@@ -1,0 +1,119 @@
+/*文件名称: base.css
+*
+* 创 建 人: fishYu
+* 创建日期: 2016/6/19 20:45
+* 描    述: 页面的通用样式
+*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+	text-align:center;
+	font-family:"微软雅黑";
+	text-align:center;
+	font-size:12px;
+	color:#333;
+	background:#EDEDED;
+}
+
+li {
+    list-style: none;
+}
+
+a {
+    color: #fff;
+    text-decoration: none;
+}
+
+a:link {
+    color: inherit;
+}
+
+.hide {
+    display: none !important;
+}
+
+.show {
+    display: block !important;
+}
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+/**
+*容器公用类
+*/
+.container {
+    width: 980px;
+    height: 100%;
+    position: relative;
+    margin: 0 auto;
+    background-color: #fff;
+    padding: 0 20px;
+}
+/**
+*登录导航公用类
+*/
+.container>nav {
+    position: fixed;
+    top: 0px;
+    /*width: 100%;*/
+    width: 980px;
+    height: 80px;
+    margin: 0 auto;
+    z-index: 999;
+    background-color: rgba(255,255,255,.5);
+    border-bottom: 2px solid red;
+    padding: 0 20px;
+    vertical-align: middle;
+
+}
+
+.x-center{
+    left: 50%;
+    -webkit-transform:translateX(-50%);
+    -moz-transform:translateX(-50%);
+    -ms-transform:translateX(-50%);
+    transform: translateX(-50%);
+}
+.y-center{
+    top: 50%;
+    -webkit-transform:translateY(-50%);
+    -moz-transform:translateY(-50%);
+    -ms-transform:translateY(-50%);
+    transform: translateY(-50%);
+}
+.xy-center{
+    top: 50%;
+    left: 50%;
+    -webkit-transform:translate(-50%,-50%);
+    -moz-transform:translate(-50%,-50%);
+    -ms-transform:translate(-50%,-50%);
+    transform: translate(-50%,-50%);
+}
+.container>nav .logo {
+    display: inline-block;
+    position: absolute;
+}
+
+.login-and-register{
+    display: inline-block;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    width: 80px;
+    color: #808080;
+}
+
+.login-and-register li{
+    width: 50%;
+    float: left;
+}
+.login-and-register li:first-child{
+    border-right: 1px solid;
+}

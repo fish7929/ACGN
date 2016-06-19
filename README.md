@@ -1,5 +1,5 @@
 # ACGN
-Gili爱网站
+二次元
 1.ACG：英文Animation、Comic、Game的缩写，是动画、漫画、游戏（通常指电玩游戏或GalGame）的总称。
 
 2.御宅族（おたく otaku）：一般指对ACG具有超出一般人知识面、鉴赏、游玩能力的特殊群体，是究级ACG爱好者的代名词。

@@ -1,0 +1,119 @@
+/*文件名称: planning.css
+*
+* 创 建 人: fishYu
+* 创建日期: 2016/6/19 20:49
+* 描    述: 企划详情页面样式
+*/
+
+@import "base.css";
+/**
+*导航样式
+*/
+.planning-banner{
+    width: 100%;
+    height: 200px;
+    background: url('../images/planning/planning-banner.jpg') center no-repeat;
+}
+/**
+*企划内容
+*/
+.planning-content{
+    margin: 20px 0;
+    padding: 0 10px;
+    width: 100%;
+    height: 420px;
+}
+/**
+*企划内容-顶部
+*/
+.planning-content-top{
+    width: 100%;
+    height: 150px;
+    background: rgb(0, 236, 255);
+}
+.planning-author{
+    width: 23.5%;
+    background: #808080;
+    height: 100%;
+    display: inline-block;
+    float: left;
+}
+.planning-detail{
+    background: hotpink;
+    height: 100%;
+    width: 53%;
+    display: inline-block;
+    padding: 0 2%;
+    float: left;
+}
+.planning-notice{
+    width: 23.5%;
+    background: pink;
+    height: 100%;
+    display: inline-block;
+    float: right;
+}
+/**
+*企划内容-底部
+*/
+.planning-content-bottom{
+    margin-top: 20px;
+    width: 100%;
+    height: 250px;
+    background: rgb(234, 211, 97);
+}
+
+.planning-type{
+    width: 100%;
+    height: 100px;
+    background: rgb(0, 236, 255);
+}
+.planning-type-item{
+    width: 23.5%;
+    background: #808080;
+    height: 100%;
+    display: inline-block;
+    float: left;
+    margin-right: 2%;
+}
+.planning-type-item:last-child{
+    margin-right: 0;
+}
+.planning-type-detail{
+    width: 100%;
+    height: 150px;
+    background: rgb(240, 10, 255);
+}
+
+.type-detail{
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    display: none;
+}
+/**
+*企划参与角色
+*/
+.planning-join-role{
+    width: 100%;
+    height: 300px;
+    background: rgb(240, 10, 0);
+    margin-bottom: 20px;
+ }
+
+/**
+*企划热门作品
+*/
+.planning-hot-opus{
+    width: 100%;
+    height: 300px;
+    background: rgb(0, 10, 255);
+    margin-bottom: 20px;
+}
+/**
+*企划动态
+*/
+.planning-dynamic{
+    width: 100%;
+    background: rgb(0, 10, 0);
+}
