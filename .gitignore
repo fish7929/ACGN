@@ -1,0 +1,9 @@
+#node
+node_modules/**
+#compile
+dist/**
+#WebStorm
+.idea/
+#git
+.git/
+
