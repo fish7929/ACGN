@@ -59,7 +59,7 @@ a:link {
 /**
 *登录导航公用类
 */
-.container>nav {
+.container nav {
     position: fixed;
     top: 0px;
     /*width: 100%;*/
@@ -117,3 +117,5 @@ a:link {
 .login-and-register li:first-child{
     border-right: 1px solid;
 }
+
+@import "planning.scss";

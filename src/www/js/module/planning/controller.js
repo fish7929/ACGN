@@ -1,12 +1,12 @@
 // 文件名称: controllers.js
 // 描    述: controllers.js
 define([
-    'module/login/views/login'
-],function(loginView){
+    'module/planning/views/planning'
+],function(planningView){
     return {
-        userLogin : function(){
+        planning : function(){
             utils.log("userLogin");
-            app.page.show(loginView);
+            app.page.show(planningView);
         }
     };
 });

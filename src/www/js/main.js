@@ -3,7 +3,7 @@
 require.config({
     //开发模式下给地址加动态参数
     //防止缓存
-    //urlArgs: "bust=" + (new Date()).getTime(),
+    urlArgs: "bust=" + (new Date()).getTime(),
     shim: {
         underscore: {
             exports : '_'

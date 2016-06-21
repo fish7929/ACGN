@@ -14,8 +14,13 @@ define([
         /**配置路由**/
         appRoutes: {
             "" : "home",
-            "login" : "userLogin"
-        }
+            "login" : "userLogin",
+            "planning" : "planning" //企划路由
 
+        },
+        /**当前路由，如果调用返回，返回到指定路由**/
+        backRoutes: {
+
+        }
     });
 });
