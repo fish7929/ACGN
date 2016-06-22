@@ -25,7 +25,8 @@ require.config({
         underscore: 'vendor/underscore',
         backbone: 'vendor/backbone/backbone',
         marionette : 'vendor/backbone/backbone.marionette',
-        text : 'vendor/text'
+        text : 'vendor/text',
+        touchSlide : 'vendor/TouchSlide.1.1'
     },
     waitSeconds: 0
 });
@@ -39,7 +40,8 @@ require([
     'module/app/controller',
     'router/AppRouter',
     'text',
-    'utils/utils'
+    'utils/utils',
+    'touchSlide'
 ], function($,Backbone, BackboneHistory, app, Controller, AppRouter) {
     $(document).ready(readyHandle);
 

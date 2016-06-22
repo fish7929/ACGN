@@ -5,20 +5,23 @@
 define([
     'common/base/base_view',
     'text!module/home/templates/home.html',
-    'marionette'
-],function(BaseView, tpl, mn) {
+    'marionette',
+    'common/views/loginBar'
+],function(BaseView, tpl, mn, LoginBarView) {
+    var bannerHtmlTpl = "<li><div style=\"background: url('{0}')\"></div></li>";
+
     return BaseView.extend({
-        id: "homeContent",
+        id: "homeContainer",
         template : _.template(tpl),
         _mouseLock : false,
-
+        //banner轮播
+        bannerSlide : null,
         ui : {
-            bnLogin : ".bnLogin"
+            bannerUL : ".home-banners-ul"
         },
 
         //事件添加
         events : {
-            'click @ui.bnLogin' : "onLoginHandle"
         },
         /**初始化**/
         initialize : function(){
@@ -35,6 +38,31 @@ define([
 
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
+            var self = this;
+
+            self.initBanner();
+        },
+
+        initBanner : function(){
+            var self = this;
+            var html = "", bannerData = ['http://ac-syrskc2g.clouddn.com/95f2df33032a1574f0b7', 'http://ac-syrskc2g.clouddn.com/c246bc514640e34f5945', 'http://ac-syrskc2g.clouddn.com/1ab3c8b1a334770f5194', 'http://ac-syrskc2g.clouddn.com/eb662a92777f1e48d3d0', 'http://ac-syrskc2g.clouddn.com/ijMtip15X15EAeNHgQ9wub78L3EwImB2C8e08M7s.jpg'];
+            for(var i = 0; i < bannerData.length; i++){
+                html += bannerHtmlTpl.replace("{0}", bannerData[i])
+            }
+            self.ui.bannerUL.html(html);
+
+            if(self.bannerSlide) self.bannerSlide.destory();
+            self.bannerSlide = TouchSlide({
+                slideCell:"#home-banners",
+                titCell:"#home-banners-nav ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+                mainCell:".home-banners-ul",
+                effect:"left",
+                autoPlay:true,//自动播放
+                autoPage:true, //自动分页
+                interTime:6000,
+                delayTime:500,
+                switchLoad:"_src" //切换加载，真实图片路径为"_src"
+            });
         },
 
         onLoginHandle : function(e){

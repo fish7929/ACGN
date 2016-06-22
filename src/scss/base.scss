@@ -118,4 +118,10 @@ a:link {
     border-right: 1px solid;
 }
 
+img{
+  draggable : false;
+}
+
+@import "home/home.scss";
 @import "planning.scss";
+
