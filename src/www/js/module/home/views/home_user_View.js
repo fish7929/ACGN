@@ -1,28 +1,27 @@
-// 文件名称: loginBar.js
+// 文件名称: home_user_view.js
 //
 // 创 建 人: zhao
 // 创建日期: 2016/6/22 15:22
-// 描    述: 登陆通用栏
+// 描    述: 首页--活跃用户
 define([
     'common/base/item_view',
-    'text!common/templates/loginBar.html',
+    'text!module/home/templates/home_user.html',
     'marionette'
 ],function(ItemView, tpl, mn){
+    var htmlTpl = '<div class="aUser-item">' +
+        '<div class="aUser-headPic" style="background: url(\'{0}\') no-repeat center; background-size: 100%"></div>' +
+        '</div>';
     return ItemView.extend({
-        className : "loginBarContainer",
+        className : "aUserContainer",
         template : _.template(tpl),
 
         _mouseLock : false,
 
         // key : selector
         ui : {
-            userPic : ".loginBar-headPic",
-            userName: ".loginBar-username",
-            bnPublish : ".loginBar-bnPublish"
         },
         //事件添加
         events : {
-            "click @ui.bnPublish" : "onPublishHandle"
         },
         /**初始化**/
         initialize : function(){
@@ -38,22 +37,33 @@ define([
 
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
-            var self = this;
-            self.init();
-            self.$el.show();
-
+            this.initList();
+            this.$el.show();
         },
 
-        init : function(){
-            var self = this;
-            var headUrl = 'images/temp/smallhead/head.png';
-            var userName = "道道好厉害";
-            self.ui.userPic.css({"background" : "url('"+headUrl+"') repeat center", "background-size" : "100%"});
-            self.ui.userName.html(userName);
-        },
+        initList : function(){
+            var data = [];
+            var obj = {};
+            obj.userPic = 'images/temp/head/head_b1.png';
+            data.push(obj);
+            var obj = {};
+            obj.userPic = 'images/temp/head/head_b2.png';
+            data.push(obj);
+            var obj = {};
+            obj.userPic = 'images/temp/head/head_b3.png';
+            data.push(obj);
+            var obj = {};
+            obj.userPic = 'images/temp/head/head_b4.png';
+            data.push(obj);
+            var obj = {};
+            obj.userPic = 'images/temp/head/head_b5.png';
+            data.push(obj);
 
-        onPublishHandle : function(e){
-
+            var self = this, html = "";
+            for(var i = 0; i<data.length; i++){
+                obj = data[i];
+                html += htmlTpl.replace("{0}", obj.userPic).replace("{1}", obj.userName);
+            }
         },
 
         /*点击事件不可以重复点*/
