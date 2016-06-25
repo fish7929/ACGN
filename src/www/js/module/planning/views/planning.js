@@ -9,7 +9,7 @@ define([
     'common/views/login'
 ],function(BaseView, tpl, mn, login) {
     return BaseView.extend({
-        id: "planning",
+        id: "gili-love-planning",
         template : _.template(tpl),
         _mouseLock : false,
         loginBtn : null,
