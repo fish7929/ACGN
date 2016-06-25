@@ -9,8 +9,10 @@ define([
     'common/region/switch_view_region',
     'common/views/loginBar',
     'module/home/views/home_QHDCView',
-    'module/home/views/home_user_view'
-],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, QHDCView, ActiveUserView) {
+    'module/home/views/home_user_view',
+    'module/home/views/home_book',
+    'module/home/views/home_college'
+],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, QHDCView, ActiveUserView, HomeBookView, HomeCollegeView) {
     var bannerHtmlTpl = "<div class='swiper-slide' style=\"background: url('{0}') center no-repeat\"></div>";
 
     return BaseView.extend({
@@ -37,12 +39,18 @@ define([
                 el : ".home-qhdc-reg",
                 regionClass : SwitchViewRegion
             },
-
             ActiveUserRegion : {
                 el : ".home-user-reg",
                 regionClass : SwitchViewRegion
+            },
+            BookRegion : {
+                el : ".home-book-reg",
+                regionClass : SwitchViewRegion
+            },
+            CollegeRegion : {
+                el : ".home-college-reg",
+                regionClass : SwitchViewRegion
             }
-
         },
 
         /**初始化**/
@@ -50,6 +58,8 @@ define([
             this._loginBarView = new LoginBarView();
             this._qhdcView = new QHDCView();
             this._aUserView = new ActiveUserView();
+            this._bookView = new HomeBookView();
+            this._collegeView = new HomeCollegeView();
         },
 
         //在开始渲染模板前执行，此时当前page没有添加到document
@@ -71,6 +81,8 @@ define([
             self.LoginBarRegion.show(self._loginBarView);
             self.QHDCRegion.show(self._qhdcView);
             self.ActiveUserRegion.show(self._aUserView);
+            self.BookRegion.show(self._bookView);
+            self.CollegeRegion.show(self._collegeView);
         },
 
         initBanner : function(){

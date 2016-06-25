@@ -19,6 +19,7 @@ define([
 
         // key : selector
         ui : {
+            headList : ".aUser-container"
         },
         //事件添加
         events : {
@@ -42,28 +43,19 @@ define([
         },
 
         initList : function(){
-            var data = [];
-            var obj = {};
-            obj.userPic = 'images/temp/head/head_b1.png';
-            data.push(obj);
-            var obj = {};
-            obj.userPic = 'images/temp/head/head_b2.png';
-            data.push(obj);
-            var obj = {};
-            obj.userPic = 'images/temp/head/head_b3.png';
-            data.push(obj);
-            var obj = {};
-            obj.userPic = 'images/temp/head/head_b4.png';
-            data.push(obj);
-            var obj = {};
-            obj.userPic = 'images/temp/head/head_b5.png';
-            data.push(obj);
+            var data = [], i;
+            for(i = 1; i <= 12; i++){
+                var obj = {};
+                obj.userPic = 'images/temp/head/head_s'+i+'.png';
+                data.push(obj);
+            }
 
             var self = this, html = "";
             for(var i = 0; i<data.length; i++){
                 obj = data[i];
-                html += htmlTpl.replace("{0}", obj.userPic).replace("{1}", obj.userName);
+                html += htmlTpl.replace("{0}", obj.userPic);
             }
+            self.ui.headList.html(html);
         },
 
         /*点击事件不可以重复点*/
