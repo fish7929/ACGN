@@ -4,7 +4,6 @@
 * 创建日期: 2016/6/19 20:49
 * 描    述: 企划详情页面样式
 */
-
 /**
 *导航样式
 */
@@ -18,9 +17,8 @@
 */
 .planning-content{
     margin: 30px 0 50px;
-    padding: 0 20px;
+    padding: 0 20px;  
     width: 100%;
-    height: 807px;
 }
 /**
 *企划内容-顶部
@@ -29,6 +27,9 @@
     width: 100%;
     height: 332px;
 }
+/**
+*企划版主
+*/
 .planning-author{
     width: 260px;
     height: 100%;
@@ -72,9 +73,10 @@
     border: 1px solid rgba(254,83,19,.9);
 }
 
-
+/**
+*企划详情
+*/
 .planning-detail{
-    background: hotpink;
     height: 100%;
     width: -webkit-calc(100% - 520px);
     width: -moz-calc(100% - 520px);
@@ -84,14 +86,76 @@
     display: inline-block;
     padding: 0 25px;
     float: left;
+    text-align: left;
+    font-family: FZLanTingHei-L-GBK;
+    position: relative;
 }
+.detail-title{
+    color: #fe5313;
+    font-size: 30px;
+    font-weight: bold;
+}
+.detail-content{
+    color: #333333;
+    font-size: 18px;
+    line-height: 26px;
+    margin-top: 27px;
+}
+.detail-operation-btn{
+    position: absolute;
+    bottom: 0;
+    left: 52px;
+    height: 70px;
+}
+.planning-operation-btn{
+    width: 150px;
+    height: 70px;
+    display: inline-block;
+    line-height: 68px;
+    color:rgb(255,255,255);
+    border-radius: 14.5px;
+    font-size: 24px;
+    text-shadow: 0px 0px 1px rgba(254,83,19,.6);
+    background-image: url(../images/common/btn-yellow.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-right: 44px;
+    text-align: center;
+    font-weight: bold;
+}
+.planning-operation-btn:first-child{
+    background-image: url(../images/common/btn-gray.png) !important;
+}
+.planning-operation-btn:last-child{
+    background-image: url(../images/common/btn-red.png) !important;
+    margin-right: 0;
+}
+/**
+*企划通告
+*/
 .planning-notice{
     width: 260px;
-    background: pink;
     height: 100%;
     display: inline-block;
     float: right;
+    text-align: left;
+    font-family: FZLanTingHei-L-GBK;
+    color: #333333;
 }
+.notice-title{
+    font-size: 24px;
+}
+.notice-content{
+    font-size: 18px;
+    line-height: 33px;
+    margin-top: 33px;
+}
+.notice-content span{
+    display: inline-block;
+    margin-right: 10px;
+}
+
 /**
 *企划内容-底部
 */
@@ -139,31 +203,133 @@
     overflow: hidden;
     border-radius: 10px;
     background: #ffefe9;
+    color: #333333;
+    font-family: FZLanTingHei-L-GBK;
     border: 1px solid rgba(128,128,128,.3);
+    padding: 20px 50px;
+}
+.type-detail-title{
+    font-size: 24px;
+    margin-bottom: 15px;
+}
+
+.type-detail-content{
+    font-size: 18px;
+    line-height: 29px;
 }
 /**
 *企划参与角色
 */
 .planning-join-role{
     width: 100%;
-    height: 300px;
-    background: rgb(240, 10, 0);
-    margin-bottom: 20px;
+    height: 275px;
+    margin-bottom: 50px;
+    padding: 0 20px;
+    font-size: 24px;
+    font-family: FZLanTingHei-L-GBK;
  }
+.planning-common-title{
+    width: 100%;
+    line-height: 30px;
+    height: 30px;
+}
+.common-hint{
+    float: left;
+    color: #3d3d3d;
+    text-align: left;
+}
+.common-more{
+    width: 120px;
+    height: 30px;
+    float: right;
+    background: url(../images/common/more-h.png) no-repeat center;
+}
+
+.role-content{
+    width: 100%;
+    height: 210px;
+    margin-top: 35px;
+}
+.join-role-item{
+    width: 175px;
+    height: 175px;
+    border-radius: 100%;
+    float: left;
+    margin-right: 22px;
+}
+.join-role-item img{
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+}
+.join-role-item:last-child{
+    margin-right: 0;
+}
+.common-name-hint{
+    margin-top: 10px;
+    color:#fe5313;
+}
+.join-role-item-selected{
+    border: 4px solid #fe5313 ;
+}
 
 /**
-*企划热门作品
+*企划最新作品
 */
-.planning-hot-opus{
+.planning-newest-opus{
     width: 100%;
-    height: 300px;
-    background: rgb(0, 10, 255);
-    margin-bottom: 20px;
+    height: 315px;
+    margin-bottom: 50px;
+    padding: 0 20px;
+    color: #333333;
+    font-size: 24px;
+    font-family: FZLanTingHei-L-GBK;
+}
+.newest-opus-content{
+    width: 100%;
+    height: 260px;
+    margin-top: 25px;
+}
+.newest-opus-item{
+    width: 175px;
+    height: 229px;
+    border-radius: 10px;
+    float: left;
+    margin-right: 22px;
+}
+.newest-opus-item:last-child{
+    margin-right: 0;
+}
+.newest-opus-item-selected{
+    border: 4px solid #fe5313  !important;
+    border-radius: 14px !important;
+}
+.opus-hint-selected{
+    color: #fe5313  !important;
+}
+
+.common-opus-hint{
+    font-size: 18px;
 }
 /**
 *企划动态
 */
 .planning-dynamic{
     width: 100%;
-    background: rgb(0, 10, 0);
+    padding: 0 20px;
+    font-family: FZLanTingHei-L-GBK;
+    font-size: 24px;
+}
+
+.dynamic-content{
+    width: 100%;
+    margin-top: 27px;
+}
+
+.dynamic-item{
+    width: 570px;
+    float: left;
+}
+.dynamic-item:nth-child(odd) {
+    margin-right: 20px;
 }
