@@ -2,6 +2,7 @@
 node_modules/**
 #compile
 dist/**
+src/www/css/base.min.css
 #WebStorm
 .idea/
 #git
