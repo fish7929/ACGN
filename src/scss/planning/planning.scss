@@ -17,7 +17,7 @@
 */
 .planning-content{
     margin: 30px 0 50px;
-    padding: 0 20px;  
+    padding: 0 20px;
     width: 100%;
 }
 /**
@@ -274,9 +274,9 @@
 }
 
 /**
-*企划最新作品
+*企划最热作品
 */
-.planning-newest-opus{
+.planning-hottest-opus{
     width: 100%;
     height: 315px;
     margin-bottom: 50px;
@@ -285,22 +285,22 @@
     font-size: 24px;
     font-family: FZLanTingHei-L-GBK;
 }
-.newest-opus-content{
+.hottest-opus-content{
     width: 100%;
     height: 260px;
     margin-top: 25px;
 }
-.newest-opus-item{
+.hottest-opus-item{
     width: 175px;
     height: 229px;
     border-radius: 10px;
     float: left;
     margin-right: 22px;
 }
-.newest-opus-item:last-child{
+.hottest-opus-item:last-child{
     margin-right: 0;
 }
-.newest-opus-item-selected{
+.hottest-opus-item-selected{
     border: 4px solid #fe5313  !important;
     border-radius: 14px !important;
 }
@@ -316,9 +316,12 @@
 */
 .planning-dynamic{
     width: 100%;
-    padding: 0 20px;
     font-family: FZLanTingHei-L-GBK;
     font-size: 24px;
+    background: #fff;
+    padding-left: 20px;
+    padding-right: 20px;
+    overflow:hidden;
 }
 
 .dynamic-content{
@@ -328,8 +331,96 @@
 
 .dynamic-item{
     width: 570px;
+    border-radius: 10px;
+    border: 1px solid rgb(192,192,192);
     float: left;
+    text-align: left;
 }
 .dynamic-item:nth-child(odd) {
     margin-right: 20px;
 }
+.dynamic-item-author{
+    height: 153px;
+    padding: 27px 16px 46px;
+    border-bottom: 1px solid rgb(192,192,192);
+}
+.dynamic-item-author img{
+    width: 80px;
+    height: 80px;
+    border-radius: 100%;
+    float: left;
+}
+.dynamic-item-author span{
+    float: left;
+    font-size: 18px;
+    margin-left: 13px;
+    margin-top: 6px;
+    color: #fe5313;
+}
+.dynamic-item-author span:last-child{
+    margin-top: 10px !important;
+    color: #3d3d3d !important;
+}
+.dynamic-item-statistics{
+    width: 100%;
+    height: 70px;
+    position: relative;
+}
+.dynamic-item-statistics div{
+    position: absolute;
+    left: 127px;
+    display: inline-block;
+    height: 70px;
+    line-height: 70px;
+    text-indent: 37px;
+    color: #ff4200;
+    background: url(../images/common/comment.png) left center no-repeat;
+}
+
+.dynamic-item-statistics div:last-child{
+    left: 335px !important;
+    color: #333 !important;
+    background: url(../images/common/praise.png) left center no-repeat !important;
+}
+
+.common-reply{
+    width: 100%;
+    padding: 20px 16px 0;
+    height: 155px;
+    font-family: FZLanTingHei-L-GBK;
+    font-size: 18px;
+    background: #eeeeee;
+}
+.common-reply-txt{
+    width: 100%;
+    border: 1px solid #c0c0c0;
+    border-radius: 10px;
+    height: 70px;
+    background: #fff;
+    outline: none;
+}
+.common-reply-btn{
+    width: 100%;
+    height: 50px;
+    margin-top: 15px;
+}
+.common-reply-btn span{
+    width: 150px;
+    display: inline-block;
+}
+
+.common-reply-btn span:first-child{
+    height: 40px;
+    border-radius: 19.5px;
+    background: url(../images/common/face.png);
+    float: left;
+}
+
+.common-reply-btn span:last-child{
+    height: 50px;
+    border-radius: 24.5px;
+    background: #ff4500;
+    text-align: center;
+    float: right;
+}
+
