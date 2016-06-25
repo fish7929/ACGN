@@ -143,6 +143,8 @@ img {
     draggable: false;
 }
 
+@import "vendor/swiper";
 @import "home/home.scss";
+@import "home/qhdc.scss";
+@import "common/loginBar.scss";
 @import "planning/planning.scss";
-

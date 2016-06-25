@@ -1,0 +1,52 @@
+.QHDCContainer{
+  width: 100%;
+  height: 100%;
+  padding-left: 20px;
+}
+
+.qhdc-header{
+  text-align: left;
+  width: 100%;
+  height: 30px;
+  .qhdc-title{
+    font-size: 24px;
+    color: #3d3d3d;
+    float: left;
+  }
+
+  .qhdc-bnMore{
+    width: 120px;
+    height: 30px;
+    background: url("../images/common/more-h.png") no-repeat center;
+    margin-right: 14px;
+    float: right;
+  }
+}
+
+.qhdc-container{
+  width: 100%;
+  height: 220px;
+  clear: both;
+
+  .qhdc-item{
+    width: 176px;
+    height: 100%;
+    padding-top: 20px;
+    padding-right: 14px;
+    float: left;
+
+    .qhdc-userPic{
+      width: 162px;
+      height: 162px;
+      border-radius: 100%;
+      border: 1px solid #c0c0c0;
+    }
+
+    .qhdc-userName{
+      width: 162px;
+      padding-top: 13px;
+      font-size: 18px;
+      color: #333333;
+    }
+  }
+}

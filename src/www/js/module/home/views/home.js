@@ -6,31 +6,54 @@ define([
     'common/base/base_view',
     'text!module/home/templates/home.html',
     'marionette',
-    'common/views/loginBar'
-],function(BaseView, tpl, mn, LoginBarView) {
-    var bannerHtmlTpl = "<li><div style=\"background: url('{0}')\"></div></li>";
+    'common/region/switch_view_region',
+    'common/views/loginBar',
+    'module/home/views/home_QHDCView',
+    'module/home/views/home_user_view'
+],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, QHDCView, ActiveUserView) {
+    var bannerHtmlTpl = "<div class='swiper-slide' style=\"background: url('{0}') center no-repeat\"></div>";
 
     return BaseView.extend({
         id: "homeContainer",
         template : _.template(tpl),
         _mouseLock : false,
         //banner轮播
-        bannerSlide : null,
+        bannerSwipe : null,
         ui : {
-            bannerUL : ".home-banners-ul"
+            bannerWrapper : ".swiper-wrapper"
         },
 
         //事件添加
         events : {
         },
+
+        regions : {
+            LoginBarRegion : {
+                el : ".home-loginBar",
+                regionClass : SwitchViewRegion
+            },
+
+            QHDCRegion : {
+                el : ".home-qhdc-reg",
+                regionClass : SwitchViewRegion
+            },
+
+            ActiveUserRegion : {
+                el : ".home-user-reg",
+                regionClass : SwitchViewRegion
+            }
+
+        },
+
         /**初始化**/
         initialize : function(){
-            //console.error(1);
+            this._loginBarView = new LoginBarView();
+            this._qhdcView = new QHDCView();
+            this._aUserView = new ActiveUserView();
         },
 
         //在开始渲染模板前执行，此时当前page没有添加到document
         onBeforeRender : function(){
-
         },
         //渲染完模板后执行,此时当前page没有添加到document
         onRender : function(){
@@ -39,42 +62,42 @@ define([
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
             var self = this;
-
+            self.regionShow();
             self.initBanner();
+        },
+
+        regionShow : function(){
+            var self = this;
+            self.LoginBarRegion.show(self._loginBarView);
+            self.QHDCRegion.show(self._qhdcView);
+            self.ActiveUserRegion.show(self._aUserView);
         },
 
         initBanner : function(){
             var self = this;
-            var html = "", bannerData = ['http://ac-syrskc2g.clouddn.com/95f2df33032a1574f0b7', 'http://ac-syrskc2g.clouddn.com/c246bc514640e34f5945', 'http://ac-syrskc2g.clouddn.com/1ab3c8b1a334770f5194', 'http://ac-syrskc2g.clouddn.com/eb662a92777f1e48d3d0', 'http://ac-syrskc2g.clouddn.com/ijMtip15X15EAeNHgQ9wub78L3EwImB2C8e08M7s.jpg'];
+            var html = "", bannerData = ['images/temp/banner/banner.jpg', 'images/temp/banner/banner1.jpg', 'images/temp/banner/banner2.jpg', 'images/temp/banner/banner3.jpg'];
             for(var i = 0; i < bannerData.length; i++){
                 html += bannerHtmlTpl.replace("{0}", bannerData[i])
             }
-            self.ui.bannerUL.html(html);
+            self.ui.bannerWrapper.html(html);
 
-            if(self.bannerSlide) self.bannerSlide.destory();
-            self.bannerSlide = TouchSlide({
-                slideCell:"#home-banners",
-                titCell:"#home-banners-nav ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
-                mainCell:".home-banners-ul",
-                effect:"left",
-                autoPlay:true,//自动播放
-                autoPage:true, //自动分页
-                interTime:6000,
-                delayTime:500,
-                switchLoad:"_src" //切换加载，真实图片路径为"_src"
-            });
-        },
+            if(self.bannerSwipe) self.bannerSwipe.destroy();
 
-        onLoginHandle : function(e){
-            app.navigate("login", {
-                replace: false,
-                trigger: true
+            self.bannerSwipe = new Swiper('.swiper-container', {
+                pagination: '.swiper-pagination',
+                autoplay : 2000,
+                speed : 1000,
+                loop : true,
+                onAutoplayStop : function(){
+                    setTimeout(function(){
+                        self.bannerSwipe.startAutoplay();
+                    }, 2000);
+                }
             });
         },
 
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
-            utils.log("home close");
         },
 
         //当页面销毁时触发
