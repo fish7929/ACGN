@@ -1,0 +1,172 @@
+#bookDetailsContainer{
+  width: 100%;
+  height: 100%;
+}
+
+.bd-container{
+  width: 100%;
+  height: 452px;
+  padding: 64px 20px 0 20px;
+  .bd-left{
+    width: 880px;
+    height: 100%;
+    float: left;
+
+    .bd-div{
+      .bd-image{
+        width: 282px;
+        height: 372px;
+        border: 1px solid #cccccc;
+        border-radius: 10px;
+        margin-top: 16px;
+        float: left;
+      }
+    }
+
+    .bd-info{
+      width: 598px;
+      height: 100%;
+      padding-left: 20px;
+      padding-top: 20px;
+      float: left;
+      font-size: 18px;
+      text-align: left;
+      color: #3d3d3d;
+    }
+
+    .title{
+      font-size: 30px;
+    }
+
+    .fontRed{
+      color: #FF4200;
+    }
+
+    .bd-info-txt{
+      margin: 30px 0;
+      height: 65px;
+      div{
+        margin-bottom: 10px;
+        float: left;
+
+      }
+
+      .bd-author-txt{
+        width: 110px;
+        margin-right: 10px;
+      }
+
+      .bd-original-txt{
+        width: 56px;
+        margin-right: 10px;
+      }
+
+      .bd-cp-txt{
+        width: 110px;
+        margin-right: 10px;
+      }
+
+      .bd-lang-txt{
+        width: 68px;
+      }
+
+      .bd-page-txt{
+        width: 58px;
+      }
+
+      .bd-size-txt{
+        width: 124px;
+        margin-right: 10px;
+      }
+      .bd-data-txt{
+        width: 180px;
+      }
+
+    }
+
+    .dash-line{
+      border-bottom: 1px dashed #808080;
+    }
+
+    .bd-label-div{
+      width: 100%;
+      height: 70px;
+      padding-top: 20px;
+
+      .bd-label-title{
+        height: 30px;
+        line-height: 30px;
+        float: left;
+      }
+
+      .bd-label-list{
+        color: #ffffff;
+        float: left;
+
+        .bd-label-item{
+          width: 70px;
+          height: 30px;
+          line-height: 30px;
+          background-color: red;
+          border-radius: 20px;
+          float: left;
+          text-align: center;
+          margin-left: 20px;
+        }
+      }
+
+    }
+
+    .book-brief{
+      margin: 30px 0;
+      height: 72px;
+    }
+  }
+
+
+  .bd-right{
+    width: 280px;
+    height: 100%;
+    padding-left: 18px;
+    float: left;
+  }
+}
+
+
+//作者信息
+.bd-author-container{
+  position: relative;
+  width: 100%;
+  height: 602px;
+  margin-top: 88px;
+  border-radius: 10px;
+  border: 1px solid #CCCCCC;
+  background-color: #fff8f5;
+
+  .bd-author-headImage{
+    position: absolute;
+    width: 124px;
+    height: 124px;
+    border-radius: 100%;
+    top: -62px;
+    left: calc(50% - 62px);
+  }
+
+}
+
+.nowrapTxt {
+  overflow:hidden;
+  text-overflow:ellipsis;
+  -o-text-overflow:ellipsis;
+  -webkit-text-overflow:ellipsis;
+  -moz-text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.wrapTxt{
+  overflow:hidden;
+  text-overflow:ellipsis;
+  -o-text-overflow:ellipsis;
+  -webkit-text-overflow:ellipsis;
+  -moz-text-overflow:ellipsis;
+}
