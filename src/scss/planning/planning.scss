@@ -385,8 +385,8 @@
 
 .common-reply{
     width: 100%;
-    padding: 20px 16px 0;
-    height: 155px;
+    padding: 15px 16px;
+    height: 165px;
     font-family: FZLanTingHei-L-GBK;
     font-size: 18px;
     background: #eeeeee;
@@ -429,5 +429,70 @@
     text-align: center;
     float: right;
     color: #fff;
+}
+.planning-comments{
+    width: 100%;
+    background: #eeeeee;
+    font-family: FZLanTingHei-L-GBK;
+    font-size: 14px;
+    color: #333333;
+    padding-bottom: 39px;
+}
+.comment-item{
+    position: relative;
+    width: 100%;
+    height: 88px;
+    padding: 16.5px 16px;
+    border-bottom: 1px solid #C0C0C0;
+}
+
+.comment-item:last-child{
+    border-bottom: none  !important;
+}
+
+.comment-item img{
+    width: 55px;
+    height: 55px;
+    border-radius: 100%;
+    float: left;
+}
+.comment-brief{
+    margin-left: 17px;
+    margin-top: 3px;
+    display: inline-block;
+    float: left;
+}
+.comment-brief span{
+    font-size: 18px;
+}
+.comment-brief span:first-child{
+    color: #ff4200;
+}
+
+.comment-created{
+    margin-left: 17px;
+    margin-top: 16px;
+    float: left;
+    display: inline-block;
+}
+
+.comment-revert{
+    position: absolute;
+    right: 16px;
+    bottom: 22px;
+}
+
+.comment-more{
+    width: 100%;
+    height: 30px;
+    margin-top: 16px;
+    text-align: center;
+}
+.comment-more-btn{
+    width: 100px;
+    height: 30px;
+    display: inline-block;
+    background: url(../images/common/more-v.png) center no-repeat;
+    margin: 0 auto;
 }
 
