@@ -8,18 +8,19 @@ define([
     'text!module/home/templates/home_college.html',
     'marionette'
 ],function(ItemView, tpl, mn){
-    var htmlTpl = '<div class="aUser-item">' +
-        '<div class="aUser-headPic" style="background: url(\'{0}\') no-repeat center; background-size: 100%"></div>' +
+    var htmlTpl = '<div class="college-item" attr="{0}">' +
+        '<div class="college-pic" style="background: url(\'{1}\') no-repeat center; background-size: 100%"></div>' +
+        '<div class="college-name">{2}</div>' +
         '</div>';
     return ItemView.extend({
-        className : "aUserContainer",
+        className : "collegeContainer",
         template : _.template(tpl),
 
         _mouseLock : false,
 
         // key : selector
         ui : {
-            headList : ".aUser-container"
+            collegeList : ".college-container"
         },
         //事件添加
         events : {
@@ -44,18 +45,20 @@ define([
 
         initList : function(){
             var data = [], i;
-            for(i = 1; i <= 12; i++){
+            for(i = 1; i <= 6; i++){
                 var obj = {};
-                obj.userPic = 'images/temp/head/head_s'+i+'.png';
+                obj.collegeId = i;
+                obj.collegePic = 'images/temp/college/college'+i+'.jpg';
+                obj.collegeName = "社团"+i;
                 data.push(obj);
             }
 
             var self = this, html = "";
-            for(var i = 0; i<data.length; i++){
+            for(i = 0; i<data.length; i++){
                 obj = data[i];
-                html += htmlTpl.replace("{0}", obj.userPic);
+                html += htmlTpl.replace("{0}", obj.collegeId).replace("{1}", obj.collegePic).replace("{2}", obj.collegeName);
             }
-            self.ui.headList.html(html);
+            self.ui.collegeList.html(html);
         },
 
         /*点击事件不可以重复点*/

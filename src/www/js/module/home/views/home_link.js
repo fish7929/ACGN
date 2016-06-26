@@ -1,26 +1,23 @@
-// 文件名称: home_book.js
+// 文件名称: home_link.js
 //
 // 创 建 人: zhao
-// 创建日期: 2016/6/25 23:37
-// 描    述: 首页--同人本子
+// 创建日期: 2016/6/26 15:00
+// 描    述: 首页--友情链接
 define([
     'common/base/item_view',
-    'text!module/home/templates/home_book.html',
+    'text!module/home/templates/home_link.html',
     'marionette'
 ],function(ItemView, tpl, mn){
-    var htmlTpl = '<div class="book-item {3}" attr="{0}">' +
-        '<div class="book-pic" style="background: url(\'{1}\') no-repeat center; background-size: 100%"></div>' +
-        '<div class="book-name">{2}</div>' +
-        '</div>';
+    var htmlTpl = "<a href='{0}' target='_blank'><div class='link-item' style='background: url(\"{1}\") no-repeat center'></div></a>"
     return ItemView.extend({
-        className : "bookContainer",
+        className : "linkContainer",
         template : _.template(tpl),
 
         _mouseLock : false,
 
         // key : selector
         ui : {
-            bookList : ".book-container"
+            linkList : ".link-container"
         },
         //事件添加
         events : {
@@ -45,24 +42,19 @@ define([
 
         initList : function(){
             var data = [], i;
-            for(i = 1; i <= 5; i++){
+            for(i = 1; i <= 6; i++){
                 var obj = {};
-                obj.bookId = i;
-                obj.bookPic = 'images/temp/book/book'+i+'.jpg';
-                obj.bookName = "女神的谜语"+i;
+                obj.link = "http://www.baidu.com";
+                obj.linkPic = 'images/temp/link/link'+i+'.jpg';
                 data.push(obj);
             }
 
-            var self = this, html = "", lastItemClass;
-            for(i = 0; i < data.length; i++){
+            var self = this, html = "";
+            for(i = 0; i<data.length; i++){
                 obj = data[i];
-                lastItemClass = "";
-                if(i == data.length - 1){
-                    lastItemClass = "last-item"
-                }
-                html += htmlTpl.replace("{0}", obj.bookId).replace("{1}", obj.bookPic).replace("{2}", obj.bookName).replace("{3}", lastItemClass);
+                html += htmlTpl.replace("{0}", obj.link).replace("{1}", obj.linkPic);
             }
-            self.ui.bookList.html(html);
+            self.ui.linkList.html(html);
         },
 
         /*点击事件不可以重复点*/
