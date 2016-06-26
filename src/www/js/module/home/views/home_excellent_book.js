@@ -1,26 +1,24 @@
-// 文件名称: home_book.js
+// 文件名称: home_excellent_book.js
 //
 // 创 建 人: zhao
-// 创建日期: 2016/6/25 23:37
-// 描    述: 首页--同人本子
+// 创建日期: 2016/6/22 15:22
+// 描    述: 首页--优秀绘本
 define([
     'common/base/item_view',
-    'text!module/home/templates/home_book.html',
+    'text!module/home/templates/home_excellent_book.html',
     'marionette'
 ],function(ItemView, tpl, mn){
-    var htmlTpl = '<div class="book-item {3}" attr="{0}">' +
-        '<div class="book-pic" style="background: url(\'{1}\') no-repeat center; background-size: 100%"></div>' +
-        '<div class="book-name">{2}</div>' +
-        '</div>';
     return ItemView.extend({
-        className : "bookContainer",
+        className : "excellentBookContainer",
         template : _.template(tpl),
 
         _mouseLock : false,
 
         // key : selector
         ui : {
-            bookList : ".book-container"
+            wideImageDiv : ".excellent_book_wide_pic",
+            highImageDiv : ".excellent_book_high_pic",
+            smallImageList : ".excellent_book_small_pic_div"
         },
         //事件添加
         events : {
@@ -44,25 +42,28 @@ define([
         },
 
         initList : function(){
-            var data = [], i;
-            for(i = 1; i <= 5; i++){
-                var obj = {};
-                obj.bookId = i;
-                obj.bookPic = 'images/temp/book/book'+i+'.jpg';
-                obj.bookName = "女神的谜语"+i;
-                data.push(obj);
+            var arr = [], i;
+            for(i=1; i<=4; i++){
+                arr.push('./images/temp/excellent_book/small_'+i+'.jpg');
             }
 
-            var self = this, html = "", lastItemClass;
-            for(i = 0; i < data.length; i++){
-                obj = data[i];
-                lastItemClass = "";
-                if(i == data.length - 1){
-                    lastItemClass = "last-item"
+            var data = {};
+            data.widePic = './images/temp/excellent_book/wide.jpg';
+            data.highPic = './images/temp/excellent_book/high.jpg';
+            data.smallPicArr = arr;
+
+            var self = this;
+            self.ui.wideImageDiv.css({'background' : "url('"+data.widePic+"') center no-repeat", 'backgroundSize' : '100%'});
+            self.ui.highImageDiv.css({'background' : "url('"+data.highPic+"') center no-repeat", 'backgroundSize' : '100%'});
+
+            var smallPicData = data.smallPicArr || [];
+            var imageList = self.ui.smallImageList.find('.excellent_book_small_pic'), len = imageList.length;
+            console.log(imageList.length);
+            for(var i = 0; i < len; i++){
+                if(smallPicData[i]){
+                    $(imageList[i]).css({'background' : "url('"+smallPicData[i]+"') center no-repeat", 'backgroundSize' : '100%'});
                 }
-                html += htmlTpl.replace("{0}", obj.bookId).replace("{1}", obj.bookPic).replace("{2}", obj.bookName).replace("{3}", lastItemClass);
             }
-            self.ui.bookList.html(html);
         },
 
         /*点击事件不可以重复点*/

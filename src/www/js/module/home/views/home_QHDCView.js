@@ -8,9 +8,9 @@ define([
     'text!module/home/templates/home_QHDC.html',
     'marionette'
 ],function(ItemView, tpl, mn){
-    var htmlTpl = '<div class="qhdc-item">' +
-        '<div class="qhdc-userPic" style="background: url(\'{0}\') no-repeat center; background-size: 100%"></div>' +
-        '<div class="qhdc-userName">{1}</div>' +
+    var htmlTpl = '<div class="qhdc-item {3}" attr="{0}">' +
+        '<div class="qhdc-userPic" style="background: url(\'{1}\') no-repeat center; background-size: 100%"></div>' +
+        '<div class="qhdc-userName">{2}</div>' +
         '</div>';
     return ItemView.extend({
         className : "QHDCContainer",
@@ -44,32 +44,23 @@ define([
         },
 
         initList : function(){
-            var data = [];
-            var obj = {};
-            obj.userPic = 'images/temp/head/head_b1.png';
-            obj.userName = "莫耀军是茶1";
-            data.push(obj);
-            var obj = {};
-            obj.userPic = 'images/temp/head/head_b2.png';
-            obj.userName = "莫耀军是茶水妹2";
-            data.push(obj);
-            var obj = {};
-            obj.userPic = 'images/temp/head/head_b3.png';
-            obj.userName = "莫耀军是茶水妹3";
-            data.push(obj);
-            var obj = {};
-            obj.userPic = 'images/temp/head/head_b4.png';
-            obj.userName = "莫耀军是茶水妹4";
-            data.push(obj);
-            var obj = {};
-            obj.userPic = 'images/temp/head/head_b5.png';
-            obj.userName = "莫耀军是茶水妹5";
-            data.push(obj);
+            var data = [], i;
+            for(i = 1; i<=5; i++){
+                var obj = {};
+                obj.userId = i;
+                obj.userPic = 'images/temp/head/head_b'+i+'.png';
+                obj.userName = "莫耀军是茶"+i;
+                data.push(obj);
+            }
 
-            var self = this, html = "";
-            for(var i = 0; i<data.length; i++){
+            var self = this, html = "", lastItemClass;
+            for(i = 0; i < data.length; i++){
                 obj = data[i];
-                html += htmlTpl.replace("{0}", obj.userPic).replace("{1}", obj.userName);
+                lastItemClass = "";
+                if(i == data.length - 1){
+                    lastItemClass = "last-item";
+                }
+                html += htmlTpl.replace("{0}", obj.userId).replace("{1}", obj.userPic).replace("{2}", obj.userName).replace("{3}", lastItemClass);
             }
             self.ui.qhdcContainer.html(html);
         },
