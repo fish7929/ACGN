@@ -31,8 +31,14 @@ define([
 
         //事件添加
         events : {
+            "click @ui.bannerWrapper" : "goToPlanningHandle"
         },
-
+        //测试
+        goToPlanningHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            app.navigate("#planning" , {replace: false, trigger: true});
+        },
         regions : {
             LoginBarRegion : {
                 el : ".home-loginBar",
