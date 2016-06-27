@@ -6,8 +6,9 @@ define([
     'common/base/base_view',
     'text!module/planning/templates/planning.html',
     'marionette',
-    'common/views/login'
-],function(BaseView, tpl, mn, login) {
+    'common/region/switch_view_region',
+    'common/views/loginBar'
+],function(BaseView, tpl, mn,SwitchViewRegion, LoginBarView) {
     return BaseView.extend({
         id: "gili-love-planning",
         template : _.template(tpl),
@@ -16,20 +17,20 @@ define([
         ui : {
             "loginBtn" : "#login"
         },
-
+        regions : {
+            LoginBarRegion: {
+                el: "#login-nav",
+                regionClass: SwitchViewRegion
+            }
+        },
         //事件添加
         events : {
-            "click @ui.loginBtn" :  "_loginHandle"
         },
         /**初始化**/
         initialize : function(){
+            var self = this;
+            self._loginBarView = new LoginBarView();
             //console.error(1);
-        },
-        _loginHandle : function(e){
-            e.stopPropagation();
-            e.preventDefault();
-            console.log("login click");
-            LoginView.show();
         },
         //在开始渲染模板前执行，此时当前page没有添加到document
         onBeforeRender : function(){
@@ -42,6 +43,8 @@ define([
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
             console.log(this.ui.loginBtn);
+            var self = this;
+            self.LoginBarRegion.show(self._loginBarView);
         },
 
         onBackHandle : function(){
