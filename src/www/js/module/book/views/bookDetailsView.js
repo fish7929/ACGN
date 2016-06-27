@@ -8,8 +8,9 @@ define([
     'text!module/book/templates/bookDetailsView.html',
     'marionette',
     'common/region/switch_view_region',
-    'common/views/loginBar'
-],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView){
+    'common/views/loginBar',
+    'module/book/views/bookDetailsPreview'
+],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, BDPreviewView){
     return BaseView.extend({
         id : "bookDetailsContainer",
         template : _.template(tpl),
@@ -26,6 +27,11 @@ define([
             LoginBarRegion: {
                 el: ".bd-loginBar-reg",
                 regionClass: SwitchViewRegion
+            },
+
+            PreviewViewRegion:{
+                el: ".bd-book-preview-reg",
+                regionClass: SwitchViewRegion
             }
         },
 
@@ -33,6 +39,7 @@ define([
         initialize : function(){
             var self = this;
             self._loginBarView = new LoginBarView();
+            self._previewView = new BDPreviewView();
         },
 
         //在开始渲染模板前执行，此时当前page没有添加到document
@@ -52,6 +59,7 @@ define([
         regionShow : function(){
             var self = this;
             self.LoginBarRegion.show(self._loginBarView);
+            self.PreviewViewRegion.show(self._previewView);
         },
 
         /**页面关闭时调用，此时不会销毁页面**/

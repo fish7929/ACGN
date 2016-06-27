@@ -5,7 +5,7 @@
 
 .bd-container{
   width: 100%;
-  height: 452px;
+  height: 100%;
   padding: 64px 20px 0 20px;
   .bd-left{
     width: 880px;
@@ -13,6 +13,8 @@
     float: left;
 
     .bd-div{
+      width: 100%;
+      height: 100%;
       .bd-image{
         width: 282px;
         height: 372px;
@@ -115,12 +117,20 @@
         }
       }
 
+
+
     }
 
     .book-brief{
       margin: 30px 0;
       height: 72px;
     }
+
+
+    .bd-book-preview-reg{
+      width: 100%;
+    }
+
   }
 
 
@@ -142,6 +152,7 @@
   border-radius: 10px;
   border: 1px solid #CCCCCC;
   background-color: #fff8f5;
+  font-size: 18px;
 
   .bd-author-headImage{
     position: absolute;
@@ -152,6 +163,56 @@
     left: calc(50% - 62px);
   }
 
+  .bd-author-name{
+    margin-top: 82px;
+    font-size: 24px;
+    color: #3d3d3d;
+  }
+
+  .bd-author-name-tip{
+    color: #FF4200;
+  }
+
+  .bd-author-works-num{
+    margin-top: 24px;
+  }
+
+  .bd-author-bn-attend{
+    width: 200px;
+    height: 50px;
+    border-radius: 24px;
+    background-color: #FF4200;
+    color: #ffffff;
+    line-height: 50px;
+    margin: 40px auto 0 auto;
+  }
+
+  .bd-author-dash-line{
+    width: calc(100% - 20px);
+    margin: 24px 10px 0 10px;
+    border-bottom: 1px dashed rgba(128, 128, 128, 0.5);
+  }
+
+  .bd-author-college-title{
+    width: 100%;
+    margin-top: 24px;
+    color: #808080;
+  }
+
+  .bd-author-college-image{
+    width: 162px;
+    height: 162px;
+    margin: 10px auto;
+    border: 1px solid #CCCCCC;
+    border-radius: 10px;
+  }
+
+  .bd-author-college-name{
+    width: 100%;
+    font-size: 24px;
+    color: #3d3d3d;
+    margin-top: 10px;
+  }
 }
 
 .nowrapTxt {
