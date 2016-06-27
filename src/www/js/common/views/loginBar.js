@@ -6,8 +6,9 @@
 define([
     'common/base/item_view',
     'text!common/templates/loginBar.html',
-    'marionette'
-],function(ItemView, tpl, mn){
+    'marionette',
+    'common/views/login'
+],function(ItemView, tpl, mn, Login){
     return ItemView.extend({
         className : "loginBarContainer",
         template : _.template(tpl),
@@ -18,11 +19,15 @@ define([
         ui : {
             userPic : ".loginBar-headPic",
             userName: ".loginBar-username",
-            bnPublish : ".loginBar-bnPublish"
+            bnPublish : ".loginBar-bnPublish",
+            btnLogin : ".loginBar-bnLogin",
+            btnRegister : ".loginBar-bnRegister"
         },
         //事件添加
         events : {
-            "click @ui.bnPublish" : "onPublishHandle"
+            "click @ui.bnPublish" : "onPublishHandle",
+            "click @ui.btnLogin" : "onLoginHandle",
+            "click @ui.btnRegister" : "onRegisterHandle"
         },
         /**初始化**/
         initialize : function(){
@@ -53,7 +58,19 @@ define([
         },
 
         onPublishHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+        },
 
+        onLoginHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            LoginView.show();
+        },
+
+        onRegisterHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
         },
 
         /*点击事件不可以重复点*/

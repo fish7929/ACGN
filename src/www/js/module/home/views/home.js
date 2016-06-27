@@ -17,7 +17,7 @@ define([
     'module/home/views/home_footer'
 ],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, QHDCView, ActiveUserView, HomeBookView, HomeCollegeView,
            HomeExcellentBookView, HomeLinkView, HomeFooterView) {
-    var bannerHtmlTpl = "<div class='swiper-slide' style=\"background: url('{0}') center no-repeat\"></div>";
+    var bannerHtmlTpl = "<div class='swiper-slide' style=\"background: url('{0}') no-repeat center \"></div>";
 
     return BaseView.extend({
         id: "homeContainer",
@@ -98,13 +98,21 @@ define([
 
         regionShow : function(){
             var self = this;
+            utils.log("_loginBarView")
             self.LoginBarRegion.show(self._loginBarView);
+            utils.log("_qhdcView")
             self.QHDCRegion.show(self._qhdcView);
+            utils.log("_aUserView")
             self.ActiveUserRegion.show(self._aUserView);
+            utils.log("_bookView")
             self.BookRegion.show(self._bookView);
+            utils.log("_collegeView")
             self.CollegeRegion.show(self._collegeView);
+            utils.log("_excellentBookView")
             self.ExcellentBookRegion.show(self._excellentBookView);
+            utils.log("_homeLinkView")
             self.HomeLinkRegion.show(self._homeLinkView);
+            utils.log("_homeFooterView")
             self.HomeFooterRegion.show(self._homeFooterView);
         },
 
@@ -129,6 +137,7 @@ define([
                     }, 2000);
                 }
             });
+            utils.log("bannerSwipe")
         },
 
         /**页面关闭时调用，此时不会销毁页面**/

@@ -9,7 +9,7 @@
      * @type {string}
      */
     var tpl =
-        '<div class="login-container-mask"></div>'+
+        '<div class="login-container-mask x-center"></div>'+
         '<div class="login-container">' +
             '<div class="login-title">登录</div>'+
             '<div class="login-content">'+
@@ -40,7 +40,7 @@
         /**
          * 朦层点击
          */
-        this.loginContainerMask.removeEventListener("click", this.loginMaskHandle, false);
+        this.loginContainerMask.addEventListener("click", this.loginMaskHandle, false);
         this._bindLoginHandle = this.loginHandle.bind(this);
         /**
          * 登录
@@ -197,24 +197,24 @@
     var cssArr = [];
     cssArr.push(
             ".login-gili-love-container{" +
-            "position: absolute; " +
+            "position: fixed; " +
             "top:0;left:0;z-index:9999;width:100%;height:100%" +
             "}"
     );
     cssArr.push(
         ".login-container-mask{" +
-            "background: #000;opacity: 0.7;position: absolute;width:100%;" +
-            "height:calc(100% - 50px);height:-webkit-calc(100% - 50px);" +
-            "height:-ms-calc(100% - 50px);height:-o-calc(100% - 50px);" +
-            "height:-moz-calc(100% - 50px); top:50px;left:0px;" +
+            "background: #000;opacity: 0.7;position: absolute;width:1280px;" +
+            "height:calc(100% - 64px);height:-webkit-calc(100% - 64px);" +
+            "height:-ms-calc(100% - 64px);height:-o-calc(100% - 64px);" +
+            "height:-moz-calc(100% - 64px); top:64px;" +
         "}"
     );
     cssArr.push(
         ".login-container{" +
             "top:50%;left:50%;transform:translate(-50%,-50%);" +
-            "width:400px; height:500px;background:#fff;"+
+            "width:412px; height:402px;background:#fff;"+
             "-webkit-transform:translate(-50%,-50%);" +
-            "position:absolute; z-index:2;" +
+            "position:absolute; z-index:2; border-radius: 10px" +
         "}"
     );
     cssArr.push(

@@ -142,6 +142,10 @@ img {
     draggable: false;
 }
 
+.clear{
+  clear: both;
+}
+
 @import "vendor/swiper";
 @import "home/home.scss";
 @import "home/qhdc.scss";
@@ -153,3 +157,6 @@ img {
 @import "home/footer.scss";
 @import "common/loginBar.scss";
 @import "planning/planning.scss";
+
+@import "book/bookDetails.scss";
+@import "book/bookDetailsPreview.scss";

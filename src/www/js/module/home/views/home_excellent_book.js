@@ -53,15 +53,14 @@ define([
             data.smallPicArr = arr;
 
             var self = this;
-            self.ui.wideImageDiv.css({'background' : "url('"+data.widePic+"') center no-repeat", 'backgroundSize' : '100%'});
-            self.ui.highImageDiv.css({'background' : "url('"+data.highPic+"') center no-repeat", 'backgroundSize' : '100%'});
+            self.ui.wideImageDiv.css({'background' : "url('"+data.widePic+"') no-repeat center", 'backgroundSize' : '100%'});
+            self.ui.highImageDiv.css({'background' : "url('"+data.highPic+"') no-repeat center", 'backgroundSize' : '100%'});
 
             var smallPicData = data.smallPicArr || [];
             var imageList = self.ui.smallImageList.find('.excellent_book_small_pic'), len = imageList.length;
-            console.log(imageList.length);
             for(var i = 0; i < len; i++){
                 if(smallPicData[i]){
-                    $(imageList[i]).css({'background' : "url('"+smallPicData[i]+"') center no-repeat", 'backgroundSize' : '100%'});
+                    $(imageList[i]).css({'background' : "url('"+smallPicData[i]+"') no-repeat center", 'backgroundSize' : '100%'});
                 }
             }
         },

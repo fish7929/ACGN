@@ -1,10 +1,16 @@
 .loginBarContainer{
+  position:relative;
+  width: 1280px;
+  margin-left: -40px;
+}
+
+.loginBar-div{
   position: fixed;
-  width: 100%;
+  width: 1280px;
   height: 64px;
   background-color : rgba(255, 255, 255, 0.9);
   top: 0;
-  left: 0;
+  //left: 0;
   border-bottom: 4px solid #ff4200;
   z-index: 999;
 }
@@ -38,12 +44,14 @@
     margin-right: 10px;
     color: #ff4200;
     border: 1px solid #ff4200;
+    border-radius: 20px;
   }
 
   .loginBar-bnRegister{
     float: right;
     color: #c0c0c0;
     border: 1px solid #c0c0c0;
+    border-radius: 20px;
   }
 }
 
