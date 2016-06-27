@@ -220,12 +220,12 @@
     cssArr.push(
     );
 
-    if(!document.getElementById("style-login-view")) {
-        var styleNode = document.createElement("style");
-        styleNode.type = "text/css";
-        styleNode.id = "style-login-view";
-        styleNode.innerHTML = cssArr.join("");
-        document.head.appendChild(styleNode);
-    }
+//    if(!document.getElementById("style-login-view")) {
+//        var styleNode = document.createElement("style");
+//        styleNode.type = "text/css";
+//        styleNode.id = "style-login-view";
+//        styleNode.innerHTML = cssArr.join("");
+//        document.head.appendChild(styleNode);
+//    }
     window.LoginView = LoginView;
 })();

@@ -9,6 +9,8 @@
   width: 1280px;
   height: 64px;
   background-color : rgba(255, 255, 255, 0.9);
+  -pie-background : rgba(255, 255, 255, 0.9);
+  behavior: url(css/PIE.htc);
   top: 0;
   //left: 0;
   border-bottom: 4px solid #ff4200;
@@ -31,6 +33,7 @@
     width: 74px;
     height: 40px;
     border-radius: 20px;
+    behavior: url(css/PIE.htc);
     font-size: 18px;
     line-height: 36px;
   }
@@ -44,12 +47,16 @@
     margin-right: 10px;
     color: #ff4200;
     border: 1px solid #ff4200;
+    border-radius: 20px;
+    behavior: url(css/PIE.htc);
   }
 
   .loginBar-bnRegister{
     float: right;
     color: #c0c0c0;
     border: 1px solid #c0c0c0;
+    border-radius: 20px;
+    behavior: url(css/PIE.htc);
   }
 }
 
@@ -78,6 +85,7 @@
     width: 90px;
     height: 40px;
     border-radius: 20px;
+    behavior: url(css/PIE.htc);
     font-size: 18px;
     line-height: 36px;
     color: #ffffff;

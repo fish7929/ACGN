@@ -12,7 +12,6 @@ define([
 
         this.title = this.title || ""; //
         this.renderParams = {};
-
         view.apply(this,[options]);
 
         this.forever = this.forever === undefined ? false : this.forever;
