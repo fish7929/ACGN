@@ -1,0 +1,183 @@
+/*文件名称: login.css
+*
+* 创 建 人: fishYu
+* 创建日期: 2016/6/27 21:51
+* 描    述: 登录和注册样式
+*/
+.login-gili-love-container{
+    position: fixed;
+    top:0;
+    left:0;
+    z-index:9999;
+    width:100%;
+    height:100%;
+    font-size: 18px;
+    font-family: FZLanTingHei-L-GBK;
+}
+
+/**
+*登录样式
+*/
+
+.login-container-mask{
+    background: rgba(0,0,0,.7);
+    position: absolute;
+    width:1280px;
+    height:-webkit-calc(100% - 64px);
+    height:-ms-calc(100% - 64px);
+    height:-o-calc(100% - 64px);
+    height:-moz-calc(100% - 64px);
+    height:calc(100% - 64px);
+    top:64px;
+}
+
+.login-container{
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:412px;
+    height:402px;
+    background:#fff;
+    -webkit-transform:translate(-50%,-50%);
+    position:absolute;
+    z-index:10;
+    border: 1px solid #c0c0c0;
+    border-radius: 10px;
+}
+
+.login-title{
+    width: 100%;
+    height: 56px;
+    border-bottom: 2px solid #fe5313;
+    line-height: 54px;
+    text-align: center;
+    color: #3d3d3d;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+}
+.login-content{
+    width: 100%;
+    height: 346px;
+    padding: 24px 0 15px;
+}
+.login-common-div{
+    height: 40px;
+    width: 100%;
+    padding-right: 29px;
+    margin-bottom: 14px;
+    text-align: right;
+}
+.login-common-div:last-child{
+    margin-bottom: 23px;
+}
+.login-common-div input{
+    height: 40px;
+    width: 272px;
+    border-radius: 19.5px;
+    outline: none;
+    border: 1px solid #c0c0c0;
+}
+.login-btn{
+    width: 340px;
+    height: 50px;
+    margin: 0 auto;
+    margin-top: 9px;
+    background: url(../images/login/login.png) no-repeat center;
+    text-align: center;
+    line-height: 50px;
+    color: #fff;
+}
+.login-forget-sign-div{
+    width: 100%;
+    padding-left:58px;
+    padding-right: 49px ;
+    height: 14px;
+    margin-top: 14px;
+    font-size: 14px;
+}
+.login-forget-sign-div>span:first-child{
+    float: left;
+}
+
+.login-forget-sign-div>span:last-child{
+    float: right;
+    color: #ff4600;
+}
+
+.third-party-hint-div{
+    width: 100%;
+    height: 14px;
+    padding: 0 21px;
+    margin-top: 26px;
+}
+.divide-line{
+    width: 130px;
+    height: 10px;
+    display: inline-block;
+    border-bottom: 1px solid #c0c0c0;
+}
+.third-party-login-hint{
+    width: 110px;
+    height: 14px;
+    font-size: 14px;
+    text-align: center;
+    display: inline-block;
+}
+
+.third-party-login-div{
+    width: 100%;
+    height: 56px;
+    padding-left:138px;
+    padding-right: 134px;
+    margin-top: 16px;
+}
+
+.micro-blog-login{
+    width: 56px;
+    height: 56px;
+    display: inline-block;
+    border-radius: 100%;
+    background: url(../images/login/weibo.png) no-repeat center;
+}
+
+.qq-login{
+    display: inline-block;
+    width: 56px;
+    height: 56px;
+    border-radius: 100%;
+    background: url(../images/login/qq.png) no-repeat center;
+}
+
+/**
+*注册样式
+*
+*/
+#register-container{
+    height: 384px;
+}
+.register-content{
+    width: 100%;
+    height: 328px;
+    padding-top: 20px;
+    text-align: right;
+}
+#register-verify-txt{
+    width: 130px;
+    margin-right: -10px;
+}
+#verify-hint{
+    width: 130px;
+    margin-left: 10px;
+    display: inline-block;
+    height: 100%;
+    line-height: 38px;
+    text-align: center;
+    border: 1px solid #c0c0c0;
+    border-radius: 19.5px;
+    background: #fd4200;
+    color: #fff;
+}
+
+
+
+
