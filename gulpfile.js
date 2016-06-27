@@ -20,7 +20,7 @@ gulp.task('css', function() {
 
 gulp.task('sass', function(done) {
   gulp.src('./src/scss/base.scss')
-    .pipe(sass())
+    .pipe(sass()).on('error', sass.logError)
     .pipe(cleanCSS())
     .pipe(rename({ extname: '.min.css' }))
     .pipe(minifyCss({
