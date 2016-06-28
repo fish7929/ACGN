@@ -40,7 +40,9 @@ define([
             "click @ui.uploadingOpus" : "onUploadingClickHandle",
             "click @ui.planningType" : "onTypeClickHandle",
             "click @ui.roleContent" : "onRoleClickHandle",
-            "click @ui.hottestOpusContent" : "onOpusClickHandle"
+            "click @ui.hottestOpusContent" : "onOpusClickHandle",
+            "click @ui.moreRole" : "onMoreRoleClickHandle",
+            "click @ui.moreOpus" : "onMoreOpusClickHandle"
         },
         /**初始化**/
         initialize : function(){
@@ -193,6 +195,26 @@ define([
             e.preventDefault();
             var self = this;
             ShowBox.alert("作品正在努力上传...");
+        },
+        /**
+         * 更多用户点击事件
+         * @param e
+         */
+        onMoreRoleClickHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            ShowBox.alert("更多用户点击");
+        },
+        /**
+         * 更多作品点击事件
+         * @param e
+         */
+        onMoreOpusClickHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            ShowBox.alert("更多作品点击");
         },
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
