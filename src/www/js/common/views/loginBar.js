@@ -15,6 +15,7 @@ define([
 
         _mouseLock : false,
         currentUser : null, //当前用户
+        isShowUserOperationLayer : false,   //默认不显示用户操作界面
         // key : selector
         ui : {
             userPic : ".loginBar-headPic",
@@ -23,13 +24,20 @@ define([
             btnLogin : ".loginBar-bnLogin",
             btnRegister : ".loginBar-bnRegister",
             userInfoLayer : ".loginBar-UserInfo",
-            loginBtnsLayer : ".loginBar-Btns"
+            loginBtnsLayer : ".loginBar-Btns",
+            userOperationLayer : ".loginBar-user-operation",
+            loginSetting : "#login-setting",
+            loginOut : "#login-out"
         },
         //事件添加
         events : {
             "click @ui.bnPublish" : "onPublishHandle",
             "click @ui.btnLogin" : "onLoginHandle",
-            "click @ui.btnRegister" : "onRegisterHandle"
+            "click @ui.btnRegister" : "onRegisterHandle",
+            "click @ui.userPic" : "onSwitchUserOperationLayerHandle",
+            "click @ui.loginSetting" : "onLoginSettingHandle",
+            "click @ui.loginOut" : "onLoginOutHandle"
+
         },
         /**初始化**/
         initialize : function(){
@@ -91,6 +99,43 @@ define([
             var self = this;
             self.currentUser = 1;       //TODO 重新获取用户信息
             self._initView();
+        },
+        onSwitchUserOperationLayerHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            if(!self.isShowUserOperationLayer){
+                self.showUserOperationLayer();
+            }else{
+                self.hideUserOperationLayer();
+            }
+        },
+        showUserOperationLayer : function(){
+            var self = this;
+            self.isShowUserOperationLayer = true;
+            self.ui.userOperationLayer.show();
+        },
+        hideUserOperationLayer : function(){
+            var self = this;
+            self.isShowUserOperationLayer = false;
+            self.ui.userOperationLayer.hide();
+        },
+        onLoginOutHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            ShowBox.ask("亲,确定要退出吗？","温馨提示",function(type) {
+                if (type == ShowBox.YES) {
+                    console.log(862);
+                }
+            });
+        },
+        onLoginSettingHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            ShowBox.alert("点击用户设置按钮");
+
         },
         /*点击事件不可以重复点*/
         _checkMouseLock : function () {
