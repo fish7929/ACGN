@@ -4,7 +4,8 @@ define([
     'module/home/controller',
     'module/login/controller',
     'module/planning/controller',
-    'module/book/controller'
+    'module/book/controller',
+    'module/publish/controller'
 ],function(){
     var controllers = {
     };

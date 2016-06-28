@@ -17,8 +17,9 @@ define([
             "login" : "userLogin",
             "planning" : "planning", //企划路由
             //同人本详情
-            "book" : "book"
-
+            "book" : "book",
+            //发布页面
+            "publish" : "publish"
         },
         /**当前路由，如果调用返回，返回到指定路由**/
         backRoutes: {

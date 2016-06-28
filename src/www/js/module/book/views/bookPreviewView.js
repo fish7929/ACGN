@@ -17,7 +17,6 @@ define([
         self._bookImage = self.$el.find(".previewImage");
         self._nextBtn = self.$el.find(".previewRightBtn");
         self._preBtn = self.$el.find(".previewLeftBtn");
-        self.show(["http://ac-syrskc2g.clouddn.com/95f2df33032a1574f0b7", "http://ac-syrskc2g.clouddn.com/1ab3c8b1a334770f5194"]);
     };
 
     /**
