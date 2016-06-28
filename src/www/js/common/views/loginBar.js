@@ -82,6 +82,7 @@ define([
         onPublishHandle : function(e){
             e.stopPropagation();
             e.preventDefault();
+            app.navigate("#publish" , {replace: false, trigger: true});
         },
 
         onLoginHandle : function(e){
