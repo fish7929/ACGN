@@ -48,6 +48,14 @@ a:link {
     float: right;
 }
 
+.button{
+    cursor: pointer;
+}
+
+.button:hover{
+    opacity: 0.5;
+}
+
 /**
 *容器公用类
 */
@@ -163,3 +171,5 @@ img {
 @import "book/bookDetailsPreview.scss";
 @import "book/bookDetailsHot.scss";
 @import "book/bookPreviewView.scss";
+
+@import "publish/publishOption.scss";
