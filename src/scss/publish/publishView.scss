@@ -1,0 +1,132 @@
+.publishContainer{
+  position: relative;
+  width: 1280px;
+  margin: 0 auto;
+  z-index: 9999;
+
+  .publishHeadMask{
+    position: fixed;
+    width: 1280px;
+    height: 100%;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0);
+  }
+
+  .publishMask {
+    position: fixed;
+    width: 1280px;
+    height: 100%;
+    top: 64px;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding-top: 105px;
+
+    .publishContent {
+      width: 605px;
+      background-color: #ffffff;
+      border-radius: 10px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: left;
+    }
+
+    .publishTitle{
+      font-size: 24px;
+      color: #3d3d3d;
+      margin-bottom: 20px;
+    }
+
+    .publishImagesContent{
+      width: 565px;
+      height: 295px;
+      margin: 0 auto;
+    }
+
+    .publishImageEmpty{
+      width: 100%;
+      height: 295px;
+      border-radius: 10px;
+      border: 1px dashed #c0c0c0;
+      padding-top: 72px;
+
+
+      .publishImageEmptyImage{
+        width: 124px;
+        height: 124px;
+        margin: 0 auto;
+        background: url("../images/publish/emptyAdd.png") no-repeat center;
+      }
+
+      .publishImageEmptyTxt{
+        width: 100%;
+        font-size: 18px;
+        color: #808080;
+        text-align: center;
+        margin-top: 26px;
+      }
+    }
+
+    .publishImageList{
+
+    }
+
+    .publishTopicContent{
+      width: 565px;
+      height: 228px;
+      margin: 20px auto 0 auto;
+      border-radius: 10px;
+      border: 1px solid #c0c0c0;
+
+      .publishTextArea{
+        width: 100%;
+        height: 130px;
+        padding: 14px 10px;
+        font-size: 18px;
+        color: #808080;
+      }
+
+      .publish-line{
+        width: 535px;
+        border-bottom: 1px solid #c0c0c0;
+        margin: 0 auto;
+      }
+
+      .publish-labels{
+        width: 100%;
+        height: 92px;
+      }
+
+    }
+
+    .publish-btns{
+      margin-top: 20px;
+      width: 100%;
+      height: 40px;
+
+      .btn-face{
+        width: 150px;
+        height: 40px;
+        background: url("../images/common/face.png") no-repeat center;
+        float: left;
+      }
+
+      .btn{
+        width: 90px;
+        height: 40px;
+        border-radius: 20px;
+        font-size: 18px;
+        float: right;
+        line-height: 40px;
+        text-align: center;
+      }
+
+      .bn-cancel{
+        background-color: #c0c0c0;
+        margin-right: 20px;
+      }
+
+      .bn-publish{
+        background-color: #fd4200;
+      }
+    }
+  }
+}

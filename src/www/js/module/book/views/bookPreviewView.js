@@ -29,9 +29,7 @@ define([
 
         if(self._isShow) return;
         self._isShow = true;
-        if(self.el.parentNode){
-            document.body.appendChild(self.el);
-        }
+        document.body.appendChild(self.el);
         self._picIndex = 0;
         self._picArr = arr;
         self.showPic();
@@ -119,10 +117,8 @@ define([
             return;
         }
         this._isShow = false;
-        if(!self.el.parentNode){
-            self.el.remove();
-        }
         self.removeEvent();
+        self.$el.remove();
     };
 
     return new BookPreviewView();

@@ -4,11 +4,19 @@
   margin: 0 auto;
   z-index: 9999;
 
-  .previewMask{
+  .previewHeadMask{
     position: fixed;
     width: 1280px;
     height: 100%;
     top: 0;
+    background-color: rgba(0,0,0,0);
+  }
+
+  .previewMask{
+    position: fixed;
+    width: 1280px;
+    height: 100%;
+    top: 64px;
     background-color: rgba(0,0,0,0.6);
 
     .previewContent{
