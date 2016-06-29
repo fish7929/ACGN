@@ -3,7 +3,8 @@
 define([
     'module/home/controller',
     'module/login/controller',
-    'module/planning/controller'
+    'module/planning/controller',
+    'module/userCenter/controller'
 ],function(){
     var controllers = {
     };

@@ -56,7 +56,7 @@ a:link {
     position: relative;
     margin: 0 auto;
     background-color: #fff;
-    padding: 0 40px;
+//    padding: 0 40px;
 }
 
 /**
@@ -147,3 +147,4 @@ img {
 @import "home/qhdc.scss";
 @import "common/loginBar.scss";
 @import "planning/planning.scss";
+@import "userCenter/userCenter.scss";
