@@ -42,8 +42,7 @@ gili_data.getPlan=function(options,cb_ok,cb_err) {
     gili_data.getalert();
     var pageNumber=options.pageNumber||0,
          pageSize=options.pageSize||1000;
-
-    $("#dg").datagrid("loading", "数据加载中……");
+ 
     var limit = pageSize;
     var skip = 0;
 
@@ -51,9 +50,7 @@ gili_data.getPlan=function(options,cb_ok,cb_err) {
         skip = pageSize * pageNumber - pageSize;
     } else {
         skip = pageNumber;
-    }
-    var rows = [];
-    $("#dg").datagrid("loading", "数据加载中……");
+    } 
     var strCql = "";
     strCql = " select include author, * from plan ";
     //翻页
@@ -239,7 +236,11 @@ gili_data.getUserPlanRelation = function (options, cb_ok, cb_err) {
     });
 };
 
+
+////////////////////////////////////////////////// 首页 相关 /////////////////////////////////////////////////////////
+
 /////////////////////////////////////
+
 /** 根据标签类型type查询标签数据集
   labelsType，标签类型 如：pc_plate_label
 **/
