@@ -60,7 +60,7 @@ define([
         pageIn : function(){
             var self = this;
             self.regionShow();
-            // BookPreviewView.show(['images/temp/excellent_book/wide.jpg']);
+            BookPreviewView.show(['images/temp/excellent_book/wide.jpg'],['http://ac-syrskc2g.clouddn.com/1ab3c8b1a334770f5194']);
         },
 
         regionShow : function(){

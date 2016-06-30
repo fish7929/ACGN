@@ -49,7 +49,6 @@ define([
             image = null;
         };
         image.src = url;
-
         self.setBtnVi();
     };
 
@@ -90,8 +89,11 @@ define([
         var self = this;
         var cssObj = {};
         cssObj.height = imageHeight+"px";
-        self._nextBtn.css(cssObj);
-        self._preBtn.css(cssObj);
+        cssObj["margin-right"] = "calc(100% - " + (imageWidth - 80) + "px)";
+//        self._nextBtn.css(cssObj);
+        console.log(self._preBtn);
+        self._preBtn.show();
+        self._preBtn.css({"margin" : "300px)"});
     };
 
     BookPreviewView.prototype.bindEvent = function(){
