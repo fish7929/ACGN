@@ -60,7 +60,6 @@ define([
 
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
-            console.log(this.ui.loginBtn);
             var self = this;
             self.LoginBarRegion.show(self._loginBarView);
             var currentUser = gili_data.getCurrentUser();

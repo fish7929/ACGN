@@ -59,13 +59,17 @@ define([
             self.init();
             self._initView();
             self.$el.show();
+            //登录成功
             app.on("login:ok",this.onLoginOkHandle, this);
+            //登出成功
+            app.on("logOut:ok",this.onLoginOkHandle, this);
         },
 
         init : function(){
             var self = this;
-            var headUrl = 'images/temp/smallhead/head.png';
-            var userName = "道道好厉害";
+            self.currentUser = gili_data.getCurrentUser();
+            var headUrl = self.currentUser.avatar;
+            var userName = self.currentUser.user_nick;
             self.ui.userPic.css({"background" : "url('"+headUrl+"') repeat center", "background-size" : "100%"});
             self.ui.userName.html(userName);
         },
@@ -78,7 +82,7 @@ define([
                 self.ui.userInfoLayer.hide();
                 self.ui.loginBtnsLayer.show();
             }
-
+            self.hideUserOperationLayer();
         },
         onPublishHandle : function(e){
             e.stopPropagation();
@@ -99,22 +103,27 @@ define([
         },
         onLoginOkHandle : function(){
             var self = this;
-            self.currentUser = 1;       //TODO 重新获取用户信息
+            self.currentUser = gili_data.getCurrentUser();      //TODO 重新获取用户信息
             self._initView();
         },
-        onSwitchUserOperationLayerHandle : function(e){
-            e.stopPropagation();
-            e.preventDefault();
+        onSwitchUserOperationLayerHandle : function(event){
+            event.stopPropagation();
+            event.preventDefault();
             var self = this;
+            var e = event || window.event;
+            var x = e.screenX;
+            var tempX = (self.ui.userInfoLayer.parent()).width() - x;
             if(!self.isShowUserOperationLayer){
-                self.showUserOperationLayer();
+                self.showUserOperationLayer(tempX);
             }else{
                 self.hideUserOperationLayer();
             }
         },
-        showUserOperationLayer : function(){
+        showUserOperationLayer : function(tempX){
             var self = this;
             self.isShowUserOperationLayer = true;
+            var marginRight = tempX - self.ui.userOperationLayer.width();
+            self.ui.userOperationLayer.css({"margin-right":  marginRight+"px"});
             self.ui.userOperationLayer.show();
         },
         hideUserOperationLayer : function(){
@@ -128,7 +137,8 @@ define([
             var self = this;
             MsgBox.ask("亲,确定要退出吗？","温馨提示",function(type) {
                 if (type == MsgBox.YES) {
-                    console.log(862);
+                    gili_data.logOut();
+                    app.triggerMethod("logOut:ok");
                 }
             });
         },
@@ -137,7 +147,6 @@ define([
             e.preventDefault();
             var self = this;
             MsgBox.alert("点击用户设置按钮");
-
         },
         /*点击事件不可以重复点*/
         _checkMouseLock : function () {
