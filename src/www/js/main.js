@@ -27,7 +27,8 @@ require.config({
         marionette : 'vendor/backbone/backbone.marionette',
         text : 'vendor/text',
         swiper : 'vendor/swiper',
-        showbox : "common/views/ShowBox"
+        showbox : "common/views/ShowBox",
+        giliApi : "lib/gili_api"
     },
     waitSeconds: 0
 });
@@ -43,7 +44,8 @@ require([
     'text',
     'utils/utils',
     'swiper',
-    'showbox'
+    'showbox',
+    'giliApi'
 ], function($,Backbone, BackboneHistory, app, Controller, AppRouter) {
     $(document).ready(readyHandle);
 
