@@ -11,19 +11,60 @@ define([
         self._isShow = false;
         self.$el = $(tpl);
         self.el = self.$el.get(0);
-
+        //发布标题
+        self.titleTxt = self.$el.find(".publishTitle");
+        //
+        self.imageContent = self.$el.find(".publishImagesContent");
+        self.imageEmptyDiv = self.$el.find(".publishImageEmpty");
+        self.imageListDiv = self.$el.find(".publishImageList");
         self.bnClose = self.$el.find(".bn-cancel");
         self.bnPublish = self.$el.find(".bn-publish");
     };
 
 
-    PublishView.prototype.show = function(){
+    PublishView.prototype.show = function(param){
         var self = this;
+        //发布话题
+        if(!param || !param.type) return;
+        switch (param.type){
+            case "topic":
+                self.initTopic();
+                break;
+            case "ill":
+                self.initIll();
+                break;
+            default:
+                return;
+        }
 
         if(self._isShow) return;
         self._isShow = true;
         document.body.appendChild(self.el);
         self.bindEvent();
+    };
+
+    PublishView.prototype.initTopic = function(){
+        var self = this;
+        self.setTitle("发布话题");
+        self.imageContent.hide();
+    };
+
+    PublishView.prototype.initIll = function(){
+        var self = this;
+        self.setTitle("发布插画");
+        self.imageContent.show();
+        self.clearImageContent();
+
+    };
+
+    PublishView.prototype.clearImageContent = function(){
+        var self = this;
+        self.imageEmptyDiv.show();
+        self.imageListDiv.hide();
+    };
+
+    PublishView.prototype.setTitle = function(val){
+        this.titleTxt.html(val);
     };
 
     PublishView.prototype.hide = function(){
@@ -37,7 +78,6 @@ define([
     };
 
     PublishView.prototype.onPublishHandle = function(e){
-        console.log("onPublishHandle")
         e.stopPropagation();
         e.preventDefault();
         var self = this;
