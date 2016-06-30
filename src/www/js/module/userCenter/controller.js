@@ -6,11 +6,11 @@ define([
     'module/userCenter/views/userCenterFansView'
 ],function(UserCenterView,UserCenterFansView){
     return {
-        userCenter:function(){
-            app.page.show(UserCenterView);
+        userCenter:function(userId){
+            app.page.show(UserCenterView,{userId:userId});
         },
-        userCenterFans:function(){
-            app.page.show(UserCenterFansView);
+        userCenterFans:function(userId){
+            app.page.show(UserCenterFansView,{userId:userId});
         }
     }
 });

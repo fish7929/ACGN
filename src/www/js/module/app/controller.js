@@ -4,7 +4,8 @@ define([
     'module/home/controller',
     'module/login/controller',
     'module/planning/controller',
-    'module/userCenter/controller'
+    'module/userCenter/controller',
+    'module/Associations/controller'
 ],function(){
     var controllers = {
     };

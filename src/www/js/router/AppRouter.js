@@ -17,7 +17,10 @@ define([
             "login" : "userLogin",
             "planning" : "planning", //企划路由
             "userCenter" : "userCenter", //用户中心 add by guYY
-            "userCenterFans" : "userCenterFans" //用户中心-粉丝 add by guYY
+            "userCenter/:userId" : "userCenter", //用户中心 add by guYY
+            "userCenterFans" : "userCenterFans", //用户中心-粉丝 add by guYY
+            "userCenterFans/:userId" : "userCenterFans", //用户中心-粉丝 add by guYY
+            "associations" : "Associations" //社团 add by guYY
 
         },
         /**当前路由，如果调用返回，返回到指定路由**/
