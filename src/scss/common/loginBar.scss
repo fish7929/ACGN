@@ -1,9 +1,16 @@
 .loginBarContainer{
-  position: absolute;
-  width: 100%;
+  position:relative;
+  width: 1280px;
+  margin-left: -40px;
+}
+
+.loginBar-div{
+  position: fixed;
+  width: 1280px;
   height: 64px;
   background-color : rgba(255, 255, 255, 0.9);
-  left: 0;
+  top: 0;
+  //left: 0;
   border-bottom: 4px solid #ff4200;
   z-index: 999;
 }
@@ -28,21 +35,19 @@
     line-height: 36px;
   }
 
-  div:active{
-    opacity: 0.5;
-  }
-
   .loginBar-bnLogin{
     float: left;
     margin-right: 10px;
     color: #ff4200;
     border: 1px solid #ff4200;
+    border-radius: 20px;
   }
 
   .loginBar-bnRegister{
     float: right;
     color: #c0c0c0;
     border: 1px solid #c0c0c0;
+    border-radius: 20px;
   }
 }
 
@@ -77,4 +82,31 @@
     background-color: #fd4200;
     float: right;
   }
+}
+
+.loginBar-user-operation{
+    position: relative;
+    float: right;
+    margin-top: 5px;
+    margin-right: 180px;
+    border: 1px solid #c0c0c0;
+    width: 182px;
+    height: 106px;
+    background: rgba(255,255,255,.9);
+    border-radius: 10px;
+    font-size: 18px;
+    color:#808080;
+    display: none;
+}
+
+.loginBar-setting-common{
+    width: 153px;
+    height: 53px;
+    text-align: center;
+    line-height: 52px;
+    margin: 0 auto;
+    border-bottom: 1px solid #c0c0c0;
+}
+.loginBar-setting-common:last-child{
+    border-bottom:0;
 }

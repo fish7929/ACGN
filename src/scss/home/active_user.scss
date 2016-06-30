@@ -1,0 +1,39 @@
+.aUserContainer{
+   width: 100%;
+   height: 100%;
+   padding-left: 20px;
+ }
+
+.aUser-header{
+  text-align: left;
+  width: 100%;
+  height: 30px;
+
+  .aUser-title{
+    font-size: 24px;
+    color: #3d3d3d;
+    float: left;
+  }
+}
+
+.aUser-container{
+  width: 100%;
+  height: 220px;
+  clear: both;
+  padding-top: 20px;
+
+  .aUser-item{
+    width: 57px;
+    height: 57px;
+    margin-right: 12px;
+    margin-bottom: 12px;
+    float: left;
+
+    .aUser-headPic{
+      width: 57px;
+      height: 57px;
+      border-radius: 100%;
+      border: 1px solid #c0c0c0;
+    }
+  }
+}

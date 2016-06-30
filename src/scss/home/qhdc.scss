@@ -18,21 +18,20 @@
     width: 120px;
     height: 30px;
     background: url("../images/common/more-h.png") no-repeat center;
-    margin-right: 14px;
     float: right;
   }
 }
 
 .qhdc-container{
   width: 100%;
-  height: 220px;
+  height: 200px;
   clear: both;
 
   .qhdc-item{
-    width: 176px;
+    width: 162px;
     height: 100%;
-    padding-top: 20px;
-    padding-right: 14px;
+    margin-top: 20px;
+    margin-right: 17.5px;
     float: left;
 
     .qhdc-userPic{
@@ -48,5 +47,9 @@
       font-size: 18px;
       color: #333333;
     }
+  }
+
+  .last-item{
+    margin-right: 0 !important;
   }
 }

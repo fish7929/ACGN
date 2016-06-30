@@ -14,7 +14,6 @@ define([
             if (!self._ensureElement()) {
                 return;
             }
-
             var view = viewManager.getViewInstance(viewClass, options);
 
             self._isReverse = false;
@@ -40,12 +39,13 @@ define([
                 self.currentView = null;
                 delete self.currentView;
             }
+
+            if(!view.el.parentNode) {
+                self.openView(view);
+            }
             if (!view.isRendered) {
                 view.render();
                 view.isRendered = true;
-            }
-            if(!view.el.parentNode) {
-                self.openView(view);
             }
             view._parent = self;
             if(view.show) {

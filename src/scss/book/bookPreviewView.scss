@@ -1,0 +1,52 @@
+.previewContainer{
+  position: relative;
+  width: 1280px;
+  margin: 0 auto;
+  z-index: 9999;
+
+  .previewHeadMask{
+    position: fixed;
+    width: 1280px;
+    height: 100%;
+    top: 0;
+    background-color: rgba(0,0,0,0);
+  }
+
+  .previewMask{
+    position: fixed;
+    width: 1280px;
+    height: 100%;
+    top: 64px;
+    background-color: rgba(0,0,0,0.6);
+
+    .previewContent{
+      width: 100%;
+      height: 100%;
+      padding-top: 80px;
+
+      .previewImage{
+        margin: 0 auto;
+      }
+
+      .previewLeftBtn{
+        width: 100px;
+        height: 90px;
+        background: url("../images/common/arrow.png") no-repeat center ;
+        transform: scaleX(-1);
+        -ms-transform: scaleX(-1); 	      /* IE 9 */
+        -moz-transform: scaleX(-1);	      /* Firefox */
+        -webkit-transform: scaleX(-1);    /* Safari 和 Chrome */
+        -o-transform: scaleX(-1); 	      /* Opera */
+        float: left;
+      }
+
+      .previewRightBtn{
+        width: 100px;
+        height: 90px;
+        background: url("../images/common/arrow.png") no-repeat center;
+        float: right;
+      }
+    }
+  }
+}
+

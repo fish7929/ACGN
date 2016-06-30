@@ -20,8 +20,11 @@ define([
             "userCenter/:userId" : "userCenter", //用户中心 add by guYY
             "userCenterFans" : "userCenterFans", //用户中心-粉丝 add by guYY
             "userCenterFans/:userId" : "userCenterFans", //用户中心-粉丝 add by guYY
-            "associations" : "Associations" //社团 add by guYY
-
+            "associations" : "Associations", //社团 add by guYY
+            //同人本详情
+            "book" : "book",
+            //发布页面
+            "publish" : "publish"
         },
         /**当前路由，如果调用返回，返回到指定路由**/
         backRoutes: {

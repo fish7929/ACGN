@@ -9,9 +9,16 @@ define([
     'common/region/switch_view_region',
     'common/views/loginBar',
     'module/home/views/home_QHDCView',
-    'module/home/views/home_user_view'
-],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, QHDCView, ActiveUserView) {
-    var bannerHtmlTpl = "<div class='swiper-slide' style=\"background: url('{0}') center no-repeat\"></div>";
+    'module/home/views/home_user_view',
+    'module/home/views/home_book',
+    'module/home/views/home_college',
+    'module/home/views/home_excellent_book',
+    'module/home/views/home_link',
+    'module/home/views/home_footer',
+    'module/publish/views/publishView'
+],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, QHDCView, ActiveUserView, HomeBookView, HomeCollegeView,
+           HomeExcellentBookView, HomeLinkView, HomeFooterView, PublishView) {
+    var bannerHtmlTpl = "<div class='swiper-slide' style=\"background: url('{0}') no-repeat center \"></div>";
 
     return BaseView.extend({
         id: "homeContainer",
@@ -25,8 +32,14 @@ define([
 
         //事件添加
         events : {
+            "click @ui.bannerWrapper" : "goToPlanningHandle"
         },
-
+        //测试
+        goToPlanningHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            app.navigate("#planning" , {replace: false, trigger: true});
+        },
         regions : {
             LoginBarRegion : {
                 el : ".home-loginBar",
@@ -37,19 +50,43 @@ define([
                 el : ".home-qhdc-reg",
                 regionClass : SwitchViewRegion
             },
-
             ActiveUserRegion : {
                 el : ".home-user-reg",
                 regionClass : SwitchViewRegion
+            },
+            BookRegion : {
+                el : ".home-book-reg",
+                regionClass : SwitchViewRegion
+            },
+            CollegeRegion : {
+                el : ".home-college-reg",
+                regionClass : SwitchViewRegion
+            },
+            ExcellentBookRegion : {
+                el : ".home-excellent-book-reg",
+                regionClass : SwitchViewRegion
+            },
+            HomeLinkRegion : {
+                el : ".home-link-reg",
+                regionClass : SwitchViewRegion
+            },
+            HomeFooterRegion : {
+                el : ".home-footer-reg",
+                regionClass : SwitchViewRegion
             }
-
         },
 
         /**初始化**/
         initialize : function(){
-            this._loginBarView = new LoginBarView();
-            this._qhdcView = new QHDCView();
-            this._aUserView = new ActiveUserView();
+            var self = this;
+            self._loginBarView = new LoginBarView();
+            self._qhdcView = new QHDCView();
+            self._aUserView = new ActiveUserView();
+            self._bookView = new HomeBookView();
+            self._collegeView = new HomeCollegeView();
+            self._excellentBookView = new HomeExcellentBookView();
+            self._homeLinkView = new HomeLinkView();
+            self._homeFooterView = new HomeFooterView();
         },
 
         //在开始渲染模板前执行，此时当前page没有添加到document
@@ -71,6 +108,11 @@ define([
             self.LoginBarRegion.show(self._loginBarView);
             self.QHDCRegion.show(self._qhdcView);
             self.ActiveUserRegion.show(self._aUserView);
+            self.BookRegion.show(self._bookView);
+            self.CollegeRegion.show(self._collegeView);
+            self.ExcellentBookRegion.show(self._excellentBookView);
+            self.HomeLinkRegion.show(self._homeLinkView);
+            self.HomeFooterRegion.show(self._homeFooterView);
         },
 
         initBanner : function(){
@@ -94,6 +136,7 @@ define([
                     }, 2000);
                 }
             });
+            utils.log("bannerSwipe")
         },
 
         /**页面关闭时调用，此时不会销毁页面**/

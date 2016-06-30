@@ -27,6 +27,7 @@ var requirejs={
         backbone: 'vendor/backbone/backbone',
         marionette : 'vendor/backbone/backbone.marionette',
         text : 'vendor/text',
-        touchSlide : 'vendor/TouchSlide.1.1'
+        swiper : 'vendor/swiper',
+        showbox : "common/views/ShowBox"
 	}
 }

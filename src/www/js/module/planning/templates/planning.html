@@ -1,11 +1,12 @@
 <!--登录的导航-->
-<nav id="login-nav" class="x-center">
-    <img class="logo xy-center" alt="logo" src="./images/logo.png">
-    <div class="login-and-register y-center">
-        <span id="login" >登录</span>
-        <span id="register" >注册</span>
-    </div>
-</nav>
+<!--<nav id="login-nav" class="x-center">-->
+    <!--<img class="logo xy-center" alt="logo" src="./images/logo.png">-->
+    <!--<div class="login-and-register y-center">-->
+        <!--<span id="login" >登录</span>-->
+        <!--<span id="register" >注册</span>-->
+    <!--</div>-->
+<!--</nav>-->
+<div id="login-nav"></div>
 <!--banner-->
 <div class="planning-banner" id="planning-banner"></div>
 <!--企划详情-->
@@ -33,29 +34,29 @@
                 这里是啥都想不出来的介绍，介绍，介绍。。。。
             </div>
             <div class="detail-operation-btn">
-                <div class="planning-operation-btn">审核中</div>
-                <div class="planning-operation-btn">订阅企划</div>
-                <div class="planning-operation-btn">上传作品</div>
+                <div class="planning-operation-btn button" id="verify-planning">审核中</div>
+                <div class="planning-operation-btn button" id="subscribe-planning">订阅企划</div>
+                <div class="planning-operation-btn button" id="uploading-opus">上传作品</div>
             </div>
         </div>
     </div>
     <div class="planning-content-bottom" >
         <div class="planning-type">
-            <div class="planning-type-item">
-                <img  class="planning-type-item-selected" src="./images/planning/1.jpg" />
-                <span class="xy-center">世界观</span>
+            <div class="planning-type-item" type-index="1">
+                <img  class="planning-type-item-selected button" src="./images/planning/1.jpg" type-index="1" />
+                <span class="xy-center" type-index="1">世界观</span>
             </div>
-            <div class="planning-type-item">
-                <img  src="./images/planning/2.jpg" />
-                <span class="xy-center">人设</span>
+            <div class="planning-type-item" type-index="2">
+                <img  src="./images/planning/2.jpg" type-index="2"  class="button"/>
+                <span class="xy-center" type-index="2">人设</span>
             </div>
-            <div class="planning-type-item">
-                <img  src="./images/planning/3.jpg" />
-                <span class="xy-center">主线</span>
+            <div class="planning-type-item" type-index="3">
+                <img  src="./images/planning/3.jpg" type-index="3" class="button"/>
+                <span class="xy-center" type-index="3">主线</span>
             </div>
-            <div class="planning-type-item">
-                <img  src="./images/planning/4.jpg" />
-                <span class="xy-center">日常</span>
+            <div class="planning-type-item" type-index="4">
+                <img  src="./images/planning/4.jpg" type-index="4" class="button"/>
+                <span class="xy-center" type-index="4">日常</span>
             </div>
         </div>
         <div class="planning-type-detail">
@@ -72,65 +73,65 @@
 <div class="planning-join-role" >
     <div class="planning-common-title">
         <span class="common-hint">参与角色</span>
-        <div class="common-more" id="more-role"></div>
+        <div class="common-more button" id="more-role"></div>
     </div>
     <div class="role-content">
-        <div class="join-role-item">
-            <img  src="./images/planning/role/1.png" class="join-role-item-selected" />
-            <span class="show common-name-hint">源氏</span>
+        <div class="join-role-item" role-index="1">
+            <img  src="./images/planning/role/1.png" class="join-role-item-selected button" role-index="1"/>
+            <span class="show common-name-hint" role-index="1">源氏</span>
         </div>
-        <div class="join-role-item">
-            <img  src="./images/planning/role/2.png" />
-            <span class="hide common-name-hint">日氏</span>
+        <div class="join-role-item" role-index="2">
+            <img  src="./images/planning/role/2.png" role-index="2" class="button" />
+            <span class="hide common-name-hint" role-index="2">日氏</span>
         </div>
-        <div class="join-role-item">
-            <img  src="./images/planning/role/3.png" />
-            <span class="hide common-name-hint">机器猫</span>
+        <div class="join-role-item" role-index="3">
+            <img  src="./images/planning/role/3.png" role-index="3"  class="button"/>
+            <span class="hide common-name-hint" role-index="3">机器猫</span>
         </div>
-        <div class="join-role-item">
-            <img  src="./images/planning/role/4.png" />
-            <span class="hide common-name-hint">李氏</span>
+        <div class="join-role-item" role-index="4">
+            <img  src="./images/planning/role/4.png" role-index="4" class="button"/>
+            <span class="hide common-name-hint" role-index="4">李氏</span>
         </div>
-        <div class="join-role-item">
-            <img  src="./images/planning/role/5.png" />
-            <span class="hide common-name-hint">周氏</span>
+        <div class="join-role-item" role-index="5">
+            <img  src="./images/planning/role/5.png" role-index="5" class="button"/>
+            <span class="hide common-name-hint" role-index="5">周氏</span>
         </div>
-        <div class="join-role-item">
-            <img  src="./images/planning/role/6.png" />
-            <span class="hide common-name-hint">王氏</span>
+        <div class="join-role-item" role-index="6">
+            <img  src="./images/planning/role/6.png" role-index="6" class="button"/>
+            <span class="hide common-name-hint" role-index="6">王氏</span>
         </div>
     </div>
 </div>
-<!--newest opus -->
-<div class="planning-newest-opus">
+<!--hottest opus -->
+<div class="planning-hottest-opus">
     <div class="planning-common-title">
-        <span class="common-hint">最新作品</span>
-        <div class="common-more" id="more-opus"></div>
+        <span class="common-hint">最热作品</span>
+        <div class="common-more button" id="more-opus"></div>
     </div>
-    <div class="newest-opus-content">
-        <div class="newest-opus-item">
-            <img  src="./images/planning/opus/1.jpg" />
-            <span class="common-opus-hint">出租房的地缚灵</span>
+    <div class="hottest-opus-content">
+        <div class="hottest-opus-item" opus-index="1">
+            <img  src="./images/planning/opus/1.jpg" opus-index="1" class="button" />
+            <span class="common-opus-hint" opus-index="1">出租房的地缚灵</span>
         </div>
-        <div class="newest-opus-item">
-            <img  src="./images/planning/opus/2.jpg" />
-            <span class="common-opus-hint">偷星九月天</span>
+        <div class="hottest-opus-item" opus-index="2">
+            <img  src="./images/planning/opus/2.jpg" opus-index="2" class="button" />
+            <span class="common-opus-hint" opus-index="2">偷星九月天</span>
         </div>
-        <div class="newest-opus-item">
-            <img  src="./images/planning/opus/3.jpg" />
-            <span class="common-opus-hint">哪吒转</span>
+        <div class="hottest-opus-item" opus-index="3">
+            <img  src="./images/planning/opus/3.jpg" opus-index="3" class="button" />
+            <span class="common-opus-hint" opus-index="3">哪吒转</span>
         </div>
-        <div class="newest-opus-item">
-            <img  src="./images/planning/opus/4.jpg" class="newest-opus-item-selected" />
-            <span class="common-opus-hint opus-hint-selected">作者：道道好厉害</span>
+        <div class="hottest-opus-item" opus-index="4">
+            <img  src="./images/planning/opus/4.jpg" class="hottest-opus-item-selected button" opus-index="4" />
+            <span class="common-opus-hint opus-hint-selected" opus-index="4">作者：道道好厉害</span>
         </div>
-        <div class="newest-opus-item">
-            <img  src="./images/planning/opus/5.jpg" />
-            <span class="common-opus-hint">女命师</span>
+        <div class="hottest-opus-item" opus-index="5">
+            <img  src="./images/planning/opus/5.jpg" opus-index="5" class="button" />
+            <span class="common-opus-hint" opus-index="5">女命师</span>
         </div>
-        <div class="newest-opus-item">
-            <img  src="./images/planning/opus/6.jpg" />
-            <span class="common-opus-hint">哑舍</span>
+        <div class="hottest-opus-item" opus-index="6">
+            <img  src="./images/planning/opus/6.jpg" opus-index="6" class="button" />
+            <span class="common-opus-hint" opus-index="6">哑舍</span>
         </div>
     </div>
 </div>
@@ -142,9 +143,83 @@
     <div class="dynamic-content">
         <div class="dynamic-item">
             <img src="./images/planning/trends/1.jpg"/>
+            <div class="dynamic-item-author">
+                <img src="./images/planning/trends/role-1.png"/>
+                <span>道道好厉害</span>
+                <span>这是我的任务设定，请大家支持我哟~(*——3)(&——*)<br/>若亚的恋人请收下！！！！！ </span>
+            </div>
+            <div class="dynamic-item-statistics">
+                <div>54513</div>
+                <div>6548</div>
+            </div>
+            <div class="common-reply">
+                <div class="common-reply-txt" contenteditable="false">您还为登录无法发布评论</div>
+                <div class="common-reply-btn">
+                    <span></span>
+                    <span>发布</span>
+                </div>
+            </div>
+            <div class="planning-comments">
+                <div class="comment-item">
+                    <img src="./images/planning/trends/role-2.png"/>
+                    <div class="comment-brief"><span>曾看见长安花</span><span>：大大画的好漂亮啊，萌新跪舔~</span></div>
+                    <div class="comment-created">2016.6.21 10:51</div>
+                    <div class="comment-revert">回复</div>
+                </div>
+                <div class="comment-item">
+                    <img src="./images/planning/trends/role-3.png"/>
+                    <div class="comment-brief"><span>好马无好鞍</span><span>：大大画的好漂亮啊，萌新跪舔~</span></div>
+                    <div class="comment-created">2016.6.21 10:51</div>
+                    <div class="comment-revert">回复</div>
+                </div>
+                <div class="comment-item">
+                    <img src="./images/planning/trends/role-4.png"/>
+                    <div class="comment-brief"><span>屁股1号</span><span>：看这里一眼求签名啊！！！！！！！！！！</span></div>
+                    <div class="comment-created">2016.6.21 10:51</div>
+                    <div class="comment-revert">回复</div>
+                </div>
+                <div class="comment-more"><span class="comment-more-btn"></span></div>
+            </div>
         </div>
         <div class="dynamic-item">
             <img src="./images/planning/trends/2.jpg"/>
+            <div class="dynamic-item-author">
+                <img src="./images/planning/trends/role-1.png"/>
+                <span>道道好厉害</span>
+                <span>这是我的任务设定，请大家支持我哟~(*——3)(&——*)<br/>若亚的恋人请收下！！！！！ </span>
+            </div>
+            <div class="dynamic-item-statistics">
+                <div>54513</div>
+                <div>6548</div>
+            </div>
+            <div class="common-reply">
+                <div class="common-reply-txt" contenteditable="false">您还为登录无法发布评论</div>
+                <div class="common-reply-btn">
+                    <span></span>
+                    <span>发布</span>
+                </div>
+            </div>
+            <div class="planning-comments">
+                <div class="comment-item">
+                    <img src="./images/planning/trends/role-2.png"/>
+                    <div class="comment-brief"><span>曾看见长安花</span><span>：大大画的好漂亮啊，萌新跪舔~</span></div>
+                    <div class="comment-created">2016.6.21 10:51</div>
+                    <div class="comment-revert">回复</div>
+                </div>
+                <div class="comment-item">
+                    <img src="./images/planning/trends/role-3.png"/>
+                    <div class="comment-brief"><span>好马无好鞍</span><span>：大大画的好漂亮啊，萌新跪舔~</span></div>
+                    <div class="comment-created">2016.6.21 10:51</div>
+                    <div class="comment-revert">回复</div>
+                </div>
+                <div class="comment-item">
+                    <img src="./images/planning/trends/role-4.png"/>
+                    <div class="comment-brief"><span>屁股1号</span><span>：看这里一眼求签名啊！！！！！！！！！！</span></div>
+                    <div class="comment-created">2016.6.21 10:51</div>
+                    <div class="comment-revert">回复</div>
+                </div>
+                <div class="comment-more"><span class="comment-more-btn"></span></div>
+            </div>
         </div>
     </div>
 </div>

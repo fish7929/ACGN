@@ -26,7 +26,8 @@ require.config({
         backbone: 'vendor/backbone/backbone',
         marionette : 'vendor/backbone/backbone.marionette',
         text : 'vendor/text',
-        swiper : 'vendor/swiper'
+        swiper : 'vendor/swiper',
+        showbox : "common/views/ShowBox"
     },
     waitSeconds: 0
 });
@@ -41,7 +42,8 @@ require([
     'router/AppRouter',
     'text',
     'utils/utils',
-    'swiper'
+    'swiper',
+    'showbox'
 ], function($,Backbone, BackboneHistory, app, Controller, AppRouter) {
     $(document).ready(readyHandle);
 

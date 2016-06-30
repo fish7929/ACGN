@@ -5,7 +5,9 @@ define([
     'module/login/controller',
     'module/planning/controller',
     'module/userCenter/controller',
-    'module/Associations/controller'
+    'module/Associations/controller',
+    'module/book/controller',
+    'module/publish/controller'
 ],function(){
     var controllers = {
     };

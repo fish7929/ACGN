@@ -6,23 +6,38 @@
 define([
     'common/base/item_view',
     'text!common/templates/loginBar.html',
-    'marionette'
-],function(ItemView, tpl, mn){
+    'marionette',
+    'showbox'
+],function(ItemView, tpl, mn, ShowBox){
     return ItemView.extend({
         className : "loginBarContainer",
         template : _.template(tpl),
 
         _mouseLock : false,
-
+        currentUser : null, //当前用户
+        isShowUserOperationLayer : false,   //默认不显示用户操作界面
         // key : selector
         ui : {
             userPic : ".loginBar-headPic",
             userName: ".loginBar-username",
-            bnPublish : ".loginBar-bnPublish"
+            bnPublish : ".loginBar-bnPublish",
+            btnLogin : ".loginBar-bnLogin",
+            btnRegister : ".loginBar-bnRegister",
+            userInfoLayer : ".loginBar-UserInfo",
+            loginBtnsLayer : ".loginBar-Btns",
+            userOperationLayer : ".loginBar-user-operation",
+            loginSetting : "#login-setting",
+            loginOut : "#login-out"
         },
         //事件添加
         events : {
-            "click @ui.bnPublish" : "onPublishHandle"
+            "click @ui.bnPublish" : "onPublishHandle",
+            "click @ui.btnLogin" : "onLoginHandle",
+            "click @ui.btnRegister" : "onRegisterHandle",
+            "click @ui.userPic" : "onSwitchUserOperationLayerHandle",
+            "click @ui.loginSetting" : "onLoginSettingHandle",
+            "click @ui.loginOut" : "onLoginOutHandle"
+
         },
         /**初始化**/
         initialize : function(){
@@ -34,14 +49,16 @@ define([
 
         //渲染完模板后执行,此时当前page没有添加到document
         onRender : function(){
+
         },
 
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
             var self = this;
             self.init();
+            self._initView();
             self.$el.show();
-
+            app.on("login:ok",this.onLoginOkHandle, this);
         },
 
         init : function(){
@@ -51,11 +68,76 @@ define([
             self.ui.userPic.css({"background" : "url('"+headUrl+"') repeat center", "background-size" : "100%"});
             self.ui.userName.html(userName);
         },
-
-        onPublishHandle : function(e){
+        _initView : function(){
+            var self = this;
+            if(self.currentUser){
+                self.ui.userInfoLayer.show();
+                self.ui.loginBtnsLayer.hide();
+            }else{
+                self.ui.userInfoLayer.hide();
+                self.ui.loginBtnsLayer.show();
+            }
 
         },
+        onPublishHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            app.navigate("#publish" , {replace: false, trigger: true});
+        },
 
+        onLoginHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            ShowBox.login();
+        },
+
+        onRegisterHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            ShowBox.register();
+        },
+        onLoginOkHandle : function(){
+            var self = this;
+            self.currentUser = 1;       //TODO 重新获取用户信息
+            self._initView();
+        },
+        onSwitchUserOperationLayerHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            if(!self.isShowUserOperationLayer){
+                self.showUserOperationLayer();
+            }else{
+                self.hideUserOperationLayer();
+            }
+        },
+        showUserOperationLayer : function(){
+            var self = this;
+            self.isShowUserOperationLayer = true;
+            self.ui.userOperationLayer.show();
+        },
+        hideUserOperationLayer : function(){
+            var self = this;
+            self.isShowUserOperationLayer = false;
+            self.ui.userOperationLayer.hide();
+        },
+        onLoginOutHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            ShowBox.ask("亲,确定要退出吗？","温馨提示",function(type) {
+                if (type == ShowBox.YES) {
+                    console.log(862);
+                }
+            });
+        },
+        onLoginSettingHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            ShowBox.alert("点击用户设置按钮");
+
+        },
         /*点击事件不可以重复点*/
         _checkMouseLock : function () {
             var self = this;

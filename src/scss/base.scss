@@ -48,6 +48,14 @@ a:link {
     float: right;
 }
 
+.button{
+    cursor: pointer;
+}
+
+.button:hover{
+    opacity: 0.5;
+}
+
 /**
 *容器公用类
 */
@@ -134,7 +142,7 @@ a:link {
 
 .login-and-register span:last-child {
     margin-left: 10px;
-    color: #cococo;
+    color: #c0c0c0;
 //    background: #1D1715;
 }
 
@@ -142,10 +150,29 @@ img {
     draggable: false;
 }
 
+.clear{
+  clear: both;
+}
+
 @import "vendor/swiper";
 @import "home/home.scss";
 @import "home/qhdc.scss";
+@import "home/active_user.scss";
+@import "home/book.scss";
+@import "home/college.scss";
+@import "home/excellent_book.scss";
+@import "home/friends_link.scss";
+@import "home/footer.scss";
 @import "common/loginBar.scss";
 @import "planning/planning.scss";
 @import "userCenter/userCenter.scss";
 @import "associations/associations.scss";
+@import "login/login.scss";
+
+@import "book/bookDetails.scss";
+@import "book/bookDetailsPreview.scss";
+@import "book/bookDetailsHot.scss";
+@import "book/bookPreviewView.scss";
+
+@import "publish/publishOption.scss";
+@import "publish/publishView.scss";
