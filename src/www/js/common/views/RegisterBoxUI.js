@@ -92,6 +92,11 @@ define([
         var account = self.accountTxt.value;  //手机号码
         var password = self.passwordTxt.value;
         var verify = self.verifyTxt.value;
+        gili_data.sendPhoneMsg(account, function(data){
+
+        }, function(err){
+
+        });
         console.log( e, "verifyHandle", account, "----", password, nick, verify);
         self._hide();
     };

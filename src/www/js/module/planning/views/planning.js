@@ -8,9 +8,9 @@ define([
     'marionette',
     'common/region/switch_view_region',
     'common/views/loginBar',
-    "showbox",
+    "msgbox",
     "module/planning/model/planning_model"
-],function(BaseView, tpl, mn,SwitchViewRegion, LoginBarView, ShowBox, PlanningModel) {
+],function(BaseView, tpl, mn,SwitchViewRegion, LoginBarView, MsgBox, PlanningModel) {
     return BaseView.extend({
         id: "gili-love-planning",
         template : _.template(tpl),
@@ -63,6 +63,8 @@ define([
             console.log(this.ui.loginBtn);
             var self = this;
             self.LoginBarRegion.show(self._loginBarView);
+            var currentUser = gili_data.getCurrentUser();
+            console.log(currentUser);
         },
         /**
          * 企划类型点击事件
@@ -89,7 +91,7 @@ define([
                 }
                 currentImg = $target.find("img");
                 currentImg.addClass("planning-type-item-selected");
-//                ShowBox.alert("点击了企划类型"+typeIndex);
+//                MsgBox.alert("点击了企划类型"+typeIndex);
                 self.changeTypeDetail(typeIndex);
             }
         },
@@ -132,7 +134,7 @@ define([
                 currentImg.addClass("join-role-item-selected");
                 currentSpn = $target.find("span");
                 currentSpn.addClass("hide").addClass("show");
-                ShowBox.alert("点击了参与角色"+roleIndex);
+                MsgBox.alert("点击了参与角色"+roleIndex);
             }
         },
         /**
@@ -163,7 +165,7 @@ define([
                 currentImg.addClass("hottest-opus-item-selected");
                 currentSpn = $target.find("span");
                 currentSpn.addClass("opus-hint-selected");
-                ShowBox.alert("点击了作品"+opusIndex);
+                MsgBox.alert("点击了作品"+opusIndex);
             }
         },
         /**
@@ -174,7 +176,8 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            ShowBox.alert("作品正在审核中");
+//            MsgBox.alert("作品正在审核中");
+            MsgBox.toast("作品正在审核中", true);
         },
         /**
          * 订阅企划点击事件
@@ -184,7 +187,7 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            ShowBox.alert("订阅企划成功");
+            MsgBox.alert("订阅企划成功");
         },
         /**
          * 上传作品点击事件
@@ -194,7 +197,7 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            ShowBox.alert("作品正在努力上传...");
+            MsgBox.alert("作品正在努力上传...");
         },
         /**
          * 更多用户点击事件
@@ -204,7 +207,7 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            ShowBox.alert("更多用户点击");
+            MsgBox.alert("更多用户点击");
         },
         /**
          * 更多作品点击事件
@@ -214,7 +217,7 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            ShowBox.alert("更多作品点击");
+            MsgBox.alert("更多作品点击");
         },
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
