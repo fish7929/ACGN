@@ -6,10 +6,9 @@ define([
     'text!module/userCenter/templates/userCenterFans.html',
     'marionette',
     'common/region/switch_view_region',
-    'common/views/login',
     'common/views/loginBar',
     'module/userCenter/views/userCenterHeadView'
-],function(BaseView,UserCenterFansTpl,mn,SwitchViewRegion,login,LoginBarView,UserCenterHeadView){
+],function(BaseView,UserCenterFansTpl,mn,SwitchViewRegion,LoginBarView,UserCenterHeadView){
     var userCenterFansView = BaseView.extend({
         id:"userCenterFansContainer",
         template: _.template(UserCenterFansTpl),

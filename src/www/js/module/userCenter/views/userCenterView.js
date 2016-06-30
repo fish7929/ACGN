@@ -5,11 +5,10 @@ define([
     'common/base/base_view',
     'text!module/userCenter/templates/userCenter.html',
     'marionette',
-    'common/views/login',
     'common/views/loginBar',
     'module/userCenter/views/userCenterHeadView',
     'module/userCenter/views/workListView'
-],function(BaseView,UserCenterTpl,mn,login,LoginBarView,UserCenterHeadView,WorkListView){
+],function(BaseView,UserCenterTpl,mn,LoginBarView,UserCenterHeadView,WorkListView){
     var userCenterView = BaseView.extend({
         id:"userCenterContainer",
         template: _.template(UserCenterTpl),

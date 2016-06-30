@@ -5,9 +5,8 @@ define([
     'common/base/base_view',
     'text!module/Associations/templates/associations.html',
     'marionette',
-    'common/views/login',
     'common/views/loginBar'
-],function(BaseView,AssociationsTpl,mn,login,LoginBarView){
+],function(BaseView,AssociationsTpl,mn,LoginBarView){
     var associationsView = BaseView.extend({
         id:"AssociationsContainer",
         template: _.template(AssociationsTpl),
