@@ -7,8 +7,9 @@ define([
     'common/base/item_view',
     'text!common/templates/loginBar.html',
     'marionette',
-    'showbox'
-],function(ItemView, tpl, mn, ShowBox){
+    'showbox',
+    "msgbox"
+],function(ItemView, tpl, mn, ShowBox, MsgBox){
     return ItemView.extend({
         className : "loginBarContainer",
         template : _.template(tpl),
@@ -125,8 +126,8 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            ShowBox.ask("亲,确定要退出吗？","温馨提示",function(type) {
-                if (type == ShowBox.YES) {
+            MsgBox.ask("亲,确定要退出吗？","温馨提示",function(type) {
+                if (type == MsgBox.YES) {
                     console.log(862);
                 }
             });
@@ -135,7 +136,7 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            ShowBox.alert("点击用户设置按钮");
+            MsgBox.alert("点击用户设置按钮");
 
         },
         /*点击事件不可以重复点*/

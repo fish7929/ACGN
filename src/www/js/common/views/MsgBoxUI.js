@@ -1,17 +1,17 @@
 // 文件名称: AppAlert
 //
 // 创 建 人: fishYu
-// 创建日期: 2016/6/28 21:39
+// 创建日期: 2016/6/30 23:05
 // 描    述: AppAlert
 define([
     'text!common/templates/msg_box.html',
-    "showbox"
-],function(tpl,ShowBox) {
+    "msgbox"
+],function(tpl,MsgBox) {
 //    console.log("app " + app.views.MsgBox);
 
-    if(!ShowBox){
-        require(["showbox"],function(showbox){
-            ShowBox = showbox;
+    if(!MsgBox){
+        require(["msgbox"],function(msgbox){
+            MsgBox = msgbox;
         });
     }
 
@@ -56,10 +56,10 @@ define([
         this._displayButton(self.bnNo,'none');
         switch(this._buttonType)
         {
-            case ShowBox.OK:
+            case MsgBox.OK:
                 this._displayButton(self.bnOk,'block');
                 break;
-            case ShowBox.YES | ShowBox.NO:
+            case MsgBox.YES | MsgBox.NO:
                 this._displayButton(self.bnYes,'block');
                 this._displayButton(self.bnNo,'block');
                 break;
@@ -86,27 +86,32 @@ define([
         e.stopPropagation();
         switch (e.target){
             case self.bnNo:
-                self._hide(ShowBox.NO);
+                self._hide(MsgBox.NO);
                 break;
             case self.bnYes:
-                self._hide(ShowBox.YES);
+                self._hide(MsgBox.YES);
                 break;
             case self.bnOk:
-                self._hide(ShowBox.OK);
+                self._hide(MsgBox.OK);
+                break;
+            case self.txtContent:
                 break;
             default :
 //                self._hide(MsgBox.NO);
+                self._hide(MsgBox.ABORT, true);
                 break;
         }
     };
 
-    MsgBoxUI.prototype._hide = function(type){
-        this.$el.unbind("click");
-        ShowBox.remove(this);
+    MsgBoxUI.prototype._hide = function(type, isNoHide){
         if(this._callback){
             this._callback.apply(null,[type,this._params]);
         }
-        this.destroy();
+        if(!isNoHide){
+            this.$el.unbind("tap");
+            MsgBox.remove(this);
+            this.destroy();
+        }
     };
 
     MsgBoxUI.prototype.destroy = function(){
@@ -127,7 +132,7 @@ define([
     };
 
     MsgBoxUI.prototype.show = function(toCenter){
-        ShowBox.add(this);
+        MsgBox.add(this);
     };
 
     return MsgBoxUI;
