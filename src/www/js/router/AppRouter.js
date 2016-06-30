@@ -14,7 +14,6 @@ define([
         /**配置路由**/
         appRoutes: {
             "" : "home",
-            "login" : "userLogin",
             "planning" : "planning", //企划路由
             "userCenter" : "userCenter", //用户中心 add by guYY
             "userCenter/:userId" : "userCenter", //用户中心 add by guYY

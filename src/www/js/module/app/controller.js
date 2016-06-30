@@ -2,7 +2,6 @@
 // 描    述: app总控制器，只能导入控制器
 define([
     'module/home/controller',
-    'module/login/controller',
     'module/planning/controller',
     'module/userCenter/controller',
     'module/Associations/controller',
