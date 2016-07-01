@@ -5,9 +5,9 @@
 
 var gili_data = {};
 
-/** 
-  返回当前登录用户对象
-**/
+/**
+ 返回当前登录用户对象
+ **/
 gili_data.getCurrentUser = function () {
     var currentUser = AV.User.current();
     if (currentUser) {
@@ -23,26 +23,26 @@ gili_data.getCurrentUser = function () {
  * cb_ok
  * cb_err
  **/
-gili_data.getObjectById = function (class_name,objectId, cb_ok, cb_err) {
+gili_data.getObjectById = function (class_name, objectId, cb_ok, cb_err) {
     var query = new AV.Query(class_name);
     query.equalTo("objectId", objectId);
     query.first({
-        success: function(obj){
-                if(obj){
-                    cb_ok(obj.toJSON());
-                }else{
-                    cb_err("找不到对象");
-                }
+        success: function (obj) {
+            if (obj) {
+                cb_ok(obj.toJSON());
+            } else {
+                cb_err("找不到对象");
+            }
         },
         error: cb_err
     });
 };
 //////////////////////////////////////////////////企划 相关 /////////////////////////////////////////////////////////
-gili_data.getPlan=function(options,cb_ok,cb_err) {
+gili_data.getPlan = function (options, cb_ok, cb_err) {
     gili_data.getalert();
-    var pageNumber=options.pageNumber||0,
-         pageSize=options.pageSize||1000;
- 
+    var pageNumber = options.pageNumber || 0,
+        pageSize = options.pageSize || 1000;
+
     var limit = pageSize;
     var skip = 0;
 
@@ -50,7 +50,7 @@ gili_data.getPlan=function(options,cb_ok,cb_err) {
         skip = pageSize * pageNumber - pageSize;
     } else {
         skip = pageNumber;
-    } 
+    }
     var strCql = "";
     strCql = " select include author, * from plan ";
     //翻页
@@ -58,10 +58,10 @@ gili_data.getPlan=function(options,cb_ok,cb_err) {
         strCql += " order by createdAt desc limit " + skip + "," + limit;
     }
     AV.Query.doCloudQuery(strCql, {
-            success: function (data) {
-                cb_ok(data.results);
-            }, error: cb_err
-        }
+        success: function (data) {
+            cb_ok(data.results);
+        }, error: cb_err
+    }
     );
 };
 /** 查询企划公告
@@ -70,26 +70,26 @@ gili_data.getPlan=function(options,cb_ok,cb_err) {
  * cb_ok
  * cb_err
  **/
-gili_data.getPlanNotice= function (options,cb_ok, cb_err) {
-    var skip=options.skip||0,
-        limit=options.limit||1000;
+gili_data.getPlanNotice = function (options, cb_ok, cb_err) {
+    var skip = options.skip || 0,
+        limit = options.limit || 1000;
     var query = new AV.Query("notice");
     query.equalTo("objectId", objectId);
     query.skip(skip);
     query.limit(limit);
     query.descending("order");
     query.find({
-        success: function(objs){
-            if(objs){
-                var data=[];
-                for(var i=0;i<objs.lenth;i++){
-                    data[i]=objs[i].toJSON();
+        success: function (objs) {
+            if (objs) {
+                var data = [];
+                for (var i = 0; i < objs.lenth; i++) {
+                    data[i] = objs[i].toJSON();
                 }
                 cb_ok(data);
-            }else{
+            } else {
                 cb_err("找不到对象");
             }
-        },error: cb_err
+        }, error: cb_err
     });
 };
 
@@ -99,26 +99,26 @@ gili_data.getPlanNotice= function (options,cb_ok, cb_err) {
  * cb_ok
  * cb_err
  **/
-gili_data.getUser= function (options,cb_ok, cb_err) {
-    var skip=options.skip||0,
-        limit=options.limit||1000;
+gili_data.getUser = function (options, cb_ok, cb_err) {
+    var skip = options.skip || 0,
+        limit = options.limit || 1000;
     var query = new AV.Query("_User");
     query.equalTo("objectId", objectId);
     query.skip(skip);
     query.limit(limit);
     query.descending("order");
     query.find({
-        success: function(objs){
-            if(objs){
-                var data=[];
-                for(var i=0;i<objs.lenth;i++){
-                    data[i]=objs[i].toJSON();
+        success: function (objs) {
+            if (objs) {
+                var data = [];
+                for (var i = 0; i < objs.lenth; i++) {
+                    data[i] = objs[i].toJSON();
                 }
                 cb_ok(data);
-            }else{
+            } else {
                 cb_err("找不到对象");
             }
-        },error: cb_err
+        }, error: cb_err
     });
 };
 /** 企划id 获取已经报名该企划的用户列表
@@ -129,16 +129,16 @@ gili_data.getUser= function (options,cb_ok, cb_err) {
  * cb_err
  **/
 gili_data.getPlanUserByPlanId = function (options, cb_ok, cb_err) {
-    var plan_id=options.plan_id,
-        skip=options.skip||0,
-        limit=options.limit||1000
+    var plan_id = options.plan_id,
+        skip = options.skip || 0,
+        limit = options.limit || 1000
 
-    var getPlanUserList=function(planObj){
+    var getPlanUserList = function (planObj) {
         var query = new AV.Query("plan_relation");
-        query.equalTo("plan",planObj);
+        query.equalTo("plan", planObj);
         query.include("join");
-        query.equalTo("status",1);//状态为1的
-        query.equalTo("approved",1);//审核通过的
+        query.equalTo("status", 1);//状态为1的
+        query.equalTo("approved", 1);//审核通过的
         query.skip(skip);
         query.limit(limit);
         query.descending("createdAt");
@@ -146,16 +146,16 @@ gili_data.getPlanUserByPlanId = function (options, cb_ok, cb_err) {
             success: function (data) {
                 cb_ok(data);
             },
-            error:cb_err
+            error: cb_err
         })
     }
     var query = new AV.Query("plan");
     query.equalTo("objectId", plan_id);
     query.first({
-        success: function(obj){
-            if(obj){
+        success: function (obj) {
+            if (obj) {
                 getPlanUserList(obj);
-            }else{
+            } else {
                 cb_err("找不到企划对象");
             }
         }, error: cb_err
@@ -170,80 +170,164 @@ gili_data.getPlanUserByPlanId = function (options, cb_ok, cb_err) {
  * orderBy
  * isDesc
  **/
-gili_data.getPlanUserBlog = function (options, cb_ok, cb_err){
+gili_data.getPlanUserBlog = function (options, cb_ok, cb_err) {
 
-    var plan_id=options.plan_id,
-        plan_name=options.plan_name,
-        skip=options.skip||0,
-        limit=options.limit||1000,
-        orderBy=options.orderBy||"createdAt",
-        isDesc=options.isDesc;
-    if(!plan_id){
+    var plan_id = options.plan_id,
+        plan_name = options.plan_name,
+        skip = options.skip || 0,
+        limit = options.limit || 1000,
+        orderBy = options.orderBy || "createdAt",
+        isDesc = options.isDesc;
+    if (!plan_id) {
         cb_err("企划id不能为空！");
         return;
     }
     //获取关注该企划的用户列表，取出用户id 拼成CQL,去blog作品表查询 且标签=企划名字
-    gili_data.getPlanUserByPlanId(plan_id,function(data){
-        if(data){
-            var strCQL= dataToCQL(data);
-            gili_data.getBlog(strCQL,function(blogs){
+    gili_data.getPlanUserByPlanId(plan_id, function (data) {
+        if (data) {
+            var strCQL = dataToCQL(data);
+            gili_data.getBlog(strCQL, function (blogs) {
                 cb_ok(blogs);
-            },cb_err);
-        }else{
+            }, cb_err);
+        } else {
             cb_err("企划关注用户为空！");
             return;
         }
-    },cb_err);
+    }, cb_err);
 
-    var dataToCQL=function(data){
-        var followeeList="",CQL="";
+    var dataToCQL = function (data) {
+        var followeeList = "", CQL = "";
         var objlen = data.length > 135 ? 135 : obj.length;//按CQL只能存储4096个字节算，除去300其他CQL剩下135个24位的objectId字节长度，也就是说关注的用户不能超过135个人，否则用户不计算在关注内容查询范围内
         for (var i = 0; i < objlen; i++) {
             followeeList += "'" + obj[i].id + "',";
         }
         if (followeeList.length > 0) {
-            CQL=" select * from gili_blog where status !=1 and author_id in ("+followeeList.substring(0, followeeList.length - 1)+") and labels in ("+plan_name+") ";
+            CQL = " select * from gili_blog where status !=1 and author_id in (" + followeeList.substring(0, followeeList.length - 1) + ") and labels in (" + plan_name + ") ";
         }
-        if(orderBy.length>0){
-            if(isDesc){
-                CQL+=" order by "+orderBy+" desc ";
-            }else{
-                CQL+=" order by "+orderBy+" asc ";
+        if (orderBy.length > 0) {
+            if (isDesc) {
+                CQL += " order by " + orderBy + " desc ";
+            } else {
+                CQL += " order by " + orderBy + " asc ";
             }
         }
-        CQL+=" limit "+skip+","+limit;
+        CQL += " limit " + skip + "," + limit;
         return CQL;
     }
 };
 /** 根据用户id,企划id查看用户和企划的关系
-* user_id,
+ * user_id,
  *  plan_id,
  **/
 gili_data.getUserPlanRelation = function (options, cb_ok, cb_err) {
     var user_id = options.user_id,
-        plan_id=options.plan_id;
+        plan_id = options.plan_id;
 
-    var strCQL = " select * from plan_relation where user_id='" + user_id + "' and  plan_id='"+plan_id+"' ";
+    var strCQL = " select * from plan_relation where user_id='" + user_id + "' and  plan_id='" + plan_id + "' ";
     AV.Query.doCloudQuery(strCQL, {
-        success: function(data){
-            if(data.results){
+        success: function (data) {
+            if (data.results) {
                 cb_ok(data.results[0]);
-            }else{
-               cb_ok([]);
+            } else {
+                cb_err();
             }
         },
         error: cb_err
     });
 };
 
-
 ////////////////////////////////////////////////// 首页 相关 /////////////////////////////////////////////////////////
+/** 查询专题banner数据
+ *
+ **/
+gili_data.getSubjectBanner = function (options, cb_ok, cb_err) {
+    var strCQL = " select * from subject order by order_num desc ";
+    AV.Query.doCloudQuery(strCQL, {
+        success: function (objs) {
+            var data = [];
+            for (var i = 0; i < objs.lenth; i++) {
+                data[i] = objs[i].toJSON();
+            }
+            cb_ok(data);
+        },
+        error: cb_err
+    });
+};
+/** 按类型 获取用户总数
+ * table_name
+ * field 字段名
+ * val 值 只支持数字和字符串
+ **/
+gili_data.getTableCountByField = function (options, cb_ok, cb_err) {
+    var field = options.field,
+         val = options.val,
+        table_name = options.table_name;
 
-/////////////////////////////////////
+    var strCQL = " select count(*) from  " + table_name;
+    if (field.length > 0) {
+        if (typeof val == "number") {
+            strCQL += " where " + field + "=" + val;
+        } else {
+            strCQL += " where " + field + "='" + val + "' ";
+        }
+    }
+    AV.Query.doCloudQuery(strCQL, {
+        success: function (objs) {
+            cb_ok(objs);
+        },
+        error: cb_err
+    });
+};
+
+/** 查询用户 如果是随机 前端先查询总数，后根据随机页数取相应的数据
+ * skip
+ * limit
+ **/
+gili_data.getUsers = function (options, cb_ok, cb_err) {
+    var skip = options.skip || 0,
+        limit = options.limit || 100;
+
+    var strCQL = " select * from _User limit " + skip + "," + limit;
+    AV.Query.doCloudQuery(strCQL, {
+        success: function (objs) {
+            var data = [];
+            for (var i = 0; i < objs.lenth; i++) {
+                data[i] = objs[i].toJSON();
+            }
+            cb_ok(data);
+        },
+        error: cb_err
+    });
+};
+
+/** 查询表随机data
+ * table_name 表名 book,gili_blog,_User,club
+ * skip
+ * limit
+ **/
+gili_data.getRandomDataByTable = function (options, cb_ok, cb_err) {
+    var skip = options.skip || 0,
+        limit = options.limit || 100,
+        table_name = options.table_name;
+
+    var strCQL = " select * from " + table_name + " limit " + skip + "," + limit;
+    AV.Query.doCloudQuery(strCQL, {
+        success: function (objs) {
+            var data = [];
+            for (var i = 0; i < objs.lenth; i++) {
+                data[i] = objs[i].toJSON();
+            }
+            cb_ok(data);
+        },
+        error: cb_err
+    });
+};
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 /** 根据标签类型type查询标签数据集
-  labelsType，标签类型 如：pc_plate_label
-**/
+ labelsType，标签类型 如：pc_plate_label
+ **/
 gili_data.getLabelsByType = function (options, cb_ok, cb_err) {
     var plateLabels = options.labelsType;
     var strCQL = " select * from labels where type='" + labels_type + "' order by order desc limit 0,1000  ";
@@ -252,22 +336,24 @@ gili_data.getLabelsByType = function (options, cb_ok, cb_err) {
         error: cb_err
     });
 };
+
+////////////////////////////////////////////////// 话题 插画 相关 ///////////////////////
 /** 获取blog
  * CQL
  * cb_ok
  * cb_err
  * */
-gili_data.getBlog=function(CQL,cb_ok,cb_err){
+gili_data.getBlog = function (CQL, cb_ok, cb_err) {
     AV.Query.doCloudQuery(CQL, {
-            success: function (data) {
-                cb_ok(data.results);
-            }, error: cb_err
-        }
+        success: function (data) {
+            cb_ok(data.results);
+        }, error: cb_err
+    }
     );
 }
 /** 查询帮助中心内容
-helptype,帮助中心类别
-**/
+ helptype,帮助中心类别
+ **/
 gili_data.getHelpCenter = function (helptype, cb_ok, cb_err) {
     var query = new AV.Query("helpcenter");
     query.equalTo("approved", 1);
@@ -282,8 +368,8 @@ gili_data.getHelpCenter = function (helptype, cb_ok, cb_err) {
 };
 
 /** 查询主题页banner
-  bannerType，banner类型
-**/
+ bannerType，banner类型
+ **/
 gili_data.getBannerByType = function (bannerType, cb_ok, cb_err) {
     if (!bannerType) {
         cb_err("参数错误，banner类型为空!");
@@ -299,8 +385,8 @@ gili_data.getBannerByType = function (bannerType, cb_ok, cb_err) {
 };
 
 /** 发送短信
-  phone，手机号码
-**/
+ phone，手机号码
+ **/
 gili_data.sendPhoneMsg = function (phone, cb_ok, cb_err) {
     if (!phone) {
         cb_err("手机号码为空!");
@@ -313,8 +399,8 @@ gili_data.sendPhoneMsg = function (phone, cb_ok, cb_err) {
 }
 
 /** 验证手机短信
-  phone，手机号码
-**/
+ phone，手机号码
+ **/
 gili_data.verifyPhoneMsgCode = function (msgcode, cb_ok, cb_err) {
     if (!msgcode) {
         cb_err("验证码为空!");
@@ -356,10 +442,10 @@ gili_data.getComment = function (options, cb_ok, cb_err) {
     var strCQL = " select include user,* from comment where  status !=1 ";
 
     //排序
-    if (orderBy.length>0) {
-        if(isDesc){
+    if (orderBy.length > 0) {
+        if (isDesc) {
             strCQL += " order by " + orderby + " desc ";
-        }else{
+        } else {
             strCQL += " order by " + orderby + " asc ";
         }
     }
@@ -374,8 +460,8 @@ gili_data.getComment = function (options, cb_ok, cb_err) {
 };
 
 /** 关注某个用户
-    userid,用户id
-**/
+ userid,用户id
+ **/
 gili_data.meFollow = function (userid, cb_ok, cb_err) {
     if (!userid || !this.getCurrentUser()) {
         cb_err("请先登录!");
@@ -384,7 +470,7 @@ gili_data.meFollow = function (userid, cb_ok, cb_err) {
     AV.User.current().follow(userid).then(
         cb_ok,
         cb_err
-        );
+    );
 };
 
 window.gili_data = gili_data;
