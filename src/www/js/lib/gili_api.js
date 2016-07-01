@@ -17,6 +17,34 @@ gili_data.getCurrentUser = function () {
     }
 };
 
+/**
+ * 用户登录
+ * @param username
+ * @param password
+ * @param cb_ok
+ * @param cb_err
+ */
+gili_data.logIn = function (username, password, cb_ok, cb_err) {
+    AV.User.logIn(username, password).then(function(user) {
+        cb_ok&&cb_ok(user);
+    },function(err){
+        cb_err&&cb_err(err);
+    });
+};
+
+/**
+ 用户注销
+ **/
+gili_data.logOut = function () {
+    AV.User.logOut();
+//    var currentUser=this.getCurrentUser();
+//    currentUser.save().then(function(obj){
+//        AV.User.logOut();
+//    },function(error){
+//        AV.User.logOut();
+//    });
+};
+
 /** 根据class 表名和objectId 查询对应的对象数据
  * class_name 表名
  * objectId 对象id

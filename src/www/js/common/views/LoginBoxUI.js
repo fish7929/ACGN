@@ -5,8 +5,9 @@
 // 描    述: 登录弹出框
 define([
     'text!common/templates/loginBoxUI.html',
-    "showbox"
-],function(tpl,ShowBox) {
+    "showbox",
+    "msgbox"
+],function(tpl,ShowBox,MsgBox) {
 
     if(!ShowBox){
         require(["showbox"],function(showbox){
@@ -125,10 +126,32 @@ define([
         var self = this;
         var account = self.loginAccount.value;
         var password = self.loginPassword.value;
-        console.log(self.loginAccount,self.loginPassword, e, "loginHandle", account, "----", password);
-        self._hide();
-        //派发自定义事件
-        app.triggerMethod("login:ok");
+        if(utils.checkPhoneNumber(account, MsgBox)&&utils.checkPassword(password, MsgBox)){
+            gili_data.logIn(account, password, function(user){
+                //派发自定义事件
+                self._hide();
+                console.log(user, 6666);
+                app.triggerMethod("login:ok");
+            }, function(error){
+                if (error.code == 211) {
+                    MsgBox.toast("该用户未注册，去注册", false);
+                }
+
+                if(error.code == 210){
+                    MsgBox.toast("用户或密码错误!",false);
+                }
+
+                if(error.code< 0){
+                    MsgBox.toast("网络不好,请检查您的网络!".false);
+                }
+                if(error.code==1){
+                    MsgBox.toast("帐号异常，请稍后再试!",false);
+                }
+
+            });
+        }
+
+
     };
     /**
      * 忘记密码点击事件

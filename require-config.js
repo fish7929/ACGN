@@ -29,6 +29,7 @@ var requirejs={
         text : 'vendor/text',
         swiper : 'vendor/swiper',
         showbox : "common/views/ShowBox",
-        giliApi : "lib/gili_api"
+        giliApi : "lib/gili_api",
+        msgbox : "common/views/MsgBox"
 	}
 }

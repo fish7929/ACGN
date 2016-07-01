@@ -56,7 +56,6 @@ define([
         pageIn : function(){
             var self = this;
             self.regionShow();
-            console.log(self.ui.bnTopic);
         },
 
         regionShow : function(){

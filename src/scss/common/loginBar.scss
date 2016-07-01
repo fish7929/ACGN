@@ -1,90 +1,90 @@
-.loginBarContainer{
-  position:relative;
-  width: 1280px;
-  margin-left: -40px;
+.loginBarContainer {
+    position: relative;
+    width: 1280px;
+    margin-left: -40px;
 }
 
-.loginBar-div{
-  position: fixed;
-  width: 1280px;
-  height: 64px;
-  background-color : rgba(255, 255, 255, 0.9);
-  top: 0;
-  //left: 0;
-  border-bottom: 4px solid #ff4200;
-  z-index: 999;
+.loginBar-div {
+    position: fixed;
+    width: 1280px;
+    height: 64px;
+    background-color: rgba(255, 255, 255, 0.9);
+    top: 0;
+    //left: 0;
+    border-bottom: 4px solid #ff4200;
+    z-index: 999;
 }
 
-.loginBar-Logo{
-  width: 100%;
-  height: 100%;
-  background: url("../images/logo.png") center no-repeat;
+.loginBar-Logo {
+    width: 100%;
+    height: 100%;
+    background: url("../images/logo.png") center no-repeat;
 }
 
-.loginBar-Btns{
-  position: absolute;
-  right: 40px;
-  top: 10px;
-  display: block;
+.loginBar-Btns {
+    position: absolute;
+    right: 40px;
+    top: 10px;
+    display: block;
 
-  div{
-    width: 74px;
-    height: 40px;
-    border-radius: 20px;
-    font-size: 18px;
-    line-height: 36px;
-  }
+    div {
+        width: 74px;
+        height: 40px;
+        border-radius: 20px;
+        font-size: 18px;
+        line-height: 36px;
+    }
 
-  .loginBar-bnLogin{
-    float: left;
-    margin-right: 10px;
-    color: #ff4200;
-    border: 1px solid #ff4200;
-    border-radius: 20px;
-  }
+    .loginBar-bnLogin {
+        float: left;
+        margin-right: 10px;
+        color: #ff4200;
+        border: 1px solid #ff4200;
+        border-radius: 20px;
+    }
 
-  .loginBar-bnRegister{
-    float: right;
-    color: #c0c0c0;
-    border: 1px solid #c0c0c0;
-    border-radius: 20px;
-  }
+    .loginBar-bnRegister {
+        float: right;
+        color: #c0c0c0;
+        border: 1px solid #c0c0c0;
+        border-radius: 20px;
+    }
 }
 
-.loginBar-UserInfo{
-  position: absolute;
-  right: 40px;
-  top: 10px;
-  display: none;
+.loginBar-UserInfo {
+    position: absolute;
+    right: 40px;
+    top: 10px;
+    display: none;
 
-  .loginBar-headPic{
-    width: 42px;
-    height: 42px;
-    float: left;
-    margin-right: 10px;
-  }
+    .loginBar-headPic {
+        width: 42px;
+        height: 42px;
+        float: left;
+        margin-right: 10px;
+    }
 
-  .loginBar-username{
-    font-size: 18px;
-    color: #3d3d3d;
-    line-height: 40px;
-    margin-right: 20px;
-    float: left;
-  }
+    .loginBar-username {
+        font-size: 18px;
+        color: #3d3d3d;
+        line-height: 40px;
+        margin-right: 20px;
+        float: left;
+    }
 
-  .loginBar-bnPublish{
-    width: 90px;
-    height: 40px;
-    border-radius: 20px;
-    font-size: 18px;
-    line-height: 36px;
-    color: #ffffff;
-    background-color: #fd4200;
-    float: right;
-  }
+    .loginBar-bnPublish {
+        width: 90px;
+        height: 40px;
+        border-radius: 20px;
+        font-size: 18px;
+        line-height: 36px;
+        color: #ffffff;
+        background-color: #fd4200;
+        float: right;
+    }
 }
 
-.loginBar-user-operation{
+.loginBar-user-operation {
     position: relative;
     float: right;
     margin-top: 5px;
@@ -92,14 +92,14 @@
     border: 1px solid #c0c0c0;
     width: 182px;
     height: 106px;
-    background: rgba(255,255,255,.9);
+    background: rgba(255, 255, 255, .9);
     border-radius: 10px;
     font-size: 18px;
-    color:#808080;
+    color: #808080;
     display: none;
 }
 
-.loginBar-setting-common{
+.loginBar-setting-common {
     width: 153px;
     height: 53px;
     text-align: center;
@@ -107,6 +107,7 @@
     margin: 0 auto;
     border-bottom: 1px solid #c0c0c0;
 }
-.loginBar-setting-common:last-child{
-    border-bottom:0;
+
+.loginBar-setting-common:last-child {
+    border-bottom: 0;
 }

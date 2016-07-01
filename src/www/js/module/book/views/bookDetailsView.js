@@ -11,8 +11,9 @@ define([
     'common/views/loginBar',
     'module/book/views/bookDetailsPreview',
     'module/book/views/bookDetailsHot',
+    'common/views/commentView',
     'module/book/views/bookPreviewView'
-],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, BDPreviewView, BDHotView, BookPreviewView){
+],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, BDPreviewView, BDHotView, CommentView, BookPreviewView){
     return BaseView.extend({
         id : "bookDetailsContainer",
         template : _.template(tpl),
@@ -37,6 +38,10 @@ define([
             HotViewRegion:{
                 el: ".bd-book-hot-reg",
                 regionClass: SwitchViewRegion
+            },
+            MessageRegion:{
+                el: ".bd-book-message-reg",
+                regionClass: SwitchViewRegion
             }
         },
 
@@ -46,6 +51,7 @@ define([
             self._loginBarView = new LoginBarView();
             self._previewView = new BDPreviewView();
             self._hotView = new BDHotView();
+            self._commentView = new CommentView();
         },
 
         //在开始渲染模板前执行，此时当前page没有添加到document
@@ -60,7 +66,7 @@ define([
         pageIn : function(){
             var self = this;
             self.regionShow();
-            BookPreviewView.show(['images/temp/excellent_book/wide.jpg'],['http://ac-syrskc2g.clouddn.com/1ab3c8b1a334770f5194']);
+            //BookPreviewView.show(['images/temp/excellent_book/wide.jpg', 'http://ac-syrskc2g.clouddn.com/1ab3c8b1a334770f5194']);
         },
 
         regionShow : function(){
@@ -68,6 +74,8 @@ define([
             self.LoginBarRegion.show(self._loginBarView);
             self.PreviewViewRegion.show(self._previewView);
             self.HotViewRegion.show(self._hotView);
+
+            self.MessageRegion.show(self._commentView);
         },
 
         /**页面关闭时调用，此时不会销毁页面**/
