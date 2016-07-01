@@ -18,6 +18,7 @@ define([
         },
         onRender:function(){
             this.getRegion("loginBar").show(this._loginBarView);
+            //社团成员  关注用户
         },
         show:function(){},
         pageIn:function(){},

@@ -8,7 +8,11 @@ define([],function(){
         },
         initialize:function(){
             var self = this;
-            self.name = "我正在测试";
+            self.likeInt = self.attributes.like_int;
+            self.commentInt = self.attributes.comment_int;
+            var time = self.attributes.createdAt ? new Date(self.attributes.createdAt) : new Date();
+            self.timeStr = utils.formatCreatedTime(time);
+            self.commentShow = false;//默认不显示
         }
     });
     return WorkModel;

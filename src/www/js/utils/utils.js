@@ -14,6 +14,14 @@
      */
     utils.log = function(str){
         console.log(str)
-    }
+    },
+    /**
+     * 格式化时间 为  2015.12.15 10：00
+     * @param time
+     */
+    utils.formatCreatedTime = function(time){
+        var t = new Date(time);
+        return (t.getFullYear()) + "." + (t.getMonth() + 1) + "." + t.getDate() +"  " +  t.getHours() + ":" + t.getMinutes();
+    };
 
 })(window);
