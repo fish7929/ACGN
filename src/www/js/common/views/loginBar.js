@@ -68,8 +68,12 @@ define([
         init : function(){
             var self = this;
             self.currentUser = gili_data.getCurrentUser();
-            var headUrl = self.currentUser.avatar;
-            var userName = self.currentUser.user_nick;
+            var headUrl = "./images/login/common-user.jpg";
+            var userName = "道道好劲道";
+            if(self.currentUser){
+                headUrl = self.currentUser.avatar;
+                userName = self.currentUser.user_nick;
+            }
             self.ui.userPic.css({"background" : "url('"+headUrl+"') repeat center", "background-size" : "100%"});
             self.ui.userName.html(userName);
         },

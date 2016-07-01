@@ -30,6 +30,6 @@ var requirejs={
         swiper : 'vendor/swiper',
         showbox : "common/views/ShowBox",
         giliApi : "lib/gili_api",
-        msgbox : "common/views/MagBox"
+        msgbox : "common/views/MsgBox"
 	}
 }

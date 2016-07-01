@@ -130,7 +130,7 @@ define([
             gili_data.logIn(account, password, function(user){
                 //派发自定义事件
                 self._hide();
-                console.log(user);
+                console.log(user, 6666);
                 app.triggerMethod("login:ok");
             }, function(error){
                 if (error.code == 211) {
