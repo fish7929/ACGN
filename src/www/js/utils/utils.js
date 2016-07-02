@@ -123,4 +123,10 @@
         return tempHeaders[index].avatar_url;
     };
 
+    utils.getLabelRandomColor = function(){
+        var tempColors = ["#0000ff", "#00ff00", "#00b7ee", "#22ac38", "#ff0000", "#ff00ff"];
+        var index = Math.floor(Math.random() * tempColors.length);
+        return tempColors[index];
+    }
+
 })(window);

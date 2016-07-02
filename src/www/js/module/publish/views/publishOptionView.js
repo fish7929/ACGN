@@ -64,7 +64,6 @@ define([
         },
 
         onBnTopicHandle : function(e){
-            console.log("onBnTopicHandle");
             e.stopPropagation();
             e.preventDefault();
             var param = {};
