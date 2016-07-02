@@ -37,7 +37,7 @@ gili_data.getObjectById = function (class_name, objectId, cb_ok, cb_err) {
         error: cb_err
     });
 };
-//////////////////////////////////////////////////企划 相关 /////////////////////////////////////////////////////////
+////////////////////////////////////////////////// 企划相关 /////////////////////////////////////////////////////////
 gili_data.getPlan = function (options, cb_ok, cb_err) {
     gili_data.getalert();
     var pageNumber = options.pageNumber || 0,
@@ -236,7 +236,7 @@ gili_data.getUserPlanRelation = function (options, cb_ok, cb_err) {
     });
 };
 
-////////////////////////////////////////////////// 首页 相关 /////////////////////////////////////////////////////////
+////////////////////////////////////////////////// 首页相关 /////////////////////////////////////////////////////////
 /** 查询专题banner数据
  *
  **/
@@ -323,20 +323,6 @@ gili_data.getRandomDataByTable = function (options, cb_ok, cb_err) {
     });
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-/** 根据标签类型type查询标签数据集
- labelsType，标签类型 如：pc_plate_label
- **/
-gili_data.getLabelsByType = function (options, cb_ok, cb_err) {
-    var plateLabels = options.labelsType;
-    var strCQL = " select * from labels where type='" + labels_type + "' order by order desc limit 0,1000  ";
-    AV.Query.doCloudQuery(strCQL, {
-        success: cb_ok,
-        error: cb_err
-    });
-};
-
 ////////////////////////////////////////////////// 话题 插画 相关 ///////////////////////
 /** 获取blog
  * CQL
@@ -351,6 +337,83 @@ gili_data.getBlog = function (CQL, cb_ok, cb_err) {
     }
     );
 }
+
+/** 获取用户动态数据
+ * user_id,用户id
+ * skip
+ * limit
+ **/
+gili_data.getUserBlog = function (options, cb_ok, cb_err) {
+    var skip = options.skip || 0,
+        limit = options.limit || 100,
+        user_id = options.user_id;
+
+    var strCQL = "";
+
+    //获取用户的关注用户，取用户id生产cql语句
+    //获取用户关注列表
+    var getUserF = function (userobj) {
+        if (userobj) {
+            var query = userobj.followeeQuery();
+            query.include("followee");
+            query.skip(0);
+            query.limit(1000);
+            query.find({
+                success: function (obj) {
+                    var followeeList = "";
+                    if (obj) {
+                        var objlen = obj.length > 135 ? 135 : obj.length;//按CQL只能存储4096个字节算，除去300其他CQL剩下135个24位的objectId字节长度，也就是说关注的用户不能超过135个人，否则用户不计算在关注内容查询范围内
+                        for (var i = 0; i < objlen; i++) {
+                            followeeList += "'" + obj[i].id + "',";
+                        }
+                        if (followeeList.length > 0) {
+                            strCQL = " select  * from  gili_blog where status!= 1 and  author_id in (" + followeeList.substring(0, followeeList.length - 1) + ")  ";
+                            gili_data.getBlog(strCQL, function (objs) {
+                                var data = [];
+                                for (var i = 0; i < objs.lenth; i++) {
+                                    data[i] = objs[i].toJSON();
+                                }
+                                cb_ok(data);
+                            }, function (data, error) {
+                                cb_err(error);
+                            });
+                        } else {
+                            cb_ok("");
+                        }
+                    } else {
+                        cb_ok("");
+                    }
+                },
+                error: cb_err
+            });
+        } else {
+            cb_ok("");
+        }
+    }
+
+    var query = new AV.Query("_User");
+    query.equalTo("objectId", user_id);
+    query.first({
+        success: function (userobj) {
+            getUserF(userobj);
+        },
+        error: cb_err
+    });
+};
+
+///////////////////////////////////////////////// 其他功能接口 //////////////////////////////////////
+/** 根据标签类型type查询标签数据集
+ labelsType，标签类型 如：pc_plate_label
+ **/
+gili_data.getLabelsByType = function (options, cb_ok, cb_err) {
+    var plateLabels = options.labelsType;
+    var strCQL = " select * from labels where type='" + labels_type + "' order by order desc limit 0,1000  ";
+    AV.Query.doCloudQuery(strCQL, {
+        success: cb_ok,
+        error: cb_err
+    });
+};
+
 /** 查询帮助中心内容
  helptype,帮助中心类别
  **/
@@ -416,7 +479,7 @@ gili_data.verifyPhoneMsgCode = function (msgcode, cb_ok, cb_err) {
 
 /** 根据评论对象id查询评论数据
  *  comment_id,评论对象id
- *  comment_type,评论目标类型0-微杂志作品，1-众创页评论，
+ *  comment_type,评论目标类型1-话题插画，2-本子，3-企划，4-留言，5-其他
  * skip, 从第几条开始
  * limit, 每页显示条数
  * orderBy, 排序字段
@@ -429,7 +492,6 @@ gili_data.getComment = function (options, cb_ok, cb_err) {
         isDesc = options.isdesc,
         skip = options.pageSize || 0,
         limit = options.pageNumber || 6;
-
 
     if (!comment_id) {
         cb_err("评论对象为空!");
@@ -459,6 +521,153 @@ gili_data.getComment = function (options, cb_ok, cb_err) {
     });
 };
 
+
+/** 查询自己的粉丝
+ follower,用户对象
+ **/
+gili_data.meFollowerList = function (options, cb_ok, cb_err) {
+    if (!this.getCurrentUser()) {
+        cb_err("请先登录!");
+        return;
+    }
+    var follower = options.follower,
+     orderby = options.orderby || "createdAt",
+     isdesc = options.isdesc,
+     pageSize = options.pageSize || 0,
+     pageNumber = options.pageNumber || 6,
+     userid = options.userid;
+
+    var userCurrent;
+    var queryUserObj = function () {
+        var skip = 0;
+        var limit = pageNumber;
+        //比如要看第 10 页，每页 10 条   就应该是 skip 90 ，limit 10
+        if (pageSize != 0) {
+            skip = pageSize * pageNumber;
+        }
+        //var query = userCurrent.followerQuery();
+        //query.include(follower);
+        var _Follower = fmacloud.Object.extend("_Follower");
+        var query = new AV.Query(_Follower);
+        query.equalTo("user", userCurrent);
+        query.include(follower);
+        query.skip(skip);
+        query.limit(limit);
+        //排序
+        if (orderby.length > 0) {
+            if (isdesc) {
+                query.descending(orderby);
+            } else {
+                query.ascending(orderby);
+            };
+        }
+        query.find({
+            success: cb_ok,
+            error: cb_err
+        });
+    }
+
+    var getUserObj = function () {
+        var query = new AV.Query("_User");
+        query.equalTo("objectId", userid);
+        query.first({
+            success: function (userobj) {
+                if (userobj) {
+                    userCurrent = userobj;
+                    queryUserObj();
+                } else {
+                    cb_err();
+                }
+            },
+            error: cb_err
+        });
+    }
+    if (userid) {
+        getUserObj();
+    } else {
+        userCurrent = fmacloud.User.current();
+        queryUserObj();
+    }
+};
+
+
+/** 查询自己关注的用户列表
+ followee,用户对象
+ **/
+gili_data.meFolloweeList = function (options, cb_ok, cb_err) {
+    if (!this.getCurrentUser()) {
+        cb_err("请先登录!");
+        return;
+    }
+    var followee = options.followee,
+        orderby = options.orderby || "createdAt",
+        isdesc = options.isdesc,
+        pageSize = options.pageSize || 0,
+        pageNumber = options.pageNumber || 100,
+        userid = options.userid || "";
+
+    var userCurrent;
+    var queryUserObj = function () {
+        var skip = 0;
+        var limit = pageNumber;
+        //比如要看第 10 页，每页 10 条   就应该是 skip 90 ，limit 10
+        if (pageSize != 0) {
+            skip = pageSize * pageNumber;
+        }
+        var _Followee = AV.Object.extend("_Followee");
+        var query = new AV.Query(_Followee);
+        query.equalTo("user", userCurrent);
+        query.include(followee);
+        query.skip(skip);
+        query.limit(limit);
+        //排序
+        if (orderby.length > 0) {
+            if (isdesc) {
+                query.descending(orderby);
+            } else {
+                query.ascending(orderby);
+            };
+        }
+        query.find({
+            success: cb_ok,
+            error: cb_err
+        });
+    }
+    var getUserObj = function () {
+        var query = new AV.Query("_User");
+        query.equalTo("objectId", userid);
+        query.first({
+            success: function (userobj) {
+                if (userobj) {
+                    userCurrent = userobj;
+                    queryUserObj();
+                } else {
+                    cb_err();
+                }
+            },
+            error: cb_err
+        });
+    }
+    if (userid) {
+        getUserObj();
+    } else {
+        userCurrent = AV.User.current();
+        queryUserObj();
+    }
+};
+/** 取消关注某个用户
+ userid,用户id
+ **/
+gili_data.meUnfollow = function (userid, cb_ok, cb_err) {
+    if (!this.getCurrentUser()) {
+        cb_err("请先登录!");
+        return;
+    }
+    AV.User.current().unfollow(userid).then(
+        cb_ok,
+        cb_err
+    );
+};
 /** 关注某个用户
  userid,用户id
  **/
@@ -472,5 +681,193 @@ gili_data.meFollow = function (userid, cb_ok, cb_err) {
         cb_err
     );
 };
+
+/////////////////////////////////////////////////  社团相关 //////////////////////////////////////
+
+/** 查询社团
+ * club_id，社团id
+ **/
+gili_data.getClubById = function (options, cb_ok, cb_err) {
+    var club_id = options.club_id;
+    if (!club_id) {
+        cb_err("社团id为空");
+        return;
+    }
+    var strCQL = " select include user, * from club where objectId='" + club_id + "' ";
+    AV.Query.doCloudQuery(strCQL, {
+        success: function (data) {
+            cb_ok(data);
+        },
+        error: cb_err
+    });
+};
+
+/** 加入关注社团
+ * club_id，社团id
+ * status,1-关注，2-加入,999-取消关注
+ *
+ **/
+gili_data.clubApi = function (options, cb_ok, cb_err) {
+    var club_id = options.club_id,
+        status = options.status;
+
+    if (!club_id) {
+        cb_err("社团id为空");
+        return;
+    }
+    if (!this.getCurrentUser()) {
+        cb_err("请先登录!");
+        return;
+    }
+
+    var strCQL = " select * from club_relation where club_id='" + club_id + "' and user_id='" + this.getCurrentUser().id + "' ";
+    AV.Query.doCloudQuery(strCQL, {
+        success: function (data) {
+            if (data) {
+                //如果存在则 update
+                var obj = data.results[0];
+                var his_status = obj.get("status") || 0;
+                if (his_status == 1 && status == 2) {
+                    obj.set("status", 3);
+                } else if (his_status == 2 && status == 1) {
+                    obj.set("status", 3);
+                    obj.set("approved", 0);
+                } else if (his_status == 3 && status == 999) {
+                    obj.set("status", 2);
+                } else if (his_status == 1 && status == 999) {
+                    obj.set("status", 0);
+                } else {
+                    obj.set("status", status);
+                }
+                obj.save(null, {
+                    success: cb_ok,
+                    error: cb_err
+                });
+            } else {
+                //如果不存在则进行数据新增
+                insertClub();
+            }
+        },
+        error: cb_err
+    });
+    var insertClub = function (obj) {
+        var club_relation = AV.Object.extend("club_relation");
+        var obj = new club_relation();
+        obj.set("club_id", club_id);
+        obj.set("user", this.getCurrentUser());
+        obj.set("user_id", this.getCurrentUser().id);
+        obj.set("status", parseInt(opration_type));
+        obj.save(null, {
+            success: cb_ok,
+            error: cb_err
+        });
+    }
+};
+
+/** 获取社团成员,或者关注用户
+ * club_id，社团id
+ * status 1-查询关注社团用户，2-查询加入社团用户
+ * skip
+ * limit
+ **/
+gili_data.getClubUser = function (options, cb_ok, cb_err) {
+    var club_id = options.club_id,
+        status = options.status,
+        skip = options.skip || 0,
+        limit = options.limit || 1000;
+
+    if (!club_id) {
+        cb_err("社团id为空");
+        return;
+    }
+    var strWhere = "";
+    if (status == 1) {
+        strWhere = " and status in (1,3)";
+    } else if (status == 2) {
+        strWhere = " and status in (2,3)";
+    }
+    var strCQL = " select include user, * from club where club_id='" + club_id + "' " + strWhere + " limit " + skip + "," + limit;
+    AV.Query.doCloudQuery(strCQL, {
+        success: function (data) {
+            cb_ok(data.results);
+        },
+        error: cb_err
+    });
+};
+
+/** 获取社团成员,或者关注用户
+ * club_id，社团id
+ * status 1-查询关注社团用户，2-查询加入社团用户
+ **/
+gili_data.getClubUserCount = function (options, cb_ok, cb_err) {
+    var club_id = options.club_id,
+        status = options.status;
+    if (!club_id) {
+        cb_err("社团id为空");
+        return;
+    }
+    var strWhere = "";
+    if (status == 1) {
+        strWhere = " and status in (1,3)";
+    } else if (status == 2) {
+        strWhere = " and status in (2,3)";
+    }
+    var strCQL = " select count(*) from club where club_id='" + club_id + "' " + strWhere;
+    AV.Query.doCloudQuery(strCQL, {
+        success: function (data) {
+            cb_ok(data);
+        },
+        error: cb_err
+    });
+};
+
+/////////////////////////////////////////////本子相关接口////////////////////////////////////////////////////////////
+/** 查询本子对象
+ * book_id，本子id
+ **/
+gili_data.getBookById = function (options, cb_ok, cb_err) {
+    var book_id = options.book_id;
+    if (!book_id) {
+        cb_err("本子id为空");
+        return;
+    }
+    var strCQL = " select include user,include club, * from club where objectId='" + book_id + "' ";
+    AV.Query.doCloudQuery(strCQL, {
+        success: function (data) {
+            cb_ok(data);
+        },
+        error: cb_err
+    });
+};
+
+/** 最热本子，查询本子list
+ * skip
+ * limit
+ **/
+gili_data.getBooks = function (options, cb_ok, cb_err) {
+    var skip = options.skip || 0,
+        limit = options.limit || 100;
+
+    var strCQL = " select  * from book where approved !=2 limit " + skip + "," + limit;
+    AV.Query.doCloudQuery(strCQL, {
+        success: function (data) {
+            cb_ok(data.results);
+        },
+        error: cb_err
+    });
+};
+
+/** 查询本子总数
+ **/
+gili_data.getBooksCount = function (options, cb_ok, cb_err) {
+    var strCQL = " select  count(*) from book where approved !=2 ";
+    AV.Query.doCloudQuery(strCQL, {
+        success: function (data) {
+            cb_ok(data);
+        },
+        error: cb_err
+    });
+};
+
 
 window.gili_data = gili_data;
