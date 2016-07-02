@@ -38,6 +38,69 @@ gili_data.getObjectById = function (class_name, objectId, cb_ok, cb_err) {
     });
 };
 ////////////////////////////////////////////////// 企划相关 /////////////////////////////////////////////////////////
+
+/** 加入 关注企划
+ * plan_id，企划id
+ * status,1-关注，2-加入,999-取消关注
+ *
+ **/
+gili_data.planOpration = function (options, cb_ok, cb_err) {
+    var plan_id = options.plan_id,
+        status = options.status;
+
+    if (!plan_id) {
+        cb_err("企划id为空");
+        return;
+    }
+    if (!this.getCurrentUser()) {
+        cb_err("请先登录!");
+        return;
+    }
+
+    var strCQL = " select * from plan_relation where plan_id='" + plan_id + "' and user_id='" + this.getCurrentUser().id + "' ";
+    AV.Query.doCloudQuery(strCQL, {
+        success: function (data) {
+            if (data) {
+                //如果存在则 update
+                var obj = data.results[0];
+                var his_status = obj.get("status") || 0;
+                if (his_status == 1 && status == 2) {
+                    obj.set("status", 3);
+                } else if (his_status == 2 && status == 1) {
+                    obj.set("status", 3);
+                    obj.set("approved", 0);
+                } else if (his_status == 3 && status == 999) {
+                    obj.set("status", 2);
+                } else if (his_status == 1 && status == 999) {
+                    obj.set("status", 0);
+                } else {
+                    obj.set("status", status);
+                }
+                obj.save(null, {
+                    success: cb_ok,
+                    error: cb_err
+                });
+            } else {
+                //如果不存在则进行数据新增
+                insert();
+            }
+        },
+        error: cb_err
+    });
+    var insert = function (obj) {
+        var club_relation = AV.Object.extend("plan_relation");
+        var obj = new club_relation();
+        obj.set("plan_id", plan_id);
+        obj.set("user", this.getCurrentUser());
+        obj.set("user_id", this.getCurrentUser().id);
+        obj.set("status", parseInt(opration_type));
+        obj.save(null, {
+            success: cb_ok,
+            error: cb_err
+        });
+    }
+};
+
 gili_data.getPlan = function (options, cb_ok, cb_err) {
     gili_data.getalert();
     var pageNumber = options.pageNumber || 0,
@@ -202,7 +265,7 @@ gili_data.getPlanUserBlog = function (options, cb_ok, cb_err) {
             followeeList += "'" + obj[i].id + "',";
         }
         if (followeeList.length > 0) {
-            CQL = " select * from gili_blog where status !=1 and author_id in (" + followeeList.substring(0, followeeList.length - 1) + ") and labels in (" + plan_name + ") ";
+            CQL = " select * from gili_blog where status !=2 and user_id in (" + followeeList.substring(0, followeeList.length - 1) + ") and labels in (" + plan_name + ") ";
         }
         if (orderBy.length > 0) {
             if (isDesc) {
@@ -367,7 +430,7 @@ gili_data.getUserBlog = function (options, cb_ok, cb_err) {
                             followeeList += "'" + obj[i].id + "',";
                         }
                         if (followeeList.length > 0) {
-                            strCQL = " select  * from  gili_blog where status!= 1 and  author_id in (" + followeeList.substring(0, followeeList.length - 1) + ")  ";
+                            strCQL = " select  * from  gili_blog where status!=2 and  user_id in (" + followeeList.substring(0, followeeList.length - 1) + ")  ";
                             gili_data.getBlog(strCQL, function (objs) {
                                 var data = [];
                                 for (var i = 0; i < objs.lenth; i++) {
@@ -590,7 +653,6 @@ gili_data.meFollowerList = function (options, cb_ok, cb_err) {
     }
 };
 
-
 /** 查询自己关注的用户列表
  followee,用户对象
  **/
@@ -655,6 +717,7 @@ gili_data.meFolloweeList = function (options, cb_ok, cb_err) {
         queryUserObj();
     }
 };
+
 /** 取消关注某个用户
  userid,用户id
  **/
@@ -668,6 +731,7 @@ gili_data.meUnfollow = function (userid, cb_ok, cb_err) {
         cb_err
     );
 };
+
 /** 关注某个用户
  userid,用户id
  **/
@@ -682,9 +746,189 @@ gili_data.meFollow = function (userid, cb_ok, cb_err) {
     );
 };
 
+/** 根据当前登录用户对象的所有赞
+ * like_type,赞类型1-话题插画，2-本子，3-企划
+ **/
+gili_data.getAllLikeList = function (cb_ok, cb_err) {
+    var like_type = options.like_type;
+
+    var currentLUser = this.getCurrentUser();
+    if (!currentLUser) {
+        cb_err("未登录用户!");
+        return;
+    }
+    var like = new AV.Query("like");
+    like.equalTo("user_id", currentLUser.id);
+    like.notEqualTo("status", 1);
+    if (like_type) {
+        like.equalTo("like_type", like_type);
+    }
+    like.limit(1000);
+    like.find({
+        success: function (obj) {
+            if (obj) {
+                var like_arr = [];
+                for (var i = 0; i < obj.length; i++) {
+                    if (obj[i])
+                        like_arr[i] = obj[i].toJSON();
+                }
+                cb_ok(like_arr);
+            } else {
+                cb_ok("");
+            }
+        },
+        error: cb_err
+    });
+};
+
+/** 查询用户关注的所有用户集合
+ **/
+sns_data.getFolloweeAllList = function (options, cb_ok, cb_err) {
+    if (!this.getCurrentUser()) {
+        cb_err("请先登录!");
+        return;
+    }
+    var userCurrent = this.getCurrentUser();
+    var query = userCurrent.followeeQuery();
+    query.include('followee');
+    query.limit(1000);
+    query.find().then(function (datas) {
+        if (datas) {
+            var arr = [];
+            for (var i = 0; i < datas.length; i++) {
+                if (datas[i])
+                    arr[i] = datas[i].toJSON();
+            }
+            cb_ok(arr);
+        } else {
+            cb_ok("");
+        }
+    });
+};
+
+/** 查询自己关注的用户列表
+ user_id, 别人用户中心的用户id，如果是查自己的个人中心不需要传
+ skip
+ limit
+ orderBy
+ isDesc
+ **/
+sns_data.followeeList = function (options, cb_ok, cb_err) {
+    if (!this.getCurrentUser()) {
+        cb_err("请先登录!");
+        return;
+    }
+    var orderBy = options.orderBy || "createdAt",
+        isDesc = options.isDesc,
+        skip = options.skip || 0,
+        limit = options.limit || 100,
+        user_id = options.user_id;
+
+    var userCurrent;
+    var queryFollowee = function () {
+        var query = userCurrent.followeeQuery();
+        query.include("followee");
+        query.skip(skip);
+        query.limit(limit);
+        //排序
+        if (orderBy.length > 0) {
+            if (isDesc) {
+                query.descending(orderBy);
+            } else {
+                query.ascending(orderBy);
+            };
+        }
+        query.find({
+            success: cb_ok,
+            error: cb_err
+        });
+    }
+    var getUserObj = function () {
+        var query = new AV.Query("_User");
+        query.equalTo("objectId", user_id);
+        query.first({
+            success: function (userobj) {
+                if (userobj) {
+                    userCurrent = userobj;
+                    queryFollowee();
+                } else {
+                    cb_err();
+                }
+            },
+            error: cb_err
+        });
+    }
+    if (userid) {
+        getUserObj();
+    } else {
+        userCurrent = AV.User.current();
+        queryFollowee();
+    }
+};
+
+/** 查询自己的粉丝
+ user_id, 别人用户中心的用户id，如果是查自己的个人中心不需要传
+ skip
+ limit
+ orderBy
+ isDesc
+ **/
+sns_data.followerList = function (options, cb_ok, cb_err) {
+    if (!this.getCurrentUser()) {
+        cb_err("请先登录!");
+        return;
+    }
+    var orderBy = options.orderBy || "createdAt",
+        isDesc = options.isDesc,
+        skip = options.skip || 0,
+        limit = options.limit || 100,
+        user_id = options.user_id;
+
+    var userCurrent;
+    var queryFollower = function () {
+        var query = userCurrent.followerQuery();
+        query.include('follower');
+        query.skip(skip);
+        query.limit(limit);
+        //排序
+        if (orderBy.length > 0) {
+            if (isDesc) {
+                query.descending(orderBy);
+            } else {
+                query.ascending(orderBy);
+            };
+        }
+        query.find({
+            success: cb_ok,
+            error: cb_err
+        });
+    }
+    var getUserObj = function () {
+        var query = new AV.Query("_User");
+        query.equalTo("objectId", user_id);
+        query.first({
+            success: function (userobj) {
+                if (userobj) {
+                    userCurrent = userobj;
+                    queryFollower();
+                } else {
+                    cb_err("用户为空！");
+                }
+            },
+            error: cb_err
+        });
+    }
+    if (user_id) {
+        getUserObj();
+    } else {
+        userCurrent = this.getCurrentUser();
+        queryFollower();
+    }
+};
+
 /////////////////////////////////////////////////  社团相关 //////////////////////////////////////
 
-/** 查询社团
+/** 查询社团s
  * club_id，社团id
  **/
 gili_data.getClubById = function (options, cb_ok, cb_err) {
@@ -702,12 +946,12 @@ gili_data.getClubById = function (options, cb_ok, cb_err) {
     });
 };
 
-/** 加入关注社团
+/** 加入,关注社团操作
  * club_id，社团id
  * status,1-关注，2-加入,999-取消关注
  *
  **/
-gili_data.clubApi = function (options, cb_ok, cb_err) {
+gili_data.clubOpration = function (options, cb_ok, cb_err) {
     var club_id = options.club_id,
         status = options.status;
 
