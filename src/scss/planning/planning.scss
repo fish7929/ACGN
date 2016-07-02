@@ -13,7 +13,7 @@
 .planning-banner{
     width: 100%;
     height: 460px;
-    background: url('../images/planning/banner.jpg') center no-repeat;
+//    background: url('../images/planning/banner.jpg') center no-repeat;
 }
 /**
 *企划内容
@@ -43,7 +43,7 @@
     width: 260px;
     height: 260px;
     border-radius: 10px;
-    background: url(../images/planning/cover.jpg) no-repeat center;
+//    background: url(../images/planning/cover.jpg) no-repeat center;
 }
 .planning-moderator{
     width: 88px;
@@ -107,7 +107,7 @@
 .detail-operation-btn{
     position: absolute;
     bottom: 0;
-    left: 52px;
+    left: 100px;
     height: 70px;
 }
 .planning-operation-btn{
@@ -119,19 +119,19 @@
     border-radius: 14.5px;
     font-size: 24px;
     text-shadow: 0px 0px 1px rgba(254,83,19,.6);
-    background-image: url(../images/common/btn-yellow.png);
+    background-image: url(../images/common/btn-red.png);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    margin-right: 44px;
+    margin-right: 100px;
     text-align: center;
     font-weight: bold;
 }
-.planning-operation-btn:first-child{
-    background-image: url(../images/common/btn-gray.png) !important;
-}
+//.planning-operation-btn:first-child{
+//    background-image: url(../images/common/btn-gray.png) !important;
+//}
 .planning-operation-btn:last-child{
-    background-image: url(../images/common/btn-red.png) !important;
+    background-image: url(../images/common/btn-yellow.png) !important;
     margin-right: 0;
 }
 /**
@@ -498,4 +498,6 @@
     background: url(../images/common/more-v.png) center no-repeat;
     margin: 0 auto;
 }
+
+@import "planning_notice.scss";
 

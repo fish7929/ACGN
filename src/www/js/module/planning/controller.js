@@ -4,9 +4,9 @@ define([
     'module/planning/views/planning'
 ],function(planningView){
     return {
-        planning : function(){
+        planning : function(planId){
             utils.log("userLogin");
-            app.page.show(planningView);
+            app.page.show(planningView, {planId: planId});
         }
     };
 });
