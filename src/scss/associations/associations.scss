@@ -20,5 +20,10 @@
 }
 #associations_main{ width:1200px; margin:35px auto 0 auto; overflow: hidden;
   #main_left{width:900px; float:left; }
-  #main_right{width:300px; height: 300px; float:left; background: rgba(34,234,34,.3);}
+  #main_right { width: 300px; height: 300px; float: left;
+    .memberImgItem {width: 57px;  height: 57px;  margin-right: 12px; margin-bottom: 12px; float:left;}
+    #associateMember p, #associateAttention p { font-size: 24px;  color: #3d3d3d;  margin-bottom: 20px; text-align: left; clear:left;}
+    #associateMember{overflow: hidden;}
+    #associateAttention{margin-top: 42px; overflow: hidden;}
+  }
 }
