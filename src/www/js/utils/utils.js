@@ -72,7 +72,15 @@
      */
     utils.log = function(str){
         console.log(str)
-    }
+    },
+    /**
+     * 格式化时间 为  2015.12.15 10：00
+     * @param time
+     */
+    utils.formatCreatedTime = function(time){
+        var t = new Date(time);
+        return (t.getFullYear()) + "." + (t.getMonth() + 1) + "." + t.getDate() +"  " +  t.getHours() + ":" + t.getMinutes();
+    };
 
     /**
      * 获取随机头像
@@ -114,5 +122,122 @@
         var index = Math.floor(Math.random() * tempHeaders.length);
         return tempHeaders[index].avatar_url;
     };
+
+    utils.getLabelRandomColor = function(){
+        var tempColors = ["#0000ff", "#00ff00", "#00b7ee", "#22ac38", "#ff0000", "#ff00ff"];
+        var index = Math.floor(Math.random() * tempColors.length);
+        return tempColors[index];
+    }
+
+    /**
+     * 加载已点赞作品列表数据
+     * add by guYY 2016/7/2 20:00
+     */
+    utils.loadLikedTplList = function(){
+        if(!window.likedWorkList || window.likedWorkList.length <= 0)
+        {
+//            sns_data.getSnsLikeByUidLocalFun(function (arr) {
+//                var workIdArr = [];
+//                window.likedWorkList = workIdArr;
+//                if(workIdArr.length > 0)
+//                    app.triggerMethod("common:works:liked",[workIdArr.join(','),1]);
+//            }, function (err) {
+//                console.log(err);
+//            });
+        }
+    }
+    /**
+     * 判断是否已点赞作品tplId
+     * @param tplId
+     * add by guYY 2016/7/2 20:00
+     */
+    utils.isLiked = function(workId){
+        if(!window.likedWorkList)window.likedWorkList=[];
+        return window.likedWorkList.indexOf(workId+"") >= 0;
+    };
+    /**
+     * 点赞或取消点赞作品
+     * @param tplId
+     * @param like  1点赞   0取消点赞
+     *  add by guYY 2016/7/2 20:11
+     */
+    utils.addLikeTpl = function(workId,like){
+        if(!window.likedWorkList)window.likedWorkList=[];
+        // 添加点赞
+        if(like == 1) {
+            if (window.likedWorkList.indexOf(workId + "") < 0)
+                window.likedWorkList.push(workId + "");
+        }else{ //取消点赞
+            if (window.likedWorkList.indexOf(workId + "") >= 0)
+                window.likedWorkList.splice(window.likedWorkList.indexOf(workId + ""),1);
+        }
+    };
+    /**
+     * 加载userObj已关注用户列表数据
+     * add by guYY 2016/7/2 20:11
+     */
+    utils.loadAttentionList = function(userObj){
+        if(!window.attentionUserList || window.attentionUserList.length <= 0)
+        {
+//            sns_data.getFolloweeAllList({"followee":"followee","pageSize":0,"pageNumber":1000},function(arr){
+//                var attList = [];
+//                for(var i = 0; i < arr.length; i++)
+//                {
+//                    attList.push(arr[i]["id"]);
+//                }
+//                window.attentionUserList = attList;
+//                if(attList.length > 0) {
+//                    app.triggerMethod("common:works:attention",[attList.join(','),1]);
+//                }
+//            },function(err){
+//                console.log(err);
+//            });
+        }
+    }
+    /**
+     * 判断是否已关注用户
+     * @param userId
+     * add by guYY 2016/7/2 20:11
+     */
+    utils.isAttention = function(userId){
+        if(!window.attentionUserList)window.attentionUserList=[];
+        return window.attentionUserList.indexOf(userId+"") >= 0;
+    };
+    /**
+     * 关注或取消关注作品
+     * @param userId   用户id
+     * @param attention  1关注   0取消关注
+     *  add by guYY 2016/7/2 20:11
+     */
+    utils.addAttention = function(userId,attention){
+        if(!window.attentionUserList)window.likedTplList=[];
+        //添加关注
+        if(attention == 1) {
+            if (window.attentionUserList.indexOf(userId + "") < 0)
+                window.attentionUserList.push(userId + "");
+        }else{ //取消关注
+            if (window.attentionUserList.indexOf(userId + "") >= 0)
+                window.attentionUserList.splice(window.attentionUserList.indexOf(userId + ""),1);
+        }
+    };
+
+    //判断是否是base64图片
+    utils.isBase64 = function(image){
+        if(!image) return false;
+        if(image.indexOf("data:") != -1) return true;
+        return false;
+    };
+
+    utils.createEvent = function(type) {
+        var customEvent;
+        try {
+            customEvent = document.createEvent('CustomEvent');
+            customEvent.initCustomEvent(type, false, false);
+        } catch (e) {
+            customEvent = document.createEvent("HTMLEvents");
+            customEvent.initEvent(type, false, false);
+        }
+        return customEvent;
+    }
 
 })(window);

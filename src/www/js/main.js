@@ -51,6 +51,7 @@ require([
 ], function($,Backbone, BackboneHistory, app, Controller, AppRouter) {
     //实例化AV
     AV.initialize("oCjYs9w05WuNmCk6sDblt7hY-gzGzoHsz", "yaREoDyiyoy5iWV2iWAODk5X");
+
     $(document).ready(readyHandle);
     function readyHandle (){
         app.router = new AppRouter({controller:Controller});

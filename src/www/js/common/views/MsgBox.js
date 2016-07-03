@@ -5,7 +5,7 @@
 // 描    述: MsgBox
 define([
     'common/views/MsgBoxUI',
-    'common/views/ToastBoxUI'
+    'common/views/ToastBoxUI',
 ],function(MsgBoxUI, ToastBoxUI) {
 
     var className = "app-msg-box";

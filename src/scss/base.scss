@@ -17,6 +17,7 @@ body {
     font-size: 12px;
     color: #333;
     background: #EDEDED;
+    overflow-y: scroll;
 }
 
 li {
@@ -170,6 +171,7 @@ img {
 @import "home/footer.scss";
 @import "common/loginBar.scss";
 @import "common/commentView.scss";
+@import "common/faceView.scss";
 @import "planning/planning.scss";
 @import "userCenter/userCenter.scss";
 @import "associations/associations.scss";

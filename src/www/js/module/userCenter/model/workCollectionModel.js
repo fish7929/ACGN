@@ -29,7 +29,11 @@ define([
             var self = this;
             if(self._loading == true) return;
             self._loading = true;
-            self.loadOk([11]);
+
+            var obj = [{"gb_id":"00000001","pictures":[],"topic":"我是话题内容话题内容话题内容话题内容11是话题内容话题内容话题内容话题内容11是话题内容话题内容话题内容话题内容1111111","author":"我是作者1","type":1,"status":0,"like_int":112,"comment_int":113},
+                {"gb_id":"00000002","pictures":["images/temp/info_pic/a006.png","images/temp/info_pic/a002.jpeg","images/temp/info_pic/a003.jpeg","images/temp/info_pic/a004.jpeg"],"topic":"我是话题内容话题内容话题内容话题内容2222222222","author":"我是作者2","type":2,"status":0,"like_int":222,"comment_int":223},
+                {"gb_id":"00000003","pictures":["images/temp/info_pic/a004.jpeg","images/temp/info_pic/a003.jpeg","images/temp/info_pic/a002.jpeg","images/temp/info_pic/a001.jpeg"],"topic":"","author":"我是作者3","type":2,"status":0,"like_int":332,"comment_int":333}];
+            self.loadOk(obj);
             //查询动态列表
 //            var options = {
 //                "tplLabel": "",
