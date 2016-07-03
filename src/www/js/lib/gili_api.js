@@ -11,7 +11,7 @@ var gili_data = {};
 gili_data.getCurrentUser = function () {
     var currentUser = AV.User.current();
     if (currentUser) {
-        return currentUser.toJSON();
+        return currentUser;
     } else {
         return null;
     }
