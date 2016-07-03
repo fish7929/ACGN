@@ -257,7 +257,6 @@
         var b = new Date().getTime().toString(16), b = b + Math.floor((1 + Math.random()) * Math.pow(16, 16 - b.length)).toString(16).substr(1);
         return (a || "") + b;
     };
-
     /**
      * 格式化显示时间
      * @param time
@@ -289,5 +288,13 @@
                     break;
             }
         })
-    }
+    };
+    utils.convert_list_2_json = function(a){
+        var result = [];
+        var len = a.length;
+        for(var i=0; i<len; i++){
+            result[i] = a[i].toJSON();
+        }
+        return result;
+    };
 })(window);

@@ -8,7 +8,7 @@ define([
     'text!module/home/templates/home_book.html',
     'marionette'
 ],function(ItemView, tpl, mn){
-    var htmlTpl = '<div class="book-item {3}" attr="{0}">' +
+    var htmlTpl = '<div class="book-item button {3}" attr="{0}">' +
         '<div class="book-pic" style="background: url(\'{1}\') no-repeat center; background-size: 100%"></div>' +
         '<div class="book-name">{2}</div>' +
         '</div>';
@@ -16,14 +16,13 @@ define([
         className : "bookContainer",
         template : _.template(tpl),
 
-        _mouseLock : false,
-
         // key : selector
         ui : {
             bookList : ".book-container"
         },
         //事件添加
         events : {
+            "click @ui.bookList" : "onClickHandle"
         },
         /**初始化**/
         initialize : function(){
@@ -39,20 +38,19 @@ define([
 
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
-            this.initList();
-            this.$el.show();
+            var self = this;
+            var opt = {};
+            opt.skip = 0;
+            opt.limit = 5;
+            gili_data.getBooks(opt, function(data){
+                data = utils.convert_list_2_json(data);
+                self.initList(data);
+            })
+            self.$el.show();
         },
 
-        initList : function(){
-            var data = [], i;
-            for(i = 1; i <= 5; i++){
-                var obj = {};
-                obj.bookId = i;
-                obj.bookPic = 'images/temp/book/book'+i+'.jpg';
-                obj.bookName = "女神的谜语"+i;
-                data.push(obj);
-            }
-
+        initList : function(data){
+            var i;
             var self = this, html = "", lastItemClass;
             for(i = 0; i < data.length; i++){
                 obj = data[i];
@@ -60,20 +58,22 @@ define([
                 if(i == data.length - 1){
                     lastItemClass = "last-item"
                 }
-                html += htmlTpl.replace("{0}", obj.bookId).replace("{1}", obj.bookPic).replace("{2}", obj.bookName).replace("{3}", lastItemClass);
+                html += htmlTpl.replace("{0}", obj.objectId).replace("{1}", obj.cover).replace("{2}", obj.name).replace("{3}", lastItemClass);
             }
             self.ui.bookList.html(html);
         },
 
-        /*点击事件不可以重复点*/
-        _checkMouseLock : function () {
-            var self = this;
-            if (self._mouseLock) return true;
-            self._mouseLock = true;
-            setTimeout(function () {
-                self._mouseLock = false;
-            }, 200);
-            return false;
+        onClickHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var target = $(e.target);
+            var parent = target.parents(".book-item");
+            if(parent && parent.get(0)){
+                var objectId = parent.attr("attr");
+                if(objectId){
+                    app.navigate("#book/"+objectId, {replace: false, trigger: true});
+                }
+            }
         },
 
         /**页面关闭时调用，此时不会销毁页面**/
