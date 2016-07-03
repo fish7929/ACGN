@@ -133,7 +133,8 @@ gili_data.getPlanByPlanId = function (plan_id, cb_ok, cb_err) {
     var strCql = " select include author, * from plan where objectId='" + plan_id + "'";
     AV.Query.doCloudQuery(strCql, {
         success: function (data) {
-            cb_ok(data.results);
+            var obj = data.results;
+            cb_ok(obj.toJSON());
         }, error: cb_err
     }
     );
