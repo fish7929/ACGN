@@ -409,10 +409,14 @@ gili_data.addBlog = function (options, cb_ok, cb_err) {
     if (pictures) {
         obj.set("pictures", pictures);
     }
-    obj.set("club_id", club_id);
+    //obj.set("club_id", club_id);
+    if (labels) {
+        obj.set("labels", labels);
+    }
+    obj.set("labels", labels);
     obj.set("user", this.getCurrentUser());
     obj.set("user_id", this.getCurrentUser().id);
-    obj.set("status", parseInt(blog_type));
+    obj.set("type", parseInt(blog_type));
     obj.save(null, {
         success: cb_ok,
         error: cb_err
