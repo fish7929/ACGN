@@ -125,6 +125,19 @@ gili_data.getPlan = function (options, cb_ok, cb_err) {
     }
     );
 };
+
+/** 根据plab_id查询plan对象
+ * plan_id，企划id
+ **/
+gili_data.getPlanByPlanId = function (plan_id, cb_ok, cb_err) {
+    var strCql = " select include author, * from plan where objectId='" + plan_id + "'";
+    AV.Query.doCloudQuery(strCql, {
+        success: function (data) {
+            cb_ok(data.results);
+        }, error: cb_err
+    }
+    );
+};
 /** 查询企划公告
  * skip,
  * limit,
@@ -413,6 +426,7 @@ gili_data.addBlog = function (options, cb_ok, cb_err) {
     if (labels) {
         obj.set("labels", labels);
     }
+    obj.set("labels", labels);
     obj.set("user", this.getCurrentUser());
     obj.set("user_id", this.getCurrentUser().id);
     obj.set("type", parseInt(blog_type));
