@@ -133,12 +133,18 @@ gili_data.getPlanByPlanId = function (plan_id, cb_ok, cb_err) {
     var strCql = " select include user, * from plan where objectId='" + plan_id + "'";
     AV.Query.doCloudQuery(strCql, {
         success: function (data) {
-            var obj = data.results;
-            cb_ok(obj.toJSON());
+            //TODO 由于只有一条的
+            var obj = (data.results)[0];
+            var _user = obj.get("user");
+            _user = _user.toJSON();
+            obj = obj.toJSON()
+            obj.user = _user;
+            cb_ok(obj);
         }, error: cb_err
     }
     );
 };
+
 /** 查询企划公告
  * skip,
  * limit,
