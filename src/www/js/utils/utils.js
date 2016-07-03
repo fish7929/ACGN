@@ -258,5 +258,15 @@
         return (a || "") + b;
     };
 
+    utils.convert_list_2_json = function(a){
+        var result = [];
+        var len = a.length;
+        for(var i=0; i<len; i++){
+            result[i] = a[i].toJSON();
+        }
+        return result;
+    };
+
+
 
 })(window);

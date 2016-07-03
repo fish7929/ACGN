@@ -4,8 +4,10 @@ define([
     'module/book/views/bookDetailsView'
 ],function(bookDetailsView){
     return {
-        book : function(){
-            app.page.show(bookDetailsView);
+        book : function(bookId){
+            var obj = {};
+            obj.bookId = bookId;
+            app.page.show(bookDetailsView, obj);
         }
     };
 });

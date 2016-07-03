@@ -22,7 +22,7 @@ define([
             "userCenterFans/:userId" : "userCenterFans", //用户中心-粉丝 add by guYY
             "associations" : "Associations", //社团 add by guYY
             //同人本详情
-            "book" : "book",
+            "book/:bookId" : "book",
             //发布页面
             "publish" : "publish"
         },
