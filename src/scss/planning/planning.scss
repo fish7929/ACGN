@@ -38,6 +38,7 @@
     height: 100%;
     display: inline-block;
     float: left;
+    position: relative;
 }
 .planning-cover{
     width: 260px;
@@ -71,7 +72,10 @@
     width:60px;
     height: 30px;
     line-height: 28px;
-    float: left;
+//    float: left;
+    position: absolute;
+    left: 95px;
+    bottom: 0;
     border-radius: 14.5px;
     border: 1px solid rgba(254,83,19,.9);
 }
@@ -356,7 +360,7 @@
 .dynamic-item-author span{
     float: left;
     font-size: 18px;
-    margin-left: 13px;
+    margin-left: 10px;          //13px  在FirFox中会出错 修改为 10
     margin-top: 6px;
     color: #fe5313;
 }

@@ -10,7 +10,7 @@ define([
     /**
      * 模拟企划数据
      */
-    PlanningModel.Plan = {
+    var plan = {
         cover : "./images/planning/cover.jpg",
         bg_img: "./images/planning/banner.jpg",
         name: "我的妹妹真是可爱到不行不行",
@@ -57,6 +57,7 @@ define([
             }
         ]
     };
+    var _plan = [];
 
     /**
      * 模拟企划公告数据
@@ -94,25 +95,35 @@ define([
     var p = PlanningModel.prototype;
     /**
      * 根据planId查询企划数据
-     * @param id
+     * @param objectId
      * @param cb_ok
      * @param cb_err
      */
-    p.getPlanById = function(id, cb_ok,cb_err){
-        if(true){
-            cb_ok&&cb_ok(PlanningModel.Plan);
-        }else{
-            cb_err&&cb_err();
+    p.getPlanById = function(planId, cb_ok,cb_err){
+        if(_plan[planId]){
+            cb_ok&&cb_ok(_plan[planId]);
+            return;
         }
+        gili_data.getPlanByPlanId(planId, function(data){
+            _plan[planId] = data;
+            cb_ok&&cb_ok(data);
+        }, function(err){
+            console.log(err);
+            cb_err&&cb_err(err);
+        });
     };
-
-    p.getTypeDetails = function(cb_ok,cb_err){
-
-    };
-
-    p.getTypeDetailByIndex = function(index){
-        var typeDetails = PlanningModel.Plan.preview[index - 1];
-        return typeDetails.description;
+    /**
+     * 根据企划ID和类型序号获取对应的简介
+     * @param planId
+     * @param index
+     * @returns {*}
+     */
+    p.getTypeDetailByIndex = function(planId, index){
+        if(_plan[planId]){
+            var typeDetails = _plan[planId].preview[index - 1];
+            return typeDetails.description;
+        }
+        return null;
     };
 
     /**
