@@ -17,34 +17,6 @@ gili_data.getCurrentUser = function () {
     }
 };
 
-/**
- * 用户登录
- * @param username
- * @param password
- * @param cb_ok
- * @param cb_err
- */
-gili_data.logIn = function (username, password, cb_ok, cb_err) {
-    AV.User.logIn(username, password).then(function(user) {
-        cb_ok&&cb_ok(user);
-    },function(err){
-        cb_err&&cb_err(err);
-    });
-};
-
-/**
- 用户注销
- **/
-gili_data.logOut = function () {
-    AV.User.logOut();
-//    var currentUser=this.getCurrentUser();
-//    currentUser.save().then(function(obj){
-//        AV.User.logOut();
-//    },function(error){
-//        AV.User.logOut();
-//    });
-};
-
 /** 根据class 表名和objectId 查询对应的对象数据
  * class_name 表名
  * objectId 对象id
@@ -842,7 +814,7 @@ gili_data.getAllLikeList = function (cb_ok, cb_err) {
 
 /** 查询用户关注的所有用户集合
  **/
-sns_data.getFolloweeAllList = function (options, cb_ok, cb_err) {
+gili_data.getFolloweeAllList = function (options, cb_ok, cb_err) {
     if (!this.getCurrentUser()) {
         cb_err("请先登录!");
         return;
@@ -872,7 +844,7 @@ sns_data.getFolloweeAllList = function (options, cb_ok, cb_err) {
  orderBy
  isDesc
  **/
-sns_data.followeeList = function (options, cb_ok, cb_err) {
+gili_data.followeeList = function (options, cb_ok, cb_err) {
     if (!this.getCurrentUser()) {
         cb_err("请先登录!");
         return;
@@ -932,7 +904,7 @@ sns_data.followeeList = function (options, cb_ok, cb_err) {
  orderBy
  isDesc
  **/
-sns_data.followerList = function (options, cb_ok, cb_err) {
+gili_data.followerList = function (options, cb_ok, cb_err) {
     if (!this.getCurrentUser()) {
         cb_err("请先登录!");
         return;
@@ -990,7 +962,7 @@ sns_data.followerList = function (options, cb_ok, cb_err) {
  like_type,1-话题插画，2-其他拓展
  like_id,点赞对象id
  **/
-sns_data.snsSaveLike = function (options, cb_ok, cb_err) {
+gili_data.snsSaveLike = function (options, cb_ok, cb_err) {
     var currentuser = this.getCurrentUser();
     var like_opration = options.like_opration,
         like_type = options.like_type,
@@ -1081,10 +1053,10 @@ sns_data.snsSaveLike = function (options, cb_ok, cb_err) {
  content,评论内容，blog评论内容：XXXXX ,如果为评论的评论进行回复的评论则为：{"content":"回复信息","uname":“刘德华”,"uid":“用户id”}，显示为：用户头像名字 + 回复@张三+ 回复内容
  belong_blog_id,所属那个话题插画
  **/
-sns_data.snsSaveComment = function (options, cb_ok, cb_err) {;
+gili_data.snsSaveComment = function (options, cb_ok, cb_err) {;
     var comment_id = options.comment_id,
-        comment_type = options.comment_type,
         content = options.content,
+        comment_type = options.comment_type,
         belong_blog_id = options.belong_blog_id || "";//便于查询评论列表
 
     if (!comment_id || !this.getCurrentUser()) {
@@ -1094,7 +1066,6 @@ sns_data.snsSaveComment = function (options, cb_ok, cb_err) {;
     if (belong_blog_id.length == 0 && comment_type == 1) {
         belong_blog_id = comment_id;
     }
-
     var current_user = this.getCurrentUser();
 
     if (current_user) {
@@ -1329,4 +1300,18 @@ gili_data.getBooksCount = function (options, cb_ok, cb_err) {
     });
 };
 
+/////////////////////////////其他 接口/////////////////////////
+/** 查询本子总数
+ * name ,文件名称 如：XXXX.jpg 一定要带后缀
+ * file,文件file对象
+ **/
+gili_data.fileUpload = function (options, cb_ok, cb_err) {
+    var name = options.name,
+        file = options.file;
+
+    var avFile = new AV.File(name, file);
+    avFile.save().then(function (obj) {
+        cb_ok(obj);
+    }, cb_err);
+};
 window.gili_data = gili_data;
