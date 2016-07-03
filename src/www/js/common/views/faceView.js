@@ -8,7 +8,7 @@ define([
     'text!common/templates/faceView.html',
     'config/faceConfig'
 ],function(tpl, faceList){
-    var FaceTpl = "<div class='face-item button'>{0}</div>";
+    var FaceTpl = "<div class='face-item button nowrapTxt'>{0}</div>";
     var FaceView = function(parent){
         var self = this;
         self._isShow = false;
