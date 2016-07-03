@@ -220,4 +220,24 @@
                 window.attentionUserList.splice(window.attentionUserList.indexOf(userId + ""),1);
         }
     };
+
+    //判断是否是base64图片
+    utils.isBase64 = function(image){
+        if(!image) return false;
+        if(image.indexOf("data:") != -1) return true;
+        return false;
+    };
+
+    utils.createEvent = function(type) {
+        var customEvent;
+        try {
+            customEvent = document.createEvent('CustomEvent');
+            customEvent.initCustomEvent(type, false, false);
+        } catch (e) {
+            customEvent = document.createEvent("HTMLEvents");
+            customEvent.initEvent(type, false, false);
+        }
+        return customEvent;
+    }
+
 })(window);

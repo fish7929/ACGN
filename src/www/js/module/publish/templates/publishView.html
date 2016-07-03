@@ -1,29 +1,32 @@
 <div class="publishContainer">
-    <div class="publishHeadMask"></div>
-    <div class="publishMask">
-        <div class="publishContent">
-            <div class="publishTitle">发布话题</div>
-            <div class="publishImagesContent">
-                <div class="publishImageEmpty">
-                    <div class="publishImageEmptyImage"></div>
-                    <div class="publishImageEmptyTxt">最多1次可上传10张</div>
-                </div>
-                <div class="publishImageList"></div>
+    <div class="publishMask"></div>
+    <div class="publishContent">
+        <div class="publishTitle">发布话题</div>
+        <div class="publishImagesContent">
+            <input class="publishImageInput" name="images" type="file" accept="image/*" multiple />
+            <div class="publishImageEmpty">
+                <div class="publishImageEmptyImage button"></div>
+                <div class="publishImageEmptyTxt">最多1次可上传10张</div>
             </div>
-            <div class="publishTopicContent">
-                <textarea class="publishTextArea" placeholder="你有什么想分享的么"></textarea>
-                <div class="publish-line"></div>
-                <div class="publish-labels">
-                    <input type="text" maxlength="6" class="publish-label-txt" name="publish-label-txt" placeholder='点击添加标签' />
-                    <div class="publish-label-del button"></div>
-                </div>
-                <div class="publish-label-info">添加标签，可以用enter分割标签哟~</div>
-            </div>
-            <div class="publish-btns">
-                <div class="btn-face button"></div>
-                <div class="bn-publish btn button">发布</div>
-                <div class="bn-cancel btn button">取消</div>
+            <div class="publishImageList">
+                <div class="publishImageAddItem button"></div>
             </div>
         </div>
+        <div class="publishTopicContent">
+            <textarea class="publishTextArea" placeholder="你有什么想分享的么"></textarea>
+            <div class="publish-line"></div>
+            <div class="publish-labels">
+                <input type="text" maxlength="6" class="publish-label-txt" name="publish-label-txt" placeholder='点击添加标签' />
+                <div class="publish-label-del button"></div>
+            </div>
+            <div class="publish-label-info">添加标签，可以用enter分割标签哟~</div>
+        </div>
+        <div class="publish-btns">
+            <div class="btn-face button"></div>
+            <div class="btn-image-single button"></div>
+            <div class="bn-publish btn button">发布</div>
+            <div class="bn-cancel btn button">取消</div>
+        </div>
+        <div class="publish-face-container"></div>
     </div>
 </div>
