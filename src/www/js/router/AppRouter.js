@@ -15,6 +15,7 @@ define([
         appRoutes: {
             "" : "home",
             "planning" : "planning", //企划路由
+            "planning/:planId" : "planning", //企划路由
             "userCenter" : "userCenter", //用户中心 add by guYY
             "userCenter/:userId" : "userCenter", //用户中心 add by guYY
             "userCenterFans" : "userCenterFans", //用户中心-粉丝 add by guYY
