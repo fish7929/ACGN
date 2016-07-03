@@ -413,7 +413,6 @@ gili_data.addBlog = function (options, cb_ok, cb_err) {
     if (labels) {
         obj.set("labels", labels);
     }
-    obj.set("labels", labels);
     obj.set("user", this.getCurrentUser());
     obj.set("user_id", this.getCurrentUser().id);
     obj.set("type", parseInt(blog_type));
