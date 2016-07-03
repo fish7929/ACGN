@@ -78,7 +78,6 @@ define([
         topic2Tpl: _.template('<div class="info-article"><%=topicStr%></div>'),
         //获取评论列表
         getComment:function(){
-            debugger;
             var commentHtml = '<div class="commentListCon">';
             var commentArr = this.model.commentList;
             if(!commentArr || commentArr.length <= 0)return commentHtml;

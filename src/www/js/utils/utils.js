@@ -210,7 +210,7 @@
      *  add by guYY 2016/7/2 20:11
      */
     utils.addAttention = function(userId,attention){
-        if(!window.attentionUserList)window.likedTplList=[];
+        if(!window.attentionUserList)window.attentionUserList=[];
         //添加关注
         if(attention == 1) {
             if (window.attentionUserList.indexOf(userId + "") < 0)
@@ -220,7 +220,20 @@
                 window.attentionUserList.splice(window.attentionUserList.indexOf(userId + ""),1);
         }
     };
-
+    /**
+     * 关注/取消关注
+     * @param type   1关注   0取消关注
+     * @param userId  关注用户ID
+     * @param cb_ok
+     * @param cb_err
+     */
+    utils.attentionUser = function(type,userId,cb_ok,cb_err){
+        if(type == 1){
+            gili_data.meFollow(userId,cb_ok,cb_err);
+        }else{
+            gili_data.meUnfollow(userId,cb_ok,cb_err);
+        }
+    }
     //判断是否是base64图片
     utils.isBase64 = function(image){
         if(!image) return false;
