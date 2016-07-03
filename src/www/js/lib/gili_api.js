@@ -42,7 +42,6 @@ gili_data.getObjectById = function (class_name, objectId, cb_ok, cb_err) {
 /** 加入 关注企划
  * plan_id，企划id
  * status,1-关注，2-加入,999-取消关注
- *
  **/
 gili_data.planOpration = function (options, cb_ok, cb_err) {
     var plan_id = options.plan_id,
@@ -265,7 +264,7 @@ gili_data.getPlanUserBlog = function (options, cb_ok, cb_err) {
             followeeList += "'" + obj[i].id + "',";
         }
         if (followeeList.length > 0) {
-            CQL = " select * from gili_blog where status !=2 and user_id in (" + followeeList.substring(0, followeeList.length - 1) + ") and labels in (" + plan_name + ") ";
+            CQL = " select * from blog where status !=2 and user_id in (" + followeeList.substring(0, followeeList.length - 1) + ") and labels in (" + plan_name + ") ";
         }
         if (orderBy.length > 0) {
             if (isDesc) {
@@ -364,7 +363,7 @@ gili_data.getUsers = function (options, cb_ok, cb_err) {
 };
 
 /** 查询表随机data
- * table_name 表名 book,gili_blog,_User,club
+ * table_name 表名 book,blog,_User,club
  * skip
  * limit
  **/
@@ -387,6 +386,38 @@ gili_data.getRandomDataByTable = function (options, cb_ok, cb_err) {
 };
 
 ////////////////////////////////////////////////// 话题 插画 相关 ///////////////////////
+/** 获取blog
+ * blog_type,1-话题，2-插画
+ * topic,
+ * pictures ，数组插画
+ * labels，数组标签
+ * cb_ok
+ * cb_err
+ * */
+gili_data.addBlog = function (options, cb_ok, cb_err) {
+    var pictures = options.pictures,
+        topic = options.topic,
+        labels = options.labels,
+        blog_type = options.blog_type,
+        status = options.status || 0;
+
+    var blog = AV.Object.extend("blog");
+    var obj = new blog();
+    if (topic) {
+        obj.set("topic", topic);
+    }
+    if (pictures) {
+        obj.set("pictures", pictures);
+    }
+    obj.set("club_id", club_id);
+    obj.set("user", this.getCurrentUser());
+    obj.set("user_id", this.getCurrentUser().id);
+    obj.set("status", parseInt(blog_type));
+    obj.save(null, {
+        success: cb_ok,
+        error: cb_err
+    });
+}
 /** 获取blog
  * CQL
  * cb_ok
@@ -430,7 +461,7 @@ gili_data.getUserBlog = function (options, cb_ok, cb_err) {
                             followeeList += "'" + obj[i].id + "',";
                         }
                         if (followeeList.length > 0) {
-                            strCQL = " select  * from  gili_blog where status!=2 and  user_id in (" + followeeList.substring(0, followeeList.length - 1) + ")  ";
+                            strCQL = " select  * from blog where status!=2 and  user_id in (" + followeeList.substring(0, followeeList.length - 1) + ")  ";
                             gili_data.getBlog(strCQL, function (objs) {
                                 var data = [];
                                 for (var i = 0; i < objs.lenth; i++) {
@@ -926,6 +957,163 @@ sns_data.followerList = function (options, cb_ok, cb_err) {
     }
 };
 
+/** 点赞提交信息
+ like_opration, 赞类型 like 点赞，cancerlike 取消赞
+ like_type,1-话题插画，2-其他拓展
+ like_id,点赞对象id
+ **/
+sns_data.snsSaveLike = function (options, cb_ok, cb_err) {
+    var currentuser = this.getCurrentUser();
+    var like_opration = options.like_opration,
+        like_type = options.like_type,
+        like_id = options.like_id;
+
+    if (!currentuser) {
+        cb_err("用户对象为空，没有登录！");
+        return;
+    }
+    if (!like_id) {
+        cb_err("参数错误，赞对象id为空！");
+        return;
+    }
+    var user_id = currentuser.id;
+    var save_like = function () {
+        var query = new AV.Query("like");
+        query.equalTo("user_id", user_id);
+        query.equalTo("like_id", like_id);
+        query.first({
+            success: function (data) {
+                if (data) {//如果已经存在该数据说明为0状态
+                    if (like_opration == "like") {
+                        data.set("status", 0);
+                        data.save(null, {
+                            success: cb_ok,
+                            error: cb_err
+                        });
+                    } else if (like_opration == "cancerlike") {
+                        data.set("status", 1);
+                        data.save(null, {
+                            success: cb_ok,
+                            error: cb_err
+                        });
+                    }
+                } else {//如果不存在新增
+                    var like = AV.Object.extend("like");
+                    var obj = new like();
+                    obj.set("user_id", user_id);
+                    obj.set("like_id", like_id);
+                    obj.set("like_type", like_type);
+                    obj.set("status", 0);
+                    obj.set("user", currentuser);
+                    obj.save(null, {
+                        success: function (obj) {
+                            cb_ok(obj);
+                        },
+                        error: cb_err
+                    });
+                }
+            },
+            error: cb_err
+        });
+    }
+    //话题插画赞总计
+    var update_blog_count = function () {
+        var query = new AV.Query("blog");
+        query.equalTo("objectId", like_id);
+        query.first({
+            success: function (data) {
+                if (data) {
+                    var like_int = data.get("like_int") || 0;
+                    if (like_opration == "like") {
+                        data.increment("like_int", 1);
+                    } else if (like_opration == "cancerlike") {
+                        if (like_int > 0) {
+                            data.increment("like_int", -1);
+                        }
+                    }
+                    data.save(null, {
+                        success: function (obj) {
+                            save_like();
+                        },
+                        error: cb_err
+                    });
+                } else {
+                    save_like();
+                }
+            },
+            error: cb_err
+        });
+    }
+    update_blog_count();
+};
+
+/** 评论
+ comment_id,评论对象id
+ comment_type,1-话题插画，2-评论
+ content,评论内容，blog评论内容：XXXXX ,如果为评论的评论进行回复的评论则为：{"content":"回复信息","uname":“刘德华”,"uid":“用户id”}，显示为：用户头像名字 + 回复@张三+ 回复内容
+ belong_blog_id,所属那个话题插画
+ **/
+sns_data.snsSaveComment = function (options, cb_ok, cb_err) {;
+    var comment_id = options.comment_id,
+        comment_type = options.comment_type,
+        content = options.content,
+        belong_blog_id = options.belong_blog_id || "";//便于查询评论列表
+
+    if (!comment_id || !this.getCurrentUser()) {
+        cb_err("参数错误，或者没有登录！");
+        return;
+    }
+    if (belong_blog_id.length == 0 && comment_type == 1) {
+        belong_blog_id = comment_id;
+    }
+
+    var current_user = this.getCurrentUser();
+
+    if (current_user) {
+        var save_comment = function () {
+            var comment = AV.Object.extend("comment");
+            var obj = new comment();
+            obj.set("comment_id", comment_id);
+            obj.set("comment_type", parseInt(comment_type));
+            obj.set("user_id", user_id);
+            obj.set("status", 0);
+            obj.set("content", content);//comment_content为JSON格式的字符串数据
+            obj.set("user", current_user);
+            obj.set("belong_blog_id", belong_blog_id);
+            obj.save(null, {
+                success: cb_ok,
+                error: cb_err
+            });
+        }
+
+        //保存tplobj评论计总数
+        var save_blog_count = function () {
+            var query = new AV.Query("blog");
+            query.equalTo("objectId", belong_blog_id);
+            query.first({
+                success: function (data) {
+                    if (data) {
+                        var comment_int = data.get("comment_int") || 0;
+                        data.increment("comment_int", 1);
+                        data.save(null, {
+                            success: function (cbobj) {
+                                save_comment();
+                            }, error: cb_err
+                        });
+                    } else {
+                        save_comment();
+                    }
+                },
+                error: cb_err
+            });
+        }
+
+        save_blog_count();
+
+    }
+};
+
+
 /////////////////////////////////////////////////  社团相关 //////////////////////////////////////
 
 /** 查询社团s
@@ -1112,6 +1300,5 @@ gili_data.getBooksCount = function (options, cb_ok, cb_err) {
         error: cb_err
     });
 };
-
 
 window.gili_data = gili_data;
