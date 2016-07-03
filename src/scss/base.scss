@@ -17,6 +17,7 @@ body {
     font-size: 12px;
     color: #333;
     background: #EDEDED;
+    overflow-y: scroll;
 }
 
 li {
@@ -64,8 +65,13 @@ a:link {
     position: relative;
     margin: 0 auto;
     background-color: #fff;
+//    padding: 0 40px;
+}
+
+.common-padding{
     padding: 0 40px;
 }
+
 
 /**
 *登录导航公用类
@@ -164,7 +170,11 @@ img {
 @import "home/friends_link.scss";
 @import "home/footer.scss";
 @import "common/loginBar.scss";
+@import "common/commentView.scss";
+@import "common/faceView.scss";
 @import "planning/planning.scss";
+@import "userCenter/userCenter.scss";
+@import "associations/associations.scss";
 @import "login/login.scss";
 
 @import "book/bookDetails.scss";
@@ -173,3 +183,4 @@ img {
 @import "book/bookPreviewView.scss";
 
 @import "publish/publishOption.scss";
+@import "publish/publishView.scss";

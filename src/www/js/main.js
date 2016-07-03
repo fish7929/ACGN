@@ -27,7 +27,9 @@ require.config({
         marionette : 'vendor/backbone/backbone.marionette',
         text : 'vendor/text',
         swiper : 'vendor/swiper',
-        showbox : "common/views/ShowBox"
+        showbox : "common/views/ShowBox",
+        giliApi : "lib/gili_api",
+        msgbox : "common/views/MsgBox"
     },
     waitSeconds: 0
 });
@@ -43,10 +45,14 @@ require([
     'text',
     'utils/utils',
     'swiper',
-    'showbox'
+    'showbox',
+    'giliApi',
+    'msgbox'
 ], function($,Backbone, BackboneHistory, app, Controller, AppRouter) {
-    $(document).ready(readyHandle);
+    //实例化AV
+    AV.initialize("oCjYs9w05WuNmCk6sDblt7hY-gzGzoHsz", "yaREoDyiyoy5iWV2iWAODk5X");
 
+    $(document).ready(readyHandle);
     function readyHandle (){
         app.router = new AppRouter({controller:Controller});
         BackboneHistory.start({pushState: false});

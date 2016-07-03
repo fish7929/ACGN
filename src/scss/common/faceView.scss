@@ -1,0 +1,33 @@
+.face-mask{
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background-color: rgba(0,0,0,0);
+}
+
+.face-container{
+  position: absolute;
+  width: 395px;
+  height: 192px;
+  background: url("../images/common/facebg.png") no-repeat center;
+  margin-bottom: 20px;
+
+  .fac-list-div{
+    width: 100%;
+    height: 176px;
+    text-align: center;
+    margin-top: 15px;
+    overflow-y: auto;
+    padding-top: 10px;
+  }
+
+  .face-item{
+    width: 25%;
+    font-size: 14px;
+    line-height: 30px;
+    display: inline-block;
+    margin-bottom: 10px;
+  }
+}

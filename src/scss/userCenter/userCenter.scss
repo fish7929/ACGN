@@ -1,0 +1,71 @@
+#userCenterContainer{width:100%; margin:0 auto; overflow: hidden;}
+#userCenterLogin{margin-left: 40px;}
+#userCenterFansContainer{width:100%; margin:0 auto; overflow: hidden;}
+#userCenterHeader{width:1280px; height: 349px; background: url("../images/userCenter/icon01.png") no-repeat; background-size: 100%;
+ text-align: center;  margin:5px auto auto auto;/* margin:0 auto; guyy todo*/
+  .uc_headerImg{width:124px; height: 124px; border:2px solid #ffffff; border-radius: 50%; display: inline-block; margin-top: 71px;
+  }
+  .uc_nick{ font-size: 24px; line-height: 14px; color: #ffffff; margin-top: 16px;}
+  .uc_desc{ font-size: 14px; line-height: 14px; color:#ffffff; margin-top: 21px;}
+  .uc_btn{width:190px; height: 50px; border-radius: 24px; background: rgba(0,0,0,.6); color:#ffffff; font-size: 24px; line-height: 50px; display: inline-block; margin-top: 15px;}
+}
+#userCenterNav {width:1280px; height: 68px; border-bottom: 1px solid #f15313;
+  ul{ display: inline-block; height:68px;
+    li{width:120px; height: 68px; line-height: 68px; font-size: 18px; color:#000000; text-align: center; float:left;}
+    li:nth-child(2){margin:auto 20px;}
+    .li_ck{border-bottom: 2px solid #f15313;}
+    span{color:#fc4500;}
+  }
+}
+#userCenterInfo{width:726px; margin:0 auto;}
+.workList{
+  .uc_info_item{ width:726px; border-bottom: 1px solid #cccccc;}
+    .info-detail{width:600px; margin:36px auto; height: 20px; line-height: 20px; font-size: 18px; color: #333333;}
+      .info-detail-comment{width:33%; height: 20px; line-height: 20px; display: inline-block; text-align: left; cursor: pointer;}
+      .info-detail-zan{width:33%;height: 20px; line-height: 20px; text-align: center; display: inline-block; cursor: pointer;}
+      .info-detail-date{width:33%;height: 20px; line-height: 20px; display: inline-block; text-align: right; float: right;}
+      .info-detail-img{vertical-align: middle; margin-right: 12px; margin-top: -3px;}
+    .info-article{ margin-top: 25px;padding:0px 63px; line-height: 33px; text-align: left; color:#3d3d3d; font-size: 14px; line-height: 20px;}
+    .info-detail-list{width:600px; margin:0 auto;}
+      #commentTxt{width:600px; height: 120px; border:1px solid #fe5313; border-radius: 10px; font-size: 24px; color:#808080; resize: none;}
+      .btnList{width:600px; height: 50px; margin-top: 20px; margin-bottom: 20px;}
+        .btnFace{ width:150px; height: 40px; float:left; background: url("../images/common/face.png") no-repeat; cursor: pointer;}
+        .btnSend{ width:150px; height: 50px; float:right; border-radius: 24px; background: #f15313; color:#ffffff; line-height: 50px; text-align: center; margin-left: 300px;
+                    cursor:pointer;}
+      .commentListCon{width:600px; overflow: hidden;
+        .commentItem{border-bottom: 1px solid #cccccc; overflow: hidden; padding-bottom: 27px; padding-top: 20px;}
+        .commentItem:last-child{border-bottom: 0;}
+          .commentHead{width:82px; height: 82px; float: left;}
+          .commentData{width:488px; text-align: left; margin-left: 30px; float:left;}
+            .commentName{color: #f15313; font-size: 18px; margin-bottom: 19px;
+              .sp_time{color:#999999;}
+              .sp_reply{ font-size: 18px; color:#f15313; float:right;}
+            }
+            .commentContext{ font-size: 18px; color: #3d3d3d;}
+      }
+      .commentMore{width:97px; height: 30px; background: url("../images/userCenter/comment.png") no-repeat; cursor: pointer; margin:0 auto 30px auto;}
+}
+/*粉丝列表*/
+#userCenterFansInfo{ padding-bottom: 100px;
+  width:932px; margin:0 auto; overflow: hidden;
+  .fans-item { width: 466px; height: 166px; float: left; margin-top: 68px; box-sizing: border-box;border-right: 1px solid #c0c0c0;
+    .fans-item-head { width: 104px; margin-right: 20px;  float: left;}
+    .fans-item-head-img { width: 104px;  height: 104px;  margin-bottom: 12px; border: 2px solid #fff;}
+    .btnAttention { width: 100px;  height: 50px; text-align: center; line-height: 50px;  color: #ffffff; background: orangered;
+      font-size: 14px; font-weight: bold; border-radius: 24px;}
+    .fans-item-data { width: 272px;  float: left; font-size: 18px; text-align: left;  }
+    .nick_p { font-weight: bold;  margin-bottom: 10px; margin-top: 10px;  color: #333333;  }
+    .address_p {
+      margin-bottom: 10px;
+      color: #3d3d3d;
+    }
+    .desc_p {
+      font-size: 16px;
+      margin-bottom: 15px;
+      color: #3d3d3d;
+    }
+    .data_p {
+    }
+  }
+  .fans-item-2{padding-left: 66px; box-sizing: border-box; border-right: 0; }
+}

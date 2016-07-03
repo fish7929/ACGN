@@ -73,6 +73,7 @@
 .login-common-div input{
     height: 40px;
     width: 272px;
+    padding-left: 10px;
     border-radius: 19.5px;
     outline: none;
     border: 1px solid #c0c0c0;
@@ -179,5 +180,6 @@
 }
 
 @import "msg-box.scss";
+@import "toast-box.scss";
 
 

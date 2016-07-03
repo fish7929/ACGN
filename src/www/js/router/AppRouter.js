@@ -14,8 +14,12 @@ define([
         /**配置路由**/
         appRoutes: {
             "" : "home",
-            "login" : "userLogin",
             "planning" : "planning", //企划路由
+            "userCenter" : "userCenter", //用户中心 add by guYY
+            "userCenter/:userId" : "userCenter", //用户中心 add by guYY
+            "userCenterFans" : "userCenterFans", //用户中心-粉丝 add by guYY
+            "userCenterFans/:userId" : "userCenterFans", //用户中心-粉丝 add by guYY
+            "associations" : "Associations", //社团 add by guYY
             //同人本详情
             "book" : "book",
             //发布页面

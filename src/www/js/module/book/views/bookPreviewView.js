@@ -29,9 +29,7 @@ define([
 
         if(self._isShow) return;
         self._isShow = true;
-        if(self.el.parentNode){
-            document.body.appendChild(self.el);
-        }
+        document.body.appendChild(self.el);
         self._picIndex = 0;
         self._picArr = arr;
         self.showPic();
@@ -51,7 +49,6 @@ define([
             image = null;
         };
         image.src = url;
-
         self.setBtnVi();
     };
 
@@ -70,7 +67,7 @@ define([
     BookPreviewView.prototype.setImage = function(url, imageWidth, imageHeight){
         var self = this;
         self._bookImage.css({"width": imageWidth+"px", "height":+imageHeight+"px", "background":"url('"+url+"') no-repeat center"});
-        self.setPos();
+        self.setPos(imageWidth, imageHeight);
     };
 
     BookPreviewView.prototype.setBtnVi = function(){
@@ -90,10 +87,15 @@ define([
 
     BookPreviewView.prototype.setPos = function(imageWidth, imageHeight){
         var self = this;
-        var cssObj = {};
-        cssObj.height = imageHeight+"px";
-        self._nextBtn.css(cssObj);
-        self._preBtn.css(cssObj);
+        var leftCssObj = {};
+        leftCssObj.height = imageHeight+"px";
+        leftCssObj.left = "calc(50% - " + (imageWidth / 2 + 80) + "px)";
+        self._preBtn.css(leftCssObj);
+
+        var rightCssObj = {};
+        rightCssObj.height = imageHeight+"px";
+        rightCssObj.right = "calc(50% - " + (imageWidth / 2 + 80) + "px)";
+        self._nextBtn.css(rightCssObj);
     };
 
     BookPreviewView.prototype.bindEvent = function(){
@@ -119,10 +121,8 @@ define([
             return;
         }
         this._isShow = false;
-        if(!self.el.parentNode){
-            self.el.remove();
-        }
         self.removeEvent();
+        self.$el.remove();
     };
 
     return new BookPreviewView();

@@ -5,8 +5,9 @@
 // 描    述: AppAlert
 define([
     'text!common/templates/registerBoxUI.html',
-    "showbox"
-],function(tpl,ShowBox) {
+    "showbox",
+    "msgbox"
+],function(tpl,ShowBox, MsgBox) {
 
     if(!ShowBox){
         require(["showbox"],function(showbox){
@@ -88,12 +89,26 @@ define([
         e.stopPropagation();
         e.preventDefault();
         var self = this;
-        var nick = self.nickTxt.value;
+//        var nick = self.nickTxt.value;
         var account = self.accountTxt.value;  //手机号码
-        var password = self.passwordTxt.value;
-        var verify = self.verifyTxt.value;
-        console.log( e, "verifyHandle", account, "----", password, nick, verify);
-        self._hide();
+        console.log(account);
+//        var password = self.passwordTxt.value;
+//        var verify = self.verifyTxt.value;
+        if(utils.checkPhoneNumber(account, MsgBox)){
+            gili_data.sendPhoneMsg(account, function(data){
+                MsgBox.toast("成功发送验证码,请查收");
+            }, function(err){
+                if(err.message=="Can't send sms code too frequently."){
+                    MsgBox.toast("已经默认发送验证码,请稍等", false);
+                }else if(err.message == "发送短信过于频繁。"){
+                    MsgBox.toast("已经默认发送验证码,请稍等", false);
+                }else if(err.message == "发送验证类短信已经超过一天五条的限制。"){
+                    MsgBox.toast("短信已经超过一天五条的限制", false);
+                }else{
+                    MsgBox.toast("验证码获取失败!", false); //发送失败
+                }
+            });
+        }
     };
     /**
      * 注册按钮点击事件
@@ -107,9 +122,49 @@ define([
         var account = self.accountTxt.value;  //手机号码
         var password = self.passwordTxt.value;
         var verify = self.verifyTxt.value;
-        console.log( e, "registerHandle", account, "----", password, nick, verify);
-        self._hide();
+        if(utils.checkPhoneNumber(account, MsgBox) && utils.checkVerifyNumber(verify, MsgBox)
+            && utils.checkNickIsEmpty(nick, MsgBox)&& utils.checkPassword(password, MsgBox)){
+            //todo 此处直接注册
+            self.registerAccount(nick, account, password);
+//            gili_data.verifyPhoneMsgCode(verify, function(data){
+//                if(data.result){
+//                    self.registerAccount(nick, account, password);
+//                }else{
+//                    MsgBox.toast("邀请码错误,请填写正确的邀请码", false);
+//                }
+//            },function(err){
+//                if(err.error == "验证码不匹配!"){
+//                    MsgBox.toast("验证码不匹配!", false);
+//                }else{
+//                    MsgBox.toast("注册帐号失败", false);
+//                }
+//            });
+        }
     };
+    p.registerAccount = function(nick, account, password){
+        var self = this;
+        var user = new AV.User();
+        user.set("user_nick", nick);    //昵称
+        user.set("avatar", utils.getRandomHeader());   //头像, 获取随机头像
+//        user.set("author", "");   //pointer类型
+        user.set("username", account);
+        user.set("password", password);
+        user.set("brief", "什么都没有");
+        user.set("user_type", 2);   //用户类型 1 画师， 2 社团主  。3
+        user.signUp(null, {
+            success: function (user) {
+                console.log(user);
+//                app.triggerMethod("login:ok");
+                MsgBox.toast("注册成功");
+                self._hide();
+            },
+            error: function (user, error) {
+                if (error.code != 202) {
+                    MsgBox.toast("注册帐号失败", false);
+                }
+            }
+        });
+    }
     p._hide = function(){
         var self = this;
         self.removeListener();
