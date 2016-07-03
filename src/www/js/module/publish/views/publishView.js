@@ -6,8 +6,11 @@
 
 define([
     'text!module/publish/templates/publishView.html',
-    'common/views/faceView'
-],function(tpl, FaceView){
+    'common/views/faceView',
+    'common/service/upload_taskschedule',
+    'msgbox',
+    'config/TipConfig'
+],function(tpl, FaceView, uploadTaskSchedule, MsgBox, Tip){
     var ImageTpl = "<div class=\"publishImageItem\" style='background: url(\"{0}\") no-repeat center; background-size: 100% {1}'> " +
         "<div class=\"publishImageItem-del button\"></div>" +
         "</div>";
@@ -53,6 +56,9 @@ define([
         self.publishType = 1;
 
         self._faceView = new FaceView(self.faceContainer);
+
+        //
+        self._topicImage = "";
     };
 
     /**
@@ -86,7 +92,7 @@ define([
      */
     PublishView.prototype.initTopic = function(){
         var self = this;
-        self.setTitle("发布话题");
+        self.setTitle(Tip.PUBLISHTOPICTITLE);
         self.publishType = 1;
         self.imageContent.hide();
         self.btnImageAddSingle.show();
@@ -97,12 +103,11 @@ define([
      */
     PublishView.prototype.initIll = function(){
         var self = this;
-        self.setTitle("发布插画");
+        self.setTitle(Tip.PUBLISHILLTITLE);
         self.publishType = 2;
         self.btnImageAddSingle.hide();
         self.imageContent.show();
         self.clearImageContent();
-
     };
 
     /**
@@ -115,11 +120,13 @@ define([
         self.inputLabel.val("");
         self.checkInputLabel();
         self.checkDelLabelBtn();
+
     };
 
     PublishView.prototype.clearImageContent = function(){
         var self = this;
         self.imageEmptyDiv.show();
+        self.imageListDiv.find(".publishImageItem").remove();
         self.imageListDiv.hide();
     };
 
@@ -145,9 +152,37 @@ define([
         e.stopPropagation();
         e.preventDefault();
         var self = this;
+        if(self.publishType == 1 && self.textArea.val() == ""){
+            //提示返回
+            MsgBox.alert(Tip.PUBLISH_ERROR_1);
+            return;
+        }else if(self.publishType == 2 && self.imageListDiv.find(".publishImageItem").length ==0){
+            //提示返回
+            MsgBox.alert(Tip.PUBLISH_ERROR_2);
+            return;
+        }
+
+        if(uploadTaskSchedule.isFinish == false) {
+            app.off("upload_taskschedule_finished").on("upload_taskschedule_finished", function () {
+                self.onUploadTaskComplete();
+                app.off("upload_taskschedule_finished");
+            });
+        }
+        else{
+            self.onUploadTaskComplete();
+        }
+    };
+
+    PublishView.prototype.onUploadTaskComplete = function(e){
+        var self = this;
         var data = self.getPublishData();
-        console.log(data);
-        self.hide();
+        gili_data.addBlog(data, function(){
+            MsgBox.toast(Tip.PUBLISH_SUCCESS, true);
+            self.hide();
+        }, function(err){
+            MsgBox.alert(Tip.PUBLISH_FAIL+err);
+        })
+
     };
 
     /**
@@ -157,7 +192,6 @@ define([
     PublishView.prototype.onFaceHandle = function(e){
         e.stopPropagation();
         e.preventDefault();
-
         this._faceView.show();
     };
 
@@ -166,17 +200,27 @@ define([
      * @returns {{}}
      */
     PublishView.prototype.getPublishData = function(){
-        var self = this, result = {};
+        var self = this, result = {}, i;
         var topic = self.textArea.val(), labels = [], pictures = [];
         var allSpan = self.labelDiv.find("span");
         var size = allSpan.length;
-        for(var i=0; i<size; i++){
+        for(i=0; i<size; i++){
             labels.push($(allSpan[i]).text());
         }
 
         result.topic = topic;
         result.labels = labels;
-        result.type = self.publishType;
+        result.blog_type = self.publishType;
+        if(self.publishType == 1){
+            if(self._topicImage != "") pictures = [self._topicImage];
+        }else if(self.publishType == 2){
+            var allPics = self.imageListDiv.find(".publishImageItem");
+            for(i=0; i<allPics.length; i++){
+                if(i>=self.MAXIMAGENUM) break;
+                var url = $(allPics[i]).attr("data-url");
+                pictures.push(url);
+            }
+        }
         result.pictures = pictures;
         return result;
     };
@@ -244,7 +288,6 @@ define([
         var maxWidth = self.labelDiv.width();
         if(allSpan.length > 0){
             var totalWidth = lastSpan.position().left + lastSpan.outerWidth() + self.inputLabel.outerWidth() + 30;
-            console.log(totalWidth, maxWidth);
             if(totalWidth >= maxWidth){
                 self.inputLabel.hide();
             }else{
@@ -296,24 +339,23 @@ define([
         var files = e.target.files;
         var filesArr = [];
         var len = self.imageListDiv.find(".publishImageItem").length;
-        console.log(len, files.length);
         for(var i=0; i + len < self.MAXIMAGENUM; i++){
             if(i >= files.length) break;
             filesArr.push(files[i]);
         }
         
         self.readFileList(filesArr, [], function(result){
-            self.addInputImages(result);
-            e.target.outerHTML = e.target.outerHTML;
-            document.selection.clear();
+            if(self.publishType == 1){
+                self.addTopicImages(result);
+            }else{
+                self.addIllImages(result);
+            }
         }, function(err){
             console.log(err);
-            e.target.outerHTML = e.target.outerHTML;
-            document.selection.clear();
         })
     };
 
-    PublishView.prototype.addInputImages = function(list){
+    PublishView.prototype.addIllImages = function(list){
         var self = this, newImage;
         var len = self.imageListDiv.find(".publishImageItem").length;
         for(var i = 0; i<list.length; i++){
@@ -327,9 +369,21 @@ define([
             }
             newImage = $(ImageTpl.replace("{0}", list[i]).replace("{1}", style));
             newImage.insertBefore(self.btnImageAdd);
+
+            uploadTaskSchedule.addUploadTask(list[i], function(obj, file){
+                var $obj = $(obj);
+                $obj.attr("data-url", file.url());
+            }, newImage);
         }
         self.checkImageEmptyDiv();
         self.checkImageButtonAdd();
+    };
+
+    PublishView.prototype.addTopicImages = function(list){
+        var self = this;
+        uploadTaskSchedule.addUploadTask(list[0], function(obj, file){
+            self._topicImage = file.url();
+        });
     };
 
     PublishView.prototype.checkImageEmptyDiv = function(){

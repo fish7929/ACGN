@@ -9,8 +9,10 @@ define([
     'marionette',
     'common/region/switch_view_region',
     'common/views/loginBar',
-    'module/publish/views/publishView'
-],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, PublishView){
+    'module/publish/views/publishView',
+    'msgbox',
+    'config/TipConfig'
+],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, PublishView, MsgBox, Tip){
     return BaseView.extend({
         id : "publishOptContainer",
         template : _.template(tpl),
@@ -66,6 +68,12 @@ define([
         onBnTopicHandle : function(e){
             e.stopPropagation();
             e.preventDefault();
+
+            if(!gili_data.getCurrentUser()){
+                MsgBox.toast(Tip.NOLOGIN, false);
+                return
+            }
+
             var param = {};
             param.type = "topic";
             PublishView.show(param);
@@ -74,17 +82,27 @@ define([
         onBnIllustrationHandle : function(e){
             e.stopPropagation();
             e.preventDefault();
+
+            if(!gili_data.getCurrentUser()){
+                MsgBox.toast(Tip.NOLOGIN, false);
+                return
+            }
+
             var param = {};
             param.type = "ill";
             PublishView.show(param);
         },
 
-        onBnPlanningHandle : function(){
-
+        onBnPlanningHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            MsgBox.toast(Tip.UNDEVELOPED, false);
         },
 
-        onBnBookHandle : function(){
-
+        onBnBookHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            MsgBox.toast(Tip.UNDEVELOPED, false);
         },
 
         /**页面关闭时调用，此时不会销毁页面**/

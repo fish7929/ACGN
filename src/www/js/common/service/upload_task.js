@@ -21,7 +21,7 @@ define([
         var data = self._data;
         if(utils.isBase64(self._data)){
             data = data.substring(data.indexOf(",") + 1);
-            fmacloud.save_image('.jpg', data, function(file){
+            utils.save_image('.jpg', data, function(file){
                 self.isFinish = true;
                 if(self.callback){
                     self.callback(self.param, file);
@@ -38,7 +38,6 @@ define([
                 }
             });
         }else{
-            console.log("不是base64图片");
             if(self.callback){
                 self.callback(self.param, null);
                 self.callback = null;

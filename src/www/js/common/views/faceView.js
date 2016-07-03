@@ -19,7 +19,7 @@ define([
         self.$el.appendTo(parent);
         self.initList();
         self.$el.hide();
-        self.bindEvent();
+
     };
 
     /**
@@ -32,6 +32,7 @@ define([
         self._isShow = true;
 
         self.$el.show();
+        self.bindEvent();
     };
 
     FaceView.prototype.initList = function(){
@@ -48,6 +49,7 @@ define([
         self._isShow = false;
 
         self.$el.hide();
+        self.removeEvent();
     };
 
     FaceView.prototype.onMaskClickHandle = function(e){
@@ -63,7 +65,6 @@ define([
         e.preventDefault();
 
         var target = e.target;
-        console.log(target.className)
         if(target.className.indexOf("face-item") >= 0){
             var val = $(target).html();
             app.triggerMethod("on:face:select", val);
