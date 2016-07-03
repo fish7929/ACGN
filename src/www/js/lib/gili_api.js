@@ -322,12 +322,13 @@ gili_data.getUserPlanRelation = function (options, cb_ok, cb_err) {
 /** 查询专题banner数据
  *
  **/
-gili_data.getSubjectBanner = function (options, cb_ok, cb_err) {
-    var strCQL = " select * from subject order by order_num desc ";
+gili_data.getSubjectBanner = function (plan_id, cb_ok, cb_err) {
+
+    var strCQL = " select * from subject where plan_id='" + plan_id + "' order by order_num desc ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (objs) {
             var data = [];
-            for (var i = 0; i < objs.lenth; i++) {
+            for (var i = 0; i < objs.length; i++) {
                 data[i] = objs[i].toJSON();
             }
             cb_ok(data);
