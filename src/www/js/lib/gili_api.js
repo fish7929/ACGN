@@ -163,7 +163,7 @@ gili_data.getPlanNotice = function (options, cb_ok, cb_err) {
         success: function (objs) {
             if (objs) {
                 var data = [];
-                for (var i = 0; i < objs.lenth; i++) {
+                for (var i = 0; i < objs.length; i++) {
                     data[i] = objs[i].toJSON();
                 }
                 cb_ok(data);
