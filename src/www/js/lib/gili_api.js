@@ -101,7 +101,6 @@ gili_data.planOpration = function (options, cb_ok, cb_err) {
 };
 
 gili_data.getPlan = function (options, cb_ok, cb_err) {
-    gili_data.getalert();
     var pageNumber = options.pageNumber || 0,
         pageSize = options.pageSize || 1000;
 
@@ -134,9 +133,10 @@ gili_data.getPlan = function (options, cb_ok, cb_err) {
  **/
 gili_data.getPlanNotice = function (options, cb_ok, cb_err) {
     var skip = options.skip || 0,
-        limit = options.limit || 1000;
+        limit = options.limit || 1000,
+        plan_id = options.plan_id;
     var query = new AV.Query("notice");
-    query.equalTo("objectId", objectId);
+    query.equalTo("plan_id", plan_id);
     query.skip(skip);
     query.limit(limit);
     query.descending("order");
@@ -1253,6 +1253,7 @@ gili_data.getClubUserCount = function (options, cb_ok, cb_err) {
 };
 
 /////////////////////////////////////////////本子相关接口////////////////////////////////////////////////////////////
+
 /** 查询本子对象
  * book_id，本子id
  **/
@@ -1299,7 +1300,6 @@ gili_data.getBooksCount = function (options, cb_ok, cb_err) {
         error: cb_err
     });
 };
-
 /////////////////////////////其他 接口/////////////////////////
 /** 查询本子总数
  * name ,文件名称 如：XXXX.jpg 一定要带后缀
