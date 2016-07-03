@@ -125,20 +125,25 @@ define([
         if(utils.checkPhoneNumber(account, MsgBox) && utils.checkVerifyNumber(verify, MsgBox)
             && utils.checkNickIsEmpty(nick, MsgBox)&& utils.checkPassword(password, MsgBox)){
             //todo 此处直接注册
-            self.registerAccount(nick, account, password);
-//            gili_data.verifyPhoneMsgCode(verify, function(data){
-//                if(data.result){
-//                    self.registerAccount(nick, account, password);
-//                }else{
-//                    MsgBox.toast("邀请码错误,请填写正确的邀请码", false);
-//                }
-//            },function(err){
-//                if(err.error == "验证码不匹配!"){
-//                    MsgBox.toast("验证码不匹配!", false);
-//                }else{
-//                    MsgBox.toast("注册帐号失败", false);
-//                }
-//            });
+//            self.registerAccount(nick, account, password);
+            gili_data.verifyPhoneMsgCode(verify, function(data){
+                if(data.result){
+                    self.registerAccount(nick, account, password);
+                }else{
+                    MsgBox.toast("邀请码错误,请填写正确的邀请码", false);
+                }
+            },function(err){
+                console.log(err);
+                if (err.code == 1 || err.code == 603) {
+                    MsgBox.alert("无效的短信验证码");
+                    return;
+                }
+                if(err.error == "验证码不匹配!"){
+                    MsgBox.toast("验证码不匹配!", false);
+                }else{
+                    MsgBox.toast("注册帐号失败", false);
+                }
+            });
         }
     };
     p.registerAccount = function(nick, account, password){
