@@ -59,6 +59,8 @@ define([
 
         //
         self._topicImage = "";
+
+        self._onSelectFaceHandle = self.onSelectFaceHandle.bind(this);
     };
 
     /**
@@ -192,7 +194,7 @@ define([
     PublishView.prototype.onFaceHandle = function(e){
         e.stopPropagation();
         e.preventDefault();
-        this._faceView.show();
+        this._faceView.show(this._onSelectFaceHandle);
     };
 
     /**
@@ -501,11 +503,9 @@ define([
         self.btnImageAddSingle.on("click", function(e){
             self.onAddImageHandle(e);
         });
-
         self.imageListDiv.on("click", function(e){
             self.onImageListDivClick(e);
         });
-        app.on("on:face:select", self.onSelectFaceHandle, self);
     };
 
     /**
@@ -520,9 +520,8 @@ define([
         self.labelDel.off("click");
         self.btnEmptyImage.off("click");
         self.btnImageAdd.off("click");
-
+        self.btnImageAddSingle.off("click");
         self.imageListDiv.off("click");
-        app.off("on:face:select", self.onSelectFaceHandle, self);
     };
 
     return new PublishView();
