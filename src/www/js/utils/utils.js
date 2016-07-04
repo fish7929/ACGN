@@ -289,11 +289,18 @@
             }
         })
     };
-    utils.convert_list_2_json = function(a){
+    utils.convert_list_2_json = function(a, attributes){
         var result = [];
         var len = a.length;
         for(var i=0; i<len; i++){
             result[i] = a[i].toJSON();
+            if(attributes){
+                for(var j = 0; j<attributes.length; j++){
+                    if(a[i].get(attributes[j])){
+                        result[i][attributes[j]] = a[i].get(attributes[j]).toJSON();
+                    }
+                }
+            }
         }
         return result;
     };
