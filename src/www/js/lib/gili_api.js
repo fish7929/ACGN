@@ -69,7 +69,7 @@ gili_data.planOpration = function (options, cb_ok, cb_err) {
     var strCQL = " select * from plan_relation where plan_id='" + plan_id + "' and user_id='" + this.getCurrentUser().id + "' ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
-            if (data) {
+            if (data.results) {
                 //如果存在则 update
                 var obj = data.results[0];
                 var his_status = obj.get("status") || 0;
@@ -431,7 +431,11 @@ gili_data.addBlog = function (options, cb_ok, cb_err) {
         labels = options.labels,
         blog_type = options.blog_type,
         status = options.status || 0;
-
+    var currentUser = this.getCurrentUser();
+    if (!currentUser) {
+        cb_err("用户未登录！");
+        return;
+    }
     var blog = AV.Object.extend("blog");
     var obj = new blog();
     if (topic) {
@@ -445,12 +449,18 @@ gili_data.addBlog = function (options, cb_ok, cb_err) {
         obj.set("labels", labels);
     }
     obj.set("labels", labels);
-    obj.set("user", this.getCurrentUser());
-    obj.set("user_id", this.getCurrentUser().id);
+    obj.set("user", currentUser);
+    obj.set("user_id", currentUser.id);
     obj.set("type", parseInt(blog_type));
     obj.save(null, {
         success: function (obj) {
             //用户作品总数加1
+            //currentUser.increment("blog_count", 1);
+            //currentUser.save(null, {
+            //    success: function (data) {
+
+            //    }, error: cb_err
+            // });
             cb_ok(obj);
         },
         error: cb_err
