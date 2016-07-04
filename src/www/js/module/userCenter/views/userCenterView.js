@@ -35,6 +35,7 @@ define([
         show:function(){
             var self = this;
             self._userId = self.getOption("userId");
+            self.userCenterHeadView._loadData(self._userId);
             self._workListView.loadData(self._userId)
         },
         pageIn:function(){

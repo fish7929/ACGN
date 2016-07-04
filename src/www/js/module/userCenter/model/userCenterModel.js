@@ -10,7 +10,67 @@ define([
         },
         initialize:function(){
             var self = this;
+            self.set({"userHeaderImg":"","userNick":"匿名用户","userBrief":"(个人简介)","fansNum":0,"attentionNum":0});
+            self.set({"otherShow":""});
             self.set({"firstLiShow":"","secondLiShow":"","thirdLiShow":""});
+        },
+        setName:function(name){
+            if(name && name != ""){
+                this.set({"userNick":name});
+            }else{
+                this.set({"userNick":"匿名用户"});
+            }
+        },
+        //简介
+        setBrief:function(userBrief){
+            if(userBrief && userBrief != ""){
+                this.set({"userBrief":userBrief});
+            }else{
+                this.set({"userBrief":"(个人简介)"});
+            }
+        },
+        setHeadImg:function(headImg){
+            if(headImg && headImg != ""){
+                this.set({"userHeaderImg":headImg});
+            }else{
+                this.set({"userHeaderImg":"images/temp/head/user_center_icon01.png"});
+            }
+        },
+        setFansNum:function(fansNum){
+            if(fansNum && fansNum != ""){
+                this.set("fansNum",fansNum);
+            }else{
+                this.set("fansNum",0);
+            }
+        },
+        setAttentionNum:function(attentionNum){
+            if(attentionNum && attentionNum != ""){
+                this.set("attentionNum",attentionNum);
+            }else{
+                this.set("attentionNum",0);
+            }
+        },
+        //获取他人用户信息
+        loadOtherUser:function(otherUID){
+            var self = this;
+            gili_data.getObjectById("_User",otherUID,function(data){
+                var userImg = data.avatar;
+                var userName = data.user_nick;
+                var userBrief = data.brief;
+                self.setBrief(userBrief);
+                self.setName(userName);
+                self.setHeadImg(userImg);
+                self.setFansNum(data.follower_count);
+                self.setAttentionNum(data.followee_count);
+            },function(){});
+        },
+        //是否当前登录用户
+        setOtherShow:function(isLoginUser){
+            if(isLoginUser){
+                this.set("otherShow","style='display:none'");
+            }else{
+                this.set("otherShow","");
+            }
         },
         /**
          * 根据type值选中对应页签
