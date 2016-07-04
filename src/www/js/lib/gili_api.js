@@ -56,17 +56,17 @@ gili_data.getObjectById = function (class_name, objectId, cb_ok, cb_err) {
 gili_data.planOpration = function (options, cb_ok, cb_err) {
     var plan_id = options.plan_id,
         status = options.status;
-
+    var currentUser = this.getCurrentUser();
     if (!plan_id) {
         cb_err("企划id为空");
         return;
     }
-    if (!this.getCurrentUser()) {
+    if (!currentUser) {
         cb_err("请先登录!");
         return;
     }
 
-    var strCQL = " select * from plan_relation where plan_id='" + plan_id + "' and user_id='" + this.getCurrentUser().id + "' ";
+    var strCQL = " select * from plan_relation where plan_id='" + plan_id + "' and user_id='" + currentUser.id + "' ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
             if (data.results.length > 0) {
@@ -100,9 +100,9 @@ gili_data.planOpration = function (options, cb_ok, cb_err) {
         var club_relation = AV.Object.extend("plan_relation");
         var obj = new club_relation();
         obj.set("plan_id", plan_id);
-        obj.set("user", this.getCurrentUser());
-        obj.set("user_id", this.getCurrentUser().id);
-        obj.set("status", parseInt(opration_type));
+        obj.set("user", currentUser);
+        obj.set("user_id", currentUser.id);
+        obj.set("status", parseInt(status));
         obj.save(null, {
             success: cb_ok,
             error: cb_err
@@ -1199,7 +1199,7 @@ gili_data.clubOpration = function (options, cb_ok, cb_err) {
         return;
     }
 
-    var strCQL = " select * from club_relation where club_id='" + club_id + "' and user_id='" + this.getCurrentUser().id + "' ";
+    var strCQL = " select * from club_relation where club_id='" + club_id + "' and user_id='" + currentUser.id + "' ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
             if (data) {
@@ -1235,7 +1235,7 @@ gili_data.clubOpration = function (options, cb_ok, cb_err) {
         obj.set("club_id", club_id);
         obj.set("user", currentUser);
         obj.set("user_id", currentUser.id);
-        obj.set("status", parseInt(status));//
+        obj.set("status", parseInt(status));
         obj.save(null, {
             success: cb_ok,
             error: cb_err
