@@ -328,8 +328,22 @@ define([
         e.stopPropagation();
         e.preventDefault();
         var self = this;
+
+        console.log(e.target);
+        var target = e.target;
+        var input = self.inputImage.get(0);
+        if(target.className.indexOf("btn-image-single") >= 0){
+            input.multiple = "";
+        }else{
+            input.multiple = "multiple";
+        }
+
+        self.inputImage.on("change", function(evt){
+            self.onInputImageChange(evt);
+        });
+
         var event = utils.createEvent("click");
-        self.inputImage.get(0).dispatchEvent(event);
+        input.dispatchEvent(event);
     };
 
     PublishView.prototype.onInputImageChange = function(e){
@@ -352,7 +366,10 @@ define([
             }
         }, function(err){
             console.log(err);
-        })
+        });
+
+        self.inputImage.off("change");
+        self.inputImage.get(0).value = "";
     };
 
     PublishView.prototype.addIllImages = function(list){
@@ -484,9 +501,7 @@ define([
         self.btnImageAddSingle.on("click", function(e){
             self.onAddImageHandle(e);
         });
-        self.inputImage.on("change", function(e){
-            self.onInputImageChange(e);
-        });
+
         self.imageListDiv.on("click", function(e){
             self.onImageListDivClick(e);
         });
@@ -505,7 +520,7 @@ define([
         self.labelDel.off("click");
         self.btnEmptyImage.off("click");
         self.btnImageAdd.off("click");
-        self.inputImage.off("change");
+
         self.imageListDiv.off("click");
         app.off("on:face:select", self.onSelectFaceHandle, self);
     };
