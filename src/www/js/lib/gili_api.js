@@ -164,7 +164,7 @@ gili_data.getPlanNotice = function (options, cb_ok, cb_err) {
         success: function (objs) {
             if (objs) {
                 var data = [];
-                for (var i = 0; i < objs.length; i++) {
+                for (var i = 0; i < objs.lenth; i++) {
                     data[i] = objs[i].toJSON();
                 }
                 cb_ok(data);
@@ -1288,7 +1288,7 @@ gili_data.getBookById = function (options, cb_ok, cb_err) {
         cb_err("本子id为空");
         return;
     }
-    var strCQL = " select include user,include club, * from club where objectId='" + book_id + "' ";
+    var strCQL = " select include user,include book, * from book where objectId='" + book_id + "' ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
             cb_ok(data);
