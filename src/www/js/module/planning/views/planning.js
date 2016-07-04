@@ -46,8 +46,8 @@ define([
         },
         //事件添加
         events : {
-            "click @ui.joinPlanning" : "onJoinClickHandle",
-            "click @ui.subscribePlanning" : "onSubscribeClickHandle",
+//            "click @ui.joinPlanning" : "onJoinClickHandle",
+//            "click @ui.subscribePlanning" : "onSubscribeClickHandle",
             "click @ui.planningType" : "onTypeClickHandle",
             "click @ui.roleContent" : "onRoleClickHandle",
             "click @ui.hottestOpusContent" : "onOpusClickHandle",
@@ -93,13 +93,58 @@ define([
 //                    console.log(data, 99663);
 //                }
 //            }, function(err){});
-//            //获取用户和企划的关系
-//            PlanningModel.getUserPlanRelation(self.currentUser.id, self.planId, function(data){
-//                console.log(data, 98);
-//            }, function(err){
-//                console.log(err, 100);
-//                console.log(err)
-//            });
+//            //获取用户和企划的关系 --- 改变按钮的状态
+            PlanningModel.getUserPlanRelation(self.currentUser.id, self.planId, function(data){
+                console.log(data, 98);
+                if(data ){
+                    //判断当前用户和企划的关系，更改状态按钮
+                    if(data.get("status")  == 1){   //关注的用户
+                        self.ui.subscribePlanning.html("已订阅");
+                        self.ui.subscribePlanning.off("click").on("click", self.onCancelSubscribeClickHandle.bind(self));
+                        //需要对应不同状态绑定不同事件
+                        self.ui.joinPlanning.off("click").on("click", self.onJoinClickHandle.bind(self));
+                    }else if(data.get("status") == 2){  //报名
+                        if(data.get("approved") == 0){      //审核中
+                            self.ui.joinPlanning.css({"background-image": "url(./images/common/btn-gray.png)"})
+                                .html("审核中");
+                            self.ui.joinPlanning.off("click").on("click", self.onJoinVerifyClickHandle.bind(self));
+                            //订阅
+                            self.ui.subscribePlanning.off("click").on("click", self.onSubscribeClickHandle.bind(self));
+                        }else if(data.get("approved") == 1){    //审核通过
+                            //订阅
+                            self.ui.subscribePlanning.off("click").on("click", self.onSubscribeClickHandle.bind(self));
+                            //加入
+                            self.ui.joinPlanning.css({"background-image": "url(./images/common/btn-red.png)"})
+                                .html("上传作品");
+                            self.ui.joinPlanning.off("click").on("click", self.onUploadingClickHandle.bind(self));
+                        }else if(data.get("approved") == 2){    //审核未通过
+                            //订阅
+                            self.ui.subscribePlanning.on("click", self.onSubscribeClickHandle.bind(self));
+                            self.ui.joinPlanning.css({"background-image": "url(./images/common/btn-gray.png)"})
+                                .html("审核不通过");
+                            self.ui.joinPlanning.off("click").on("click", self.onJoinVerifyErrorClickHandle.bind(self));
+                        }
+                    }else if (data.get("status") == 3){     //报名并且关注的
+                        self.ui.subscribePlanning.html("已订阅");
+                        self.ui.subscribePlanning.off("click").on("click", self.onCancelSubscribeClickHandle.bind(self));
+                        //加入
+                        self.ui.joinPlanning.css({"background-image": "url(./images/common/btn-red.png)"})
+                            .html("上传作品");
+                        self.ui.joinPlanning.off("click").on("click", self.onUploadingClickHandle.bind(self));
+                    }else if(data.get("status")  == 999){   //999-取消关注
+                        self.ui.subscribePlanning.html("订阅企划");
+                        self.ui.subscribePlanning.on("click", self.onSubscribeClickHandle.bind(self));
+                        //需要对应不同状态绑定不同事件
+                        self.ui.joinPlanning.off("click").on("click", self.onJoinClickHandle.bind(self));
+                    }else{          //默认的情况下
+                        self.ui.subscribePlanning.off("click").on("click", self.onSubscribeClickHandle.bind(self));
+                        //需要对应不同状态绑定不同事件
+                        self.ui.joinPlanning.off("click").on("click", self.onJoinClickHandle.bind(self));
+                    }
+                }
+            }, function(err){
+                console.log(err, 100);
+            });
         },
         show : function(){
             this.planningNoticeView.on("hide:planning:notice:handle", this.onPlanningNoticeViewHideHandle, this); //隐藏击事件
@@ -292,22 +337,74 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-//            MsgBox.toast("加入企划点击", true);
             PlanningModel.joinPlan(self.planId, function(data){
-                console.log(data, 866333);
+                //点击报名成功的时候处理UI
+                if(data.get("approved") == 0){
+                    self.ui.joinPlanning.css({"background-image": "url(./images/common/btn-gray.png)"})
+                        .html("审核中");
+                    self.ui.joinPlanning.off("click").on("click", self.onJoinVerifyClickHandle.bind(self));
+                }
             }, function(err){
                 console.log(err, 822);
             });
         },
         /**
-         * 订阅企划点击事件
+         *报名审核中
+         * @param e
+         */
+        onJoinVerifyClickHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            MsgBox.alert("报名正在审核中...");
+        },
+        /**
+         *报名审核中
+         * @param e
+         */
+        onJoinVerifyErrorClickHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            MsgBox.alert("报名审核失败");
+        },
+        /**
+         * 订阅企划点击事件 -- 1
          * @param e
          */
         onSubscribeClickHandle : function(e){
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            MsgBox.alert("订阅企划成功");
+            PlanningModel.subscribePlan(self.planId, function(data){
+                //点击报名成功的时候处理UI
+                if(data){
+                    self.ui.subscribePlanning.html("已订阅");
+                    self.ui.subscribePlanning.off("click").on("click", self.onCancelSubscribeClickHandle.bind(self));
+                    MsgBox.alert("订阅企划成功");
+                }
+            }, function(err){
+                console.log(err);
+            });
+        },
+        /**
+         * 取消订阅点击事件 -- 999
+         * @param e
+         */
+        onCancelSubscribeClickHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            PlanningModel.cancelSubscribePlan(self.planId, function(data){
+                //点击报名成功的时候处理UI
+                if(data){
+                    self.ui.subscribePlanning.html("订阅企划");
+                    self.ui.subscribePlanning.off("click").on("click", self.onSubscribeClickHandle.bind(self));
+                    MsgBox.alert("取消订阅企划成功");
+                }
+            }, function(err){
+                console.log(err);
+            });
         },
         /**
          * 上传作品点击事件

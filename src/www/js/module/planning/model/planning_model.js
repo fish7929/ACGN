@@ -129,6 +129,38 @@ define([
             cb_err&&cb_err(err);
         });
     };
+    /**
+     * 订阅期刊
+     * @param id
+     * @param cb_ok
+     * @param cb_err
+     */
+    p.subscribePlan = function(id, cb_ok, cb_err){
+        var option = {};
+        option.plan_id = id;
+        option.status = 1;
+        gili_data.planOpration(option, function(data){
+            cb_ok&&cb_ok(data);
+        }, function(err){
+            cb_err&&cb_err(err);
+        });
+    };
+    /**
+     * 取消订阅
+     * @param id
+     * @param cb_ok
+     * @param cb_err
+     */
+    p.cancelSubscribePlan = function(id, cb_ok, cb_err){
+        var option = {};
+        option.plan_id = id;
+        option.status = 999;
+        gili_data.planOpration(option, function(data){
+            cb_ok&&cb_ok(data);
+        }, function(err){
+            cb_err&&cb_err(err);
+        });
+    };
     var planningModel = new PlanningModel();
     return planningModel;
 });
