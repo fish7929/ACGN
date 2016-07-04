@@ -16,7 +16,17 @@ gili_data.getCurrentUser = function () {
         return null;
     }
 };
-
+/**
+ 返回当前登录用户对象
+ **/
+gili_data.getCurrentUserJSON = function () {
+    var currentUser = AV.User.current();
+    if (currentUser) {
+        return currentUser.toJSON();
+    } else {
+        return null;
+    }
+};
 /** 根据class 表名和objectId 查询对应的对象数据
  * class_name 表名
  * objectId 对象id
@@ -59,7 +69,7 @@ gili_data.planOpration = function (options, cb_ok, cb_err) {
     var strCQL = " select * from plan_relation where plan_id='" + plan_id + "' and user_id='" + this.getCurrentUser().id + "' ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
-            if (data) {
+            if (data.results.length > 0) {
                 //如果存在则 update
                 var obj = data.results[0];
                 var his_status = obj.get("status") || 0;
@@ -421,7 +431,11 @@ gili_data.addBlog = function (options, cb_ok, cb_err) {
         labels = options.labels,
         blog_type = options.blog_type,
         status = options.status || 0;
-
+    var currentUser = this.getCurrentUser();
+    if (!currentUser) {
+        cb_err("用户未登录！");
+        return;
+    }
     var blog = AV.Object.extend("blog");
     var obj = new blog();
     if (topic) {
@@ -435,11 +449,20 @@ gili_data.addBlog = function (options, cb_ok, cb_err) {
         obj.set("labels", labels);
     }
     obj.set("labels", labels);
-    obj.set("user", this.getCurrentUser());
-    obj.set("user_id", this.getCurrentUser().id);
+    obj.set("user", currentUser);
+    obj.set("user_id", currentUser.id);
     obj.set("type", parseInt(blog_type));
     obj.save(null, {
-        success: cb_ok,
+        success: function (obj) {
+            //用户作品总数加1
+            //currentUser.increment("blog_count", 1);
+            //currentUser.save(null, {
+            //    success: function (data) {
+
+            //    }, error: cb_err
+            // });
+            cb_ok(obj);
+        },
         error: cb_err
     });
 }
@@ -1166,12 +1189,12 @@ gili_data.getClubById = function (options, cb_ok, cb_err) {
 gili_data.clubOpration = function (options, cb_ok, cb_err) {
     var club_id = options.club_id,
         status = options.status;
-
+    var currentUser = this.getCurrentUser();
     if (!club_id) {
         cb_err("社团id为空");
         return;
     }
-    if (!this.getCurrentUser()) {
+    if (!currentUser) {
         cb_err("请先登录!");
         return;
     }
@@ -1210,9 +1233,9 @@ gili_data.clubOpration = function (options, cb_ok, cb_err) {
         var club_relation = AV.Object.extend("club_relation");
         var obj = new club_relation();
         obj.set("club_id", club_id);
-        obj.set("user", this.getCurrentUser());
-        obj.set("user_id", this.getCurrentUser().id);
-        obj.set("status", parseInt(opration_type));
+        obj.set("user", currentUser);
+        obj.set("user_id", currentUser.id);
+        obj.set("status", parseInt(status));//
         obj.save(null, {
             success: cb_ok,
             error: cb_err

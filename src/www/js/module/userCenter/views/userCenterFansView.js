@@ -29,6 +29,7 @@ define([
         show:function(){
             var self = this;
             var userId = self.getOption("userId");
+            this.userCenterHeadView._loadData(userId);
         },
         pageIn:function(){
 

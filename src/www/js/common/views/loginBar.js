@@ -67,7 +67,7 @@ define([
 
         init : function(){
             var self = this;
-            self.currentUser = gili_data.getCurrentUser();
+            self.currentUser = gili_data.getCurrentUserJSON();
             var headUrl = "./images/login/common-user.jpg";
             var userName = "道道好劲道";
             if(self.currentUser){
@@ -107,7 +107,7 @@ define([
         },
         onLoginOkHandle : function(){
             var self = this;
-            self.currentUser = gili_data.getCurrentUser();      //TODO 重新获取用户信息
+            self.currentUser = gili_data.getCurrentUserJSON();      //TODO 重新获取用户信息
             self._initView();
         },
         onSwitchUserOperationLayerHandle : function(event){

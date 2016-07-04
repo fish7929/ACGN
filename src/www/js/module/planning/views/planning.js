@@ -72,6 +72,7 @@ define([
             var self = this;
             //获取参数
             self.planId = self.getOption("planId");
+            self.currentUser = gili_data.getCurrentUser();
             //初始化企划基本信息
             PlanningModel.getPlanById(self.planId, function(data){
                 self._initPlanInfoView(data);
@@ -85,6 +86,20 @@ define([
                     self._initNoticeInfoView(data);
                 }
             }, function(err){});
+
+            //初始化企划参与角色列表信息
+//            PlanningModel.getJoinUserById(self.planId, function(data){
+//                if(data){
+//                    console.log(data, 99663);
+//                }
+//            }, function(err){});
+//            //获取用户和企划的关系
+//            PlanningModel.getUserPlanRelation(self.currentUser.id, self.planId, function(data){
+//                console.log(data, 98);
+//            }, function(err){
+//                console.log(err, 100);
+//                console.log(err)
+//            });
         },
         show : function(){
             this.planningNoticeView.on("hide:planning:notice:handle", this.onPlanningNoticeViewHideHandle, this); //隐藏击事件
@@ -165,7 +180,6 @@ define([
             var self = this;
             //显示登录条
             self.LoginBarRegion.show(self._loginBarView);
-            self.currentUser = gili_data.getCurrentUser();
         },
         /**
          * 企划类型点击事件
@@ -278,8 +292,12 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-//            MsgBox.alert("作品正在审核中");
-            MsgBox.toast("加入企划点击", true);
+//            MsgBox.toast("加入企划点击", true);
+            PlanningModel.joinPlan(self.planId, function(data){
+                console.log(data, 866333);
+            }, function(err){
+                console.log(err, 822);
+            });
         },
         /**
          * 订阅企划点击事件
