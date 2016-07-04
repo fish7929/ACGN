@@ -69,7 +69,7 @@ gili_data.planOpration = function (options, cb_ok, cb_err) {
     var strCQL = " select * from plan_relation where plan_id='" + plan_id + "' and user_id='" + this.getCurrentUser().id + "' ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
-            if (data.results) {
+            if (data.results.length > 0) {
                 //如果存在则 update
                 var obj = data.results[0];
                 var his_status = obj.get("status") || 0;
