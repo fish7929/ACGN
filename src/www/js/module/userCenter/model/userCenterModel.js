@@ -11,7 +11,7 @@ define([
         initialize:function(){
             var self = this;
             self.set({"userHeaderImg":"","userNick":"匿名用户","userBrief":"(个人简介)","fansNum":0,"attentionNum":0});
-            self.set({"otherShow":""});
+            self.set({"otherShow":"","btnText":"关注","attEdClass":""});
             self.set({"firstLiShow":"","secondLiShow":"","thirdLiShow":""});
         },
         setName:function(name){
@@ -65,11 +65,15 @@ define([
             },function(){});
         },
         //是否当前登录用户
-        setOtherShow:function(isLoginUser){
+        setOtherShow:function(isLoginUser,id){
             if(isLoginUser){
-                this.set("otherShow","style='display:none'");
+                this.set({"otherShow":"style='display:none'","btnText":"","attEdClass":""});
             }else{
-                this.set("otherShow","");
+                if(utils.isAttention(id)) {
+                    this.set({"otherShow": "", "btnText": "取消关注", "attEdClass": "uc_btn_ck"});
+                }else{
+                    this.set({"otherShow": "", "btnText": "关注", "attEdClass": ""});
+                }
             }
         },
         /**
