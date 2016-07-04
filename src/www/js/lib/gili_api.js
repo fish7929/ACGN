@@ -16,7 +16,17 @@ gili_data.getCurrentUser = function () {
         return null;
     }
 };
-
+/**
+ 返回当前登录用户对象
+ **/
+gili_data.getCurrentUserJSON = function () {
+    var currentUser = AV.User.current();
+    if (currentUser) {
+        return currentUser.toJSON();
+    } else {
+        return null;
+    }
+};
 /** 根据class 表名和objectId 查询对应的对象数据
  * class_name 表名
  * objectId 对象id
@@ -439,7 +449,10 @@ gili_data.addBlog = function (options, cb_ok, cb_err) {
     obj.set("user_id", this.getCurrentUser().id);
     obj.set("type", parseInt(blog_type));
     obj.save(null, {
-        success: cb_ok,
+        success: function (obj) {
+            //用户作品总数加1
+            cb_ok(obj);
+        },
         error: cb_err
     });
 }
