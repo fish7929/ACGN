@@ -1291,7 +1291,7 @@ gili_data.getBookById = function (options, cb_ok, cb_err) {
     var strCQL = " select include user,include book, * from book where objectId='" + book_id + "' ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
-            cb_ok(data);
+            cb_ok(data.results);
         },
         error: cb_err
     });
