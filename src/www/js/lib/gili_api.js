@@ -47,6 +47,25 @@ gili_data.getObjectById = function (class_name, objectId, cb_ok, cb_err) {
         error: cb_err
     });
 };
+/** 根据用户id查询用户对象
+ * objectId ，用户id
+ * cb_ok
+ * cb_err
+ **/
+gili_data.getUserById = function (user_id, cb_ok, cb_err) {
+    var query = new AV.Query("_User");
+    query.equalTo("objectId", user_id);
+    query.first({
+        success: function (obj) {
+            if (obj) {
+                cb_ok(obj);
+            } else {
+                cb_err("找不到对象");
+            }
+        },
+        error: cb_err
+    });
+};
 ////////////////////////////////////////////////// 企划相关 /////////////////////////////////////////////////////////
 
 /** 加入 关注企划
@@ -455,13 +474,7 @@ gili_data.addBlog = function (options, cb_ok, cb_err) {
     obj.save(null, {
         success: function (obj) {
             //用户作品总数加1
-            //currentUser.increment("blog_count", 1);
-            //currentUser.save(null, {
-            //    success: function (data) {
-
-            //    }, error: cb_err
-            // });
-            cb_ok(obj);
+            gili_data.currentUserCountUpdate("blog_count", 1, cb_ok(obj), cb_err);
         },
         error: cb_err
     });
@@ -800,27 +813,61 @@ gili_data.meFolloweeList = function (options, cb_ok, cb_err) {
 /** 取消关注某个用户
  userid,用户id
  **/
-gili_data.meUnfollow = function (userid, cb_ok, cb_err) {
-    if (!this.getCurrentUser()) {
+gili_data.meUnfollow = function (user_id, cb_ok, cb_err) {
+    var currentUser = this.getCurrentUser();
+    if (!currentUser) {
         cb_err("请先登录!");
         return;
     }
-    AV.User.current().unfollow(userid).then(
-        cb_ok,
+    currentUser.unfollow(user_id).then(
+        function (obj) {
+            //1、当前用户关注总数减一，2、对方用户粉丝总数减一
+            gili_data.currentUserCountUpdate(currentUser, "followee_count", -1, function (data) {
+                gili_data.getUserById(user_id, function (user) {
+                    if (user) {
+                        gili_data.currentUserCountUpdate(user, "follower_count", -1, cb_ok(obj), cb_err);
+                    } else {
+                        cb_err("取消关注用户失败！");
+                    }
+                }, cb_err);
+            }, cb_err);
+        },
         cb_err
     );
 };
-
-/** 关注某个用户
- userid,用户id
+/** 用户计总数操作
+ currentUser,用户对象
+ field,字段名
+ num，数值
  **/
-gili_data.meFollow = function (userid, cb_ok, cb_err) {
-    if (!userid || !this.getCurrentUser()) {
+gili_data.currentUserCountUpdate = function (currentUser, field, num, cb_ok, cb_err) {
+    currentUser.increment(field, num);
+    currentUser.save(null, {
+        success: cb_ok, error: cb_err
+    });
+}
+/** 关注某个用户
+ user_id,用户id
+ **/
+gili_data.meFollow = function (user_id, cb_ok, cb_err) {
+    var currentUser = this.getCurrentUser();
+    if (!user_id || !currentUser) {
         cb_err("请先登录!");
         return;
     }
-    AV.User.current().follow(userid).then(
-        cb_ok,
+    currentUser.follow(user_id).then(
+        function (obj) {
+            //1、当前用户关注总数加一，2、对方用户粉丝总数减加一
+            gili_data.currentUserCountUpdate(currentUser, "followee_count", 1, function (data) {
+                gili_data.getUserById(user_id, function (user) {
+                    if (user) {
+                        gili_data.currentUserCountUpdate(user, "follower_count", 1, cb_ok(obj), cb_err);
+                    } else {
+                        cb_err("未找到用户对象，取消关注用户失败！");
+                    }
+                }, cb_err);
+            }, cb_err);
+        },
         cb_err
     );
 };
@@ -828,7 +875,7 @@ gili_data.meFollow = function (userid, cb_ok, cb_err) {
 /** 根据当前登录用户对象的所有赞
  * like_type,赞类型1-话题插画，2-本子，3-企划
  **/
-gili_data.getAllLikeList = function (cb_ok, cb_err) {
+gili_data.getAllLikeList = function (options, cb_ok, cb_err) {
     var like_type = options.like_type;
 
     var currentLUser = this.getCurrentUser();
@@ -937,7 +984,7 @@ gili_data.followeeList = function (options, cb_ok, cb_err) {
             error: cb_err
         });
     }
-    if (userid) {
+    if (user_id) {
         getUserObj();
     } else {
         userCurrent = AV.User.current();
@@ -1097,25 +1144,23 @@ gili_data.snsSaveLike = function (options, cb_ok, cb_err) {
 
 /** 评论
  comment_id,评论对象id
- comment_type,1-话题插画，2-评论
+ comment_type,评论目标类型1-话题插画，2-本子，3-企划，4-留言，5-评论
  content,评论内容，blog评论内容：XXXXX ,如果为评论的评论进行回复的评论则为：{"content":"回复信息","uname":“刘德华”,"uid":“用户id”}，显示为：用户头像名字 + 回复@张三+ 回复内容
- belong_blog_id,所属那个话题插画
+ belong_id,所属那个话题插画
  **/
 gili_data.snsSaveComment = function (options, cb_ok, cb_err) {;
     var comment_id = options.comment_id,
         content = options.content,
         comment_type = options.comment_type,
-        belong_blog_id = options.belong_blog_id || "";//便于查询评论列表
-
-    if (!comment_id || !this.getCurrentUser()) {
+        belong_id = options.belong_id || "";//便于查询评论列表
+    var current_user = this.getCurrentUser();
+    if (!comment_id || !current_user) {
         cb_err("参数错误，或者没有登录！");
         return;
     }
-    if (belong_blog_id.length == 0 && comment_type == 1) {
-        belong_blog_id = comment_id;
+    if (belong_id.length == 0 && comment_type == 1) {
+        belong_id = comment_id;
     }
-    var current_user = this.getCurrentUser();
-
     if (current_user) {
         var save_comment = function () {
             var comment = AV.Object.extend("comment");
@@ -1126,7 +1171,7 @@ gili_data.snsSaveComment = function (options, cb_ok, cb_err) {;
             obj.set("status", 0);
             obj.set("content", content);//comment_content为JSON格式的字符串数据
             obj.set("user", current_user);
-            obj.set("belong_blog_id", belong_blog_id);
+            obj.set("belong_id", belong_id);
             obj.save(null, {
                 success: cb_ok,
                 error: cb_err
@@ -1136,7 +1181,7 @@ gili_data.snsSaveComment = function (options, cb_ok, cb_err) {;
         //保存tplobj评论计总数
         var save_blog_count = function () {
             var query = new AV.Query("blog");
-            query.equalTo("objectId", belong_blog_id);
+            query.equalTo("objectId", belong_id);
             query.first({
                 success: function (data) {
                     if (data) {
