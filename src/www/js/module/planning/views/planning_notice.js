@@ -54,10 +54,11 @@ define([
         _initView : function(){
             var self = this;
             if(self.currentNotice){
+                var time = utils.formatTime(self.currentNotice.createdAt, "yyyy.MM.dd HH:mm");
                 var titleTemp = '<div class="planning-notice-layer-type">' +
                     self.currentNotice.description + '</div>'+
                     '<div class="planning-notice-layer-author"><span>' +self.authorNick +
-                    '</span><span>' +self.currentNotice.createdAt +'</span></div>';
+                    '</span><span>' + time+'</span></div>';
                 self.ui.noticeLayerTitle.html(titleTemp);
                 self.ui.noticeLayerContent.html(self.currentNotice.content);
             }

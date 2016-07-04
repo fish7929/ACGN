@@ -70,10 +70,14 @@ define([
         //渲染完模板后执行,此时当前page没有添加到document
         onRender : function(){
             var self = this;
+            //获取参数
+            self.planId = self.getOption("planId");
             //初始化企划基本信息
             PlanningModel.getPlanById(self.planId, function(data){
                 self._initPlanInfoView(data);
-            }, function(err){});
+            }, function(err){
+                console.log(err);
+            });
             //初始化企划公告基本信息
             PlanningModel.getNoticeById(self.planId, function(data){
                 if(data){
@@ -100,7 +104,7 @@ define([
             var cover = data.cover;
             var name = data.name;
             var brief = data.brief;
-            var author = data.author;
+            var author = data.user;
             var preview = data.preview;
             if(author){
                 self.moderatorNick = author.user_nick;
@@ -111,7 +115,7 @@ define([
             self.ui.planningAuthor.html(authorTemp);
             self.ui.planningDetailTitle.html(name);
             self.ui.planningDetailContent.html(brief);
-            self._initPlanTypeView(preview);
+            self._initPlanTypeView(preview.slice(0,4));     //这里只取前四条
         },
         /**
          * 初始化企划类型信息
@@ -145,11 +149,12 @@ define([
          */
         _initNoticeInfoView : function(data){
             var self = this;
-            var noticeTemp = '<li notice-index="myNoticeIndex"><span notice-index="myNoticeIndex">noticeCreateTime</span><span notice-index="myNoticeIndex">noticeDescription</span></li>';
+            var noticeTemp = '<li notice-index="myNoticeIndex" class="button"><span notice-index="myNoticeIndex" >noticeCreateTime</span><span notice-index="myNoticeIndex" >noticeDescription</span></li>';
             var noticeLi = "",noticeRepTemp = "";
             for(var i = 0; i < data.length; i++){
                 var obj = data[i];
-                noticeRepTemp = noticeTemp.replace(/myNoticeIndex/g, i+1).replace(/noticeCreateTime/g, obj.createdAt)
+                var time = utils.formatTime(obj.createdAt, "yyyy.MM.dd");
+                noticeRepTemp = noticeTemp.replace(/myNoticeIndex/g, i+1).replace(/noticeCreateTime/g, time)
                     .replace(/noticeDescription/g, obj.description);
                 noticeLi += noticeRepTemp;
             }
@@ -158,8 +163,6 @@ define([
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
             var self = this;
-            //获取参数
-            self.planId = self.getOption("planId");
             //显示登录条
             self.LoginBarRegion.show(self._loginBarView);
             self.currentUser = gili_data.getCurrentUser();
@@ -199,7 +202,8 @@ define([
          */
         changeTypeDetail : function(type){
             var self = this;
-            var currentDetails =  PlanningModel.getTypeDetailByIndex(type);
+            var currentDetails =  PlanningModel.getTypeDetailByIndex(self.planId, type);
+            if(!currentDetails)return;
             var detailContent = currentDetails.content.replace(/\n/g,"<br/>");	//把回车替换成<br />
             self.ui.typeDetailTitle.html(currentDetails.title);
             self.ui.typeDetailContent.html(detailContent);

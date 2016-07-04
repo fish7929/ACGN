@@ -38,7 +38,7 @@ define([
         goToPlanningHandle : function(e){
             e.stopPropagation();
             e.preventDefault();
-            app.navigate("#planning" , {replace: false, trigger: true});
+            app.navigate("#planning/576deefa5bbb50005955b651" , {replace: false, trigger: true});
         },
         regions : {
             LoginBarRegion : {

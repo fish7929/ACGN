@@ -8,7 +8,7 @@ define([
     'text!common/templates/faceView.html',
     'config/faceConfig'
 ],function(tpl, faceList){
-    var FaceTpl = "<div class='face-item button'>{0}</div>";
+    var FaceTpl = "<div class='face-item button nowrapTxt'>{0}</div>";
     var FaceView = function(parent){
         var self = this;
         self._isShow = false;
@@ -19,7 +19,7 @@ define([
         self.$el.appendTo(parent);
         self.initList();
         self.$el.hide();
-        self.bindEvent();
+
     };
 
     /**
@@ -32,6 +32,7 @@ define([
         self._isShow = true;
 
         self.$el.show();
+        self.bindEvent();
     };
 
     FaceView.prototype.initList = function(){
@@ -48,6 +49,7 @@ define([
         self._isShow = false;
 
         self.$el.hide();
+        self.removeEvent();
     };
 
     FaceView.prototype.onMaskClickHandle = function(e){
@@ -63,7 +65,6 @@ define([
         e.preventDefault();
 
         var target = e.target;
-        console.log(target.className)
         if(target.className.indexOf("face-item") >= 0){
             var val = $(target).html();
             app.triggerMethod("on:face:select", val);

@@ -4,7 +4,7 @@
 // 创建日期: 2015/1/21 15:14
 // 描    述: 上传的任务调度器
 define([
-    'common/services/task/upload_task'
+    'common/service/upload_task'
 ],function(UploadTask) {
     var uploadTaskSchedule = {
         tasks : [],
@@ -64,7 +64,7 @@ define([
                     this._timer = null;
                     this._count = 0;
                     this.currentTask = null;
-                    topEvent.trigger("upload_taskschedule_finished");
+                    app.triggerMethod("upload_taskschedule_finished");
                 }else{
                     this.currentTask = this.tasks.shift();
                     this._count = 0;
