@@ -1235,7 +1235,7 @@ gili_data.clubOpration = function (options, cb_ok, cb_err) {
         obj.set("club_id", club_id);
         obj.set("user", currentUser);
         obj.set("user_id", currentUser.id);
-        obj.set("status", parseInt(opration_type));
+        obj.set("status", parseInt(status));//
         obj.save(null, {
             success: cb_ok,
             error: cb_err
