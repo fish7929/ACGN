@@ -270,7 +270,38 @@
         var b = new Date().getTime().toString(16), b = b + Math.floor((1 + Math.random()) * Math.pow(16, 16 - b.length)).toString(16).substr(1);
         return (a || "") + b;
     };
-
+    /**
+     * 格式化显示时间
+     * @param time
+     * @param format  如"yyyy.MM.dd HH:mm"   "yyyy.MM.dd"
+     * @returns {*}
+     */
+    utils.formatTime = function(time, format) {
+        var t = new Date(time);
+        var tf = function (i) { return (i < 10 ? '0' : '') + i };
+        return format.replace(/yyyy|MM|dd|HH|mm|ss/g, function (a) {
+            switch (a) {
+                case 'yyyy':
+                    return tf(t.getFullYear());
+                    break;
+                case 'MM':
+                    return tf(t.getMonth() + 1);
+                    break;
+                case 'mm':
+                    return tf(t.getMinutes());
+                    break;
+                case 'dd':
+                    return tf(t.getDate());
+                    break;
+                case 'HH':
+                    return tf(t.getHours());
+                    break;
+                case 'ss':
+                    return tf(t.getSeconds());
+                    break;
+            }
+        })
+    };
     utils.convert_list_2_json = function(a){
         var result = [];
         var len = a.length;
@@ -279,7 +310,4 @@
         }
         return result;
     };
-
-
-
 })(window);

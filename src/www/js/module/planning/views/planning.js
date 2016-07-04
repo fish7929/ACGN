@@ -149,11 +149,12 @@ define([
          */
         _initNoticeInfoView : function(data){
             var self = this;
-            var noticeTemp = '<li notice-index="myNoticeIndex"><span notice-index="myNoticeIndex">noticeCreateTime</span><span notice-index="myNoticeIndex">noticeDescription</span></li>';
+            var noticeTemp = '<li notice-index="myNoticeIndex" class="button"><span notice-index="myNoticeIndex" >noticeCreateTime</span><span notice-index="myNoticeIndex" >noticeDescription</span></li>';
             var noticeLi = "",noticeRepTemp = "";
             for(var i = 0; i < data.length; i++){
                 var obj = data[i];
-                noticeRepTemp = noticeTemp.replace(/myNoticeIndex/g, i+1).replace(/noticeCreateTime/g, obj.createdAt)
+                var time = utils.formatTime(obj.createdAt, "yyyy.MM.dd");
+                noticeRepTemp = noticeTemp.replace(/myNoticeIndex/g, i+1).replace(/noticeCreateTime/g, time)
                     .replace(/noticeDescription/g, obj.description);
                 noticeLi += noticeRepTemp;
             }

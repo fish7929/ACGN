@@ -19,19 +19,18 @@ define([
         self.$el.appendTo(parent);
         self.initList();
         self.$el.hide();
-
     };
 
     /**
      * 显示发布页面
      * @param param.type 1：话题  2：插画
      */
-    FaceView.prototype.show = function(){
+    FaceView.prototype.show = function(cb_ok){
         var self = this;
         if(self._isShow) return;
         self._isShow = true;
-
         self.$el.show();
+        self.callBack = cb_ok;
         self.bindEvent();
     };
 
@@ -50,6 +49,7 @@ define([
 
         self.$el.hide();
         self.removeEvent();
+        self.callBack = null;
     };
 
     FaceView.prototype.onMaskClickHandle = function(e){
@@ -67,7 +67,9 @@ define([
         var target = e.target;
         if(target.className.indexOf("face-item") >= 0){
             var val = $(target).html();
-            app.triggerMethod("on:face:select", val);
+            if(self.callBack){
+                self.callBack(val);
+            }
         }
         self.hide();
     };
