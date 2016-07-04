@@ -1288,7 +1288,7 @@ gili_data.getBookById = function (options, cb_ok, cb_err) {
         cb_err("本子id为空");
         return;
     }
-    var strCQL = " select include user,include book, * from book where objectId='" + book_id + "' ";
+    var strCQL = " select include user,include club, * from book where objectId='" + book_id + "' ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
             cb_ok(data.results);
