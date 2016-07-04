@@ -50,6 +50,15 @@
         top: 80px;
       }
     }
+
+    .previewClose{
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 64px;
+      height: 64px;
+      background: url("../images/common/error.png");
+    }
   }
 }
 
