@@ -1189,12 +1189,12 @@ gili_data.getClubById = function (options, cb_ok, cb_err) {
 gili_data.clubOpration = function (options, cb_ok, cb_err) {
     var club_id = options.club_id,
         status = options.status;
-
+    var currentUser = this.getCurrentUser();
     if (!club_id) {
         cb_err("社团id为空");
         return;
     }
-    if (!this.getCurrentUser()) {
+    if (!currentUser) {
         cb_err("请先登录!");
         return;
     }
@@ -1233,8 +1233,8 @@ gili_data.clubOpration = function (options, cb_ok, cb_err) {
         var club_relation = AV.Object.extend("club_relation");
         var obj = new club_relation();
         obj.set("club_id", club_id);
-        obj.set("user", this.getCurrentUser());
-        obj.set("user_id", this.getCurrentUser().id);
+        obj.set("user", currentUser);
+        obj.set("user_id", currentUser.id);
         obj.set("status", parseInt(opration_type));
         obj.save(null, {
             success: cb_ok,
