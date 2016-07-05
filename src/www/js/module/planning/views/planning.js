@@ -88,14 +88,13 @@ define([
             }, function(err){});
 
             //初始化企划参与角色列表信息
-//            PlanningModel.getJoinUserById(self.planId, function(data){
-//                if(data){
-//                    console.log(data, 99663);
-//                }
-//            }, function(err){});
+            PlanningModel.getJoinUserById(self.planId, function(data){
+                if(data && data.insta){
+                    self._initJoinUserView(data);
+                }
+            }, function(err){});
 //            //获取用户和企划的关系 --- 改变按钮的状态
             PlanningModel.getUserPlanRelation(self.currentUser.id, self.planId, function(data){
-                console.log(data, 98);
                 if(data ){
                     //判断当前用户和企划的关系，更改状态按钮
                     if(data.get("status")  == 1){   //关注的用户
@@ -219,6 +218,31 @@ define([
                 noticeLi += noticeRepTemp;
             }
             self.ui.planningNoticeContent.html(noticeLi);
+        },
+        /**
+         * 初始化报名角色，及参与角色
+         * @param data
+         * @private
+         */
+        _initJoinUserView : function(data){
+            var self = this;
+            var joinUserTemp = '<div class="join-role-item" role-index="roleIndex">'+
+                '<img  src="joinUserHeaderSrc" role-index="roleIndex" class="itemSelected button"/>'+
+                '<span class="showName common-name-hint" role-index="roleIndex">roleName</span>'+
+                '</div>';
+            var joinUserHtml = "", joinUserRepTemp = "";
+            for(var i = 0; i < data.length; i++){
+                var obj = data[i];
+                var avatar = obj.get("user").get("avatar");
+                var name = obj.get("user").get("user_nick");
+                var selectedTemp = i == 0 ? "join-role-item-selected" : "";
+                var isShow = i == 0 ? "show" : "hide";
+                joinUserRepTemp = joinUserTemp.replace(/roleIndex/g, i+1).replace(/itemSelected/g, selectedTemp)
+                    .replace(/showName/g, isShow).replace(/joinUserHeaderSrc/g, avatar)
+                    .replace(/roleName/g, name);
+                joinUserHtml += joinUserRepTemp;
+            }
+            self.ui.roleContent.html(joinUserHtml);
         },
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
