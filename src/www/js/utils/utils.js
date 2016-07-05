@@ -349,19 +349,35 @@
             }
         })
     };
-    utils.convert_list_2_json = function(a, attributes){
-        var result = [];
-        var len = a.length;
-        for(var i=0; i<len; i++){
-            result[i] = a[i].toJSON();
-            if(attributes){
-                for(var j = 0; j<attributes.length; j++){
-                    if(a[i].get(attributes[j])){
-                        result[i][attributes[j]] = a[i].get(attributes[j]).toJSON();
+
+    utils.convert_2_json = function(obj){
+        var result, i;
+        if (obj instanceof Array) {
+            result = [];
+            for (i = 0; i < obj.length; i++) {
+                result[i] = utils.convert_2_json(obj[i]);
+            }
+        }else if(obj instanceof Object) {
+            if(obj.hasOwnProperty("attributes") && obj.toJSON){
+                result = obj.toJSON();
+                for (i in obj["attributes"]) {
+                    var a = obj["attributes"][i];
+                    if(a && a.hasOwnProperty("attributes") && a.toJSON){
+                        result[i] = utils.convert_2_json(a);
                     }
                 }
+            }else if(obj.toJSON){
+                result = obj.toJSON();
+            }else{
+                result = {};
+                for (i in obj) {
+                    result[i] = utils.convert_2_json(obj[i]);
+                }
             }
+        }else{
+            result = obj;
         }
         return result;
-    };
+    }
+
 })(window);

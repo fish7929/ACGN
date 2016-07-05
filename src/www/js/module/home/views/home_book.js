@@ -43,7 +43,7 @@ define([
             opt.skip = 0;
             opt.limit = 5;
             gili_data.getBooks(opt, function(data){
-                data = utils.convert_list_2_json(data);
+                data = utils.convert_2_json(data);
                 self.initList(data);
             })
             self.$el.show();

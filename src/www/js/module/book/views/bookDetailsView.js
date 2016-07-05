@@ -90,8 +90,7 @@ define([
             opt.book_id = self.getOption("bookId");
             gili_data.getBookById(opt, function(data){
                 if(data.length>0){
-                    var attributes = ["user", "club", "sale_date"];
-                    data = utils.convert_list_2_json(data, attributes);
+                    data = utils.convert_2_json(data);
                     self.initData(data[0]);
                 }
             }, function(error){
