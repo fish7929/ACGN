@@ -494,7 +494,7 @@ gili_data.getBlog = function (CQL, cb_ok, cb_err) {
 }
 
 /** 获取用户动态数据
- * user_id,用户id
+ * user_id,用户id //如果是用户自己的用户中心就不需要 传 该参数
  * skip
  * limit
  **/
@@ -504,7 +504,7 @@ gili_data.getUserBlog = function (options, cb_ok, cb_err) {
         user_id = options.user_id;
 
     var strCQL = "";
-
+    var currentUser = this.getCurrentUser();
     //获取用户的关注用户，取用户id生产cql语句
     //获取用户关注列表
     var getUserF = function (userobj) {
@@ -516,8 +516,11 @@ gili_data.getUserBlog = function (options, cb_ok, cb_err) {
             query.find({
                 success: function (obj) {
                     var followeeList = "";
+                    if (!user_id) {//如果为空说明是查询自己的 动态空间，需要加上用户自己的id 作为查询 blog的条件
+                        followeeList += "'" + currentUser.id + "',";
+                    }
                     if (obj) {
-                        var objlen = obj.length > 135 ? 135 : obj.length;//按CQL只能存储4096个字节算，除去300其他CQL剩下135个24位的objectId字节长度，也就是说关注的用户不能超过135个人，否则用户不计算在关注内容查询范围内
+                        var objlen = obj.length > 134 ? 134 : obj.length;//按CQL只能存储4096个字节算，除去300其他CQL剩下135个24位的objectId字节长度，也就是说关注的用户不能超过135个人，否则用户不计算在关注内容查询范围内
                         for (var i = 0; i < objlen; i++) {
                             followeeList += "'" + obj[i].id + "',";
                         }
@@ -525,7 +528,7 @@ gili_data.getUserBlog = function (options, cb_ok, cb_err) {
                             strCQL = " select  * from blog where status!=2 and  user_id in (" + followeeList.substring(0, followeeList.length - 1) + ")  ";
                             gili_data.getBlog(strCQL, function (objs) {
                                 var data = [];
-                                for (var i = 0; i < objs.lenth; i++) {
+                                for (var i = 0; i < objs.length; i++) {
                                     data[i] = objs[i].toJSON();
                                 }
                                 cb_ok(data);
@@ -545,15 +548,18 @@ gili_data.getUserBlog = function (options, cb_ok, cb_err) {
             cb_ok("");
         }
     }
-
-    var query = new AV.Query("_User");
-    query.equalTo("objectId", user_id);
-    query.first({
-        success: function (userobj) {
-            getUserF(userobj);
-        },
-        error: cb_err
-    });
+    if (user_id) {
+        var query = new AV.Query("_User");
+        query.equalTo("objectId", user_id);
+        query.first({
+            success: function (userobj) {
+                getUserF(userobj);
+            },
+            error: cb_err
+        });
+    } else {
+        getUserF(currentUser);
+    }
 };
 
 ///////////////////////////////////////////////// 其他功能接口 //////////////////////////////////////
