@@ -82,7 +82,6 @@ define([
         option.plan_id = planId;
         gili_data.getUserPlanRelation(option, function(data){
             if(data){
-                console.log(data);
                 cb_ok&&cb_ok(data);
             }
         }, function(err){
@@ -105,11 +104,9 @@ define([
         option.limit = 6;
         option.plan_id = id;
         gili_data.getPlanUserByPlanId(option, function(data){
-            console.log(data);
             _joinUser[id] = data;
             cb_ok&&cb_ok(data);
         }, function(err){
-            console.log(err, 456);
             cb_err&&cb_err(err);
         });
     };
