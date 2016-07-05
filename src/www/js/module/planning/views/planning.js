@@ -89,7 +89,7 @@ define([
 
             //初始化企划参与角色列表信息
             PlanningModel.getJoinUserById(self.planId, function(data){
-                if(data && data.insta){
+                if(data ){
                     self._initJoinUserView(data);
                 }
             }, function(err){});
