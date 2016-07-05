@@ -362,7 +362,7 @@
                 result = obj.toJSON();
                 for (i in obj["attributes"]) {
                     var a = obj["attributes"][i];
-                    if(a && a.hasOwnProperty("attributes") && a.toJSON){
+                    if(a && a.toJSON){
                         result[i] = utils.convert_2_json(a);
                     }
                 }

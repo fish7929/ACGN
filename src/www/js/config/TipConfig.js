@@ -17,6 +17,8 @@ define(function(){
     tip.NOT_ATTENTION = "取消关注";
     tip.ATTENTIONED = "关注";
     tip.COMMENT_ERROR = "请输入评论内容！";
+    tip.COMMENT_SUCCESS = "评论发布成功";
+    tip.COMMENT_FAIL = "评论发布失败:";
 
     return tip;
 });

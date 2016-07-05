@@ -137,11 +137,11 @@ define([
             }
             self.ui.bookLabelList.html(labelHtml);
 
-            var bookNum = "";
+            var bookNum = data.user.blog_count || 0;
             var clubImage = "";
             var clubName = "";
             if(data.club){
-                bookNum = "作品：5部";
+                bookNum = "作品："+bookNum+"部";
                 clubImage = data.club.cover;
                 clubName = data.club.name;
             }
@@ -191,6 +191,8 @@ define([
 
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
+            var self = this;
+            self._previewView.hideBookPreview();
         },
 
         //当页面销毁时触发

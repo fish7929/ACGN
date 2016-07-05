@@ -46,6 +46,7 @@ define([
         },
 
         initData : function(data){
+            if(!data) return;
             var html = "", self = this;
             self._data = data;
             for(var i=0; i<data.length; i++){
@@ -62,6 +63,10 @@ define([
             if(self._data && self._data.length){
                 BookPreviewView.show(self._data);
             }
+        },
+
+        hideBookPreview : function(){
+            BookPreviewView.hide();
         },
 
         /**页面关闭时调用，此时不会销毁页面**/

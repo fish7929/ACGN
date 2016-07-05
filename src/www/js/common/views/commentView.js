@@ -8,11 +8,12 @@ define([
     'text!common/templates/commentView.html',
     'marionette',
     'common/views/faceView',
-    'msgbox'
-],function(ItemView, tpl, mn, FaceView, MsgBox){
-    var htmlTpl = "<div class=\"comment-list-item\">" +
+    'msgbox',
+    'config/TipConfig'
+],function(ItemView, tpl, mn, FaceView, MsgBox, Tip){
+    var htmlTpl = "<div class=\"comment-list-item\" data-id='{dataId}'>" +
             "<div class=\"comment-left-div\">" +
-            "<div class=\"comment-head-pic\"></div>" +
+            "<div class=\"comment-head-pic\" style='background: url(\"{pic}\") no-repeat center; background-size: 100%'></div>" +
             "<div class=\"comment-floor-txt\">{floor}</div>" +
             "</div>" +
             "<div class=\"comment-right-div\">" +
@@ -29,6 +30,8 @@ define([
 
         _faceView : null,
         _commentObj : null,
+        PageMaxNum : 10,
+        currentPage : 0,
         // key : selector
         ui : {
             noLoginDiv : ".commentLogin",
@@ -36,13 +39,15 @@ define([
             bnFace : ".btn-face",
             bnCommit : ".btn-commit",
             faceContainer : ".comment-face-container",
-            commentList : ".comment-list"
+            commentList : ".comment-list",
+            bnViewMore : ".comment-view-more-btn"
         },
 
         //事件添加
         events : {
             "click @ui.bnFace" : "onBnFaceHandle",
-            "click @ui.bnCommit" : "onCommitHandle"
+            "click @ui.bnCommit" : "onCommitHandle",
+            "click @ui.bnViewMore" : "onViewMoreHandle"
         },
 
         /**初始化**/
@@ -63,6 +68,22 @@ define([
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
             var self = this;
+            self.checkLogin();
+            self.$el.show();
+            self.bindEvent();
+        },
+
+        onViewMoreHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+
+            var self = this;
+            self.currentPage++;
+            self.addNextPage();
+        },
+
+        checkLogin : function(){
+            var self = this;
             if(gili_data.getCurrentUser()){
                 self.ui.noLoginDiv.hide();
                 self.ui.commentText.show();
@@ -70,16 +91,80 @@ define([
                 self.ui.noLoginDiv.show();
                 self.ui.commentText.hide();
             }
-            self.$el.show();
         },
 
-        setCommentTarget : function(obj){
-            this._commentObj = obj;
-        },
-
-        onCommitHandle : function(){
+        reset : function(){
             var self = this;
-            if(!self._commentObj || !self._commentObj.type || !self._commentObj.comment_id) return;
+            self.ui.commentList.find(".comment-list-item").remove();
+            self.currentPage = 0;
+        },
+
+        addNextPage : function(){
+            var self = this;
+            if(!self._commentObj || !self._commentObj.comment_type || !self._commentObj.comment_id) return;
+            var opt = {};
+            opt.comment_id = self._commentObj.comment_id;
+            opt.comment_type = self._commentObj.comment_type;
+            opt.isdesc = true;
+            opt.pageSize = self.currentPage * self.PageMaxNum;
+            opt.pageNumber = self.PageMaxNum;
+            gili_data.getComment(opt, function(data){
+                if(data && data.results){
+                    var len = data.results.length;
+                    if(len > 0){
+                        data = utils.convert_2_json(data.results);
+                        self.addCommentItem(data);
+                    }
+                    if(len < self.PageMaxNum){
+                        self.ui.bnViewMore.hide();
+                    }else{
+                        self.ui.bnViewMore.show();
+                    }
+                }else{
+                    self.ui.bnViewMore.hide();
+                }
+            }, function(err){
+                console.log(err);
+            })
+        },
+
+        addCommentItem : function(data){
+            if(!data || data.length==0) return;
+            var self = this, html = "";
+            var obj, id, user_nick, user_pic, content, createdAt, floor;
+            for(var i = 0; i < data.length; i++){
+                obj = data[i];
+                id = obj.objectId;
+                if(self.ui.commentList.find(".comment-list-item[data-id="+id+"]").get(0)) continue;
+                floor = "第12楼";
+                user_nick = obj.user.user_nick || "";
+                user_pic = obj.user.avatar || "";
+                content = obj.content || "";
+                createdAt = data.createdAt || Date.now();
+                html += htmlTpl.replace("{dataId}", id).replace("{floor}", floor).replace("{name}", user_nick).replace("{pic}", user_pic)
+                    .replace("{content}", content).replace("{data}", utils.formatTime(createdAt, "yyyy.MM.dd HH.mm"));
+            }
+            self.ui.commentList.append(html);
+        },
+
+        /**
+         *
+         * @param obj{}
+         * obj.comment_id
+         * obj.comment_type
+         */
+        setCommentTarget : function(obj){
+            var self = this;
+            self._commentObj = obj;
+            self.reset();
+            self.addNextPage();
+        },
+
+        onCommitHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            if(!self._commentObj || !self._commentObj.comment_type || !self._commentObj.comment_id) return;
             var str = self.ui.commentText.val();
             if(str == ""){
                 MsgBox.toast(Tip.COMMENT_ERROR);
@@ -89,15 +174,17 @@ define([
             opt.comment_id = self._commentObj.comment_id;
             opt.comment_type = self._commentObj.comment_type;
             opt.content = str;
-            console.log(opt);
             gili_data.snsSaveComment(opt, function(data){
-                console.log(123);
+                self.ui.commentText.val("");
+                MsgBox.toast(Tip.COMMENT_SUCCESS, true);
             }, function(err){
-                console.log(456);
+                MsgBox.toast(Tip.COMMENT_FAIL+err, false);
             })
         },
 
-        onBnFaceHandle : function(){
+        onBnFaceHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
             var self = this;
             self._faceView.show(self._onFaceSelect)
         },
@@ -108,9 +195,22 @@ define([
             self.ui.commentText.val(str);
         },
 
+        bindEvent : function(){
+            var self = this;
+            app.on("login:ok", self.checkLogin, self);
+            app.on("logOut:ok", self.checkLogin, self);
+        },
+
+        removeEvent : function(){
+            app.off("login:ok", self.checkLogin, self);
+            app.off("logOut:ok", self.checkLogin, self);
+        },
+
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
-            this.$el.hide();
+            var self = this;
+            self.removeEvent();
+            self.$el.hide();
         },
 
         //当页面销毁时触发

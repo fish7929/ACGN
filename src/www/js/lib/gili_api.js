@@ -474,7 +474,7 @@ var currentUser=this.getCurrentUser();
     obj.save(null, {
         success: function(obj){
             //用户作品总数加1
-            gili_data.currentUserCountUpdate("blog_count",1,cb_ok(obj),cb_err);
+            gili_data.currentUserCountUpdate(currentUser, "blog_count", 1, cb_ok(obj), cb_err);
         },
         error: cb_err
     });
@@ -667,16 +667,16 @@ gili_data.getComment = function (options, cb_ok, cb_err) {
     //排序
     if (orderBy.length>0) {
         if(isDesc){
-            strCQL += " order by " + orderby + " desc ";
+            strCQL += " order by " + orderBy + " desc ";
         }else{
-            strCQL += " order by " + orderby + " asc ";
+            strCQL += " order by " + orderBy + " asc ";
         }
     }
     //翻页
     if (skip >= 0 && limit > 0) {
         strCQL += " limit " + skip + "," + limit;
     }
-    fmacloud.Query.doCloudQuery(strCQL, {
+    AV.Query.doCloudQuery(strCQL, {
         success: cb_ok,
         error: cb_err
     });
@@ -1173,7 +1173,7 @@ gili_data.snsSaveComment = function (options, cb_ok, cb_err) { ;
             var obj = new comment();
             obj.set("comment_id", comment_id);
             obj.set("comment_type", parseInt(comment_type));
-            obj.set("user_id", user_id);
+            obj.set("user_id", current_user.id);
             obj.set("status", 0);
             obj.set("content", content);//comment_content为JSON格式的字符串数据
             obj.set("user", current_user);

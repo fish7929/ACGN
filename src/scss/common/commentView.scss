@@ -56,6 +56,7 @@
     .comment-list-item{
       width: 100%;
       border-bottom: 1px solid #c0c0c0;
+      margin-top: 34px;
 
       .comment-left-div{
         width: 102px;
@@ -116,6 +117,17 @@
       }
 
     }
+
+    .comment-list-item:first-child{
+      margin-top: 0px;
+    }
+  }
+
+  .comment-view-more-btn{
+    width: 98px;
+    height: 30px;
+    background: url("../images/common/more-v.png") no-repeat center;
+    margin: 30px auto;
   }
 }
 

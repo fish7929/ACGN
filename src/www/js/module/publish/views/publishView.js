@@ -182,7 +182,7 @@ define([
             MsgBox.toast(Tip.PUBLISH_SUCCESS, true);
             self.hide();
         }, function(err){
-            MsgBox.alert(Tip.PUBLISH_FAIL+err);
+            MsgBox.toast(Tip.PUBLISH_FAIL+err, false);
         })
 
     };
@@ -331,7 +331,6 @@ define([
         e.preventDefault();
         var self = this;
 
-        console.log(e.target);
         var target = e.target;
         var input = self.inputImage.get(0);
         if(target.className.indexOf("btn-image-single") >= 0){
@@ -367,7 +366,7 @@ define([
                 self.addIllImages(result);
             }
         }, function(err){
-            console.log(err);
+            utils.log(err);
         });
 
         self.inputImage.off("change");
