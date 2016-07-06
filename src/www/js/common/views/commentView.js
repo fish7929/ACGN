@@ -19,7 +19,7 @@ define([
             "<div class=\"comment-right-div\">" +
             "<div class=\"comment-user-name\">{name}</div>" +
             "<div class=\"comment-time\">{data}</div>" +
-            "<div class=\"comment-reply\">回复</div>" +
+            "<div class=\"comment-reply button\">回复</div>" +
             "<div class=\"clear wrapTxt comment-content\">{content}</div>" +
             "</div>" +
             "<div class=\"clear\"></div>" +
@@ -47,7 +47,8 @@ define([
         events : {
             "click @ui.bnFace" : "onBnFaceHandle",
             "click @ui.bnCommit" : "onCommitHandle",
-            "click @ui.bnViewMore" : "onViewMoreHandle"
+            "click @ui.bnViewMore" : "onViewMoreHandle",
+            "click @ui.commentList" : "onCommentListHandle"
         },
 
         /**初始化**/
@@ -71,6 +72,15 @@ define([
             self.checkLogin();
             self.$el.show();
             self.bindEvent();
+        },
+
+        onCommentListHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            if(e.target.className.indexOf("comment-reply") >= 0){
+                self.ui.commentText.focus();
+            }
         },
 
         onViewMoreHandle : function(e){
@@ -131,20 +141,32 @@ define([
         addCommentItem : function(data){
             if(!data || data.length==0) return;
             var self = this, html = "";
-            var obj, id, user_nick, user_pic, content, createdAt, floor;
             for(var i = 0; i < data.length; i++){
-                obj = data[i];
-                id = obj.objectId;
-                if(self.ui.commentList.find(".comment-list-item[data-id="+id+"]").get(0)) continue;
-                floor = "第12楼";
-                user_nick = obj.user.user_nick || "";
-                user_pic = obj.user.avatar || "";
-                content = obj.content || "";
-                createdAt = data.createdAt || Date.now();
-                html += htmlTpl.replace("{dataId}", id).replace("{floor}", floor).replace("{name}", user_nick).replace("{pic}", user_pic)
-                    .replace("{content}", content).replace("{data}", utils.formatTime(createdAt, "yyyy.MM.dd HH.mm"));
+                html += self.getCommentHtml(data[i]);
             }
             self.ui.commentList.append(html);
+        },
+
+        getCommentHtml : function(obj){
+            var self = this;
+            var id, user_nick, user_pic, content, createdAt, floor, html = "";
+            id = obj.objectId;
+            if(self.ui.commentList.find(".comment-list-item[data-id="+id+"]").get(0)){
+                return html;
+            }
+            floor = "";
+            user_nick = obj.user.user_nick || "";
+            user_pic = obj.user.avatar || "";
+            content = obj.content || "";
+            createdAt = obj.createdAt || Date.now();
+            html = htmlTpl.replace("{dataId}", id).replace("{floor}", floor).replace("{name}", user_nick).replace("{pic}", user_pic)
+                .replace("{content}", content).replace("{data}", utils.formatTime(createdAt, "yyyy.MM.dd HH.mm"));
+            return html;
+        },
+
+        insertComment : function(data){
+            var self = this;
+            self.ui.commentList.prepend(self.getCommentHtml(data));
         },
 
         /**
@@ -175,6 +197,8 @@ define([
             opt.comment_type = self._commentObj.comment_type;
             opt.content = str;
             gili_data.snsSaveComment(opt, function(data){
+                data = utils.convert_2_json(data);
+                self.insertComment(data);
                 self.ui.commentText.val("");
                 MsgBox.toast(Tip.COMMENT_SUCCESS, true);
             }, function(err){

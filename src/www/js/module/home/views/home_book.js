@@ -6,8 +6,9 @@
 define([
     'common/base/item_view',
     'text!module/home/templates/home_book.html',
-    'marionette'
-],function(ItemView, tpl, mn){
+    'marionette',
+    'module/book/model/BookModel'
+],function(ItemView, tpl, mn, BookModel){
     var htmlTpl = '<div class="book-item button {3}" attr="{0}">' +
         '<div class="book-pic" style="background: url(\'{1}\') no-repeat center; background-size: 100%"></div>' +
         '<div class="book-name">{2}</div>' +
@@ -39,19 +40,14 @@ define([
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
             var self = this;
-            var opt = {};
-            opt.skip = 0;
-            opt.limit = 5;
-            gili_data.getBooks(opt, function(data){
-                data = utils.convert_2_json(data);
+            BookModel.queryHotBooks(function(data){
                 self.initList(data);
-            })
+            });
             self.$el.show();
         },
 
         initList : function(data){
-            var i;
-            var self = this, html = "", lastItemClass;
+            var i, self = this, html = "", lastItemClass, obj;
             for(i = 0; i < data.length; i++){
                 obj = data[i];
                 lastItemClass = "";
