@@ -233,46 +233,33 @@ gili_data.getUser = function (options, cb_ok, cb_err) {
     });
 };
 /** 企划id 获取已经报名该企划的用户列表
- * paln_id
+ * plan_id
  * skip
  * limit
  * cb_ok
  * cb_err
  **/
 gili_data.getPlanUserByPlanId = function (options, cb_ok, cb_err) {
-    var plan_id = options.plan_id,
-        skip = options.skip || 0,
-        limit = options.limit || 1000
+    var plan_id=options.plan_id,
+        skip=options.skip||0,
+        limit=options.limit||1000
 
-    var getPlanUserList = function (planObj) {
-        var query = new AV.Query("plan_relation");
-        query.equalTo("plan_id", plan_id);
-        query.include("join");
-        query.equalTo("status", 2);//状态为1的
-        query.equalTo("approved", 1);//审核通过的
-        query.skip(skip);
-        query.limit(limit);
-        query.descending("createdAt");
-        query.find({
-            success: function (data) {
-                cb_ok(data);
-            },
-            error: cb_err
-        })
-    }
-    var query = new AV.Query("plan");
-    query.equalTo("objectId", plan_id);
-    query.first({
-        success: function (obj) {
-            if (obj) {
-                getPlanUserList(obj);
-            } else {
-                cb_err("找不到企划对象");
-            }
-        }, error: cb_err
-    });
+    var query = new AV.Query("plan_relation");
+    query.equalTo("plan_id",plan_id);
+    query.include("user");
+    query.equalTo("status",2);//状态为1的
+    query.equalTo("status",3);//状态为1的
+    query.equalTo("approved",1);//审核通过的
+    query.skip(skip);
+    query.limit(limit);
+    query.descending("createdAt");
+    query.find({
+        success: function (data) {
+            cb_ok(data);
+        },
+        error:cb_err
+    })
 };
-
 /** 获取加入该企划的用户的作品(最热，最新排序)
  * plan_id,
  * plan_name 企划名字
