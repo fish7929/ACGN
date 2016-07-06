@@ -12,18 +12,38 @@ define([
     'module/book/views/bookDetailsPreview',
     'module/book/views/bookDetailsHot',
     'common/views/commentView',
-    'module/book/views/bookPreviewView'
-],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, BDPreviewView, BDHotView, CommentView, BookPreviewView){
+    'config/TipConfig'
+],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, BDPreviewView, BDHotView, CommentView, Tip){
+    var labelTpl = "<div class=\"bd-label-item\" style='background-color: {0}'>{1}</div>"
+
     return BaseView.extend({
         id : "bookDetailsContainer",
         template : _.template(tpl),
-
+        _data : null,
         // key : selector
         ui : {
+            bookCover : ".bd-image",
+            bookTitle : ".title",
+            bookAuthor : ".bd-author-txt",
+            bookOriginal: ".bd-original-txt",
+            bookCP : ".bd-cp-txt",
+            bookLang : ".bd-lang-txt",
+            bookPage : ".bd-page-txt",
+            bookSize : ".bd-size-txt",
+            bookSaleDate : ".bd-data-txt",
+            bookBrief : ".book-brief",
+            bookLabelList : ".bd-label-list",
+            //
+            bookAuthorRight : ".bd-author-name",
+            bookNum : ".bd-author-works-num",
+            clubImage : ".bd-author-college-image",
+            clubName : ".bd-author-college-name",
+            attendBtn : ".bd-author-bn-attend"
         },
 
         //事件添加
         events : {
+            "click @ui.attendBtn" : "onAttentionHandle"
         },
 
         regions : {
@@ -66,7 +86,16 @@ define([
         pageIn : function(){
             var self = this;
             self.regionShow();
-            //BookPreviewView.show(['images/temp/excellent_book/wide.jpg', 'http://ac-syrskc2g.clouddn.com/1ab3c8b1a334770f5194']);
+            var opt = {};
+            opt.book_id = self.getOption("bookId");
+            gili_data.getBookById(opt, function(data){
+                if(data.length>0){
+                    data = utils.convert_2_json(data);
+                    self.initData(data[0]);
+                }
+            }, function(error){
+                utils.log(error);
+            });
         },
 
         regionShow : function(){
@@ -74,12 +103,96 @@ define([
             self.LoginBarRegion.show(self._loginBarView);
             self.PreviewViewRegion.show(self._previewView);
             self.HotViewRegion.show(self._hotView);
-
             self.MessageRegion.show(self._commentView);
+        },
+
+        initData : function(data){
+            var self = this;
+            self._data = data;
+            var cover = data.cover || "";
+            var bookName = data.name || "";
+            var author = data.user.user_nick || "";
+            var originalAuthor = data.original || "";
+            var cp = data.cp || "";
+            var lang = data.language || "";
+            var page = data.page || "";
+            var size = data.size || "";
+            var saleDate = data.sale_date;
+            var brief = data.brief || "";
+            var labelArr = data.labels || [];
+            self.ui.bookCover.css({"background":"url("+cover+") no-repeat center", "background-size": "100%"});
+            self.ui.bookTitle.html(bookName);
+            self.ui.bookAuthor.html(author);
+            self.ui.bookOriginal.html(originalAuthor);
+            self.ui.bookCP.html(cp);
+            self.ui.bookLang.html(lang);
+            self.ui.bookPage.html(page);
+            self.ui.bookSize.html(size);
+            self.ui.bookSaleDate.html(utils.formatTime(saleDate, "yyyy.MM"));
+            self.ui.bookBrief.html(brief);
+            var labelHtml = "", color;
+            for(var i = 0; i<labelArr.length; i++){
+                color = utils.getLabelRandomColor();
+                labelHtml += labelTpl.replace("{0}", color).replace("{1}", labelArr[i]);
+            }
+            self.ui.bookLabelList.html(labelHtml);
+
+            var bookNum = data.user.blog_count || 0;
+            var clubImage = "";
+            var clubName = "";
+            if(data.club){
+                bookNum = "作品："+bookNum+"部";
+                clubImage = data.club.cover;
+                clubName = data.club.name;
+            }
+            self.ui.bookAuthorRight.html(author);
+            self.ui.bookNum.html(bookNum);
+            self.ui.clubImage.css({"background":"url("+clubImage+") no-repeat center", "background-size": "100%"});
+            self.ui.clubName.html(clubName);
+
+            var imageList = data.preview;
+            self._previewView.initData(imageList);
+
+            self.setAttentionStyle(utils.isAttention(data.user.objectId));
+
+            var obj = {};
+            obj.comment_id = data.objectId;
+            obj.comment_type = 2;
+            self._commentView.setCommentTarget(obj)
+        },
+
+        onAttentionHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+
+            var self = this;
+            if(!self._data) return;
+
+            var type = 0;
+            if(self.ui.attendBtn.html() == Tip.ATTENTIONED){
+                type = 1;
+            }
+            var userId = self._data.user.objectId;
+            console.log(type);
+            utils.attentionUser(type, userId, function(data){
+                self.setAttentionStyle(type);
+            }, function(err){
+            });
+        },
+
+        setAttentionStyle : function(val){
+            var self = this;
+            if(val){
+                self.ui.attendBtn.html(Tip.NOT_ATTENTION)
+            }else{
+                self.ui.attendBtn.html(Tip.ATTENTIONED);
+            }
         },
 
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
+            var self = this;
+            self._previewView.hideBookPreview();
         },
 
         //当页面销毁时触发

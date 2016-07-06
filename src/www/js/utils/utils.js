@@ -130,20 +130,28 @@
     }
 
     /**
-     * 加载已点赞作品列表数据
+     * 加载已点赞话题列表数据
      * add by guYY 2016/7/2 20:00
      */
     utils.loadLikedTplList = function(){
         if(!window.likedWorkList || window.likedWorkList.length <= 0)
         {
-//            sns_data.getSnsLikeByUidLocalFun(function (arr) {
-//                var workIdArr = [];
-//                window.likedWorkList = workIdArr;
-//                if(workIdArr.length > 0)
-//                    app.triggerMethod("common:works:liked",[workIdArr.join(','),1]);
-//            }, function (err) {
-//                console.log(err);
-//            });
+            var options = {like_type:1};
+            gili_data.getAllLikeList(options,function(data){
+                var workIdArr = [];
+                if(data && data.length > 0){
+                    for(var i = 0; i < data.length; i++){
+                        if(data[i].like_type == 1){
+                            workIdArr.push(data[i].like_id);
+                        }
+                    }
+                }
+                window.likedWorkList = workIdArr;
+                if(workIdArr.length > 0)
+                    app.triggerMethod("common:works:liked",[workIdArr.join(','),1]);
+            },function(err){
+                window.likedWorkList = [];
+            });
         }
     }
     /**
@@ -156,8 +164,8 @@
         return window.likedWorkList.indexOf(workId+"") >= 0;
     };
     /**
-     * 点赞或取消点赞作品
-     * @param tplId
+     * 点赞或取消点赞话题
+     * @param workId话题ID
      * @param like  1点赞   0取消点赞
      *  add by guYY 2016/7/2 20:11
      */
@@ -173,25 +181,57 @@
         }
     };
     /**
+     * 点赞/取消点赞
+     * @param type   1点赞   0取消点赞
+     * @param topicId 点赞话题ID
+     * @param cb_ok
+     * @param cb_err
+     */
+    utils.likeTopic = function(type,topicId,cb_ok,cb_err){
+        var self = this;
+        var options = {like_type:type,like_id:topicId};
+        if(type == 1){
+            options.like_opration = "like";
+            gili_data.snsSaveLike(options,function(){
+                self.addLikeTpl(topicId,type);
+                cb_ok && cb_ok();
+            },cb_err);
+        }else{
+            options.like_opration = "cancerlike";
+            gili_data.snsSaveLike(options,function(){
+                self.addLikeTpl(topicId,type);
+                cb_ok && cb_ok();
+            },cb_err);
+        }
+    }
+    /**
      * 加载userObj已关注用户列表数据
      * add by guYY 2016/7/2 20:11
      */
-    utils.loadAttentionList = function(userObj){
+    utils.loadAttentionList = function(userId){
         if(!window.attentionUserList || window.attentionUserList.length <= 0)
         {
-//            sns_data.getFolloweeAllList({"followee":"followee","pageSize":0,"pageNumber":1000},function(arr){
-//                var attList = [];
-//                for(var i = 0; i < arr.length; i++)
-//                {
-//                    attList.push(arr[i]["id"]);
-//                }
-//                window.attentionUserList = attList;
-//                if(attList.length > 0) {
-//                    app.triggerMethod("common:works:attention",[attList.join(','),1]);
-//                }
-//            },function(err){
-//                console.log(err);
-//            });
+            var options = {
+                user_id:userId,
+                skip:0,
+                limit:100,
+                orderBy:"",
+                isDesc:""
+            };
+            gili_data.followeeList(options,function(data){
+                var attList = [];
+                if(data && typeof data == 'object' && data.length > 0){
+                    for(var i = 0; i < data.length; i++){
+                        attList.push(data[i].id);
+                    }
+                }
+                window.attentionUserList = attList;
+                if(attList.length > 0) {
+                    app.triggerMethod("common:works:attention",[attList.join(','),1]);
+                }
+            },function(err){
+                window.attentionUserList = [];
+            });
         }
     }
     /**
@@ -228,10 +268,17 @@
      * @param cb_err
      */
     utils.attentionUser = function(type,userId,cb_ok,cb_err){
+        var self = this;
         if(type == 1){
-            gili_data.meFollow(userId,cb_ok,cb_err);
+            gili_data.meFollow(userId,function(){
+                self.addAttention(userId,type);
+                cb_ok && cb_ok();
+            },cb_err);
         }else{
-            gili_data.meUnfollow(userId,cb_ok,cb_err);
+            gili_data.meUnfollow(userId,function(){
+                self.addAttention(userId,type);
+                cb_ok && cb_ok();
+            },cb_err);
         }
     }
     //判断是否是base64图片
@@ -302,12 +349,35 @@
             }
         })
     };
-    utils.convert_list_2_json = function(a){
-        var result = [];
-        var len = a.length;
-        for(var i=0; i<len; i++){
-            result[i] = a[i].toJSON();
+
+    utils.convert_2_json = function(obj){
+        var result, i;
+        if (obj instanceof Array) {
+            result = [];
+            for (i = 0; i < obj.length; i++) {
+                result[i] = utils.convert_2_json(obj[i]);
+            }
+        }else if(obj instanceof Object) {
+            if(obj.hasOwnProperty("attributes") && obj.toJSON){
+                result = obj.toJSON();
+                for (i in obj["attributes"]) {
+                    var a = obj["attributes"][i];
+                    if(a && a.toJSON){
+                        result[i] = utils.convert_2_json(a);
+                    }
+                }
+            }else if(obj.toJSON){
+                result = obj.toJSON();
+            }else{
+                result = {};
+                for (i in obj) {
+                    result[i] = utils.convert_2_json(obj[i]);
+                }
+            }
+        }else{
+            result = obj;
         }
         return result;
-    };
+    }
+
 })(window);

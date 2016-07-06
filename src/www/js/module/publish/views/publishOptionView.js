@@ -107,6 +107,7 @@ define([
 
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
+            PublishView.hide();
         },
 
         //当页面销毁时触发

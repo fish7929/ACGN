@@ -6,18 +6,26 @@
 define([
     'common/base/item_view',
     'text!module/book/templates/bookDetailsPreview.html',
-    'marionette'
-],function(ItemView, tpl, mn){
+    'marionette',
+    'module/book/views/bookPreviewView'
+],function(ItemView, tpl, mn, BookPreviewView){
+    var htmlTpl = "<div class='bd-preview-item'><div class='bd-preview-pic button' style='background: url(\"{0}\") no-repeat center; background-size: 100%'></div></div>";
     return ItemView.extend({
         className : "bookDetailsPreviewContainer",
         template : _.template(tpl),
 
+        MaxImage : 5,
+
+        _data : null,
+
         // key : selector
         ui : {
+            list : ".bd-preview-container"
         },
 
         //事件添加
         events : {
+            "click @ui.list" : "onClickHandle"
         },
 
         /**初始化**/
@@ -35,6 +43,30 @@ define([
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
             this.$el.show();
+        },
+
+        initData : function(data){
+            if(!data) return;
+            var html = "", self = this;
+            self._data = data;
+            for(var i=0; i<data.length; i++){
+                if(i >= self.MaxImage) break;
+                html += htmlTpl.replace("{0}", data[i]);
+            }
+            self.ui.list.html(html);
+        },
+
+        onClickHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            if(self._data && self._data.length){
+                BookPreviewView.show(self._data);
+            }
+        },
+
+        hideBookPreview : function(){
+            BookPreviewView.hide();
         },
 
         /**页面关闭时调用，此时不会销毁页面**/

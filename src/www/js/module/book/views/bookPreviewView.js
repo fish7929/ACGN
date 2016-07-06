@@ -17,6 +17,8 @@ define([
         self._bookImage = self.$el.find(".previewImage");
         self._nextBtn = self.$el.find(".previewRightBtn");
         self._preBtn = self.$el.find(".previewLeftBtn");
+
+        self._closeBtn = self.$el.find(".previewClose");
     };
 
     /**
@@ -100,19 +102,24 @@ define([
 
     BookPreviewView.prototype.bindEvent = function(){
         var self = this;
-        self._preBtn.bind("click", function(){
+        self._preBtn.bind("click", function(e){
             self.showPrePic();
         });
 
-        self._nextBtn.bind("click", function(){
+        self._nextBtn.bind("click", function(e){
             self.showNextPic();
         });
+
+        self._closeBtn.bind("click", function(e){
+            self.hide();
+        })
     };
 
     BookPreviewView.prototype.removeEvent = function(){
         var self = this;
         self._preBtn.unbind("click");
         self._nextBtn.unbind("click");
+        self._closeBtn.unbind("click");
     };
 
     BookPreviewView.prototype.hide = function(){

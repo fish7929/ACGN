@@ -37,6 +37,11 @@ define([
                 data.picHtml = self.getPic();
                 data.descHtml = self.getDesc();
             }
+            if(utils.isLiked(self.model.get("gb_id"))){
+                data.zanName = "praise_ck";
+            }else{
+                data.zanName = "praise";
+            }
             if(self.model.commentShow){
                 data.commentShow = "style='display:block;'";
             }else{
@@ -48,9 +53,7 @@ define([
         //获取类型为1的话题 内容
         getArticle:function(){
             var articleHtml = "";
-            console.log("1111");
             var topic = this.model.get("topic");
-            console.log(topic);
             articleHtml = this.topicTpl({topicStr:topic});
             return articleHtml;
         },
@@ -96,7 +99,6 @@ define([
             '<div class="commentContext"><%=commentTxt %></div></div></div>'),
         //点击评论图片，显示评论列表或隐藏
         _clickCommentHandler:function(e){
-            debugger;
             var self = this;
             //如果评论列表显示，点击隐藏即可
             if(self.model.commentShow){
@@ -128,7 +130,23 @@ define([
         },
         //点赞/取消点赞
         _clickZanHandler:function(e){
+            var self = this;
+            var target = $(e.target);
+            var gId = self.model.get("gb_id");
+            if(target.data("zan") == "praise" && !utils.isLiked(gId)){ //点赞
+                utils.likeTopic(1,gId,function(){
+                    self.render();
+                },function(){
+                    console.log("点赞失败");
+                });
 
+            }else if(target.data("zan") == "praise_ck" && utils.isLiked(gId)) { //取消点赞
+                utils.likeTopic(0,gId,function(){
+                    self.render();
+                },function(){
+                    console.log("默认点赞失败");
+                });
+            }
         }
     });
     return WorkItemView;

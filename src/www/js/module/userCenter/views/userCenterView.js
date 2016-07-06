@@ -20,6 +20,8 @@ define([
             this.userCenterHeadView = new UserCenterHeadView();
             this._workListView = new WorkListView();
             this._workListView.on("workListView:change",self._workListChangeHandler,self);
+            //点赞列表发生变化
+            app.on("common:works:liked",self.likedChangeHandler,self);
         },
         regions : {
             "loginBar":"#userCenterLogin",
@@ -45,6 +47,10 @@ define([
         _workListChangeHandler:function(type){
             var self = this;
             self.updateMsg(type);
+        },
+        //点赞插画列表发生变化触发  全局
+        likedChangeHandler:function(arr){
+            this._workListView.collection.reset(this._workListView.collection.models);
         },
         /**
          * 更新状态
@@ -98,6 +104,11 @@ define([
             if(!self.data_finish) {
                 self._workListView.scrollUpdate();//call the data update
             }
+        },
+        destroy:function(){
+            this._loginBarView = null;
+            this._workListView = null;
+            app.off("common:works:liked",this.likedChangeHandler,this);
         }
     });
     return userCenterView;
