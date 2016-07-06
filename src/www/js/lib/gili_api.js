@@ -246,9 +246,9 @@ gili_data.getPlanUserByPlanId = function (options, cb_ok, cb_err) {
 
     var getPlanUserList = function (planObj) {
         var query = new AV.Query("plan_relation");
-        query.equalTo("plan", planObj);
+        query.equalTo("plan_id", plan_id);
         query.include("join");
-        query.equalTo("status", 1);//状态为1的
+        query.equalTo("status", 2);//状态为1的
         query.equalTo("approved", 1);//审核通过的
         query.skip(skip);
         query.limit(limit);
@@ -474,7 +474,7 @@ gili_data.addBlog = function (options, cb_ok, cb_err) {
     obj.save(null, {
         success: function (obj) {
             //用户作品总数加1
-            gili_data.currentUserCountUpdate("blog_count", 1, cb_ok(obj), cb_err);
+            gili_data.currentUserCountUpdate(currentUser, "blog_count", 1, cb_ok(obj), cb_err);
         },
         error: cb_err
     });
@@ -525,7 +525,7 @@ gili_data.getUserBlog = function (options, cb_ok, cb_err) {
                             followeeList += "'" + obj[i].id + "',";
                         }
                         if (followeeList.length > 0) {
-                            strCQL = " select  * from blog where status!=2 and  user_id in (" + followeeList.substring(0, followeeList.length - 1) + ")  ";
+                            strCQL = " select  * from blog where status!=2  and is_delete !=1 and  user_id in (" + followeeList.substring(0, followeeList.length - 1) + ")  limit " + skip + "," + limit + " order by createdAt desc ";
                             gili_data.getBlog(strCQL, function (objs) {
                                 var data = [];
                                 for (var i = 0; i < objs.length; i++) {
@@ -560,6 +560,31 @@ gili_data.getUserBlog = function (options, cb_ok, cb_err) {
     } else {
         getUserF(currentUser);
     }
+};
+/** 删除话题插画
+ * blog_id
+ **/
+gili_data.deleteBlog = function (blog_id, cb_ok, cb_err) {
+    if (!blog_id) {
+        cb_err("blog id为空");
+        return;
+    }
+    var query = new AV.Query("blog");
+    query.equalTo("objectId", blog_id);
+    query.first({
+        success: function (obj) {
+            if (obj) {
+                obj.set("is_delete", 1);
+                obj.save(null, {
+                    success: cb_ok,
+                    error: cb_err
+                });
+            } else {
+                cb_err("对象为空！");
+            }
+        },
+        error: cb_err
+    })
 };
 
 ///////////////////////////////////////////////// 其他功能接口 //////////////////////////////////////
@@ -667,16 +692,16 @@ gili_data.getComment = function (options, cb_ok, cb_err) {
     //排序
     if (orderBy.length > 0) {
         if (isDesc) {
-            strCQL += " order by " + orderby + " desc ";
+            strCQL += " order by " + orderBy + " desc ";
         } else {
-            strCQL += " order by " + orderby + " asc ";
+            strCQL += " order by " + orderBy + " asc ";
         }
     }
     //翻页
     if (skip >= 0 && limit > 0) {
         strCQL += " limit " + skip + "," + limit;
     }
-    fmacloud.Query.doCloudQuery(strCQL, {
+    AV.Query.doCloudQuery(strCQL, {
         success: cb_ok,
         error: cb_err
     });
@@ -1173,7 +1198,7 @@ gili_data.snsSaveComment = function (options, cb_ok, cb_err) {;
             var obj = new comment();
             obj.set("comment_id", comment_id);
             obj.set("comment_type", parseInt(comment_type));
-            obj.set("user_id", user_id);
+            obj.set("user_id", current_user.id);
             obj.set("status", 0);
             obj.set("content", content);//comment_content为JSON格式的字符串数据
             obj.set("user", current_user);
