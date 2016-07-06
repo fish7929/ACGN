@@ -473,7 +473,7 @@ gili_data.addBlog = function (options, cb_ok, cb_err) {
     obj.set("type", parseInt(blog_type));
     obj.save(null, {
         success: function (obj) {
-            //用户作品总数加1
+            //当前用户作品总数加1
             gili_data.currentUserCountUpdate(currentUser, "blog_count", 1, cb_ok(obj), cb_err);
         },
         error: cb_err
@@ -854,13 +854,14 @@ gili_data.meUnfollow = function (user_id, cb_ok, cb_err) {
         function (obj) {
             //1、当前用户关注总数减一，2、对方用户粉丝总数减一
             gili_data.currentUserCountUpdate(currentUser, "followee_count", -1, function (data) {
-                gili_data.getUserById(user_id, function (user) {
-                    if (user) {
-                        gili_data.currentUserCountUpdate(user, "follower_count", -1, cb_ok(obj), cb_err);
-                    } else {
-                        cb_err("取消关注用户失败！");
-                    }
-                }, cb_err);
+                //gili_data.getUserById(user_id, function (user) {
+                //    if (user) {
+                //        gili_data.currentUserCountUpdate(user, "follower_count", -1, cb_ok(obj), cb_err);
+                //    } else {
+                //        cb_err("取消关注用户失败！");
+                //    }
+                //}, cb_err);
+                gili_data.updateUser({ "followee_count": 11 }, user_id, cb_ok(obj), cb_err);
             }, cb_err);
         },
         cb_err
@@ -890,17 +891,31 @@ gili_data.meFollow = function (user_id, cb_ok, cb_err) {
         function (obj) {
             //1、当前用户关注总数加一，2、对方用户粉丝总数减加一
             gili_data.currentUserCountUpdate(currentUser, "followee_count", 1, function (data) {
-                gili_data.getUserById(user_id, function (user) {
-                    if (user) {
-                        gili_data.currentUserCountUpdate(user, "follower_count", 1, cb_ok(obj), cb_err);
-                    } else {
-                        cb_err("未找到用户对象，取消关注用户失败！");
-                    }
-                }, cb_err);
+
+                //gili_data.getUserById(user_id, function (user) {
+                //    if (user) {
+                //        gili_data.currentUserCountUpdate({"follower_count":1}, cb_ok(obj), cb_err);
+                //    } else {
+                //        cb_err("未找到用户对象，取消关注用户失败！");
+                //    }
+                //}, cb_err); 
+                gili_data.updateUser({ "follower_count": 1 }, user_id, cb_ok(obj), cb_err);
+
             }, cb_err);
         },
         cb_err
     );
+};
+
+/** 关注某个用户
+options,{"user_nick":"tom","user_level":2}
+userid
+ **/
+gili_data.updateUser = function (options, userid, cb_ok, cb_err) {
+    fmacloud.Cloud.run('updateUserInfo', { "options": options, "userid": userid }, {
+        success: cb_ok,
+        error: cb_err
+    });
 };
 
 /** 根据当前登录用户对象的所有赞
