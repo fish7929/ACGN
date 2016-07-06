@@ -6,18 +6,28 @@
 define([
     'common/base/item_view',
     'text!module/book/templates/bookDetailsHot.html',
-    'marionette'
-],function(ItemView, tpl, mn){
+    'marionette',
+    'module/book/model/BookModel'
+],function(ItemView, tpl, mn, BookModel){
+    var htmlTpl = "<div class=\"hot-book-item\">" +
+                        "<div class=\"item-image button\" data-id='{0}' style=\"background:url('{1}') no-repeat center; background-size:100%\"></div>" +
+                        "<div class=\"item-info\">" +
+                            "<div class=\"item-title nowrapTxt\">{2}</div>" +
+                            "<div class=\"item-desc wrapTxt\">{3}</div>" +
+                        "</div>" +
+                    "</div>";
     return ItemView.extend({
         className : "bookDetailsHotContainer",
         template : _.template(tpl),
 
         // key : selector
         ui : {
+            bookList : ".bd-hot-container"
         },
-
+        ShowNum : 3,
         //事件添加
         events : {
+            "click @ui.bookList" : "onBookListHandler"
         },
 
         /**初始化**/
@@ -32,9 +42,36 @@ define([
         onRender : function(){
         },
 
+        onBookListHandler : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var target = e.target;
+            var bookId = target.getAttribute("data-id");
+            if(bookId){
+                app.navigate("#book/"+bookId, {replace: false, trigger: true});
+            }
+        },
+
+        setParam : function(bookId){
+            this._bookId = bookId;
+        },
+
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
-            this.$el.show();
+            var self = this;
+            BookModel.queryRandomBooks(self._bookId, self.ShowNum, function(data){
+                self.initList(data);
+            });
+            self.$el.show();
+        },
+
+        initList : function(data){
+            var self = this, i, html = "", obj;
+            for(i = 0; i < data.length; i++){
+                obj = data[i];
+                html += htmlTpl.replace("{0}", obj.objectId).replace("{1}", obj.cover).replace("{2}", obj.name).replace("{3}", obj.brief);
+            }
+            self.ui.bookList.html(html);
         },
 
         /**页面关闭时调用，此时不会销毁页面**/

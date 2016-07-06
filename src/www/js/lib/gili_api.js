@@ -338,16 +338,11 @@ gili_data.getUserPlanRelation = function (options, cb_ok, cb_err) {
 /** 查询专题banner数据
  *
  **/
-gili_data.getSubjectBanner = function (plan_id, cb_ok, cb_err) {
-
-    var strCQL = " select * from subject where plan_id='" + plan_id + "' order by order_num desc ";
+gili_data.getSubjectBanner = function (cb_ok, cb_err) {
+    var strCQL = "select * from subject order by order_num desc ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (objs) {
-            var data = [];
-            for (var i = 0; i < objs.length; i++) {
-                data[i] = objs[i].toJSON();
-            }
-            cb_ok(data);
+            cb_ok(objs.results);
         },
         error: cb_err
     });
@@ -848,7 +843,7 @@ gili_data.meUnfollow = function (user_id, cb_ok, cb_err) {
                 //        cb_err("取消关注用户失败！");
                 //    }
                 //}, cb_err);
-                gili_data.updateUser({ "followee_count": 11 }, user_id, cb_ok(obj), cb_err);
+                gili_data.updateUser({ "follower_count": -1 }, user_id, cb_ok(obj), cb_err);
             }, cb_err);
         },
         cb_err
@@ -1407,7 +1402,11 @@ gili_data.getBooks = function (options, cb_ok, cb_err) {
         limit = options.limit || 100,
         book_id = options.book_id;
 
-    var strCQL = " select  * from book where approved !=2 and objectId='" + book_id + "' limit " + skip + "," + limit;
+    var strCQL = " select  * from book where approved !=2 ";
+    if (book_id) {
+        strCQL += " and objectId='" + book_id + "'"
+    }
+    strCQL += " limit " + skip + "," + limit;
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
             cb_ok(data.results);
@@ -1418,7 +1417,7 @@ gili_data.getBooks = function (options, cb_ok, cb_err) {
 
 /** 查询本子总数
  **/
-gili_data.getBooksCount = function (options, cb_ok, cb_err) {
+gili_data.getBooksCount = function (cb_ok, cb_err) {
     var strCQL = " select  count(*) from book where approved !=2 ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
@@ -1427,8 +1426,32 @@ gili_data.getBooksCount = function (options, cb_ok, cb_err) {
         error: cb_err
     });
 };
+/** 获取随机本子
+ * limit ,显示多少条
+ * book_id,
+ **/
+gili_data.getRandomBooks = function (options, cb_ok, cb_err) {
+    var limit = options.limit || 3;
+    var getRandom = function (min, max) {
+        var r = Math.random() * (max - min);
+        var re = Math.round(r + min);
+        re = Math.max(Math.min(re, max), min)
+        return re;
+    }
+
+    gili_data.getBooksCount(function (obj) {
+        var count = obj.count;
+        var skip = 0;
+        if (count > limit) {
+            skip = getRandom(0, count / limit);
+        }
+        options.skip = skip;
+        gili_data.getBooks(options, cb_ok, cb_err)
+    }, cb_err);
+};
+
 /////////////////////////////其他 接口/////////////////////////
-/** 查询本子总数
+/** 上传文件
  * name ,文件名称 如：XXXX.jpg 一定要带后缀
  * file,文件file对象
  **/

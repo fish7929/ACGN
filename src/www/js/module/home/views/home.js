@@ -15,10 +15,10 @@ define([
     'module/home/views/home_excellent_book',
     'module/home/views/home_link',
     'module/home/views/home_footer',
-    'module/publish/views/publishView'
+    'module/home/model/HomeModel'
 ],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, QHDCView, ActiveUserView, HomeBookView, HomeCollegeView,
-           HomeExcellentBookView, HomeLinkView, HomeFooterView, PublishView) {
-    var bannerHtmlTpl = "<div class='swiper-slide' style=\"background: url('{0}') no-repeat center \"></div>";
+           HomeExcellentBookView, HomeLinkView, HomeFooterView, HomeModel) {
+    var bannerHtmlTpl = "<div class='swiper-slide {2}' data-link='{1}' style=\"background: url('{0}') no-repeat center \"></div>";
 
     return BaseView.extend({
         id: "homeContainer",
@@ -32,13 +32,18 @@ define([
 
         //事件添加
         events : {
-            "click @ui.bannerWrapper" : "goToPlanningHandle"
+            "click @ui.bannerWrapper" : "onBannerHandler"
         },
-        //测试
-        goToPlanningHandle : function(e){
+
+
+        onBannerHandler : function(e){
             e.stopPropagation();
             e.preventDefault();
-            app.navigate("#planning/576deefa5bbb50005955b651" , {replace: false, trigger: true});
+            var target = e.target;
+            var link = target.getAttribute("data-link");
+            if(link){
+                app.navigate(link, {replace: false, trigger: true});
+            }
         },
         regions : {
             LoginBarRegion : {
@@ -100,7 +105,12 @@ define([
         pageIn : function(){
             var self = this;
             self.regionShow();
-            self.initBanner();
+
+            HomeModel.queryBannerData(function(data){
+                self.initBanner(data);
+            }, function(err){
+
+            })
         },
 
         regionShow : function(){
@@ -115,11 +125,15 @@ define([
             self.HomeFooterRegion.show(self._homeFooterView);
         },
 
-        initBanner : function(){
+        initBanner : function(data){
             var self = this;
-            var html = "", bannerData = ['images/temp/banner/banner.jpg', 'images/temp/banner/banner1.jpg', 'images/temp/banner/banner2.jpg', 'images/temp/banner/banner3.jpg'];
-            for(var i = 0; i < bannerData.length; i++){
-                html += bannerHtmlTpl.replace("{0}", bannerData[i])
+            var html = "", obj, link, btnClass;
+            for(var i = 0; i < data.length; i++){
+                obj = data[i];
+                btnClass = "";
+                link = obj.link || "";
+                if(link) btnClass = "button";
+                html += bannerHtmlTpl.replace("{0}", obj.img).replace("{1}", link).replace("{2}", btnClass)
             }
             self.ui.bannerWrapper.html(html);
 
@@ -136,7 +150,6 @@ define([
                     }, 2000);
                 }
             });
-            utils.log("bannerSwipe")
         },
 
         /**页面关闭时调用，此时不会销毁页面**/
