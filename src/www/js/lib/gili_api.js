@@ -372,7 +372,7 @@ gili_data.getSubjectBanner = function (plan_id, cb_ok, cb_err) {
  **/
 gili_data.getTableCountByField = function (options, cb_ok, cb_err) {
     var field = options.field,
-         val = options.val,
+        val = options.val,
         table_name = options.table_name;
 
     var strCQL = " select count(*) from  " + table_name;
@@ -717,11 +717,11 @@ gili_data.meFollowerList = function (options, cb_ok, cb_err) {
         return;
     }
     var follower = options.follower,
-     orderby = options.orderby || "createdAt",
-     isdesc = options.isdesc,
-     pageSize = options.pageSize || 0,
-     pageNumber = options.pageNumber || 6,
-     userid = options.userid;
+        orderby = options.orderby || "createdAt",
+        isdesc = options.isdesc,
+        pageSize = options.pageSize || 0,
+        pageNumber = options.pageNumber || 6,
+        userid = options.userid;
 
     var userCurrent;
     var queryUserObj = function () {
@@ -898,7 +898,7 @@ gili_data.meFollow = function (user_id, cb_ok, cb_err) {
                 //    } else {
                 //        cb_err("未找到用户对象，取消关注用户失败！");
                 //    }
-                //}, cb_err); 
+                //}, cb_err);
                 gili_data.updateUser({ "follower_count": 1 }, user_id, cb_ok(obj), cb_err);
 
             }, cb_err);
@@ -908,8 +908,8 @@ gili_data.meFollow = function (user_id, cb_ok, cb_err) {
 };
 
 /** 关注某个用户
-options,{"user_nick":"tom","user_level":2}
-userid
+ options,{"user_nick":"tom","user_level":2}
+ userid
  **/
 gili_data.updateUser = function (options, userid, cb_ok, cb_err) {
     fmacloud.Cloud.run('updateUserInfo', { "options": options, "userid": userid }, {
@@ -1417,9 +1417,10 @@ gili_data.getBookById = function (options, cb_ok, cb_err) {
  **/
 gili_data.getBooks = function (options, cb_ok, cb_err) {
     var skip = options.skip || 0,
-        limit = options.limit || 100;
+        limit = options.limit || 100,
+        book_id = options.book_id;
 
-    var strCQL = " select  * from book where approved !=2 limit " + skip + "," + limit;
+    var strCQL = " select  * from book where approved !=2 and objectId='" + book_id + "' limit " + skip + "," + limit;
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
             cb_ok(data.results);
@@ -1455,12 +1456,12 @@ gili_data.fileUpload = function (options, cb_ok, cb_err) {
 };
 
 /**
-  * 用户登录
-  * @param username
-  * @param password
-  * @param cb_ok
-  * @param cb_err
-  */
+ * 用户登录
+ * @param username
+ * @param password
+ * @param cb_ok
+ * @param cb_err
+ */
 gili_data.logIn = function (username, password, cb_ok, cb_err) {
     AV.User.logIn(username, password).then(function (user) {
         cb_ok && cb_ok(user);
