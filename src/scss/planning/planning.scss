@@ -406,8 +406,9 @@
     height: 70px;
     color: #c0c0c0;
     background: #fff;
-    outline: none;
     padding: 14px;
+    resize: none;
+    outline: 0;
 }
 .common-reply-btn{
     width: 100%;

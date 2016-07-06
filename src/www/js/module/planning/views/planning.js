@@ -11,8 +11,9 @@ define([
     "msgbox",
     "module/planning/model/planning_model",
     'common/region/control_view',
-    "module/planning/views/planning_notice"
-],function(BaseView, tpl, mn,SwitchViewRegion, LoginBarView, MsgBox, PlanningModel, ControlView,PlanningNoticeView) {
+    "module/planning/views/planning_notice",
+    'common/views/faceView'
+],function(BaseView, tpl, mn,SwitchViewRegion, LoginBarView, MsgBox, PlanningModel, ControlView,PlanningNoticeView, FaceView) {
     return BaseView.extend({
         id: "gili-love-planning",
         template : _.template(tpl),
@@ -106,6 +107,7 @@ define([
             if(self.currentUser){
                 self.resetUserPlanRelationStatus();
                 self.resetCommentOperation();
+                self._faceView = new FaceView(self.ui.planningFaceContainer);
             }
             app.on("login:ok", this.onLoginOkHandler, this);
             app.on("logOut:ok", this.onLogOutOkHandler, this);
@@ -187,10 +189,9 @@ define([
          */
         resetCommentOperation : function(){
             var self = this;
-            self.ui.commonReplyTxt.attr("contenteditable", true);
-            self.ui.commonReplyTxt.val("");
-            self.ui.commonReplyTxt.attr("placeholder", "niye ");
+            self.ui.commonReplyTxt.attr("disabled", false);
             self.ui.commonReplyTxt.css({color: "#000"});
+            self.ui.commonReplyTxt.attr("placeholder", "你有什么想分享的么");
             self.ui.planningFaceBtn.on("click",self.onFaceBtnClickHandler.bind(self));
             self.ui.planningCommentsPublish.on("click",self.onPublishCommentsHandler.bind(self));
         },
@@ -539,10 +540,8 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            if(self.currentUser){
-
-            }else{
-                MsgBox.toast("请先登录", false);
+            if(self._faceView){
+                self._faceView.show(self.onSelectedFaceHandler.bind(self));
             }
         },
         /**
@@ -560,11 +559,7 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            if(self.currentUser){
-
-            }else{
-                MsgBox.toast("请先登录", false);
-            }
+            MsgBox.toast("请先登录", false);
         },
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
