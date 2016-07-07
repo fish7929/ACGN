@@ -11,8 +11,9 @@ define([
     "msgbox",
     "module/planning/model/planning_model",
     'common/region/control_view',
-    "module/planning/views/planning_notice"
-],function(BaseView, tpl, mn,SwitchViewRegion, LoginBarView, MsgBox, PlanningModel, ControlView,PlanningNoticeView) {
+    "module/planning/views/planning_notice",
+    'common/views/faceView'
+],function(BaseView, tpl, mn,SwitchViewRegion, LoginBarView, MsgBox, PlanningModel, ControlView,PlanningNoticeView, FaceView) {
     return BaseView.extend({
         id: "gili-love-planning",
         template : _.template(tpl),
@@ -36,7 +37,12 @@ define([
             roleContent : ".role-content",                  //参加角色
             moreRole : "#more-role",                            //更多角色
             hottestOpusContent : ".hottest-opus-content",        //最热作品
-            moreOpus : "#more-opus"                             //更多作品
+            moreOpus : "#more-opus",                           //更多作品
+            dynamicContent : ".dynamic-content",                         //企划动态
+            commonReplyTxt : ".common-reply-txt",               //评论回复框
+            planningFaceBtn : ".planning-face-btn",             //颜表情按钮
+            planningCommentsPublish : ".planning-comments-publish", //发布评论按钮
+            planningFaceContainer : ".planning-face-container"      //颜表情容器
         },
         regions : {
             LoginBarRegion: {
@@ -48,12 +54,14 @@ define([
         events : {
 //            "click @ui.joinPlanning" : "onJoinClickHandle",
 //            "click @ui.subscribePlanning" : "onSubscribeClickHandle",
-            "click @ui.planningType" : "onTypeClickHandle",
-            "click @ui.roleContent" : "onRoleClickHandle",
-            "click @ui.hottestOpusContent" : "onOpusClickHandle",
-            "click @ui.moreRole" : "onMoreRoleClickHandle",
-            "click @ui.moreOpus" : "onMoreOpusClickHandle",
-            'click @ui.planningNoticeContent' : "onShowNoticeLayerHandle"
+            "click @ui.planningType" : "onTypeClickHandler",
+            "click @ui.roleContent" : "onRoleClickHandler",
+            "click @ui.hottestOpusContent" : "onOpusClickHandler",
+            "click @ui.moreRole" : "onMoreRoleClickHandler",
+            "click @ui.moreOpus" : "onMoreOpusClickHandler",
+            'click @ui.planningNoticeContent' : "onShowNoticeLayerHandler"
+//            'click @ui.planningFaceBtn' : "onFaceBtnClickHandler",
+//            'click @ui.planningCommentsPublish' : "onPublishCommentsHandler"
         },
         /**初始化**/
         initialize : function(){
@@ -90,63 +98,105 @@ define([
             //初始化企划参与角色列表信息
             PlanningModel.getJoinUserById(self.planId, function(data){
                 if(data ){
+                    console.log(data);
                     self._initJoinUserView(data);
                 }
             }, function(err){});
-//            //获取用户和企划的关系 --- 改变按钮的状态
+
+            //初始化评论发布框
+            if(self.currentUser){
+                self.resetUserPlanRelationStatus();
+                self.resetCommentOperation();
+                self._faceView = new FaceView(self.ui.planningFaceContainer);
+            }
+            app.on("login:ok", this.onLoginOkHandler, this);
+            app.on("logOut:ok", this.onLogOutOkHandler, this);
+        },
+        /**
+         * 监听用户登录成功事件
+         */
+        onLoginOkHandler : function(){
+            var self = this;
+            self.currentUser = gili_data.getCurrentUser();
+            self.resetUserPlanRelationStatus();
+            self.resetCommentOperation();
+        },
+        /**
+         * 监听用户登出成功事件
+         */
+        onLogOutOkHandler : function(){
+
+        },
+        /**
+         * 重置当前用户和企划的关系状态
+         */
+        resetUserPlanRelationStatus : function(){
+            var self = this;
+            //获取用户和企划的关系 --- 改变按钮的状态
             PlanningModel.getUserPlanRelation(self.currentUser.id, self.planId, function(data){
                 if(data ){
                     //判断当前用户和企划的关系，更改状态按钮
                     if(data.get("status")  == 1){   //关注的用户
                         self.ui.subscribePlanning.html("已订阅");
-                        self.ui.subscribePlanning.off("click").on("click", self.onCancelSubscribeClickHandle.bind(self));
+                        self.ui.subscribePlanning.off("click").on("click", self.onCancelSubscribeClickHandler.bind(self));
                         //需要对应不同状态绑定不同事件
-                        self.ui.joinPlanning.off("click").on("click", self.onJoinClickHandle.bind(self));
+                        self.ui.joinPlanning.off("click").on("click", self.onJoinClickHandler.bind(self));
                     }else if(data.get("status") == 2){  //报名
                         if(data.get("approved") == 0){      //审核中
                             self.ui.joinPlanning.css({"background-image": "url(./images/common/btn-gray.png)"})
                                 .html("审核中");
-                            self.ui.joinPlanning.off("click").on("click", self.onJoinVerifyClickHandle.bind(self));
+                            self.ui.joinPlanning.off("click").on("click", self.onJoinVerifyClickHandler.bind(self));
                             //订阅
-                            self.ui.subscribePlanning.off("click").on("click", self.onSubscribeClickHandle.bind(self));
+                            self.ui.subscribePlanning.off("click").on("click", self.onSubscribeClickHandler.bind(self));
                         }else if(data.get("approved") == 1){    //审核通过
                             //订阅
-                            self.ui.subscribePlanning.off("click").on("click", self.onSubscribeClickHandle.bind(self));
+                            self.ui.subscribePlanning.off("click").on("click", self.onSubscribeClickHandler.bind(self));
                             //加入
                             self.ui.joinPlanning.css({"background-image": "url(./images/common/btn-red.png)"})
                                 .html("上传作品");
-                            self.ui.joinPlanning.off("click").on("click", self.onUploadingClickHandle.bind(self));
+                            self.ui.joinPlanning.off("click").on("click", self.onUploadingClickHandler.bind(self));
                         }else if(data.get("approved") == 2){    //审核未通过
                             //订阅
-                            self.ui.subscribePlanning.on("click", self.onSubscribeClickHandle.bind(self));
+                            self.ui.subscribePlanning.on("click", self.onSubscribeClickHandler.bind(self));
                             self.ui.joinPlanning.css({"background-image": "url(./images/common/btn-gray.png)"})
                                 .html("审核不通过");
-                            self.ui.joinPlanning.off("click").on("click", self.onJoinVerifyErrorClickHandle.bind(self));
+                            self.ui.joinPlanning.off("click").on("click", self.onJoinVerifyErrorClickHandler.bind(self));
                         }
                     }else if (data.get("status") == 3){     //报名并且关注的
                         self.ui.subscribePlanning.html("已订阅");
-                        self.ui.subscribePlanning.off("click").on("click", self.onCancelSubscribeClickHandle.bind(self));
+                        self.ui.subscribePlanning.off("click").on("click", self.onCancelSubscribeClickHandler.bind(self));
                         //加入
                         self.ui.joinPlanning.css({"background-image": "url(./images/common/btn-red.png)"})
                             .html("上传作品");
-                        self.ui.joinPlanning.off("click").on("click", self.onUploadingClickHandle.bind(self));
+                        self.ui.joinPlanning.off("click").on("click", self.onUploadingClickHandler.bind(self));
                     }else if(data.get("status")  == 999){   //999-取消关注
                         self.ui.subscribePlanning.html("订阅企划");
-                        self.ui.subscribePlanning.on("click", self.onSubscribeClickHandle.bind(self));
+                        self.ui.subscribePlanning.on("click", self.onSubscribeClickHandler.bind(self));
                         //需要对应不同状态绑定不同事件
-                        self.ui.joinPlanning.off("click").on("click", self.onJoinClickHandle.bind(self));
+                        self.ui.joinPlanning.off("click").on("click", self.onJoinClickHandler.bind(self));
                     }else{          //默认的情况下
-                        self.ui.subscribePlanning.off("click").on("click", self.onSubscribeClickHandle.bind(self));
+                        self.ui.subscribePlanning.off("click").on("click", self.onSubscribeClickHandler.bind(self));
                         //需要对应不同状态绑定不同事件
-                        self.ui.joinPlanning.off("click").on("click", self.onJoinClickHandle.bind(self));
+                        self.ui.joinPlanning.off("click").on("click", self.onJoinClickHandler.bind(self));
                     }
                 }
             }, function(err){
                 console.log(err, 100);
             });
         },
+        /**
+         * 重置评论相关事件和UI
+         */
+        resetCommentOperation : function(){
+            var self = this;
+            self.ui.commonReplyTxt.attr("disabled", false);
+            self.ui.commonReplyTxt.css({color: "#000"});
+            self.ui.commonReplyTxt.attr("placeholder", "你有什么想分享的么");
+            self.ui.planningFaceBtn.on("click",self.onFaceBtnClickHandler.bind(self));
+            self.ui.planningCommentsPublish.on("click",self.onPublishCommentsHandler.bind(self));
+        },
         show : function(){
-            this.planningNoticeView.on("hide:planning:notice:handle", this.onPlanningNoticeViewHideHandle, this); //隐藏击事件
+            this.planningNoticeView.on("hide:planning:notice:handle", this.onPlanningNoticeViewHideHandler, this); //隐藏击事件
         },
         /**
          * 初始化企划信息
@@ -254,7 +304,7 @@ define([
          * 企划类型点击事件
          * @param e
          */
-        onTypeClickHandle : function(e){
+        onTypeClickHandler : function(e){
             e.stopPropagation();
             e.preventDefault();
             var self = this;
@@ -295,7 +345,7 @@ define([
          * 参与角色点击事件
          * @param e
          */
-        onRoleClickHandle : function(e){
+        onRoleClickHandler : function(e){
             e.stopPropagation();
             e.preventDefault();
             var self = this;
@@ -326,7 +376,7 @@ define([
          * 热门作品点击事件
          * @param e
          */
-        onOpusClickHandle : function(e){
+        onOpusClickHandler : function(e){
             e.stopPropagation();
             e.preventDefault();
             var self = this;
@@ -357,7 +407,7 @@ define([
          * 加入企划点击事件
          * @param e
          */
-        onJoinClickHandle : function(e){
+        onJoinClickHandler : function(e){
             e.stopPropagation();
             e.preventDefault();
             var self = this;
@@ -366,7 +416,7 @@ define([
                 if(data.get("approved") == 0){
                     self.ui.joinPlanning.css({"background-image": "url(./images/common/btn-gray.png)"})
                         .html("审核中");
-                    self.ui.joinPlanning.off("click").on("click", self.onJoinVerifyClickHandle.bind(self));
+                    self.ui.joinPlanning.off("click").on("click", self.onJoinVerifyClickHandler.bind(self));
                 }
             }, function(err){
                 console.log(err, 822);
@@ -376,7 +426,7 @@ define([
          *报名审核中
          * @param e
          */
-        onJoinVerifyClickHandle : function(e){
+        onJoinVerifyClickHandler : function(e){
             e.stopPropagation();
             e.preventDefault();
             var self = this;
@@ -386,7 +436,7 @@ define([
          *报名审核中
          * @param e
          */
-        onJoinVerifyErrorClickHandle : function(e){
+        onJoinVerifyErrorClickHandler : function(e){
             e.stopPropagation();
             e.preventDefault();
             var self = this;
@@ -396,7 +446,7 @@ define([
          * 订阅企划点击事件 -- 1
          * @param e
          */
-        onSubscribeClickHandle : function(e){
+        onSubscribeClickHandler : function(e){
             e.stopPropagation();
             e.preventDefault();
             var self = this;
@@ -404,7 +454,7 @@ define([
                 //点击报名成功的时候处理UI
                 if(data){
                     self.ui.subscribePlanning.html("已订阅");
-                    self.ui.subscribePlanning.off("click").on("click", self.onCancelSubscribeClickHandle.bind(self));
+                    self.ui.subscribePlanning.off("click").on("click", self.onCancelSubscribeClickHandler.bind(self));
                     MsgBox.alert("订阅企划成功");
                 }
             }, function(err){
@@ -415,7 +465,7 @@ define([
          * 取消订阅点击事件 -- 999
          * @param e
          */
-        onCancelSubscribeClickHandle : function(e){
+        onCancelSubscribeClickHandler : function(e){
             e.stopPropagation();
             e.preventDefault();
             var self = this;
@@ -423,7 +473,7 @@ define([
                 //点击报名成功的时候处理UI
                 if(data){
                     self.ui.subscribePlanning.html("订阅企划");
-                    self.ui.subscribePlanning.off("click").on("click", self.onSubscribeClickHandle.bind(self));
+                    self.ui.subscribePlanning.off("click").on("click", self.onSubscribeClickHandler.bind(self));
                     MsgBox.alert("取消订阅企划成功");
                 }
             }, function(err){
@@ -434,7 +484,7 @@ define([
          * 上传作品点击事件
          * @param e
          */
-        onUploadingClickHandle : function(e){
+        onUploadingClickHandler : function(e){
             e.stopPropagation();
             e.preventDefault();
             var self = this;
@@ -444,7 +494,7 @@ define([
          * 更多用户点击事件
          * @param e
          */
-        onMoreRoleClickHandle : function(e){
+        onMoreRoleClickHandler : function(e){
             e.stopPropagation();
             e.preventDefault();
             var self = this;
@@ -454,7 +504,7 @@ define([
          * 更多作品点击事件
          * @param e
          */
-        onMoreOpusClickHandle : function(e){
+        onMoreOpusClickHandler : function(e){
             e.stopPropagation();
             e.preventDefault();
             var self = this;
@@ -464,7 +514,7 @@ define([
          * 显示公告点击的浮层
          * @param e
          */
-        onShowNoticeLayerHandle : function(e){
+        onShowNoticeLayerHandler : function(e){
             var self = this;
             var target = e.target;
             var noticeIndex = $(target).attr("notice-index");
@@ -477,15 +527,44 @@ define([
                 }
             }
         },
-        onPlanningNoticeViewHideHandle : function(){
+        onPlanningNoticeViewHideHandler : function(){
             if(this.planningControlView && this.planningNoticeView){
                 this.planningControlView.hide(this.planningNoticeView);
             }
         },
+        /**
+         * 颜表情按钮点击事件
+         * @param e
+         */
+        onFaceBtnClickHandler : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            if(self._faceView){
+                self._faceView.show(self.onSelectedFaceHandler.bind(self));
+            }
+        },
+        /**
+         * 颜表情按钮选择回调
+         * @param val
+         */
+        onSelectedFaceHandler : function(val){
+
+        },
+        /**
+         * 发布按钮点击事件
+         * @param e
+         */
+        onPublishCommentsHandler : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            MsgBox.toast("请先登录", false);
+        },
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
             var self = this;
-            this.planningNoticeView.off("hide:planning:notice:handle", this.onPlanningNoticeViewHideHandle, this);
+            this.planningNoticeView.off("hide:planning:notice:handle", this.onPlanningNoticeViewHideHandler, this);
             if(this.planningControlView && this.planningNoticeView){
                 this.planningControlView.empty(this.planningNoticeView);
             }

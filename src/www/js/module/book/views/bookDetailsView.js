@@ -12,8 +12,9 @@ define([
     'module/book/views/bookDetailsPreview',
     'module/book/views/bookDetailsHot',
     'common/views/commentView',
-    'config/TipConfig'
-],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, BDPreviewView, BDHotView, CommentView, Tip){
+    'config/TipConfig',
+    'module/book/model/BookModel'
+],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, BDPreviewView, BDHotView, CommentView, Tip, BookModel){
     var labelTpl = "<div class=\"bd-label-item\" style='background-color: {0}'>{1}</div>"
 
     return BaseView.extend({
@@ -85,23 +86,22 @@ define([
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
             var self = this;
-            self.regionShow();
-            var opt = {};
-            opt.book_id = self.getOption("bookId");
-            gili_data.getBookById(opt, function(data){
-                if(data.length>0){
-                    data = utils.convert_2_json(data);
-                    self.initData(data[0]);
-                }
+
+            var book_id = self.getOption("bookId");
+            if(!book_id) return;
+            BookModel.getBookById(book_id, function(data){
+                self.initData(data[0]);
             }, function(error){
                 utils.log(error);
             });
+            self.regionShow();
         },
 
         regionShow : function(){
             var self = this;
             self.LoginBarRegion.show(self._loginBarView);
             self.PreviewViewRegion.show(self._previewView);
+            self._hotView.setParam(self.getOption("bookId"));
             self.HotViewRegion.show(self._hotView);
             self.MessageRegion.show(self._commentView);
         },

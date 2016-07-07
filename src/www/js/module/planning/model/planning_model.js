@@ -158,6 +158,17 @@ define([
             cb_err&&cb_err(err);
         });
     };
+    /**
+     * 查询最热作品
+     * @param id
+     * @param name
+     * @param order
+     * @param isDesc
+     * @param cb_ok
+     * @param cb_err
+     */
+    p.queryHottestOpus = function(id, name,order, isDesc, cb_ok, cb_err){
+    };
     var planningModel = new PlanningModel();
     return planningModel;
 });
