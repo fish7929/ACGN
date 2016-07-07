@@ -6,10 +6,11 @@
 define([
     'common/base/item_view',
     'text!module/home/templates/home_college.html',
-    'marionette'
-],function(ItemView, tpl, mn){
-    var htmlTpl = '<div class="college-item" attr="{0}">' +
-        '<div class="college-pic" style="background: url(\'{1}\') no-repeat center; background-size: 100%"></div>' +
+    'marionette',
+    'module/home/model/HomeModel'
+],function(ItemView, tpl, mn, HomeModel){
+    var htmlTpl = '<div class="college-item">' +
+        '<div class="college-pic button" data-id="{0}" style="background: url(\'{1}\') no-repeat center; background-size: 100%"></div>' +
         '<div class="college-name">{2}</div>' +
         '</div>';
     return ItemView.extend({
@@ -24,6 +25,7 @@ define([
         },
         //事件添加
         events : {
+            "click @ui.collegeList" : "onClickHandler"
         },
         /**初始化**/
         initialize : function(){
@@ -39,24 +41,28 @@ define([
 
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
-            this.initList();
-            this.$el.show();
+            var self = this;
+            HomeModel.queryClubData(function(data){
+                self.initList(data);
+            });
+            self.$el.show();
         },
 
-        initList : function(){
-            var data = [], i;
-            for(i = 1; i <= 6; i++){
-                var obj = {};
-                obj.collegeId = i;
-                obj.collegePic = 'images/temp/college/college'+i+'.jpg';
-                obj.collegeName = "社团"+i;
-                data.push(obj);
+        onClickHandler : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var target = e.target;
+            var clubId = target.getAttribute("data-id");
+            if(clubId){
+                app.navigate("#associations/"+clubId, {replace: false, trigger: true});
             }
+        },
 
-            var self = this, html = "";
-            for(i = 0; i<data.length; i++){
+        initList : function(data){
+            var self = this, html = "", i, obj;
+            for(i = 0; i < data.length; i++){
                 obj = data[i];
-                html += htmlTpl.replace("{0}", obj.collegeId).replace("{1}", obj.collegePic).replace("{2}", obj.collegeName);
+                html += htmlTpl.replace("{0}", obj.objectId).replace("{1}", obj.cover).replace("{2}", obj.name);
             }
             self.ui.collegeList.html(html);
         },

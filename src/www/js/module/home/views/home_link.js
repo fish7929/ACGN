@@ -41,18 +41,11 @@ define([
         },
 
         initList : function(){
-            var data = [], i;
-            for(i = 1; i <= 6; i++){
-                var obj = {};
-                obj.link = "http://www.baidu.com";
-                obj.linkPic = 'images/temp/link/link'+i+'.jpg';
-                data.push(obj);
-            }
-
-            var self = this, html = "";
-            for(i = 0; i<data.length; i++){
-                obj = data[i];
-                html += htmlTpl.replace("{0}", obj.link).replace("{1}", obj.linkPic);
+            var list = giliConfig.Link;
+            var self = this, html = "", i, obj;
+            for(i = 0; i<list.length; i++){
+                obj = list[i];
+                html += htmlTpl.replace("{0}", obj.link).replace("{1}", obj.src);
             }
             self.ui.linkList.html(html);
         },

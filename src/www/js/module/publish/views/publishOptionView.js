@@ -10,9 +10,8 @@ define([
     'common/region/switch_view_region',
     'common/views/loginBar',
     'module/publish/views/publishView',
-    'msgbox',
-    'config/TipConfig'
-],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, PublishView, MsgBox, Tip){
+    'msgbox'
+],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, PublishView, MsgBox){
     return BaseView.extend({
         id : "publishOptContainer",
         template : _.template(tpl),
@@ -70,7 +69,7 @@ define([
             e.preventDefault();
 
             if(!gili_data.getCurrentUser()){
-                MsgBox.toast(Tip.NOLOGIN, false);
+                MsgBox.toast(giliConfig.Tip.NOLOGIN, false);
                 return
             }
 
@@ -84,7 +83,7 @@ define([
             e.preventDefault();
 
             if(!gili_data.getCurrentUser()){
-                MsgBox.toast(Tip.NOLOGIN, false);
+                MsgBox.toast(giliConfig.Tip.NOLOGIN, false);
                 return
             }
 
@@ -96,13 +95,13 @@ define([
         onBnPlanningHandle : function(e){
             e.stopPropagation();
             e.preventDefault();
-            MsgBox.toast(Tip.UNDEVELOPED, false);
+            MsgBox.toast(giliConfig.Tip.UNDEVELOPED, false);
         },
 
         onBnBookHandle : function(e){
             e.stopPropagation();
             e.preventDefault();
-            MsgBox.toast(Tip.UNDEVELOPED, false);
+            MsgBox.toast(giliConfig.Tip.UNDEVELOPED, false);
         },
 
         /**页面关闭时调用，此时不会销毁页面**/

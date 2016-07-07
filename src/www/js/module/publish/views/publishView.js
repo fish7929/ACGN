@@ -8,9 +8,8 @@ define([
     'text!module/publish/templates/publishView.html',
     'common/views/faceView',
     'common/service/upload_taskschedule',
-    'msgbox',
-    'config/TipConfig'
-],function(tpl, FaceView, uploadTaskSchedule, MsgBox, Tip){
+    'msgbox'
+],function(tpl, FaceView, uploadTaskSchedule, MsgBox){
     var ImageTpl = "<div class=\"publishImageItem\" style='background: url(\"{0}\") no-repeat center; background-size: 100% {1}'> " +
         "<div class=\"publishImageItem-del button\"></div>" +
         "</div>";
@@ -71,6 +70,11 @@ define([
         var self = this;
         //发布话题
         if(!param || !param.type) return;
+        if(self._isShow) return;
+
+        self._isShow = true;
+        document.body.appendChild(self.el);
+        self.reset();
         switch (param.type){
             case "topic":
                 self.initTopic();
@@ -87,10 +91,6 @@ define([
                 self.addNewLabel(labels[i]);
             }
         }
-        if(self._isShow) return;
-        self._isShow = true;
-        document.body.appendChild(self.el);
-        self.reset();
         self.bindEvent();
     };
 
@@ -99,7 +99,7 @@ define([
      */
     PublishView.prototype.initTopic = function(){
         var self = this;
-        self.setTitle(Tip.PUBLISHTOPICTITLE);
+        self.setTitle(giliConfig.Tip.PUBLISHTOPICTITLE);
         self.publishType = 1;
         self.imageContent.hide();
         self.btnImageAddSingle.show();
@@ -110,7 +110,7 @@ define([
      */
     PublishView.prototype.initIll = function(){
         var self = this;
-        self.setTitle(Tip.PUBLISHILLTITLE);
+        self.setTitle(giliConfig.Tip.PUBLISHILLTITLE);
         self.publishType = 2;
         self.btnImageAddSingle.hide();
         self.imageContent.show();
@@ -161,11 +161,11 @@ define([
         var self = this;
         if(self.publishType == 1 && self.textArea.val() == ""){
             //提示返回
-            MsgBox.alert(Tip.PUBLISH_ERROR_1);
+            MsgBox.alert(giliConfig.Tip.PUBLISH_ERROR_1);
             return;
         }else if(self.publishType == 2 && self.imageListDiv.find(".publishImageItem").length ==0){
             //提示返回
-            MsgBox.alert(Tip.PUBLISH_ERROR_2);
+            MsgBox.alert(giliConfig.Tip.PUBLISH_ERROR_2);
             return;
         }
 
@@ -184,10 +184,10 @@ define([
         var self = this;
         var data = self.getPublishData();
         gili_data.addBlog(data, function(){
-            MsgBox.toast(Tip.PUBLISH_SUCCESS, true);
+            MsgBox.toast(giliConfig.Tip.PUBLISH_SUCCESS, true);
             self.hide();
         }, function(err){
-            MsgBox.toast(Tip.PUBLISH_FAIL+err, false);
+            MsgBox.toast(giliConfig.Tip.PUBLISH_FAIL+err, false);
         })
 
     };
