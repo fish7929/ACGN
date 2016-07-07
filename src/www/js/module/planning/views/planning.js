@@ -13,8 +13,10 @@ define([
     'common/region/control_view',
     "module/planning/views/planning_notice",
     'common/views/faceView',
-    "module/publish/views/publishView"
-],function(BaseView, tpl, mn,SwitchViewRegion, LoginBarView, MsgBox, PlanningModel, ControlView,PlanningNoticeView, FaceView, PublishView) {
+    "module/publish/views/publishView",
+    "module/book/views/bookPreviewView"
+],function(BaseView, tpl, mn,SwitchViewRegion, LoginBarView, MsgBox, PlanningModel, ControlView,PlanningNoticeView,
+           FaceView, PublishView, BookPreviewView) {
     return BaseView.extend({
         id: "gili-love-planning",
         template : _.template(tpl),
@@ -227,7 +229,6 @@ define([
             self.ui.planningDetailContent.html(brief);
             self._initPlanTypeView(preview.slice(0,4));     //这里只取前四条
             //查询热门作品
-            console.log(self.planId, self.planName);
             PlanningModel.queryHottestOpus(self.planId, self.planName,function(data){
                 if(data && data.length > 0){
                     self._initHottestOpusView(data);
@@ -420,6 +421,7 @@ define([
             var opusIndex = $target.attr("opus-index");
             var currentImg , currentSpn;
             if(opusIndex){
+                opusIndex = parseInt(opusIndex);
                 //todo 先清除样式
                 var opusImages = self.ui.hottestOpusContent.find("img");
                 var opusSpans = self.ui.hottestOpusContent.find("span");
@@ -435,7 +437,11 @@ define([
                 currentImg.addClass("hottest-opus-item-selected");
                 currentSpn = $target.find("span");
                 currentSpn.addClass("opus-hint-selected");
-                MsgBox.alert("点击了作品"+opusIndex);
+//                MsgBox.alert("点击了作品"+opusIndex);
+                var picturesArr = PlanningModel.getHottestOpusPicturesByIndex(self.planId, opusIndex);
+                if(picturesArr){
+                    BookPreviewView.show(picturesArr);
+                }
             }
         },
         /**
@@ -615,6 +621,7 @@ define([
             self.planName = "";      // 企划名称
             self.planId = "";   //企划ID
             PublishView.hide();
+            BookPreviewView.hide();
         },
 
         //当页面销毁时触发

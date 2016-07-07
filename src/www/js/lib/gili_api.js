@@ -1594,4 +1594,91 @@ gili_data.logOut = function () {
     AV.User.logOut();
 };
 
+/**
+ * 第三方登录需要的接口
+ * @param data
+ */
+gili_data.loginUtils = function(data) {
+    var unionid = data.unionid;
+    var nickname = data.nickname;
+    var sexual = data.sexual;
+    var headimgurl = data.headimgurl;
+
+    //检索对象
+    var User = AV.Object.extend("_User");
+    var query = new AV.Query(User);
+    query.equalTo("username", unionid);
+    query.find({
+        success: function (user) {
+            if (user.length > 0) {
+                //用户存在则登陆绑定
+                AV.User.logIn(unionid, "6a063e705a16e625", {
+                    success: function (_user) {
+
+                        var jsonUser = JSON.stringify(_user.toJSON());
+
+                        if (!!jsonUser.user_nick) {
+                            jsonUser.user_nick = jsonUser.username || "无";
+                        }
+
+                        window.location.href="http://www.gilieye.com";
+                    },
+                    error: function (_user, error) {
+                        console.log(error.message);
+                    }
+                })
+            } else {
+                //用户不存在则注册
+                var user = new AV.User();
+                user.set("username", unionid);
+                user.set("password", "6a063e705a16e625"); //me第三方登录
+                user.set('user_nick', nickname);
+                if(!headimgurl){
+                    user.set("user_pic", utils.getRandomHeader());
+                }else{
+                    user.set("user_pic", headimgurl);
+                }
+                user.set("sex", sexual);
+                user.signUp(null, {
+                    success: function (user) {
+                        //注册成功则登陆
+                        AV.User.logIn(unionid, "6a063e705a16e625", {
+                            success: function (user) {
+                                var jsonUser = JSON.stringify(_user.toJSON());
+                                if (!!jsonUser.user_nick) {
+                                    jsonUser.user_nick = jsonUser.username || "无";
+                                }
+
+                                window.location.href="http://www.gilieye.com";
+                            },
+                            error: function (user, error) {
+                                console.log(error.message);
+                            }
+                        })
+                    },
+                    error: function (user, error) {
+                        console.log(error.message);
+                    }
+                })
+            }
+        },
+        error: function (error) {
+            console.log(error.message);
+        }
+    });
+};
+/**
+ * 重新封装微博反会的数据
+ * @param originObj
+ * @returns {{unionid: *, nickname: (*|string), sexual: number, headimgurl: *}}
+ */
+gili_data.packageMicroBlogResults = function  (originObj) {
+    console.log(originObj);
+    return {
+        unionid: originObj.id.toString(),
+        nickname: originObj.name || '',
+        sexual: originObj.gender === 'm' ? 1 : originObj.gender === 'f' ? 2 : 0,
+        headimgurl: originObj.avatar_large
+    };
+};
 window.gili_data = gili_data;

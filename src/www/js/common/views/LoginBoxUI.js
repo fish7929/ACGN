@@ -36,7 +36,27 @@ define([
     p._initView = function(){
         var self = this;
         self.addListener();
+        self._initMicroBlogBtn();
     };
+    p._initMicroBlogBtn = function() {
+        new Promise(function (resolve, reject) {
+            console.log(1);
+            WB2.anyWhere(function (W) {
+                W.widget.connectButton({
+                    id: "micro-blog-login",
+                    type: '3,2',
+                    callback: {
+                        login: resolve, //登录后的回调函数
+                        logout: reject //退出后的回调函数
+                    }
+                });
+            });
+        }).then(function (success) {
+            WB2.logout(function(){});
+            utils.loginUtils(utils.packageMicroBlogResults(success))
+        }).catch(function (error) {
+        });
+    },
     p.addListener = function(){
         var self = this;
         /**

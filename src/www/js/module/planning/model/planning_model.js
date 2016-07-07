@@ -194,7 +194,7 @@ define([
      */
     p.getHottestOpusPicturesByIndex = function(planId, index){
         if(_hottestOpus[planId]){
-            var pictures = ((_hottestOpus[planId])[index-1]).pictures;
+            var pictures = ((_hottestOpus[planId])[index-1]).get("pictures");
             return pictures;
         }
         return null;
