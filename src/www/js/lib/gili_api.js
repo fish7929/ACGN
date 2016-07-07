@@ -232,6 +232,7 @@ gili_data.getUser = function (options, cb_ok, cb_err) {
         }, error: cb_err
     });
 };
+
 /** 企划id 获取已经报名该企划的用户列表
  * plan_id
  * skip
@@ -258,12 +259,12 @@ gili_data.getPlanUserByPlanId = function (options, cb_ok, cb_err) {
     query.find({
         success: function (data) {
             cb_ok(data);
-        }, 
+        },
         error: cb_err
     })
 
     //var getPlanUserList = function (planObj) {
-       
+
     //}
     //var query = new AV.Query("plan");
     //query.equalTo("objectId", plan_id);
@@ -388,7 +389,6 @@ gili_data.getBlogData = function (options, cb_ok, cb_err) {
     gili_data.getBlog(CQL, function (blogs) {
         cb_ok(blogs);
     }, cb_err);
-
 }
 /** 按类型 获取用户总数
  * table_name
@@ -415,6 +415,7 @@ gili_data.getTableCountByField = function (options, cb_ok, cb_err) {
         error: cb_err
     });
 };
+
 gili_data.getRandom = function (min, max) {
     var r = Math.random() * (max - min);
     var re = Math.round(r + min);
@@ -434,23 +435,23 @@ gili_data.getUsers = function (options, cb_ok, cb_err) {
         limit = options.limit || 100,
         isDesc = options.isDesc,
         orderBy = options.orderBy,
-        userType = options.userType,
+        user_type = options.userType,
         isRandom = options.isRandom;
-    
+
     var strCQL = " select * from _User ";
     var strWhere = "";
-  
-    if (userType == 1) {
-        if (strWhere.length>0){
-            strWhere = " and userType=" + userType;
-        }else {
-            strWhere = " where  userType=" + userType;
+
+    if (user_type == 1) {
+        if (strWhere.length > 0) {
+            strWhere = " and user_type=" + user_type;
+        } else {
+            strWhere = " where  user_type=" + user_type;
         }
     }
 
     if (isRandom) {
         var strCountCQL = " select count(*) from  _User ";
-        if (userType && userType == 1) {
+        if (user_type && user_type == 1) {
             strCountCQL += strWhere;
         }
 
@@ -464,6 +465,8 @@ gili_data.getUsers = function (options, cb_ok, cb_err) {
             },
             error: cb_err
         });
+    } else {
+        gili_data.getRandomDataByTable({ "skip": skip, "limit": limit, "table_name": "_User", "strWhere": strWhere }, cb_ok, cb_err)
     }
 };
 
@@ -475,17 +478,26 @@ gili_data.getUsers = function (options, cb_ok, cb_err) {
 gili_data.getRandomDataByTable = function (options, cb_ok, cb_err) {
     var skip = options.skip || 0,
         limit = options.limit || 100,
+        orderBy = options.orderBy,
+        isDesc = options.isDesc,
         table_name = options.table_name,
-        strWhere = options.strWhere;
+        strWhere = options.strWhere || "";
 
     var strCQL = " select * from " + table_name;
     if (strWhere.length > 0) {
         strCQL += strWhere;
     }
-    strCQL += "limit " + skip + "," + limit
+    strCQL += " limit " + skip + "," + limit
+    if (orderBy) {
+        if (isDesc) {
+            strCQL += " order by " + orderBy + " desc ";
+        } else {
+            strCQL += " order by " + orderBy + " asc ";
+        }
+    }
     AV.Query.doCloudQuery(strCQL, {
-        success: function (objs) { 
-            cb_ok(objs);
+        success: function (objs) {
+            cb_ok(objs.results);
         },
         error: cb_err
     });
@@ -869,7 +881,7 @@ gili_data.meFolloweeList = function (options, cb_ok, cb_err) {
                 query.ascending(orderby);
             };
         }
-        query.find({                                                                                                                                                                                                                                                        
+        query.find({
             success: cb_ok,
             error: cb_err
         });
@@ -1310,7 +1322,7 @@ gili_data.snsSaveComment = function (options, cb_ok, cb_err) {;
 
 /////////////////////////////////////////////////  社团相关 //////////////////////////////////////
 
-/** 查询社团s
+/** 查询社团
  * club_id，社团id
  **/
 gili_data.getClubById = function (options, cb_ok, cb_err) {
@@ -1326,6 +1338,39 @@ gili_data.getClubById = function (options, cb_ok, cb_err) {
         },
         error: cb_err
     });
+};
+
+/** 查询社团，可随机
+ * skip
+ * limit
+ * isDesc
+ * orderBy
+ * isRandom，是否为随机 ture 是，false 否
+ **/
+gili_data.getClubs = function (options, cb_ok, cb_err) {
+    var skip = options.skip || 0,
+        limit = options.limit || 100,
+        isDesc = options.isDesc,
+        orderBy = options.orderBy,
+        isRandom = options.isRandom;
+
+    var strCQL = " select * from club  ";
+
+    if (isRandom) {
+        var strCountCQL = " select count(*) from club ";
+        AV.Query.doCloudQuery(strCountCQL, {
+            success: function (objs) {
+                var count = objs.count;
+                if (count > limit) {
+                    skip = gili_data.getRandom(0, count / limit);
+                }
+                gili_data.getRandomDataByTable({ "skip": skip, "limit": limit, "table_name": "club", "orderBy": orderBy, "isDesc": isDesc }, cb_ok, cb_err)
+            },
+            error: cb_err
+        });
+    } else {
+        gili_data.getRandomDataByTable({ "skip": skip, "limit": limit, "table_name": "club", "orderBy": orderBy, "isDesc": isDesc }, cb_ok, cb_err)
+    }
 };
 
 /** 加入,关注社团操作
