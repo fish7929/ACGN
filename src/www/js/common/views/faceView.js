@@ -5,9 +5,8 @@
 // 描    述: 颜表情
 
 define([
-    'text!common/templates/faceView.html',
-    'config/faceConfig'
-],function(tpl, faceList){
+    'text!common/templates/faceView.html'
+],function(tpl){
     var FaceTpl = "<div class='face-item button nowrapTxt'>{0}</div>";
     var FaceView = function(parent){
         var self = this;
@@ -36,8 +35,9 @@ define([
 
     FaceView.prototype.initList = function(){
         var html = "", self = this;
-        for(var i = 0; i<faceList.length; i++){
-            html += FaceTpl.replace("{0}", faceList[i]);
+        var list = giliConfig.FaceList;
+        for(var i = 0; i<list.length; i++){
+            html += FaceTpl.replace("{0}", list[i]);
         }
         self.faceContent.html(html);
     };

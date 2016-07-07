@@ -8,9 +8,8 @@ define([
     'text!common/templates/commentView.html',
     'marionette',
     'common/views/faceView',
-    'msgbox',
-    'config/TipConfig'
-],function(ItemView, tpl, mn, FaceView, MsgBox, Tip){
+    'msgbox'
+],function(ItemView, tpl, mn, FaceView, MsgBox){
     var htmlTpl = "<div class=\"comment-list-item\" data-id='{dataId}'>" +
             "<div class=\"comment-left-div\">" +
             "<div class=\"comment-head-pic\" style='background: url(\"{pic}\") no-repeat center; background-size: 100%'></div>" +
@@ -189,7 +188,7 @@ define([
             if(!self._commentObj || !self._commentObj.comment_type || !self._commentObj.comment_id) return;
             var str = self.ui.commentText.val();
             if(str == ""){
-                MsgBox.toast(Tip.COMMENT_ERROR);
+                MsgBox.toast(giliConfig.Tip.COMMENT_ERROR);
                 return;
             }
             var opt = {};
@@ -200,9 +199,9 @@ define([
                 data = utils.convert_2_json(data);
                 self.insertComment(data);
                 self.ui.commentText.val("");
-                MsgBox.toast(Tip.COMMENT_SUCCESS, true);
+                MsgBox.toast(giliConfig.Tip.COMMENT_SUCCESS, true);
             }, function(err){
-                MsgBox.toast(Tip.COMMENT_FAIL+err, false);
+                MsgBox.toast(giliConfig.Tip.COMMENT_FAIL+err, false);
             })
         },
 

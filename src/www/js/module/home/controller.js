@@ -5,7 +5,6 @@ define([
 ],function(homeView){
     return {
         home : function(){
-            utils.log("homeView");
             app.page.show(homeView);
         }
     };

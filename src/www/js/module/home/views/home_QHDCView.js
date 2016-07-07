@@ -6,10 +6,11 @@
 define([
     'common/base/item_view',
     'text!module/home/templates/home_QHDC.html',
-    'marionette'
-],function(ItemView, tpl, mn){
-    var htmlTpl = '<div class="qhdc-item {3}" attr="{0}">' +
-        '<div class="qhdc-userPic" style="background: url(\'{1}\') no-repeat center; background-size: 100%"></div>' +
+    'marionette',
+    'module/home/model/HomeModel'
+],function(ItemView, tpl, mn, HomeModel){
+    var htmlTpl = '<div class="qhdc-item {3}" >' +
+        '<div class="qhdc-userPic button" data-id="{0}" style="background: url(\'{1}\') no-repeat center; background-size: 100%"></div>' +
         '<div class="qhdc-userName">{2}</div>' +
         '</div>';
     return ItemView.extend({
@@ -24,6 +25,7 @@ define([
         },
         //事件添加
         events : {
+            "click @ui.qhdcContainer" : "onClickHandler"
         },
         /**初始化**/
         initialize : function(){
@@ -39,28 +41,32 @@ define([
 
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
-            this.initList();
-            this.$el.show();
+            var self = this;
+            HomeModel.queryQHDCData(function(data){
+                self.initList(data);
+            });
+            self.$el.show();
         },
 
-        initList : function(){
-            var data = [], i;
-            for(i = 1; i<=5; i++){
-                var obj = {};
-                obj.userId = i;
-                obj.userPic = 'images/temp/head/head_b'+i+'.png';
-                obj.userName = "莫耀军是茶"+i;
-                data.push(obj);
+        onClickHandler : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var target = e.target;
+            var userId = target.getAttribute("data-id");
+            if(userId){
+                app.navigate("#userCenter/"+userId, {replace: false, trigger: true});
             }
+        },
 
-            var self = this, html = "", lastItemClass;
+        initList : function(data){
+            var self = this, html = "", lastItemClass, i, obj;
             for(i = 0; i < data.length; i++){
                 obj = data[i];
                 lastItemClass = "";
                 if(i == data.length - 1){
                     lastItemClass = "last-item";
                 }
-                html += htmlTpl.replace("{0}", obj.userId).replace("{1}", obj.userPic).replace("{2}", obj.userName).replace("{3}", lastItemClass);
+                html += htmlTpl.replace("{0}", obj.objectId).replace("{1}", obj.avatar).replace("{2}", obj.user_nick).replace("{3}", lastItemClass);
             }
             self.ui.qhdcContainer.html(html);
         },

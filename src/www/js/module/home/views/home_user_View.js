@@ -6,10 +6,11 @@
 define([
     'common/base/item_view',
     'text!module/home/templates/home_user.html',
-    'marionette'
-],function(ItemView, tpl, mn){
+    'marionette',
+    'module/home/model/HomeModel'
+],function(ItemView, tpl, mn, HomeModel){
     var htmlTpl = '<div class="aUser-item">' +
-        '<div class="aUser-headPic" style="background: url(\'{0}\') no-repeat center; background-size: 100%"></div>' +
+        '<div class="aUser-headPic button" data-id="{1}" style="background: url(\'{0}\') no-repeat center; background-size: 100%"></div>' +
         '</div>';
     return ItemView.extend({
         className : "aUserContainer",
@@ -23,6 +24,7 @@ define([
         },
         //事件添加
         events : {
+            "click @ui.headList" : "onClickHandler"
         },
         /**初始化**/
         initialize : function(){
@@ -38,22 +40,28 @@ define([
 
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
-            this.initList();
-            this.$el.show();
+            var self = this;
+            HomeModel.queryActiveUserData(function(data){
+                self.initList(data);
+            })
+            self.$el.show();
         },
 
-        initList : function(){
-            var data = [], i;
-            for(i = 1; i <= 12; i++){
-                var obj = {};
-                obj.userPic = 'images/temp/head/head_s'+i+'.png';
-                data.push(obj);
+        onClickHandler : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var target = e.target;
+            var userId = target.getAttribute("data-id");
+            if(userId){
+                app.navigate("#userCenter/"+userId, {replace: false, trigger: true});
             }
+        },
 
-            var self = this, html = "";
+        initList : function(data){
+            var self = this, html = "", i, obj;
             for(var i = 0; i<data.length; i++){
                 obj = data[i];
-                html += htmlTpl.replace("{0}", obj.userPic);
+                html += htmlTpl.replace("{0}", obj.avatar).replace("{1}", obj.objectId);
             }
             self.ui.headList.html(html);
         },

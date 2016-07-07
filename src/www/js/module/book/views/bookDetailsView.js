@@ -12,9 +12,8 @@ define([
     'module/book/views/bookDetailsPreview',
     'module/book/views/bookDetailsHot',
     'common/views/commentView',
-    'config/TipConfig',
     'module/book/model/BookModel'
-],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, BDPreviewView, BDHotView, CommentView, Tip, BookModel){
+],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, BDPreviewView, BDHotView, CommentView, BookModel){
     var labelTpl = "<div class=\"bd-label-item\" style='background-color: {0}'>{1}</div>"
 
     return BaseView.extend({
@@ -169,11 +168,10 @@ define([
             if(!self._data) return;
 
             var type = 0;
-            if(self.ui.attendBtn.html() == Tip.ATTENTIONED){
+            if(self.ui.attendBtn.html() == giliConfig.ATTENTIONED){
                 type = 1;
             }
             var userId = self._data.user.objectId;
-            console.log(type);
             utils.attentionUser(type, userId, function(data){
                 self.setAttentionStyle(type);
             }, function(err){
@@ -183,9 +181,9 @@ define([
         setAttentionStyle : function(val){
             var self = this;
             if(val){
-                self.ui.attendBtn.html(Tip.NOT_ATTENTION)
+                self.ui.attendBtn.html(giliConfig.NOT_ATTENTION)
             }else{
-                self.ui.attendBtn.html(Tip.ATTENTIONED);
+                self.ui.attendBtn.html(giliConfig.ATTENTIONED);
             }
         },
 
