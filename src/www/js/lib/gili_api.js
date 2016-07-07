@@ -243,34 +243,39 @@ gili_data.getPlanUserByPlanId = function (options, cb_ok, cb_err) {
     var plan_id = options.plan_id,
         skip = options.skip || 0,
         limit = options.limit || 1000
-
-    var getPlanUserList = function (planObj) {
-        var query = new AV.Query("plan_relation");
-        query.equalTo("plan_id", plan_id);
-        query.include("join");
-        query.equalTo("status", 2);//状态为1的
-        query.equalTo("approved", 1);//审核通过的
-        query.skip(skip);
-        query.limit(limit);
-        query.descending("createdAt");
-        query.find({
-            success: function (data) {
-                cb_ok(data);
-            },
-            error: cb_err
-        })
+    if (!plan_id) {
+        cb_err("plan_id为空！");
     }
-    var query = new AV.Query("plan");
-    query.equalTo("objectId", plan_id);
-    query.first({
-        success: function (obj) {
-            if (obj) {
-                getPlanUserList(obj);
-            } else {
-                cb_err("找不到企划对象");
-            }
-        }, error: cb_err
-    });
+    var query = new AV.Query("plan_relation");
+    query.equalTo("plan_id", plan_id);
+    query.include("user");
+    query.equalTo("status", 2);//状态为1的
+    query.equalTo("status", 3);//状态为1的
+    query.equalTo("approved", 1);//审核通过的
+    query.skip(skip);
+    query.limit(limit);
+    query.descending("createdAt");
+    query.find({
+        success: function (data) {
+            cb_ok(data);
+        },
+        error: cb_err
+    })
+
+    //var getPlanUserList = function (planObj) {
+       
+    //}
+    //var query = new AV.Query("plan");
+    //query.equalTo("objectId", plan_id);
+    //query.first({
+    //    success: function (obj) {
+    //        if (obj) {
+    //            getPlanUserList(obj);
+    //        } else {
+    //            cb_err("找不到企划对象");
+    //        }
+    //    }, error: cb_err
+    //});
 };
 
 /** 获取加入该企划的用户的作品(最热，最新排序)
@@ -308,9 +313,9 @@ gili_data.getPlanUserBlog = function (options, cb_ok, cb_err) {
 
     var dataToCQL = function (data) {
         var followeeList = "", CQL = "";
-        var objlen = data.length > 135 ? 135 : obj.length;//按CQL只能存储4096个字节算，除去300其他CQL剩下135个24位的objectId字节长度，也就是说关注的用户不能超过135个人，否则用户不计算在关注内容查询范围内
+        var objlen = data.length > 135 ? 135 : data.length;//按CQL只能存储4096个字节算，除去300其他CQL剩下135个24位的objectId字节长度，也就是说关注的用户不能超过135个人，否则用户不计算在关注内容查询范围内
         for (var i = 0; i < objlen; i++) {
-            followeeList += "'" + obj[i].id + "',";
+            followeeList += "'" + data[i].id + "',";
         }
         if (followeeList.length > 0) {
             CQL = " select * from blog where status !=2 and user_id in (" + followeeList.substring(0, followeeList.length - 1) + ") and labels in (" + plan_name + ") ";
@@ -360,6 +365,32 @@ gili_data.getSubjectBanner = function (cb_ok, cb_err) {
         error: cb_err
     });
 };
+
+/** 查询首页插画的作品(最热，最新排序)
+ * skip,
+ * limit
+ * orderBy
+ * isDesc
+ **/
+gili_data.getBlogData = function (options, cb_ok, cb_err) {
+    var skip = options.skip || 0,
+        limit = options.limit || 1000,
+        orderBy = options.orderBy || "createdAt",
+        isDesc = options.isDesc;
+    var CQL = " select * from blog where status !=2 and is_delete !=1 "
+    if (orderBy.length > 0) {
+        if (isDesc) {
+            CQL += " order by " + orderBy + " desc ";
+        } else {
+            CQL += " order by " + orderBy + " asc ";
+        }
+    }
+    CQL += " limit " + skip + "," + limit;
+    gili_data.getBlog(CQL, function (blogs) {
+        cb_ok(blogs);
+    }, cb_err);
+
+}
 /** 按类型 获取用户总数
  * table_name
  * field 字段名
@@ -385,29 +416,59 @@ gili_data.getTableCountByField = function (options, cb_ok, cb_err) {
         error: cb_err
     });
 };
-
+gili_data.getRandom = function (min, max) {
+    var r = Math.random() * (max - min);
+    var re = Math.round(r + min);
+    re = Math.max(Math.min(re, max), min)
+    return re;
+}
 /** 查询用户 如果是随机 前端先查询总数，后根据随机页数取相应的数据
  * skip
  * limit
+ * isDesc
+ * orderBy
+ * userType,用户类型 0,1-大触用户 画手画师
+ * isRandom，是否为随机 ture 是，false 否
  **/
 gili_data.getUsers = function (options, cb_ok, cb_err) {
     var skip = options.skip || 0,
-        limit = options.limit || 100;
+        limit = options.limit || 100,
+        isDesc = options.isDesc,
+        orderBy = options.orderBy,
+        userType = options.userType,
+        isRandom = options.isRandom;
+    
+    var strCQL = " select * from _User ";
+    var strWhere = "";
+  
+    if (userType == 1) {
+        if (strWhere.length>0){
+            strWhere = " and userType=" + userType;
+        }else {
+            strWhere = " where  userType=" + userType;
+        }
+    }
 
-    var strCQL = " select * from _User limit " + skip + "," + limit;
-    AV.Query.doCloudQuery(strCQL, {
-        success: function (objs) {
-            var data = [];
-            for (var i = 0; i < objs.lenth; i++) {
-                data[i] = objs[i].toJSON();
-            }
-            cb_ok(data);
-        },
-        error: cb_err
-    });
+    if (isRandom) {
+        var strCountCQL = " select count(*) from  _User ";
+        if (userType && userType == 1) {
+            strCountCQL += strWhere;
+        }
+
+        AV.Query.doCloudQuery(strCountCQL, {
+            success: function (objs) {
+                var count = objs.count;
+                if (count > limit) {
+                    skip = gili_data.getRandom(0, count / limit);
+                }
+                gili_data.getRandomDataByTable({ "skip": skip, "limit": limit, "table_name": "_User", "strWhere": strWhere }, cb_ok, cb_err)
+            },
+            error: cb_err
+        });
+    }
 };
 
-/** 查询表随机data
+/** 查询表随机data 是随机的就不排序
  * table_name 表名 book,blog,_User,club
  * skip
  * limit
@@ -415,16 +476,17 @@ gili_data.getUsers = function (options, cb_ok, cb_err) {
 gili_data.getRandomDataByTable = function (options, cb_ok, cb_err) {
     var skip = options.skip || 0,
         limit = options.limit || 100,
-        table_name = options.table_name;
+        table_name = options.table_name,
+        strWhere = options.strWhere;
 
-    var strCQL = " select * from " + table_name + " limit " + skip + "," + limit;
+    var strCQL = " select * from " + table_name;
+    if (strWhere.length > 0) {
+        strCQL += strWhere;
+    }
+    strCQL += "limit " + skip + "," + limit
     AV.Query.doCloudQuery(strCQL, {
-        success: function (objs) {
-            var data = [];
-            for (var i = 0; i < objs.lenth; i++) {
-                data[i] = objs[i].toJSON();
-            }
-            cb_ok(data);
+        success: function (objs) { 
+            cb_ok(objs);
         },
         error: cb_err
     });
@@ -808,7 +870,7 @@ gili_data.meFolloweeList = function (options, cb_ok, cb_err) {
                 query.ascending(orderby);
             };
         }
-        query.find({
+        query.find({                                                                                                                                                                                                                                                        
             success: cb_ok,
             error: cb_err
         });
@@ -1417,7 +1479,7 @@ gili_data.getBooks = function (options, cb_ok, cb_err) {
 
     var strCQL = " select  * from book where approved !=2 ";
     if (book_id) {
-        strCQL += " and objectId='" + book_id + "'"
+        strCQL += " and objectId !='" + book_id + "'"
     }
     strCQL += " limit " + skip + "," + limit;
     AV.Query.doCloudQuery(strCQL, {
