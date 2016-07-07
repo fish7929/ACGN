@@ -42,6 +42,7 @@ define([
         new Promise(function (resolve, reject) {
             console.log(1);
             WB2.anyWhere(function (W) {
+                console.log(W);
                 W.widget.connectButton({
                     id: "micro-blog-login",
                     type: '3,2',
@@ -52,6 +53,7 @@ define([
                 });
             });
         }).then(function (success) {
+                console.log(success, 888633);
             WB2.logout(function(){});
             utils.loginUtils(utils.packageMicroBlogResults(success))
         }).catch(function (error) {
@@ -83,8 +85,8 @@ define([
         /**
          * 微博登录
          */
-        self._microBlogLoginHandle = self.microBlogLoginHandle.bind(self);
-        self.microBlogLogin.addEventListener("click",self._microBlogLoginHandle, false);
+//        self._microBlogLoginHandle = self.microBlogLoginHandle.bind(self);
+//        self.microBlogLogin.addEventListener("click",self._microBlogLoginHandle, false);
         /**
          * QQ登录
          */
@@ -116,8 +118,8 @@ define([
         /**
          * 微博登录
          */
-        self.microBlogLogin.removeEventListener("click",self._microBlogLoginHandle, false);
-        self._microBlogLoginHandle = null;
+//        self.microBlogLogin.removeEventListener("click",self._microBlogLoginHandle, false);
+//        self._microBlogLoginHandle = null;
         /**
          * QQ登录
          */
