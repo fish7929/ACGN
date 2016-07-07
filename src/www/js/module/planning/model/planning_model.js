@@ -162,12 +162,23 @@ define([
      * 查询最热作品
      * @param id
      * @param name
-     * @param order
-     * @param isDesc
      * @param cb_ok
      * @param cb_err
      */
-    p.queryHottestOpus = function(id, name,order, isDesc, cb_ok, cb_err){
+    p.queryHottestOpus = function(id, name, cb_ok, cb_err){
+        var option = {};
+        option.plan_id = id;
+        option.plan_name = name;
+        option.limit = 6;
+        option.isDesc = true;
+        option.orderBy = "like_int";
+        gili_data.getPlanUserBlog(option, function(data){
+            if(data&&data.length > 0){
+                cb_ok&&cb_ok(data);
+            }
+        },function(err){
+            cb_err&&cb_err(err);
+        });
     };
     var planningModel = new PlanningModel();
     return planningModel;
