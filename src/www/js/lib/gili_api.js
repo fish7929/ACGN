@@ -318,7 +318,7 @@ gili_data.getPlanUserBlog = function (options, cb_ok, cb_err) {
             followeeList += "'" + data[i].id + "',";
         }
         if (followeeList.length > 0) {
-            CQL = " select * from blog where status !=2 and user_id in (" + followeeList.substring(0, followeeList.length - 1) + ") and labels in (" + plan_name + ") ";
+            CQL = " select * from blog where status !=2 and user_id in (" + followeeList.substring(0, followeeList.length - 1) + ") and labels in ('" + plan_name + "') ";
         }
         if (orderBy.length > 0) {
             if (isDesc) {
@@ -907,7 +907,6 @@ gili_data.meFolloweeList = function (options, cb_ok, cb_err) {
         queryUserObj();
     }
 };
-
 
 /** 取消关注某个用户
  userid,用户id
