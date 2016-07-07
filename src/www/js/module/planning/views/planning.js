@@ -227,8 +227,11 @@ define([
             self.ui.planningDetailContent.html(brief);
             self._initPlanTypeView(preview.slice(0,4));     //这里只取前四条
             //查询热门作品
+            console.log(self.planId, self.planName);
             PlanningModel.queryHottestOpus(self.planId, self.planName,function(data){
-                console.log(data, 96333);
+                if(data && data.length > 0){
+                    self._initHottestOpusView(data);
+                }
             },function(err){
 
             });
@@ -300,6 +303,14 @@ define([
                 joinUserHtml += joinUserRepTemp;
             }
             self.ui.roleContent.html(joinUserHtml);
+        },
+        /**
+         *
+         * @param data
+         * @private
+         */
+        _initHottestOpusView : function(data) {
+
         },
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
