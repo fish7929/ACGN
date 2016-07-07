@@ -775,9 +775,8 @@ gili_data.getComment = function (options, cb_ok, cb_err) {
     });
 };
 
-
 /** 查询自己的粉丝
- follower,用户对象
+ userid,如果是查询别人的粉丝，必须传别人的用户id
  **/
 gili_data.meFollowerList = function (options, cb_ok, cb_err) {
     if (!this.getCurrentUser()) {
@@ -801,10 +800,10 @@ gili_data.meFollowerList = function (options, cb_ok, cb_err) {
         }
         //var query = userCurrent.followerQuery();
         //query.include(follower);
-        var _Follower = fmacloud.Object.extend("_Follower");
+        var _Follower = AV.Object.extend("_Follower");
         var query = new AV.Query(_Follower);
         query.equalTo("user", userCurrent);
-        query.include(follower);
+        query.include("follower");
         query.skip(skip);
         query.limit(limit);
         //排序
@@ -839,13 +838,13 @@ gili_data.meFollowerList = function (options, cb_ok, cb_err) {
     if (userid) {
         getUserObj();
     } else {
-        userCurrent = fmacloud.User.current();
+        userCurrent = AV.User.current();
         queryUserObj();
     }
 };
 
 /** 查询自己关注的用户列表
- followee,用户对象
+userid,如果是查询别人的关注，必须传别人的用户id
  **/
 gili_data.meFolloweeList = function (options, cb_ok, cb_err) {
     if (!this.getCurrentUser()) {
@@ -870,7 +869,7 @@ gili_data.meFolloweeList = function (options, cb_ok, cb_err) {
         var _Followee = AV.Object.extend("_Followee");
         var query = new AV.Query(_Followee);
         query.equalTo("user", userCurrent);
-        query.include(followee);
+        query.include("followee");
         query.skip(skip);
         query.limit(limit);
         //排序
@@ -909,6 +908,7 @@ gili_data.meFolloweeList = function (options, cb_ok, cb_err) {
     }
 };
 
+
 /** 取消关注某个用户
  userid,用户id
  **/
@@ -921,14 +921,13 @@ gili_data.meUnfollow = function (user_id, cb_ok, cb_err) {
     currentUser.unfollow(user_id).then(
         function (obj) {
             //1、当前用户关注总数减一，2、对方用户粉丝总数减一
-            gili_data.currentUserCountUpdate(currentUser, "followee_count", -1, function (data) {
-                //gili_data.getUserById(user_id, function (user) {
-                //    if (user) {
-                //        gili_data.currentUserCountUpdate(user, "follower_count", -1, cb_ok(obj), cb_err);
-                //    } else {
-                //        cb_err("取消关注用户失败！");
-                //    }
-                //}, cb_err);
+            var num = currentUser.get("followee_count");
+            if (num <= 0) {
+                num = 0;
+            } else {
+                num = -1;
+            }
+            gili_data.currentUserCountUpdate(currentUser, "followee_count", num, function (data) {
                 gili_data.updateUser({ "follower_count": -1 }, user_id, cb_ok(obj), cb_err);
             }, cb_err);
         },
@@ -959,16 +958,7 @@ gili_data.meFollow = function (user_id, cb_ok, cb_err) {
         function (obj) {
             //1、当前用户关注总数加一，2、对方用户粉丝总数减加一
             gili_data.currentUserCountUpdate(currentUser, "followee_count", 1, function (data) {
-
-                //gili_data.getUserById(user_id, function (user) {
-                //    if (user) {
-                //        gili_data.currentUserCountUpdate({"follower_count":1}, cb_ok(obj), cb_err);
-                //    } else {
-                //        cb_err("未找到用户对象，取消关注用户失败！");
-                //    }
-                //}, cb_err);
                 gili_data.updateUser({ "follower_count": 1 }, user_id, cb_ok(obj), cb_err);
-
             }, cb_err);
         },
         cb_err
@@ -980,7 +970,7 @@ gili_data.meFollow = function (user_id, cb_ok, cb_err) {
  userid
  **/
 gili_data.updateUser = function (options, userid, cb_ok, cb_err) {
-    fmacloud.Cloud.run('updateUserInfo', { "options": options, "userid": userid }, {
+    AV.Cloud.run('updateUserInfo', { "options": options, "userid": userid }, {
         success: cb_ok,
         error: cb_err
     });
@@ -1571,7 +1561,7 @@ gili_data.getRandomBooks = function (options, cb_ok, cb_err) {
 
 /////////////////////////////其他 接口/////////////////////////
 /** 上传文件
- * name ,文件名称 如：XXXX.jpg 一定要带后缀
+ * name ,文件名称 如：XXXX.jpg 一定要带后缀 test you code
  * file,文件file对象
  **/
 gili_data.fileUpload = function (options, cb_ok, cb_err) {
