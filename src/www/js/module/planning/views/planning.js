@@ -310,7 +310,24 @@ define([
          * @private
          */
         _initHottestOpusView : function(data) {
-
+            var self = this;
+            var hottestOpusTemp = '<div class="hottest-opus-item" opus-index="opusIndex">'+
+                '<img  src="opusFirstImg" opus-index="opusIndex" class="button itemSelected" />'+
+                '<span class="common-opus-hint hintSelectedClass" opus-index="opusIndex">opusBreif</span>'+
+            '</div>';
+            var hottestOpusHtml = "", hottestOpusRepTemp = "";
+            for(var i = 0; i < data.length; i++){
+                var obj = data[i];
+                var pictures = obj.get("pictures")[0];
+                var topic = obj.get("topic");
+                var selectedTemp = i == 0 ? "hottest-opus-item-selected " : "";
+                var hintSelectedClass = i == 0 ? "opus-hint-selected" : "";
+                hottestOpusRepTemp = hottestOpusTemp.replace(/opusIndex/g, i+1).replace(/itemSelected/g, selectedTemp)
+                    .replace(/hintSelectedClass/g, hintSelectedClass).replace(/opusFirstImg/g, pictures)
+                    .replace(/opusBreif/g, topic);
+                hottestOpusHtml += hottestOpusRepTemp;
+            }
+            self.ui.hottestOpusContent.html(hottestOpusHtml);
         },
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){

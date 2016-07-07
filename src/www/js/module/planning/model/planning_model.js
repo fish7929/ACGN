@@ -158,6 +158,7 @@ define([
             cb_err&&cb_err(err);
         });
     };
+    var _hottestOpus = [];
     /**
      * 查询最热作品
      * @param id
@@ -166,6 +167,10 @@ define([
      * @param cb_err
      */
     p.queryHottestOpus = function(id, name, cb_ok, cb_err){
+        if(_hottestOpus[id]){
+            cb_ok&&cb_ok(_hottestOpus[id]);
+            return;
+        }
         var option = {};
         option.plan_id = id;
         option.plan_name = name;
@@ -174,11 +179,25 @@ define([
         option.orderBy = "like_int";
         gili_data.getPlanUserBlog(option, function(data){
             if(data&&data.length > 0){
+                _hottestOpus[id] = data;
                 cb_ok&&cb_ok(data);
             }
         },function(err){
             cb_err&&cb_err(err);
         });
+    };
+    /**
+     * 根据企划ID和类型序号获取对应的热门作品图片
+     * @param planId
+     * @param index
+     * @returns {*}
+     */
+    p.getHottestOpusPicturesByIndex = function(planId, index){
+        if(_hottestOpus[planId]){
+            var pictures = ((_hottestOpus[planId])[index-1]).pictures;
+            return pictures;
+        }
+        return null;
     };
     var planningModel = new PlanningModel();
     return planningModel;

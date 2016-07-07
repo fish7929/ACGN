@@ -320,6 +320,11 @@
 
 .common-opus-hint{
     font-size: 18px;
+    width: 100%;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 /**
 *企划动态
