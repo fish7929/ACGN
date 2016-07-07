@@ -12,8 +12,9 @@ define([
     "module/planning/model/planning_model",
     'common/region/control_view',
     "module/planning/views/planning_notice",
-    'common/views/faceView'
-],function(BaseView, tpl, mn,SwitchViewRegion, LoginBarView, MsgBox, PlanningModel, ControlView,PlanningNoticeView, FaceView) {
+    'common/views/faceView',
+    "module/publish/views/publishView"
+],function(BaseView, tpl, mn,SwitchViewRegion, LoginBarView, MsgBox, PlanningModel, ControlView,PlanningNoticeView, FaceView, PublishView) {
     return BaseView.extend({
         id: "gili-love-planning",
         template : _.template(tpl),
@@ -23,6 +24,8 @@ define([
         moderatorNick : "",     //版主昵称
         noticeObj : null,       //企划公告对象
         currentNotice : null,   //当前选中的通告对象
+        planName : "",      // 企划名称
+        planId : "",    //企划ID
         ui : {
             planningBanner : "#planning-banner",        //企划banner
             planningAuthor : ".planning-author",          //企划用户信息
@@ -98,16 +101,14 @@ define([
             //初始化企划参与角色列表信息
             PlanningModel.getJoinUserById(self.planId, function(data){
                 if(data ){
-                    console.log(data);
                     self._initJoinUserView(data);
                 }
             }, function(err){});
-
             //初始化评论发布框
             if(self.currentUser){
                 self.resetUserPlanRelationStatus();
                 self.resetCommentOperation();
-                self._faceView = new FaceView(self.ui.planningFaceContainer);
+//                self._faceView = new FaceView(self.ui.planningFaceContainer);
             }
             app.on("login:ok", this.onLoginOkHandler, this);
             app.on("logOut:ok", this.onLogOutOkHandler, this);
@@ -211,7 +212,7 @@ define([
                 '<span class="planning-moderator-hint">企划主</span>';
             var bgImg = data.bg_img;
             var cover = data.cover;
-            var name = data.name;
+            self.planName = data.name;
             var brief = data.brief;
             var author = data.user;
             var preview = data.preview;
@@ -222,9 +223,18 @@ define([
                 .replace("myPlanningModeratorNick", author.user_nick);
             self.ui.planningBanner.css({"background": "url('"+bgImg+"') center no-repeat"});
             self.ui.planningAuthor.html(authorTemp);
-            self.ui.planningDetailTitle.html(name);
+            self.ui.planningDetailTitle.html(self.planName);
             self.ui.planningDetailContent.html(brief);
             self._initPlanTypeView(preview.slice(0,4));     //这里只取前四条
+            //查询热门作品
+            console.log(self.planId, self.planName);
+            PlanningModel.queryHottestOpus(self.planId, self.planName,function(data){
+                if(data && data.length > 0){
+                    self._initHottestOpusView(data);
+                }
+            },function(err){
+
+            });
         },
         /**
          * 初始化企划类型信息
@@ -293,6 +303,14 @@ define([
                 joinUserHtml += joinUserRepTemp;
             }
             self.ui.roleContent.html(joinUserHtml);
+        },
+        /**
+         *
+         * @param data
+         * @private
+         */
+        _initHottestOpusView : function(data) {
+
         },
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
@@ -488,7 +506,11 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            MsgBox.alert("作品正在努力上传...");
+            var param = {};
+//            param.type = "topic";
+            param.type = "ill";
+            param.labels = [self.planName];
+            PublishView.show(param);
         },
         /**
          * 更多用户点击事件
@@ -573,6 +595,9 @@ define([
             self.moderatorNick = "";     //版主昵称
             self.noticeObj = null;      //企划公告对象
             self.currentNotice = null;   //当前选中的通告对象
+            self.planName = "";      // 企划名称
+            self.planId = "";   //企划ID
+            PublishView.hide();
         },
 
         //当页面销毁时触发

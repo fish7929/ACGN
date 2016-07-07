@@ -81,7 +81,12 @@ define([
             default:
                 return;
         }
-
+        var labels = param.labels;
+        if(labels){
+            for(var i=0; i<labels.length; i++){
+                self.addNewLabel(labels[i]);
+            }
+        }
         if(self._isShow) return;
         self._isShow = true;
         document.body.appendChild(self.el);
