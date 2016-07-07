@@ -276,7 +276,7 @@ gili_data.getPlanUserByPlanId = function (options, cb_ok, cb_err) {
     //            cb_err("找不到企划对象");
     //        }
     //    }, error: cb_err
-    //}); 
+    //});
 };
 /** 获取加入该企划的用户的作品(最热，最新排序)
  * plan_id,
@@ -315,7 +315,7 @@ gili_data.getPlanUserBlog = function (options, cb_ok, cb_err) {
         var followeeList = "", CQL = "";
         var objlen = data.length > 135 ? 135 : data.length;//按CQL只能存储4096个字节算，除去300其他CQL剩下135个24位的objectId字节长度，也就是说关注的用户不能超过135个人，否则用户不计算在关注内容查询范围内
         for (var i = 0; i < objlen; i++) {
-            followeeList += "'" + data[i].id + "',";
+            followeeList += "'" + data[i].get("user_id") + "',";
         }
         if (followeeList.length > 0) {
             CQL = " select * from blog where status !=2 and user_id in (" + followeeList.substring(0, followeeList.length - 1) + ") and labels in ('" + plan_name + "') ";
@@ -844,7 +844,7 @@ gili_data.meFollowerList = function (options, cb_ok, cb_err) {
 };
 
 /** 查询自己关注的用户列表
-userid,如果是查询别人的关注，必须传别人的用户id
+ userid,如果是查询别人的关注，必须传别人的用户id
  **/
 gili_data.meFolloweeList = function (options, cb_ok, cb_err) {
     if (!this.getCurrentUser()) {
