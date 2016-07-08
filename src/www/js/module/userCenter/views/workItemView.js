@@ -4,8 +4,9 @@
 define([
     'module/userCenter/model/workModel',
     'text!module/userCenter/templates/workItem.html',
-    'marionette'
-],function(workModel,workItemTpl,mn){
+    'marionette',
+    'msgbox'
+],function(workModel,workItemTpl,mn,MsgBox){
     var WorkItemView = Marionette.ItemView.extend({
         template: _.template(workItemTpl),
         model:workModel,
@@ -13,7 +14,10 @@ define([
         events:{
             "click .info-detail-comment":"_clickCommentHandler",
             "click .commentMore":"_clickCommentMoreHandler", //查看该作品更多评论
-            "click .info-detail-zan":"_clickZanHandler"
+            "click .info-detail-zan":"_clickZanHandler",
+            "click .info-del":"_clickDelHandler"      //用户只能删除自己的动态话题等
+//            "mouseover .uc_info_item":"_overItemHandler", //鼠标移入 显示“删除”按钮
+//            "mouseout .uc_info_item":"_outItemHandler" //鼠标移出 隐藏“删除”按钮
         },
         initialize:function(){
         },
@@ -23,8 +27,9 @@ define([
         serializeData:function() {
             var self = this;
             data = Marionette.ItemView.prototype.serializeData.apply(this,arguments);
-            data.likeInt = self.model.likeInt;
-            data.commentInt = self.model.commentInt;
+            var loginUser = gili_data.getCurrentUser();
+            data.likeInt = self.model.likeInt?self.model.likeInt:0;
+            data.commentInt = self.model.commentInt?self.model.commentInt:0;
             data.timeStr = self.model.timeStr;
             //话题类型 1文字话题   2插画话题（文字可有可无，图片最多10张）
             data.type = self.model.get("type");
@@ -37,7 +42,7 @@ define([
                 data.picHtml = self.getPic();
                 data.descHtml = self.getDesc();
             }
-            if(utils.isLiked(self.model.get("gb_id"))){
+            if(utils.isLiked(self.model.get("objectId"))){
                 data.zanName = "praise_ck";
             }else{
                 data.zanName = "praise";
@@ -47,7 +52,13 @@ define([
             }else{
                 data.commentShow = "style='display:none;'";
             }
+            if(loginUser && loginUser.id == self.model.get("user_id")){
+                data.delShow = "";
+            }else{
+                data.delShow = "display:none";
+            }
             data.commentHtml = self.getComment();
+
             return data;
         },
         //获取类型为1的话题 内容
@@ -132,9 +143,11 @@ define([
         _clickZanHandler:function(e){
             var self = this;
             var target = $(e.target);
-            var gId = self.model.get("gb_id");
+            var gId = self.model.get("objectId");
             if(target.data("zan") == "praise" && !utils.isLiked(gId)){ //点赞
                 utils.likeTopic(1,gId,function(){
+                    self.model.likeInt++;
+                    self.model.attribute.like_int++;
                     self.render();
                 },function(){
                     console.log("点赞失败");
@@ -142,12 +155,32 @@ define([
 
             }else if(target.data("zan") == "praise_ck" && utils.isLiked(gId)) { //取消点赞
                 utils.likeTopic(0,gId,function(){
+                    self.model.likeInt--;
+                    self.model.attribute.like_int--;
                     self.render();
                 },function(){
                     console.log("默认点赞失败");
                 });
             }
+        },
+        //删除
+        _clickDelHandler:function(e){
+            var gid = this.model.get("objectId");
+            gili_data.deleteBlog(gid,function(){
+                MsgBox.toast("删除成功");
+                app.trigger("workListView:delWork",[gid]); //触发删除某话题
+            },function(err){
+                MsgBox.alert("删除失败");
+            })
         }
+//        //移入
+//        _overItemHandler:function(e){
+//            console.log("over");
+//        },
+//        //移出
+//        _outItemHandler:function(e){
+//            console.log("out");
+//        }
     });
     return WorkItemView;
 });

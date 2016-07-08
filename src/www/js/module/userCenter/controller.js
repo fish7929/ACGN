@@ -3,7 +3,7 @@
  */
 define([
     'module/userCenter/views/userCenterView',
-    'module/userCenter/views/userCenterFansView'
+    '../userCenterFans/views/userCenterFansView'
 ],function(UserCenterView,UserCenterFansView){
     return {
         userCenter:function(userId){

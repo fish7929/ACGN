@@ -1,32 +1,26 @@
 /**
- * Created by Administrator on 2016/6/30.
+ * Created by guYY on 2016/7/7 0:12
  */
 define([
-    'module/userCenter/model/workCollectionModel',
-    'module/userCenter/views/workItemView',
+    'module/userCenterFans/model/fansCollectionModel',
+    'module/userCenterFans/views/fansItemView',
     'marionette'
-],function(WorkCollectionModel,WorkItemView,mn){
-    var workListView = Marionette.CollectionView.extend({
-        childView: WorkItemView,
-        model: WorkCollectionModel,
+],function(FansCollectionModel,FansItemView,mn){
+    var fansListView = Marionette.CollectionView.extend({
+        childView: FansItemView,
+        model: FansCollectionModel,
         tagName:"div",
         userId:"",
         initialize:function(){
             var self = this;
             if(self.collection == null){
-                self.collection = new WorkCollectionModel();
-                self.collection.on("workListView:colModelChange",self._colModelChangeHandler,this);
+                self.collection = new FansCollectionModel();
+                self.collection.on("fansListView:colModelChange",self._colModelChangeHandler,this);
             }
-            app.on("workListView:delWork",self._delWorkHandler,self);
         },
         _colModelChangeHandler:function(type){
             var self = this;
-            self.trigger("workListView:change",type);
-        },
-        //根据话题ID 删除话题
-        _delWorkHandler:function(gid){
-            var self = this;
-            self.collection.delById(gid);
+            self.trigger("fansListView:change",type);
         },
         loadData:function(userId){
             var self = this;
@@ -41,5 +35,5 @@ define([
             self.collection.more();
         }
     });
-    return workListView;
+    return fansListView;
 });

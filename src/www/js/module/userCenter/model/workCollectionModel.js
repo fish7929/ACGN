@@ -7,7 +7,7 @@ define([
     var WorkColModel = Backbone.Collection.extend({
         model:WorkModel,
         worksArr:[],                //当前已读取作品列表
-        pageSize:10,                //每页10条
+        pageSize:4,                //每页10条
         _userId:"",                  //用户ID
         _loading:false,
         initialize:function(){
@@ -29,29 +29,24 @@ define([
             var self = this;
             if(self._loading == true) return;
             self._loading = true;
-
-            var obj = [{"gb_id":"00000001","pictures":[],"topic":"我是话题内容话题内容话题内容话题内容11是话题内容话题内容话题内容话题内容11是话题内容话题内容话题内容话题内容1111111","author":"我是作者1","type":1,"status":0,"like_int":112,"comment_int":113},
-                {"gb_id":"00000002","pictures":["images/temp/info_pic/a006.png","images/temp/info_pic/a002.jpeg","images/temp/info_pic/a003.jpeg","images/temp/info_pic/a004.jpeg"],"topic":"我是话题内容话题内容话题内容话题内容2222222222","author":"我是作者2","type":2,"status":0,"like_int":222,"comment_int":223},
-                {"gb_id":"00000003","pictures":["images/temp/info_pic/a004.jpeg","images/temp/info_pic/a003.jpeg","images/temp/info_pic/a002.jpeg","images/temp/info_pic/a001.jpeg"],"topic":"","author":"我是作者3","type":2,"status":0,"like_int":332,"comment_int":333}];
-            self.loadOk(obj);
-            //查询动态列表
-//            var options = {
-//                "tplLabel": "",
-//                "search": "",
-//                "pageSize": self.worksArr.length, //跳过数
-//                "pageNumber": self.pageSize,     //每页数
-//                "userid": self._userId,         //查询条件  暂不需要
-//                "like_show_num": 12,            //点赞对象显示最大个数
-//                "page_len": 3,                   //作品页缩略图最大个数
-//                "orderby": "reupdate_date",   //排序方式
-//                "isdesc": true,                 //是否降序,
-//                "draftArr": self.draftIdList   //需过滤的草稿列表
-//            };
-//            sns_data.getDiscoverPageByLocalFun(options, function (data) {
-//                self.loadOk(data);
-//            }, function (error) {
-//                self.loadErr(error);
-//            });
+            var options = {
+                skip:self.worksArr.length,
+                limit:self.pageSize
+            };
+            var loginUser = gili_data.getCurrentUser();
+            //当前登录用户用户中心 不需要传user_id参数
+            if(!loginUser || loginUser.id != self._userId){
+                options.user_id = self._userId;
+            }
+            gili_data.getUserBlog(options,function(data){
+                self.loadOk(data);
+            },function(error){
+                self.loadErr(error);
+            });
+//            var obj = [{"gb_id":"00000001","pictures":[],"topic":"我是话题内容话题内容话题内容话题内容11是话题内容话题内容话题内容话题内容11是话题内容话题内容话题内容话题内容1111111","user_id":"577a773d0a2b58393762f328","author":"我是作者1","type":1,"status":0,"like_int":112,"comment_int":113},
+//                {"gb_id":"00000002","pictures":["images/temp/info_pic/a006.png","images/temp/info_pic/a002.jpeg","images/temp/info_pic/a003.jpeg","images/temp/info_pic/a004.jpeg"],"user_id":"577a773d0a2b58393762f328","topic":"我是话题内容话题内容话题内容话题内容2222222222","author":"我是作者2","type":2,"status":0,"like_int":222,"comment_int":223},
+//                {"gb_id":"00000003","pictures":["images/temp/info_pic/a004.jpeg","images/temp/info_pic/a003.jpeg","images/temp/info_pic/a002.jpeg","images/temp/info_pic/a001.jpeg"],"user_id":"577a773d0a2b58393762f328","topic":"","author":"我是作者3","type":2,"status":0,"like_int":332,"comment_int":333}];
+//            self.loadOk(obj);
         },
         //加载更多
         more:function(){
@@ -85,6 +80,34 @@ define([
             var self = this;
             self._loading = false;
             self.trigger("workListView:colModelChange",[0]);
+        },
+        //根据ID删除话题对象
+        removeToWorkArr:function(gid){
+            var self = this;
+            //根据作品id判断是否存在，存在则删除
+            for(var i = 0; i < self.worksArr.length; i++){
+                debugger;
+                var tempWork = self.worksArr[i];
+                if(tempWork.objectId == gid){
+                    self.worksArr.splice(i,1);
+                    break;
+                }
+            }
+        },
+        delById:function(gid){
+            var self = this;
+            for(var j = 0; j < self.models.length; j++){
+                var tempModel = self.models[j];
+                if(tempModel && tempModel.get("objectId") == gid){
+                    self.remove(tempModel);
+                }
+            }
+            self.removeToWorkArr(gid);
+            self.reset(self.models);
+            //删除最后一个作品时,需添加无作品提示层
+            if(self.models.length <= 0){
+                self.trigger("workListView:colModelChange",[2]);
+            }
         }
     });
     return WorkColModel;

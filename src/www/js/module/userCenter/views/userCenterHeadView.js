@@ -36,8 +36,7 @@ define([
             var self = this,
                 userId = arr[0],
                 type = arr[1];
-
-            if(self.currentUser && self.currentUser.id == userId) {
+            if(self.currentUser && self.currentUser.id == self.currentUserId) {
                 self.model.setOtherShow(true, self.currentUserId);
             }else{
                 self.model.setOtherShow(false, self.currentUserId);
@@ -99,20 +98,20 @@ define([
             var self = this;
             self.currentUserId = userId;
             self.currentUser = gili_data.getCurrentUser();
-            //查询当前登录用户已关注用户ID列表 已点赞作品ID列表
+            //查询当前登录用户已关注用户ID列表 已点赞话题(插画)ID列表
             utils.loadAttentionList(self.currentUser.id);
             utils.loadLikedTplList(self.currentUser.id);
             //头像 昵称 简介 关注数 动态数 粉丝数
             if(self.currentUser && self.currentUser.id == userId) {
-                this.model.setOtherShow(true,self.currentUserId);
-                this.model.setName(this.currentUser.get("user_nick"));
-                this.model.setBrief(this.currentUser.get("brief"));
-                this.model.setHeadImg(this.currentUser.get("avatar"));
-                this.model.setFansNum(this.currentUser.get("follower_count"));
-                this.model.setAttentionNum(this.currentUser.get("followee_count"));
+                self.model.setOtherShow(true,self.currentUserId);
+                self.model.setName(this.currentUser.get("user_nick"));
+                self.model.setBrief(this.currentUser.get("brief"));
+                self.model.setHeadImg(this.currentUser.get("avatar"));
+                self.model.setFansNum(this.currentUser.get("follower_count"));
+                self.model.setAttentionNum(this.currentUser.get("followee_count"));
             }else{
-                this.model.setOtherShow(false,self.currentUserId);
-                this.model.loadOtherUser(userId);
+                self.model.setOtherShow(false,self.currentUserId);
+                self.model.loadOtherUser(userId);
             }
         },
         //销毁

@@ -5,7 +5,7 @@
     <div class="info-detail">
         <div class="info-detail-comment"><img src="images/common/comment2.png" alt="" class="info-detail-img"/><%=commentInt %></div>
         <div class="info-detail-zan"><img src="images/common/<%=zanName %>.png"  data-zan="<%=zanName %>" class="info-detail-img"/><%=likeInt %></div>
-        <div class="info-detail-date"><%=timeStr%></div>
+        <div class="info-detail-date"><span class="info-del" style=" <%=delShow %>">删除&nbsp;</span><%=timeStr%></div>
     </div>
     <div class="info-detail-list" <%=commentShow %>>
         <textarea name="commentTxt" id="commentTxt" cols="30" rows="10"></textarea>

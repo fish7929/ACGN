@@ -220,7 +220,7 @@
             };
             gili_data.followeeList(options,function(data){
                 var attList = [];
-                if(data && typeof data == 'object' && data.length > 0){
+                if(data && data.length > 0){
                     for(var i = 0; i < data.length; i++){
                         attList.push(data[i].id);
                     }

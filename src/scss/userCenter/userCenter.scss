@@ -26,6 +26,7 @@
       .info-detail-comment{width:33%; height: 20px; line-height: 20px; display: inline-block; text-align: left; cursor: pointer;}
       .info-detail-zan{width:33%;height: 20px; line-height: 20px; text-align: center; display: inline-block; cursor: pointer;}
       .info-detail-date{width:33%;height: 20px; line-height: 20px; display: inline-block; text-align: right; float: right;}
+      .info-del{font-size: 18px; color:red; cursor:pointer;}
       .info-detail-img{vertical-align: middle; margin-right: 12px; margin-top: -3px;}
     .info-article{ margin-top: 25px;padding:0px 63px; line-height: 33px; text-align: left; color:#3d3d3d; font-size: 14px; line-height: 20px;}
     .info-detail-list{width:600px; margin:0 auto;}
@@ -55,6 +56,8 @@
     .fans-item-head-img { width: 104px;  height: 104px;  margin-bottom: 12px; border: 2px solid #fff;}
     .btnAttention { width: 100px;  height: 50px; text-align: center; line-height: 50px;  color: #ffffff; background: orangered;
       font-size: 14px; font-weight: bold; border-radius: 24px;}
+//    已关注
+    .btnAttentionEd{ background: #c0c0c0;}
     .fans-item-data { width: 272px;  float: left; font-size: 18px; text-align: left;  }
     .nick_p { font-weight: bold;  margin-bottom: 10px; margin-top: 10px;  color: #333333;  }
     .address_p {
@@ -65,9 +68,13 @@
       font-size: 16px;
       margin-bottom: 15px;
       color: #3d3d3d;
+      height: 40px;
     }
     .data_p {
     }
   }
   .fans-item-2{padding-left: 66px; box-sizing: border-box; border-right: 0; }
 }
+
+#mz-square-sk-out{    margin-top: 10px; font-size: 14px;}
+.loading-gif img{width:24px; height: 24px; vertical-align: middle}

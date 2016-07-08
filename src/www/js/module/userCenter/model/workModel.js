@@ -8,8 +8,8 @@ define([],function(){
         },
         initialize:function(){
             var self = this;
-            self.likeInt = self.attributes.like_int;
-            self.commentInt = self.attributes.comment_int;
+            self.likeInt = self.attributes.like_int?self.attributes.like_int:0;
+            self.commentInt = self.attributes.comment_int?self.attributes.comment_int:0;
             var time = self.attributes.createdAt ? new Date(self.attributes.createdAt) : new Date();
             self.timeStr = utils.formatCreatedTime(time);
             self.commentShow = false;//默认不显示
