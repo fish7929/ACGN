@@ -65,6 +65,10 @@ define([
             self._onFaceSelect = self.onFaceSelect.bind(self);
         },
 
+        setBlogClass : function(){
+            this.$el.get(0).className = "commentContainerBlog";
+        },
+
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
             var self = this;
@@ -177,6 +181,7 @@ define([
         setCommentTarget : function(obj){
             var self = this;
             self._commentObj = obj;
+            console.log(obj);
             self.reset();
             self.addNextPage();
         },

@@ -60,7 +60,8 @@ define([
         opt.orderBy = "createdAt";
         opt.isDesc = true;
         gili_data.getBlogData(opt, function(data){
-            console.log(data);
+            data = utils.convert_2_json(data);
+            cb_ok(data);
         }, cb_err)
     };
 

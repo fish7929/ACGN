@@ -12,12 +12,12 @@ define([
     'module/home/views/home_user_view',
     'module/home/views/home_book',
     'module/home/views/home_college',
-    'module/home/views/home_excellent_book',
+    'module/home/views/home_blog',
     'module/home/views/home_link',
     'module/home/views/home_footer',
     'module/home/model/HomeModel'
 ],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, QHDCView, ActiveUserView, HomeBookView, HomeCollegeView,
-           HomeExcellentBookView, HomeLinkView, HomeFooterView, HomeModel) {
+           HomeBlogView, HomeLinkView, HomeFooterView, HomeModel) {
     var bannerHtmlTpl = "<div class='swiper-slide {2}' data-link='{1}' style=\"background: url('{0}') no-repeat center \"></div>";
 
     return BaseView.extend({
@@ -89,7 +89,7 @@ define([
             self._aUserView = new ActiveUserView();
             self._bookView = new HomeBookView();
             self._collegeView = new HomeCollegeView();
-            self._excellentBookView = new HomeExcellentBookView();
+            self._homeBlog = new HomeBlogView();
             self._homeLinkView = new HomeLinkView();
             self._homeFooterView = new HomeFooterView();
         },
@@ -120,7 +120,7 @@ define([
             self.ActiveUserRegion.show(self._aUserView);
             self.BookRegion.show(self._bookView);
             self.CollegeRegion.show(self._collegeView);
-            self.ExcellentBookRegion.show(self._excellentBookView);
+            self.ExcellentBookRegion.show(self._homeBlog);
             self.HomeLinkRegion.show(self._homeLinkView);
             self.HomeFooterRegion.show(self._homeFooterView);
         },
