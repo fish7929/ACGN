@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:wb="http://open.weibo.com/wb"  lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta property="qc:admins" content="2336345717671415156375"/>
+    <title>测试微博登录</title>
+</head>
+<body>
+<script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=834787454" type="text/javascript" charset="utf-8"></script>
+<button id="testwb">testwblogin</button>
+</body>
+
+<script>
+
+   function packageWblogResults (originObj) {
+       console.log(originObj);
+       return {
+            unionid: originObj.id.toString(),
+            nickname: originObj.name || '',
+            sexual: originObj.gender === 'm' ? 1 : originObj.gender === 'f' ? 2 : 0,
+            headimgurl: originObj.avatar_large
+        };
+    }
+    window.onload=function(){
+            WB2.anyWhere(function (W) {
+                W.widget.connectButton({
+                    id: "testwb",
+                    type: '3,2',
+                    callback: {
+                        login: function(data){
+                            alert("login: " + data.screen_name)
+                        }, //登录后的回调函数
+                        logout: function(){
+                            alert('logout');
+                        } //退出后的回调函数
+                    }
+                });
+            });
+    }
+</script>
+</html>

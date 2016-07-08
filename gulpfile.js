@@ -50,7 +50,7 @@ gulp.task('_copyCss', function () {
 });
 
 gulp.task('_copyJs', function () {
-    return gulp.src(["src/www/js/vendor/require.js", "src/www/js/vendor/av.js"], {base: 'src/www/js'})
+    return gulp.src(["src/www/js/vendor/require.js", "src/www/js/vendor/av.js", "src/www/js/lib/gili_config.js"], {base: 'src/www/js'})
         .pipe(gulp.dest(destDir + "/js"));
 });
 
