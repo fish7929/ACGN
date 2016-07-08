@@ -22,6 +22,7 @@ define([
             data = Marionette.ItemView.prototype.serializeData.apply(this,arguments);
             data.name = "我就是我";
             data.avatar = "images/temp/info_pic/head1.png";
+            data.address = "住址";
             data.brief = "我是简介";
             data.attentionNum = self.model.followee_count || 0;
             data.fansNum = self.model.follower_count || 0;

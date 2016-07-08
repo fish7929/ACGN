@@ -19,6 +19,7 @@ define([
             var self = this;
             self._loginBarView = new LoginBarView();
             self.userCenterHeadView = new UserCenterHeadView();
+            self.userCenterHeadView.on("fansView:clickNav",self.fansViewClickNavHandler,self);
             self.fansListView = new FansListView();
             self.fansListView.on("fansListView:change",self._fansListChangeHandler,self);
         },
@@ -39,16 +40,28 @@ define([
         },
         show:function(){
             var self = this;
+            //type 1粉丝列表  2关注列表
+            var type = self.getOption("type");
             var userId = self.getOption("userId");
+            self.userCenterHeadView.setSelected(type);
+            console.log("加载用户"+userId+",的"+type+"数据");
             self.updateMsg([1]);
             self.data_finish = false;
             self.addOnScroll();
             self.userCenterHeadView._loadData(userId);
-            self.fansListView.loadData(userId);
+            self.fansListView.loadData(userId,type);
         },
         pageIn:function(){
 
         },
+        /**
+         * 粉丝 关注切换
+         * @param type 1粉丝列表  2关注列表
+         */
+        fansViewClickNavHandler:function(type){
+            console.log("点击"+type)
+        },
+        //列表状态变化
         _fansListChangeHandler:function(type){
             var self = this;
             self.updateMsg(type);

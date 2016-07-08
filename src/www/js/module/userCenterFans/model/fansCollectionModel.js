@@ -9,6 +9,7 @@ define([
         worksArr:[],                //当前已读取粉丝列表
         pageSize:10,                //每页10条
         _userId:"",                  //用户ID
+        _type:1,                    //1粉丝列表   2关注列表
         _loading:false,
         initialize:function(){
             var self = this;
@@ -16,16 +17,21 @@ define([
             self.worksArr.length = 0;
             self.worksArr = [];
         },
-        //根据用户ID读取作品列表
-        load:function(userId){
+        /**
+         * 根据ID读取数据
+         * @param userId
+         * @param type 1粉丝数据  2关注数据
+         */
+        load:function(userId,type){
             var self = this;
             self._userId = userId;
+            self._type = type;
             self._loading = false;
             self.worksArr.length = 0;//清空数组
             self.worksArr = [];
-            self._load();
+            self._load(type);
         },
-        _load:function(){
+        _load:function(type){
             var self = this;
             if(self._loading == true) return;
             self._loading = true;
@@ -38,24 +44,19 @@ define([
             if(!loginUser || loginUser.id != self._userId){
                 options.user_id = self._userId;
             }
-//            gili_data.followerList(options,function(data){
-//                self.loadOk(data);
-//            },function(error){
-//                self.loadErr(error);
-//            });
-            var options = {
-                user_id:self._userId ,
-                skip:0,
-                limit:100,
-                orderBy:"",
-                isDesc:""
-            };
-            gili_data.followeeList(options,function(data){
-                debugger;
-                self.loadOk(data);
-            },function(err){
-                self.loadErr(err);
-            });
+            if(type == 1){
+                gili_data.followerList(options,function(data){
+                    self.loadOk(data);
+                },function(error){
+                    self.loadErr(error);
+                });
+            }else{
+                gili_data.followeeList(options,function(data){
+                    self.loadOk(data);
+                },function(err){
+                    self.loadErr(err);
+                });
+            }
         },
         //加载更多
         more:function(){

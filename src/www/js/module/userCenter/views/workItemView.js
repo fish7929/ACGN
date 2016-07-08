@@ -11,11 +11,15 @@ define([
         template: _.template(workItemTpl),
         model:workModel,
         pageSize:10, //每页10冬条
+        ui:{
+          "commentTxt":"#commentTxt"
+        },
         events:{
             "click .info-detail-comment":"_clickCommentHandler",
             "click .commentMore":"_clickCommentMoreHandler", //查看该作品更多评论
             "click .info-detail-zan":"_clickZanHandler",
-            "click .info-del":"_clickDelHandler"      //用户只能删除自己的动态话题等
+            "click .info-del":"_clickDelHandler",      //用户只能删除自己的动态话题等
+            "click .btnSend":"_clickSendHandler"       //点击发布
 //            "mouseover .uc_info_item":"_overItemHandler", //鼠标移入 显示“删除”按钮
 //            "mouseout .uc_info_item":"_outItemHandler" //鼠标移出 隐藏“删除”按钮
         },
@@ -172,6 +176,26 @@ define([
             },function(err){
                 MsgBox.alert("删除失败");
             })
+        },
+        //点击发送
+        _clickSendHandler:function(e){
+            var self = this;
+            var content = self.ui.commentTxt.val();
+            var belongId = self.model.id;
+            var commentType = 1;
+            var commentId = 0; //如果回复的话，回复评论ID 否则为0
+            var options = {
+                comment_id:commentId,
+                comment_type:commentType,
+                content:content,
+                belong_id:belongId
+            };
+            gili_data.snsSaveComment(options,function(data){
+                debugger;
+                MsgBox.alert("评论成功guyy todo");
+            },function(err){
+                MsgBox.alert("评论失败");
+            });
         }
 //        //移入
 //        _overItemHandler:function(e){

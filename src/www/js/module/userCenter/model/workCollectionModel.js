@@ -2,7 +2,7 @@
  * Created by GYY on 2016/6/30
  */
 define([
-    'module/userCenter/model/WorkModel'
+    'module/userCenter/model/workModel'
 ],function(WorkModel){
     var WorkColModel = Backbone.Collection.extend({
         model:WorkModel,

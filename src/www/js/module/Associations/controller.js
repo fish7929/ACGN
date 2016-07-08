@@ -5,8 +5,8 @@ define([
     'module/Associations/views/associationsView'
 ],function(AssociationsView){
     return {
-        Associations:function(){
-            app.page.show(AssociationsView);
+        Associations:function(userId){
+            app.page.show(AssociationsView,{userId:userId});
         }
     }
 });

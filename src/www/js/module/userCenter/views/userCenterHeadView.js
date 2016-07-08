@@ -77,12 +77,15 @@ define([
             var target = $(e.target);
             var index = target.data("liindex");
             if(this._type == index)return;
+            this._type = index;
             if(index == 0){     //指向当前打开用户的动态
                 app.navigate("#userCenter/"+self.currentUserId,{replace: false, trigger: true});
-            }else if(index == 1){ //指向当前打开用户的粉丝列表
-                app.navigate("#userCenterFans/"+self.currentUserId,{replace: false, trigger: true});
-            }else if(index == 2){//指向当前打开用户的关注列表
-
+            }else if(index == 1){
+                this.trigger("fansView:clickNav",[index]);
+                app.navigate("#userCenterFans/1/"+self.currentUserId,{replace: false, trigger: true});
+            }else if(index == 2){
+                this.trigger("fansView:clickNav",[index]);
+                app.navigate("#userCenterFans/2/"+self.currentUserId,{replace: false, trigger: true});
             }
         },
         /**

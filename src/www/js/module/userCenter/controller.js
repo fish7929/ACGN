@@ -9,8 +9,8 @@ define([
         userCenter:function(userId){
             app.page.show(UserCenterView,{userId:userId});
         },
-        userCenterFans:function(userId){
-            app.page.show(UserCenterFansView,{userId:userId});
+        userCenterFans:function(type,userId){
+            app.page.show(UserCenterFansView,{type:type,userId:userId});
         }
     }
 });

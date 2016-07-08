@@ -12,6 +12,7 @@ define([
         id:"AssociationsContainer",
         template: _.template(AssociationsTpl),
         _associateId:"",
+        _userId:"",
         initialize:function(){
             var self = this;
             this._loginBarView = new LoginBarView();
@@ -29,6 +30,7 @@ define([
         },
         show:function(){
             var self = this;
+            self._userId = self.getOption("userId");
             self._workListView.loadData(self._associateId)
         },
         pageIn:function(){},

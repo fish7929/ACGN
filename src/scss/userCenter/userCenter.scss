@@ -1,6 +1,7 @@
 #userCenterContainer{width:100%; margin:0 auto; overflow: hidden;}
 #userCenterLogin{margin-left: 40px;}
 #userCenterFansContainer{width:100%; margin:0 auto; overflow: hidden;}
+#userCenterAttentionsContainer{width:100%; margin:0 auto; overflow: hidden;}
 #userCenterHeader{width:1280px; height: 349px; background: url("../images/userCenter/icon01.png") no-repeat; background-size: 100%;
  text-align: center;  margin:5px auto auto auto;/* margin:0 auto; guyy todo*/
   .uc_headerImg{width:124px; height: 124px; border:2px solid #ffffff; border-radius: 50%; display: inline-block; margin-top: 71px;
@@ -16,7 +17,7 @@
     li{width:120px; height: 68px; line-height: 68px; font-size: 18px; color:#000000; text-align: center; float:left; cursor:pointer;}
     li:nth-child(2){margin:auto 20px;}
     .li_ck{border-bottom: 2px solid #f15313;}
-    span{color:#fc4500;}
+    span{color:#fc4500;pointer-events:none;}
   }
 }
 #userCenterInfo{width:726px; margin:0 auto;}
