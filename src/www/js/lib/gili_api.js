@@ -130,13 +130,23 @@ gili_data.followeePlan = function (options, cb_ok, cb_err) {
     var strCQL = " select * from followee_plan where plan_id='" + plan_id + "' and user_id='" + currentUser.id + "' ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
-            if (data.results.length > 0 && status == 999) {
-                //如果存在则 update  取消关注
-                obj.set("status", 1); 
-                obj.save(null, {
-                    success: cb_ok,
-                    error: cb_err
-                });
+            if (data.results.length > 0 ) {
+                var obj = data.results[0];
+                if(status == 999){
+                    //如果存在则 update  取消关注
+                    obj.set("status", 1);
+                    obj.save(null, {
+                        success: cb_ok,
+                        error: cb_err
+                    });
+                }else{
+                    //如果存在则 update  取消关注
+                    obj.set("status", 0);
+                    obj.save(null, {
+                        success: cb_ok,
+                        error: cb_err
+                    });
+                }
             } else {
                 //如果不存在则进行数据新增
                 insert();

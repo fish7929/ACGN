@@ -70,7 +70,7 @@ define([
         });
     };
     /**
-     * 根据用户Id和企划ID查询用户和企划的关系
+     * 根据用户Id和企划ID查询用户和企划报名的关系
      * @param userId
      * @param planId
      * @param cb_ok
@@ -83,6 +83,29 @@ define([
         gili_data.getUserPlanRelation(option, function(data){
             if(data){
                 cb_ok&&cb_ok(data);
+            }else{
+                cb_ok&&cb_ok(null);
+            }
+        }, function(err){
+            cb_err&&cb_err(err);
+        });
+    };
+    /**
+     * 根据用户Id和企划ID查询用户和企划，订阅的关系
+     * @param userId
+     * @param planId
+     * @param cb_ok
+     * @param cb_err
+     */
+    p.getUserFlloweePlanRelation  = function(userId, planId, cb_ok, cb_err){
+        var option = {};
+        option.user_id = userId;
+        option.plan_id = planId;
+        gili_data.getUserFlloweePlanRelation (option, function(data){
+            if(data){
+                cb_ok&&cb_ok(data);
+            }else{
+                cb_ok&&cb_ok(null);
             }
         }, function(err){
             cb_err&&cb_err(err);
@@ -116,8 +139,7 @@ define([
     p.joinPlan = function(id, cb_ok, cb_err){
         var option = {};
         option.plan_id = id;
-        option.status = 2;
-        gili_data.planOpration(option, function(data){
+        gili_data.joinPlan(option, function(data){
             cb_ok&&cb_ok(data);
         }, function(err){
             cb_err&&cb_err(err);
@@ -133,7 +155,7 @@ define([
         var option = {};
         option.plan_id = id;
         option.status = 1;
-        gili_data.planOpration(option, function(data){
+        gili_data.followeePlan(option, function(data){
             cb_ok&&cb_ok(data);
         }, function(err){
             cb_err&&cb_err(err);
@@ -149,7 +171,7 @@ define([
         var option = {};
         option.plan_id = id;
         option.status = 999;
-        gili_data.planOpration(option, function(data){
+        gili_data.followeePlan(option, function(data){
             cb_ok&&cb_ok(data);
         }, function(err){
             cb_err&&cb_err(err);
