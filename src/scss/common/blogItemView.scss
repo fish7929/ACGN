@@ -4,7 +4,6 @@
     border: 1px solid rgb(192,192,192);
     float: left;
     text-align: left;
-    display: inline-block;
     margin-bottom: 40px;
 }
 .blogItemView:nth-child(odd) {
@@ -56,17 +55,34 @@
     display: inline-block;
     height: 70px;
     line-height: 70px;
-    text-indent: 37px;
 }
 
 .blog-item-msg{
+    .blog-item-msg-btn{
+        width: 50px;
+        background: url(../images/common/comment.png) center no-repeat;
+        display: inherit;
+    }
+    .blog-item-msg-num{
+        margin-left: 50px;
+        color: #ff4200;
+        display: inherit;
+    }
     left: 127px;
-    color: #ff4200;
-    background: url(../images/common/comment.png) left center no-repeat;
 }
 
 .blog-item-love{
     left: 335px;
+    .blog-item-love-btn{
+        width: 50px;
+        background: url(../images/common/praise.png) no-repeat center;
+        display: inherit;
+    }
+    .blog-item-love-num{
+        margin-left: 50px;
+        color: #ff4200;
+        display: inherit;
+    }
     color: #333;
-    background: url(../images/common/praise.png) left center no-repeat;
+
 }

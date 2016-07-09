@@ -31,6 +31,8 @@ define([
         _commentObj : null,
         PageMaxNum : 10,
         currentPage : 0,
+        _isLoaded : false,
+        isShow : false,
         // key : selector
         ui : {
             noLoginDiv : ".commentLogin",
@@ -63,6 +65,7 @@ define([
             var self = this;
             self._faceView = new FaceView(self.ui.faceContainer);
             self._onFaceSelect = self.onFaceSelect.bind(self);
+            self.isShow = true;
         },
 
         setBlogClass : function(){
@@ -72,9 +75,15 @@ define([
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
             var self = this;
+            if(self.isShow) return;
+            self.isShow = true;
             self.checkLogin();
             self.$el.show();
             self.bindEvent();
+
+            if(self._isLoaded) return;
+            self.reset();
+            self.addNextPage();
         },
 
         onCommentListHandle : function(e){
@@ -181,9 +190,7 @@ define([
         setCommentTarget : function(obj){
             var self = this;
             self._commentObj = obj;
-            console.log(obj);
-            self.reset();
-            self.addNextPage();
+
         },
 
         onCommitHandle : function(e){
@@ -237,6 +244,8 @@ define([
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
             var self = this;
+            if(!self.isShow) return;
+            self.isShow = false;
             self.removeEvent();
             self.$el.hide();
         },
