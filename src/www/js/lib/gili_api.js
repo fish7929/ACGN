@@ -87,7 +87,7 @@ gili_data.joinPlan = function (options, cb_ok, cb_err) {
     var strCQL = " select * from join_plan where plan_id='" + plan_id + "' and user_id='" + currentUser.id + "' ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
-            if (data.results.length > 0) {
+            if (data.results.length > 0) { 
                 cb_err("已经关注该企划！");
             } else {
                 //如果不存在则进行数据新增
@@ -132,7 +132,7 @@ gili_data.followeePlan = function (options, cb_ok, cb_err) {
         success: function (data) {
             if (data.results.length > 0 && status == 999) {
                 //如果存在则 update  取消关注
-                obj.set("status", 1);
+                obj.set("status", 1); 
                 obj.save(null, {
                     success: cb_ok,
                     error: cb_err
@@ -352,7 +352,7 @@ gili_data.getPlanUserBlog = function (options, cb_ok, cb_err) {
         return;
     }
     //获取关注该企划的用户列表，取出用户id 拼成CQL,去blog作品表查询 且标签=企划名字
-    gili_data.getPlanUserByPlanId({ "plan_id": plan_id }, function (data) {
+    gili_data.getPlanUserByPlanId({"plan_id":plan_id}, function (data) {
         if (data.length>0) {
             var strCQL = dataToCQL(data);
             gili_data.getBlog(strCQL, function (blogs) {
@@ -1123,7 +1123,10 @@ gili_data.getFolloweeAllList = function (options, cb_ok, cb_err) {
  isDesc
  **/
 gili_data.followeeList = function (options, cb_ok, cb_err) {
-   
+    if (!this.getCurrentUser()) {
+        cb_err("请先登录!");
+        return;
+    }
     var orderBy = options.orderBy || "createdAt",
         isDesc = options.isDesc,
         skip = options.skip || 0,
@@ -1167,10 +1170,6 @@ gili_data.followeeList = function (options, cb_ok, cb_err) {
     if (user_id) {
         getUserObj();
     } else {
-        if (!this.getCurrentUser()) {
-            cb_err("请先登录!");
-            return;
-        }
         userCurrent = AV.User.current();
         queryFollowee();
     }
@@ -1184,7 +1183,10 @@ gili_data.followeeList = function (options, cb_ok, cb_err) {
  isDesc
  **/
 gili_data.followerList = function (options, cb_ok, cb_err) {
-   
+    if (!this.getCurrentUser()) {
+        cb_err("请先登录!");
+        return;
+    }
     var orderBy = options.orderBy || "createdAt",
         isDesc = options.isDesc,
         skip = options.skip || 0,
@@ -1228,10 +1230,6 @@ gili_data.followerList = function (options, cb_ok, cb_err) {
     if (user_id) {
         getUserObj();
     } else {
-        if (!this.getCurrentUser()) {
-            cb_err("请先登录!");
-            return;
-        }
         userCurrent = this.getCurrentUser();
         queryFollower();
     }

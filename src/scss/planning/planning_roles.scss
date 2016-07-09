@@ -1,0 +1,146 @@
+/*文件名称: planning_roles.css
+*
+* 创 建 人: fishYu
+* 创建日期: 2016/7/9 14:25
+* 描    述: 企划详情---更多用户详情
+*/
+#planning-roles-layer{
+    position: fixed;
+    top:0;
+    left:0;
+    z-index:999999;
+    width:100%;
+    height:100%;
+    font-size: 18px;
+    font-family: FZLanTingHei-L-GBK;
+    line-height: 26px;
+    color: #333333;
+}
+
+
+#roles-layer{
+    height: 595px;
+    padding-bottom: 35px;
+    top: 20%;
+}
+
+#planning-roles-layer-title{
+    height: 100px;
+    padding: 35px 0;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#planning-roles-layer-content{
+    width: 100%;
+    height: 494px;
+    text-align: center;
+    border-top: 0;
+    padding-top: 0;
+    overflow: hidden;
+}
+
+.planning-roles-wrapper{
+    width: 100%;
+    height: 420px;
+    overflow: hidden;
+}
+
+.role-layer-item{
+    width: 150px;
+    height: 180px;
+    margin-right: 37.5px;
+    margin-bottom: 35px;
+    float: left;
+}
+.role-layer-item:nth-child(5n+0){
+    margin-right: 0;
+}
+.role-layer-item img{
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+}
+.role-layer-name-hint{
+    margin-top: 20px;
+}
+
+.roles-operation-buttons{
+    width: 100%;
+    height: 50px;
+    padding: 0 50px;
+    text-align: left;
+    line-height: 50px;
+}
+.roles-first-page{
+    display: inline-block;
+    text-align: center;
+    width: 50px;
+    float: left;
+}
+
+
+.roles-page-number{
+    display: inline-block;
+    margin-left: 20px;
+    width: 370px;
+    height: 50px;
+    float: left;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+.roles-page-number span{
+    display: inline-block;
+    text-align: center;
+    margin-right: 20px;
+    width: 50px;
+    float: left;
+}
+.roles-page-number span:last-child{
+    margin-right: 0
+}
+.roles-last-page{
+    display: inline-block;
+    text-align: center;
+    width: 50px;
+    margin: 0 20px;
+}
+
+
+.roles-all-pages{
+    display: inline-block;
+    width: 60px;
+    margin-right: 10px;
+}
+.roles-page-number-input{
+    display: inline-block;
+    margin-right: 10px;
+}
+#page-number-txt{
+    width: 35px;
+    height: 20px;
+    display: inline-block;
+
+}
+.roles-go-to-page{
+    display: inline-block;
+    width: 50px;
+    text-align: center;
+}
+
+.roles-page-number-selected{
+    width: 50px;
+    height: 50px;
+    background: #fe5313;
+    border-radius: 100%;
+}
+/**
+*去掉输入框的箭头
+*/
+#page-number-txt::-webkit-outer-spin-button,
+#page-number-txt::-webkit-inner-spin-button{
+    -webkit-appearance: none !important;
+    margin: 0;
+}
+
+#page-number-txt{-moz-appearance:textfield;}
