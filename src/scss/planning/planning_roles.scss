@@ -81,7 +81,6 @@
 
 
 .roles-page-number{
-    display: inline-block;
     margin-left: 20px;
     width: 370px;
     height: 50px;
@@ -89,14 +88,13 @@
     overflow-x: auto;
     overflow-y: hidden;
 }
-.roles-page-number span{
-    display: inline-block;
+.roles-page-number li{
     text-align: center;
     margin-right: 20px;
     width: 50px;
     float: left;
 }
-.roles-page-number span:last-child{
+.roles-page-number div:last-child{
     margin-right: 0
 }
 .roles-last-page{
