@@ -124,6 +124,7 @@ define([
          * 重置属性和初始状态
          */
         resetData : function(){
+            var self = this;
             self.authorNick = null;
             self.currentNotice = null;
         }

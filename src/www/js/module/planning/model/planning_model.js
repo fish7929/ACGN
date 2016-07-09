@@ -88,23 +88,20 @@ define([
             cb_err&&cb_err(err);
         });
     };
-    var _joinUser = [];
     /**
      * 根据企划id查询已经报名该企划的用户列表
      * @param id
+     * @param limit
+     * @param skip
      * @param cb_ok
      * @param cb_err
      */
-    p.getJoinUserById = function(id, cb_ok, cb_err){
-        if(_joinUser[id]){
-            cb_ok&&cb_ok(_joinUser[id]);
-            return;
-        }
+    p.getJoinUserById = function(id,limit, skip, cb_ok, cb_err){
         var option = {};
-        option.limit = 6;
+        option.limit = limit;
+        option.skip = skip;
         option.plan_id = id;
         gili_data.getPlanUserByPlanId(option, function(data){
-            _joinUser[id] = data;
             cb_ok&&cb_ok(data);
         }, function(err){
             cb_err&&cb_err(err);
@@ -198,6 +195,32 @@ define([
             return pictures;
         }
         return null;
+    };
+
+    /**
+     * 查询动态作品
+     * @param id
+     * @param name
+     * @param limit
+     * @param skip
+     * @param cb_ok
+     * @param cb_err
+     */
+    p.queryDynamicOpus = function(id, name,limit, skip, cb_ok, cb_err){
+        var option = {};
+        option.plan_id = id;
+        option.plan_name = name;
+        option.limit = limit;
+        option.skip = skip;
+        option.isDesc = true;
+        option.orderBy = "createdAt";
+        gili_data.getPlanUserBlog(option, function(data){
+            if(data&&data.length > 0){
+                cb_ok&&cb_ok(data);
+            }
+        },function(err){
+            cb_err&&cb_err(err);
+        });
     };
     var planningModel = new PlanningModel();
     return planningModel;

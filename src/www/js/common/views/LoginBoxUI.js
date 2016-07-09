@@ -205,7 +205,7 @@ define([
         e.preventDefault();
         var self = this;
         self._hide();
-        window.open('https://graph.qq.com/oauth2.0/authorize?response_type=token&client_id=101326661&redirect_uri='+ encodeURIComponent("http://www.gililove.com/qq.html?platform=qq&v="+ Math.random()) +'', '_self')
+        window.open('https://graph.qq.com/oauth2.0/authorize?response_type=token&client_id=101326661&redirect_uri='+ encodeURIComponent("http://www.gilieye.com/qq.html?platform=qq&v="+ Math.random()) +'', '_self')
     };
     p._hide = function () {
         var self = this;
