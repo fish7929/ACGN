@@ -5,11 +5,12 @@ define([
     'common/base/base_view',
     'text!module/userCenter/templates/userCenter.html',
     'marionette',
+    'common/region/switch_view_region',
     'common/views/loginBar',
     'module/userCenter/views/userCenterHeadView',
     'module/userCenter/views/workListView',
     'msgbox'
-],function(BaseView,UserCenterTpl,mn,LoginBarView,UserCenterHeadView,WorkListView,MsgBox){
+],function(BaseView,UserCenterTpl,mn,SwitchViewRegion,LoginBarView,UserCenterHeadView,WorkListView,MsgBox){
     var userCenterView = BaseView.extend({
         id:"userCenterContainer",
         template: _.template(UserCenterTpl),
@@ -24,8 +25,18 @@ define([
             //点赞列表发生变化
             app.on("common:works:liked",self.likedChangeHandler,self);
         },
+//        regions : {
+//            LoginBarRegion: {
+//                el: "#login-nav",
+//                regionClass: SwitchViewRegion
+//            }
+//        },
         regions : {
-            "loginBar":"#userCenterLogin",
+            LoginBarRegion: {
+                el: "#userCenterLogin",
+                regionClass: SwitchViewRegion
+            },
+//            "loginBar":"#userCenterLogin",
             "headerCon":"#userCenterHeaderCon",
             "workCon":"#userCenterInfo"
         },
@@ -34,7 +45,9 @@ define([
             "loadMsg":"#mz-square-sk-text"
         },
         onRender:function(){
-            this.getRegion("loginBar").show(this._loginBarView);
+            var self = this;
+            self.LoginBarRegion.show(self._loginBarView);
+//            this.getRegion("loginBar").show(this._loginBarView);
             this.getRegion("headerCon").show(this.userCenterHeadView);
             this.userCenterHeadView.setSelected(0);
             this.getRegion("workCon").show(this._workListView);

@@ -39,7 +39,6 @@ define([
         pageIn : function(){
             var self = this;
             HomeModel.queryBlog(function(data){
-                console.log(data);
                 self.initList(data);
             });
             self.$el.show();
@@ -47,23 +46,14 @@ define([
 
         initList : function(data){
             var self = this;
-            self.clearItem();
+            self.ui.blogList.html("");
             for(var i = 0; i < data.length; i++){
                 var item = new BlogItemView();
                 item.render();
-                item.initData(data[i]);
+                item.initData(data[i], 1);
                 self.ui.blogList.append(item.$el);
             }
             self.ui.blogList.append($("<div class='clear'></div>"))
-        },
-
-        clearItem : function(){
-            var self = this;
-            for(var i = 0; i < self.itemList.length; i++){
-                self.itemList[i].onDestroy();
-                self.itemList[i] = null;
-            }
-            self.itemList = [];
         },
 
         /**页面关闭时调用，此时不会销毁页面**/

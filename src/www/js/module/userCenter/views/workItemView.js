@@ -5,28 +5,43 @@ define([
     'module/userCenter/model/workModel',
     'text!module/userCenter/templates/workItem.html',
     'marionette',
-    'msgbox'
-],function(workModel,workItemTpl,mn,MsgBox){
+    'msgbox',
+    'common/views/faceView'
+],function(workModel,workItemTpl,mn,MsgBox,FaceView){
     var WorkItemView = Marionette.ItemView.extend({
         template: _.template(workItemTpl),
         model:workModel,
         pageSize:10, //每页10冬条
+        isReply:false,    //当前是否给留言回复
+        replyUserId:"",   //当前回复评论 评论者昵称
+        replyUserName:"", //当前回复评论对象
+        replyCId:"",      //当前回复评论ID
+        replyKey:"",      //格式 ："回复@张三:"
         ui:{
-          "commentTxt":"#commentTxt"
+            "commentTxt":"#commentTxt",
+            "faceCon":".faceCon"
         },
         events:{
             "click .info-detail-comment":"_clickCommentHandler",
             "click .commentMore":"_clickCommentMoreHandler", //查看该作品更多评论
             "click .info-detail-zan":"_clickZanHandler",
             "click .info-del":"_clickDelHandler",      //用户只能删除自己的动态话题等
-            "click .btnSend":"_clickSendHandler"       //点击发布
+            "click .btnFace":"_clickFaceHandler",       //点击颜表情
+            "click .sp_reply":"_clickReplyHandler",    //点击评论
+            "click .btnSend":"_clickSendHandler",       //点击发布
+            "click .reply_userName":"_clickReplyUser"  //点击评论内容里的用户
 //            "mouseover .uc_info_item":"_overItemHandler", //鼠标移入 显示“删除”按钮
 //            "mouseout .uc_info_item":"_outItemHandler" //鼠标移出 隐藏“删除”按钮
         },
         initialize:function(){
+
         },
         render:function(){
             Marionette.ItemView.prototype.render.call(this);
+
+            var self = this;
+            if(!self.faceView)
+                self.faceView = new FaceView(self.ui.faceCon);
         },
         serializeData:function() {
             var self = this;
@@ -101,16 +116,26 @@ define([
             if(!commentArr || commentArr.length <= 0)return commentHtml;
             for(var i = 0; i < commentArr.length; i++){
                 var comment = commentArr[i];
+                var commentType = comment.comment_type;
                 var commentTime = comment.createdAt ? new Date(comment.createdAt):new Date();
                 var commentTimeStr = utils.formatCreatedTime(commentTime);
+                var cId = comment.id;//评论ID
+                var content = comment.content;
+                var contentStr = "";
+                if(commentType == 5){
+                    content = JSON.parse(content);
+                    contentStr = "回复@<span data-userid='"+content.uid+"' class='reply_userName'>"+content.uname+"</span>:"+content.content||"";
+                }else{
+                    contentStr = content;
+                }
                 commentHtml += this.commentTpl({headUrl:comment.user.avatar,
-                    commentName:comment.user.username,commentTime:commentTimeStr,commentTxt:comment.content});
+                    commentName:comment.user.user_nick,commentTime:commentTimeStr,commentTxt:contentStr,commentUserId:comment.user.userId,commentUserName:comment.user.user_nick,cId:cId});
             }
             commentHtml += '</div>';
             return commentHtml;
         },
         commentTpl: _.template('<div class="commentItem"><div class="commentHead" style="background:url(\'<%=headUrl%>\') no-repeat #f7f7f7 center; background-size:cover;"></div><div class="commentData">'+
-            '<div class="commentName"><%=commentName %>&nbsp;<span class="sp_time"><%=commentTime %></span><span class="sp_reply">回复</span></div>'+
+            '<div class="commentName"><%=commentName %>&nbsp;<span class="sp_time"><%=commentTime %></span><span data-cId="<%=cId %>" data-userId="<%=commentUserId %>" data-userName="<%=commentUserName %>" class="sp_reply">回复</span></div>'+
             '<div class="commentContext"><%=commentTxt %></div></div></div>'),
         //点击评论图片，显示评论列表或隐藏
         _clickCommentHandler:function(e){
@@ -151,7 +176,6 @@ define([
             if(target.data("zan") == "praise" && !utils.isLiked(gId)){ //点赞
                 utils.likeTopic(1,gId,function(){
                     self.model.likeInt++;
-                    self.model.attribute.like_int++;
                     self.render();
                 },function(){
                     console.log("点赞失败");
@@ -160,12 +184,18 @@ define([
             }else if(target.data("zan") == "praise_ck" && utils.isLiked(gId)) { //取消点赞
                 utils.likeTopic(0,gId,function(){
                     self.model.likeInt--;
-                    self.model.attribute.like_int--;
                     self.render();
                 },function(){
-                    console.log("默认点赞失败");
+                    console.log("取消点赞失败");
                 });
             }
+        },
+        //点击打开颜表情
+        _clickFaceHandler:function(e){
+            var self = this;
+            self.faceView.show(function(data){
+                debugger;
+            });
         },
         //删除
         _clickDelHandler:function(e){
@@ -177,34 +207,85 @@ define([
                 MsgBox.alert("删除失败");
             })
         },
+        //取消当前回复对象
+        removeReply:function(){
+            var self = this;
+            self.isReply = false;
+            self.replyCId = "";
+            self.replyUserId = "";
+            self.replyUserName = "";
+            self.replyKey = "";
+            self.ui.commentTxt.val("");
+        },
+        //设置当前回复对象
+        addReply:function(cId,userName,userId){
+            var self = this;
+            self.isReply = true;
+            self.replyCId = cId;
+            self.replyUserId = userId;
+            self.replyUserName = userName;
+            var key = "回复@"+userName+":";
+            self.replyKey = key;
+            self.ui.commentTxt.val(key);
+        },
+        //点击回复
+        _clickReplyHandler:function(e){
+            var self = this;
+            var target = $(e.target);
+            var cId = target.data("cid");
+            var userName = target.data("username");
+            var userId = target.data("userid");
+            self.addReply(cId,userName,userId);
+        },
         //点击发送
         _clickSendHandler:function(e){
             var self = this;
-            var content = self.ui.commentTxt.val();
-            var belongId = self.model.id;
+            self.isReply = false;
+            //如果是给话题留言  belongId话题ID  commentId话题ID content回复内容
+            //如果给话题留言回复 belongId话题ID  commentId被回复留言ID content {"content":"回复信息","uname":“补充回复人昵称”,"uid":“被回复人ID”}
+            var belongId = self.model.get("objectId");  //话题
             var commentType = 1;
-            var commentId = 0; //如果回复的话，回复评论ID 否则为0
+            var commentId = belongId; //如果回复的话，回复评论ID 否则为0  对象ID
+            var txt = self.ui.commentTxt.val();
+            var content = txt;
+            if(self.replyKey != "" && txt.indexOf(self.replyKey) == 0){
+                self.isReply = true;
+            }
+            if(self.isReply){
+                commentId = self.replyCId;
+                var contentObj = {};
+                txt = txt.substring(txt.indexOf(":")+1);
+                contentObj.content = txt;
+                contentObj.uname = self.replyUserName;
+                contentObj.uid = self.replyUserId;
+                commentType = 5; //给评论回复 类型为5
+                content = JSON.stringify(contentObj);
+            }
+            if(txt.trim() == ""){
+                MsgBox.alert("评论内容不能为空");
+                return;
+            }
             var options = {
+                belong_id:belongId,
                 comment_id:commentId,
                 comment_type:commentType,
-                content:content,
-                belong_id:belongId
+                content:content
             };
+            console.log(options);
             gili_data.snsSaveComment(options,function(data){
-                debugger;
-                MsgBox.alert("评论成功guyy todo");
+                self.model.addComment(data);
+                self.removeReply();
+                self.render();
             },function(err){
                 MsgBox.alert("评论失败");
             });
+        },
+        //点击回复对象用户ID 指向用户中心
+        _clickReplyUser:function(e){
+            var target = $(e.target);
+            var userId = target.data("userid");
+            app.navigate("userCenter/"+userId,{trigger:true,replace:true});
         }
-//        //移入
-//        _overItemHandler:function(e){
-//            console.log("over");
-//        },
-//        //移出
-//        _outItemHandler:function(e){
-//            console.log("out");
-//        }
     });
     return WorkItemView;
 });
