@@ -142,7 +142,15 @@ define([
          * 监听用户登出成功事件
          */
         onLogOutOkHandler: function () {
-
+            var self = this;
+            self.currentUser = null;
+                //报名
+            self.ui.joinPlanning.css({"background-image": "url(./images/common/btn-red.png)"})
+                .html("报名企划");
+            self.ui.joinPlanning.off("click").on("click", self.onJoinClickHandler.bind(self));
+            //订阅
+            self.ui.subscribePlanning.html("订阅企划");
+            self.ui.subscribePlanning.on("click", self.onSubscribeClickHandler.bind(self));
         },
         /**
          * 重置当前用户和企划的关系状态
@@ -424,7 +432,7 @@ define([
             this.planningRolesView.on("hide:planning:roles:handler", this.onPlanningRolesViewHideHandler, this); //隐藏击事件
             app.on("update:masonry:list", self.masonryRefresh, self);
             app.on("login:ok", this.onLoginOkHandler, this);
-            app.on("logOut:ok", this.onLoginOkHandler, this);
+            app.on("logOut:ok", this.onLogOutOkHandler, this);
                 window.onscroll = null;
                 window.onscroll = function (e){
                 var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
@@ -443,7 +451,7 @@ define([
             var self = this;
             app.off("update:masonry:list", self.masonryRefresh, self);
             app.off("login:ok", this.onLoginOkHandler, this);
-            app.off("logOut:ok", this.onLoginOkHandler, this);
+            app.off("logOut:ok", this.onLogOutOkHandler, this);
             this.planningNoticeView.off("hide:planning:notice:handle", this.onPlanningNoticeViewHideHandler, this);
             this.planningRolesView.off("hide:planning:roles:handler", this.onPlanningRolesViewHideHandler, this); //隐藏击事件
             window.onscroll = null;
@@ -564,6 +572,10 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
+            if(!self.currentUser){
+                MsgBox.toast("亲，请先登录！", false);
+                return;
+            }
             PlanningModel.joinPlan(self.planId, function (data) {
                 //点击报名成功的时候处理UI
                 if (data.get("approved") == 0) {
@@ -603,6 +615,10 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
+            if(!self.currentUser){
+                MsgBox.toast("亲，请先登录！", false);
+                return;
+            }
             PlanningModel.subscribePlan(self.planId, function (data) {
                 //点击报名成功的时候处理UI
                 if (data) {
