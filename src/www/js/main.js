@@ -18,6 +18,10 @@ require.config({
         marionette: {
             exports: 'Backbone.Marionette',
             deps: ['jquery','backbone']
+        },
+        masonry :{
+            deps : ['jquery'],
+            exports : 'jquery'
         }
     },
     paths: {
@@ -29,7 +33,8 @@ require.config({
         swiper : 'vendor/swiper',
         showbox : "common/views/ShowBox",
         giliApi : "lib/gili_api",
-        msgbox : "common/views/MsgBox"
+        msgbox : "common/views/MsgBox",
+        masonry : 'vendor/jquery.masonry'
     },
     waitSeconds: 0
 });
@@ -47,7 +52,8 @@ require([
     'swiper',
     'showbox',
     'giliApi',
-    'msgbox'
+    'msgbox',
+    'masonry'
 ], function($,Backbone, BackboneHistory, app, Controller, AppRouter) {
     //实例化AV
     AV.initialize("oCjYs9w05WuNmCk6sDblt7hY-gzGzoHsz", "yaREoDyiyoy5iWV2iWAODk5X");

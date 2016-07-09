@@ -15,7 +15,6 @@ define([
         self.el = self.$el.get(0);
         self.faceMask = self.$el.find(".face-mask");
         self.faceContent = self.$el.find(".fac-list-div");
-        console.log(parent);
         self.$el.appendTo(parent);
         self.initList();
         self.$el.hide();
@@ -26,7 +25,6 @@ define([
      * @param param.type 1：话题  2：插画
      */
     FaceView.prototype.show = function(cb_ok){
-        console.log("sh")
         var self = this;
         if(self._isShow) return;
         self._isShow = true;

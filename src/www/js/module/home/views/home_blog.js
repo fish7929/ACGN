@@ -42,23 +42,67 @@ define([
                 self.initList(data);
             });
             self.$el.show();
+            self.addEvent();
         },
 
         initList : function(data){
             var self = this;
+            self.clearItemList();
             self.ui.blogList.html("");
             for(var i = 0; i < data.length; i++){
                 var item = new BlogItemView();
                 item.render();
                 item.initData(data[i], 1);
+                self.itemList.push(item);
                 self.ui.blogList.append(item.$el);
             }
-            self.ui.blogList.append($("<div class='clear'></div>"))
+            self.ui.blogList.append($("<div class='clear'></div>"));
+            self.masonryRefresh(true);
+        },
+
+        clearItemList : function(){
+            var self = this;
+            for(var i=0; i<self.itemList.length; i++){
+                self.itemList[i].onDestroy();
+                self.itemList[i] = null;
+            }
+            self.itemList.length = 0;
+            self.ui.blogList.html("");
+        },
+
+        masonryRefresh : function(needLoad){
+            console.log(this.cid)
+            var self = this;
+            if(needLoad){
+                self.ui.blogList.imagesLoaded(function(){
+                    self.ui.blogList.masonry({
+                        itemSelector: '.blogItemView',
+                        columnWidth: 2 //每两列之间的间隙为5像素
+                    });
+                });
+            }else{
+                self.ui.blogList.masonry({
+                    itemSelector: '.blogItemView',
+                    columnWidth: 2 //每两列之间的间隙为5像素
+                });
+            }
+        },
+
+        addEvent : function(){
+            var self = this;
+            app.on("update:masonry:list", self.masonryRefresh, self);
+        },
+
+        removeEvent : function(){
+            var self = this;
+            app.off("update:masonry:list", self.masonryRefresh, self);
         },
 
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
             this.$el.hide();
+            this.removeEvent();
+            this.clearItemList();
         },
 
         //当页面销毁时触发

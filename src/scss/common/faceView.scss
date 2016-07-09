@@ -5,6 +5,7 @@
   left: 0;
   top: 0;
   background-color: rgba(0,0,0,0);
+  z-index: 999;
 }
 
 .face-container{
@@ -13,6 +14,7 @@
   height: 192px;
   background: url("../images/common/facebg.png") no-repeat center;
   margin-bottom: 20px;
+  z-index: 999;
 
   .fac-list-div{
     width: 100%;

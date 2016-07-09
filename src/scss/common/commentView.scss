@@ -256,6 +256,10 @@
     .comment-list-item:first-child{
       margin-top: 0px;
     }
+
+    .comment-list-item:last-child{
+      border-bottom: 0px;
+    }
   }
 
   .comment-view-more-btn{

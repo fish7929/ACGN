@@ -42,6 +42,7 @@ define([
 
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
+            console.log(this.cid);
             this.$el.show();
         },
 

@@ -54,10 +54,12 @@ define([
 
         setParam : function(bookId){
             this._bookId = bookId;
+            console.log(bookId)
         },
 
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
+            console.log(123);
             var self = this;
             BookModel.queryRandomBooks(self._bookId, self.ShowNum, function(data){
                 self.initList(data);
