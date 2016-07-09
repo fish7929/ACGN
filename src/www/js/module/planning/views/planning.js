@@ -409,7 +409,7 @@ define([
             this.planningRolesView.on("hide:planning:roles:handler", this.onPlanningRolesViewHideHandler, this); //隐藏击事件
             app.on("update:masonry:list", self.masonryRefresh, self);
             app.on("login:ok", this.onLoginOkHandler, this);
-            app.on("logOut:ok", this.onLogOutOkHandler, this);
+            app.on("logOut:ok", this.onLoginOkHandler, this);
                 window.onscroll = null;
                 window.onscroll = function (e){
                 var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
@@ -428,7 +428,7 @@ define([
             var self = this;
             app.off("update:masonry:list", self.masonryRefresh, self);
             app.off("login:ok", this.onLoginOkHandler, this);
-            app.off("logOut:ok", this.onLogOutOkHandler, this);
+            app.off("logOut:ok", this.onLoginOkHandler, this);
             this.planningNoticeView.off("hide:planning:notice:handle", this.onPlanningNoticeViewHideHandler, this);
             this.planningRolesView.off("hide:planning:roles:handler", this.onPlanningRolesViewHideHandler, this); //隐藏击事件
             window.onscroll = null;
@@ -549,7 +549,6 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            debugger;
             PlanningModel.joinPlan(self.planId, function (data) {
                 //点击报名成功的时候处理UI
                 if (data.get("approved") == 0) {
