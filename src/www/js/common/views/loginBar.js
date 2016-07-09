@@ -68,6 +68,7 @@ define([
         init : function(){
             var self = this;
             self.currentUser = gili_data.getCurrentUserJSON();
+            console.log(self.currentUser, 6333333);
             var headUrl = "./images/login/common-user.jpg";
             var userName = "道道好劲道";
             if(self.currentUser){
@@ -80,6 +81,10 @@ define([
         _initView : function(){
             var self = this;
             if(self.currentUser){
+                var headUrl = self.currentUser.avatar;
+                var userName = self.currentUser.user_nick;
+                self.ui.userPic.css({"background" : "url('"+headUrl+"') repeat center", "background-size" : "100%"});
+                self.ui.userName.html(userName);
                 self.ui.userInfoLayer.show();
                 self.ui.loginBtnsLayer.hide();
             }else{
@@ -126,8 +131,8 @@ define([
         showUserOperationLayer : function(tempX){
             var self = this;
             self.isShowUserOperationLayer = true;
-            var marginRight = tempX - self.ui.userOperationLayer.width();
-            self.ui.userOperationLayer.css({"margin-right":  marginRight+"px"});
+//            var marginRight = tempX - self.ui.userOperationLayer.width();
+//            self.ui.userOperationLayer.css({"margin-right":  marginRight+"px"});
             self.ui.userOperationLayer.show();
         },
         hideUserOperationLayer : function(){

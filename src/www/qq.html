@@ -1,0 +1,156 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta property="qc:admins" content="2336345717671415156375"/>
+    <title></title>
+    <script src="http://www.gililove.com/js/vendor/av.js"></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            //实例化AV
+            AV.initialize("oCjYs9w05WuNmCk6sDblt7hY-gzGzoHsz", "yaREoDyiyoy5iWV2iWAODk5X");
+            var accessToken = getTokenParam();
+
+            AV.Cloud.run('getOauthData', { access_token: accessToken }, {
+                success: function (obj) {
+                    var platform = getParam(location.href, 'platform');
+                    loginuser(afreshPackageData(obj, platform));
+                },
+                error: function (err) {
+                    console.log(err.message);
+                }
+            });
+
+        });
+
+        function afreshPackageData(obj, platform) {
+            platform || (platform = 'qq');
+
+            var retObj = {},
+                    originObj = JSON.parse(obj.data);
+
+            if (platform === 'qq') {
+                retObj.unionid = obj.openid;
+                retObj.nickname = originObj.nickname || '';
+                retObj.sexual = originObj.gender ? originObj.gender === '男' ? 1 : 2 : 0;
+                retObj.headimgurl = originObj.figureurl_qq_1 ? originObj.figureurl_qq_1.replace(/\\\//g, function (str) {
+                    return '/';
+                }) : '';
+            }
+
+            return retObj;
+        }
+
+        /**
+         * query string 转换成 query object
+         *
+         * @params querystring {string} 查询字符串
+         * @return {string}
+         */
+        function getQueryObject(querystring) {
+            var ret = {},
+                    querys = querystring.split('&'), splitters;
+
+            querys.forEach(function (_query) {
+                splitters = _query.split('=');
+                splitters.length > 1 && (ret[splitters[0]] = splitters[1]);
+            });
+
+            return ret;
+        }
+
+        /**
+         * 获取url参数值
+         *
+         * @params url {string} url
+         * @params name {string} 参数名
+         * @return {string}
+         */
+        function getParam(url, name) {
+            var match = new RegExp('' + name + '\\s?=(.*?)&', 'i').exec(url),
+                    queryObj = match ? this.getQueryObject(match[0]) : {};
+
+            return queryObj[name];
+        }
+
+        /**
+         * 获取Token
+         */
+        function getTokenParam() {
+            var url = location.href;
+            var queryString = url.substring(url.indexOf('#') + 1, url.lastIndexOf('&'));
+
+            return queryString.split('=')[1];
+        }
+
+        //获取请求url参数值
+        function GetRequest() {
+            var theRequest = [];
+            var url = location.href; //获取url中"?"符后的字串
+            var re_url = (url.substring(url.indexOf("#"), url.length)).substr(2);
+            var strs = re_url.split("&");  //把获取到的字符串进行数组分割每一个"&"之后都成为一个数组赋值给strs
+            for (var i = 0; i < strs.length; i++) {     //循环数组长度
+                theRequest[strs[i].split("=")[0]] = unescape(strs[i].split("=")[1]);    //解码字符串strs[i]从中分割“=”的第一个数组赋值给theRequest变量
+            }
+            return theRequest;
+        }
+
+        function loginuser(data) {
+            var unionid = data.unionid;
+            var nickname = data.nickname;
+            var sexual = data.sexual;
+            var headimgurl = data.headimgurl;
+            //检索对象
+            var User = AV.Object.extend("_User");
+            var query = new AV.Query(User);
+            query.equalTo("username", unionid);
+            query.find({
+                success: function (user) {
+                    if (user.length > 0) {
+                        //用户存在则登陆绑定
+                        AV.User.logIn(unionid, "6a063e705a16e625", {
+                            success: function (_user) {
+                                window.location.href = 'http://www.gililove.com';
+                            },
+                            error: function (_user, error) {
+                                console.log(error.message);
+                            }
+                        })
+                    } else {
+                        //用户不存在则注册
+                        var user = new AV.User();
+                        user.set("username", unionid);
+                        user.set("password", "6a063e705a16e625"); //me第三方登录
+                        user.set('user_nick', nickname);
+                        user.set("avatar", headimgurl);
+                        user.set("sex", sexual);
+                        user.signUp(null, {
+                            success: function (user) {
+                                //注册成功则登陆
+                                AV.User.logIn(unionid, "6a063e705a16e625", {
+                                    success: function (user) {
+                                        window.location.href = 'http://www.gililove.com';
+                                    },
+                                    error: function (user, error) {
+                                        console.log(error.message);
+                                    }
+                                })
+                            },
+                            error: function (user, error) {
+                                console.log(error.message);
+                            }
+                        })
+                    }
+                },
+                error: function (error) {
+                    console.log(error.message);
+                }
+            });
+        }
+    </script>
+
+</head>
+<body>
+
+
+</body>
+</html>
