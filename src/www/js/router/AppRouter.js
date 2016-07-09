@@ -21,7 +21,7 @@ define([
             "userCenterFans" : "userCenterFans", //用户中心-粉丝 add by guYY
             "userCenterFans/:type/:userId" : "userCenterFans", //用户中心-type=1粉丝列表  type-2关注列表 add by guYY
             "associations" : "Associations", //社团 add by guYY
-            "associations/:userId" : "Associations", //社团 add by guYY
+            "associations/:assoId" : "Associations", //社团 add by guYY
             //同人本详情
             "book/:bookId" : "book",
             //发布页面

@@ -5,33 +5,49 @@ define([
     'common/base/base_view',
     'text!module/Associations/templates/associations.html',
     'marionette',
+    'common/region/switch_view_region',
     'common/views/loginBar',
-    'module/userCenter/views/workListView'
-],function(BaseView,AssociationsTpl,mn,LoginBarView,WorkListView){
+    'module/Associations/model/associationsModel',
+    'module/userCenter/views/workListView',
+    'msgbox'
+],function(BaseView,AssociationsTpl,mn,SwitchViewRegion,LoginBarView,AssociationsModel,WorkListView,MsgBox){
     var associationsView = BaseView.extend({
         id:"AssociationsContainer",
         template: _.template(AssociationsTpl),
         _associateId:"",
-        _userId:"",
+        _assoId:"", //当前社团ID
         initialize:function(){
             var self = this;
+            self.model = new AssociationsModel();
             this._loginBarView = new LoginBarView();
             this._workListView = new WorkListView();
             this._workListView.on("workListView:change",self._workListChangeHandler,self);
         },
         regions : {
-            "loginBar":"#associationsLogin",
+            LoginBarRegion: {
+                el: "#associationsLogin",
+                regionClass: SwitchViewRegion
+            },
             "workList":"#main_left"
         },
         onRender:function(){
-            this.getRegion("loginBar").show(this._loginBarView);
+            var self = this;
+            self.LoginBarRegion.show(self._loginBarView);
             this.getRegion("workList").show(this._workListView);
             //社团成员  关注用户
         },
         show:function(){
             var self = this;
-            self._userId = self.getOption("userId");
-            self._workListView.loadData(self._associateId)
+            self._assoId = self.getOption("assoId");
+            if(!self._assoId) {
+                MsgBox.alert("无效路由");
+                return;
+            }
+            debugger;
+            //根据社团ID查询社团对象
+            self.model.getAssociationsById(self._assoId);
+            self._workListView.loadData("577a773d0a2b58393762f328");//guyy todo
+//            self._workListView.loadData(self._associateId)
         },
         pageIn:function(){},
         //列表状态更新

@@ -74,7 +74,7 @@ define([
             self.updateMsg([1]);
             self.userCenterHeadView._loadData(self._userId);
             self.addOnScroll();
-            self._workListView.loadData(self._userId)
+            self._workListView.loadData(self._userId);
         },
         pageIn:function(){
 
