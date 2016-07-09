@@ -68,11 +68,10 @@ gili_data.getUserById = function (user_id, cb_ok, cb_err) {
 };
 ////////////////////////////////////////////////// 企划相关 /////////////////////////////////////////////////////////
 
-/** 加入 关注企划
+/** 报名企划
  * plan_id，企划id
- * status,1-关注，2-加入,999-取消关注
  **/
-gili_data.planOpration = function (options, cb_ok, cb_err) {
+gili_data.joinPlan = function (options, cb_ok, cb_err) {
     var plan_id = options.plan_id,
         status = options.status;
     var currentUser = this.getCurrentUser();
@@ -85,25 +84,55 @@ gili_data.planOpration = function (options, cb_ok, cb_err) {
         return;
     }
 
-    var strCQL = " select * from plan_relation where plan_id='" + plan_id + "' and user_id='" + currentUser.id + "' ";
+    var strCQL = " select * from join_plan where plan_id='" + plan_id + "' and user_id='" + currentUser.id + "' ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
             if (data.results.length > 0) {
-                //如果存在则 update
-                var obj = data.results[0];
-                var his_status = obj.get("status") || 0;
-                if (his_status == 1 && status == 2) {
-                    obj.set("status", 3);
-                } else if (his_status == 2 && status == 1) {
-                    obj.set("status", 3);
-                    obj.set("approved", 0);
-                } else if (his_status == 3 && status == 999) {
-                    obj.set("status", 2);
-                } else if (his_status == 1 && status == 999) {
-                    obj.set("status", 0);
-                } else {
-                    obj.set("status", status);
-                }
+                cb_err("已经关注该企划！");
+            } else {
+                //如果不存在则进行数据新增
+                insert();
+            }
+        },
+        error: cb_err
+    });
+    var insert = function (obj) {
+        var join_plan = AV.Object.extend("join_plan");
+        var obj = new join_plan();
+        obj.set("plan_id", plan_id);
+        obj.set("user", currentUser);
+        obj.set("user_id", currentUser.id);
+        obj.set("status", 0);
+        obj.set("approved", 0);
+        obj.save(null, {
+            success: cb_ok,
+            error: cb_err
+        });
+    }
+};
+/**订阅企划
+ * plan_id，企划id
+ * status,1-关注，999-取消关注
+ **/
+gili_data.followeePlan = function (options, cb_ok, cb_err) {
+    var plan_id = options.plan_id,
+        status = options.status;
+    var currentUser = this.getCurrentUser();
+    if (!plan_id) {
+        cb_err("企划id为空");
+        return;
+    }
+    if (!currentUser) {
+        cb_err("请先登录!");
+        return;
+    }
+
+    var strCQL = " select * from followee_plan where plan_id='" + plan_id + "' and user_id='" + currentUser.id + "' ";
+    AV.Query.doCloudQuery(strCQL, {
+        success: function (data) {
+            if (data.results.length > 0 && status == 999) {
+                //如果存在则 update  取消关注
+                obj.set("status", 1);
                 obj.save(null, {
                     success: cb_ok,
                     error: cb_err
@@ -116,12 +145,12 @@ gili_data.planOpration = function (options, cb_ok, cb_err) {
         error: cb_err
     });
     var insert = function (obj) {
-        var club_relation = AV.Object.extend("plan_relation");
-        var obj = new club_relation();
+        var followee_plan = AV.Object.extend("followee_plan");
+        var obj = new followee_plan();
         obj.set("plan_id", plan_id);
         obj.set("user", currentUser);
         obj.set("user_id", currentUser.id);
-        obj.set("status", parseInt(status));
+        obj.set("status", 0);
         obj.save(null, {
             success: cb_ok,
             error: cb_err
@@ -129,6 +158,7 @@ gili_data.planOpration = function (options, cb_ok, cb_err) {
     }
 };
 
+///获取企划
 gili_data.getPlan = function (options, cb_ok, cb_err) {
     var pageNumber = options.pageNumber || 0,
         pageSize = options.pageSize || 1000;
@@ -233,7 +263,7 @@ gili_data.getUser = function (options, cb_ok, cb_err) {
     });
 };
 
-/** 企划id 获取已经报名该企划的用户列表
+/**参与角色 根据企划id获取已经成功报名该企划的用户列表
  * plan_id
  * skip
  * limit
@@ -247,11 +277,10 @@ gili_data.getPlanUserByPlanId = function (options, cb_ok, cb_err) {
     if (!plan_id) {
         cb_err("plan_id为空！");
     }
-    var query = new AV.Query("plan_relation");
+    var query = new AV.Query("join_plan");
     query.equalTo("plan_id", plan_id);
     query.include("user");
-    query.equalTo("status", 2);//状态为1的
-    query.equalTo("status", 3);//状态为1的
+    query.notEqualTo("status", 1);//状态为1的 
     query.equalTo("approved", 1);//审核通过的、
     query.skip(skip);
     query.limit(limit);
@@ -290,13 +319,13 @@ gili_data.getPlanUserCountByPlanId = function (plan_id, cb_ok, cb_err) {
     if (!plan_id) {
         cb_err("plan_id为空！");
     }
-    var strCQL = " select * from plan_relation where plan_id='" + plan_id + "' and approved=1 and status in (2,3) ";
+    var strCQL = " select count(*) from join_plan where plan_id='" + plan_id + "' and approved=1 and status !=1 ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
-            if (data.results) {
-                cb_ok(data.results[0]);
+            if (data) {
+                cb_ok(data);
             } else {
-                cb_err();
+                cb_err("数据为空！");
             }
         },
         error: cb_err
@@ -355,7 +384,7 @@ gili_data.getPlanUserBlog = function (options, cb_ok, cb_err) {
         return CQL;
     }
 };
-/** 根据用户id,企划id查看用户和企划的关系
+/** 根据用户id,企划id查看用户和企划报名的关系
  * user_id,
  *  plan_id,
  **/
@@ -363,7 +392,7 @@ gili_data.getUserPlanRelation = function (options, cb_ok, cb_err) {
     var user_id = options.user_id,
         plan_id = options.plan_id;
 
-    var strCQL = " select * from plan_relation where user_id='" + user_id + "' and  plan_id='" + plan_id + "' ";
+    var strCQL = " select * from join_plan where user_id='" + user_id + "' and  plan_id='" + plan_id + "' ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
             if (data.results) {
@@ -375,6 +404,28 @@ gili_data.getUserPlanRelation = function (options, cb_ok, cb_err) {
         error: cb_err
     });
 };
+/** 根据用户id,企划id查看用户和企划订阅的关系
+ * user_id,
+ *  plan_id,
+ **/
+gili_data.getUserFlloweePlanRelation = function (options, cb_ok, cb_err) {
+    var user_id = options.user_id,
+        plan_id = options.plan_id;
+
+    var strCQL = " select * from followee_plan where user_id='" + user_id + "' and  plan_id='" + plan_id + "' ";
+    AV.Query.doCloudQuery(strCQL, {
+        success: function (data) {
+            if (data.results) {
+                cb_ok(data.results[0]);
+            } else {
+                cb_err();
+            }
+        },
+        error: cb_err
+    });
+};
+
+
 
 ////////////////////////////////////////////////// 首页相关 /////////////////////////////////////////////////////////
 /** 查询专题banner数据
