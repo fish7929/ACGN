@@ -92,7 +92,6 @@ define([
             self._homeBlog = new HomeBlogView();
             self._homeLinkView = new HomeLinkView();
             self._homeFooterView = new HomeFooterView();
-            console.log("home INITIALIZE");
         },
 
         //在开始渲染模板前执行，此时当前page没有添加到document

@@ -43,6 +43,10 @@ define([
             });
             self.$el.show();
             self.addEvent();
+            $('.home-blog-list').masonry({
+                itemSelector: '.blogItemView',
+                columnWidth: 2 //每两列之间的间隙为5像素
+            });
         },
 
         initList : function(data){
@@ -71,20 +75,13 @@ define([
         },
 
         masonryRefresh : function(needLoad){
-            console.log(this.cid)
             var self = this;
             if(needLoad){
                 self.ui.blogList.imagesLoaded(function(){
-                    self.ui.blogList.masonry({
-                        itemSelector: '.blogItemView',
-                        columnWidth: 2 //每两列之间的间隙为5像素
-                    });
+                    $('.home-blog-list').masonry('reload');
                 });
             }else{
-                self.ui.blogList.masonry({
-                    itemSelector: '.blogItemView',
-                    columnWidth: 2 //每两列之间的间隙为5像素
-                });
+                $('.home-blog-list').masonry('reload');
             }
         },
 
