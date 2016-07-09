@@ -19,20 +19,21 @@ define([
             authorPic : ".blog-item-author-pic",
             authorName : ".blog-item-author-name",
             authorBrief : ".blog-item-author-brief",
-            blogMsgNum : ".blog-item-msg",
-            blogLoveNum : ".blog-item-love",
-            commentDiv : ".blog-comment-region"
+            blogMsgNum : ".blog-item-msg-num",
+            blogLoveNum : ".blog-item-love-num",
+            commentDiv : ".blog-comment-region",
+            btnComment : ".blog-item-msg-btn",
+            btnLove : ".blog-item-love-num"
         },
 
         ShowNum : 3,
         //事件添加
         events : {
+            "click @ui.btnComment" : "onBtnCommentHandle"
         },
 
         /**初始化**/
         initialize : function(){
-            // this._commentView = new CommentView();
-            console.log("initialize");
         },
 
         //在开始渲染模板前执行，此时当前page没有添加到document
@@ -46,25 +47,44 @@ define([
             self._commentView.render();
             self.ui.commentDiv.append(self._commentView.$el);
             self._commentView.setBlogClass();
-            self._commentView.pageIn();
+            self._commentView.close();
         },
 
-        initData : function(data){
+        initData : function(data, commentType){
             var self = this;
-            var url = './images/planning/trends/1.jpg';
+            var id = data.objectId;
+            var pic = data.pictures[0];
+            var userPic = data.user.avatar;
+            var userName = data.user.user_nick;
+            var brief = data.user.brief;
+            var likeNum = data.like_int || 0;
+            var comment_int = data.comment_int || 0;
             var image = new Image();
             image.onload = function(){
                 self.ui.blogImage.css({height:image.height});
+                image = null;
             };
-            image.src = url;
-            self.ui.blogImage.css({background:"url('"+url+"') no-repeat center"});
-            self.ui.authorPic.css({background:"url('./images/planning/trends/role-1.png') no-repeat center"});
-            self.ui.authorName.html("好像什么也咩有");
-            self.ui.authorBrief.html(data.topic);
-            self.ui.blogMsgNum.html("199");
-            self.ui.blogLoveNum.html("200")
-            var opt = {comment_id: "57790e112e958a005595e55e", comment_type: 2};
+            image.src = pic;
+            self.ui.blogImage.css({background:"url('"+pic+"') no-repeat center"});
+            self.ui.authorPic.css({background:"url('"+userPic+"') no-repeat center"});
+            self.ui.authorName.html(userName);
+            self.ui.authorBrief.html(brief);
+            self.ui.blogMsgNum.html(comment_int);
+            self.ui.blogLoveNum.html(likeNum);
+
+            var opt = {comment_id: id, comment_type: commentType};
             self._commentView.setCommentTarget(opt);
+        },
+
+        onBtnCommentHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            if(self._commentView.isShow){
+                self._commentView.close();
+            }else{
+                self._commentView.pageIn();
+            }
         },
 
 
