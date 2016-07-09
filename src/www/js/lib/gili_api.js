@@ -299,8 +299,8 @@ gili_data.getPlanUserBlog = function (options, cb_ok, cb_err) {
         return;
     }
     //获取关注该企划的用户列表，取出用户id 拼成CQL,去blog作品表查询 且标签=企划名字
-    gili_data.getPlanUserByPlanId(plan_id, function (data) {
-        if (data) {
+    gili_data.getPlanUserByPlanId({"plan_id":plan_id}, function (data) {
+        if (data.length>0) {
             var strCQL = dataToCQL(data);
             gili_data.getBlog(strCQL, function (blogs) {
                 cb_ok(blogs);

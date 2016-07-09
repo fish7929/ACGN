@@ -1,33 +1,34 @@
 /**
- *   功能：点击公告
- *   概述：公告详情显示
- *   时间：2016/7/2
+ *   功能：点击查看更多用户
+ *   概述：更多用户显示
+ *   时间：2016/7/9
  *   人物：fishYu
  */
 define([
     'common/base/item_view',
-    'text!module/planning/templates/planning_notice.html',
+    'text!module/planning/templates/planning_roles.html',
     "marionette"
 ],function(ItemView,tpl, mn) {
     /**
      * 活动类型
      */
     return ItemView.extend({
-        id: 'planning-notice-layer',
+        id: 'planning-roles-layer',
         template: _.template(tpl),
         _isShow: false,
         parentView : null,  //父对象
-        authorNick : "",
-        currentNotice : null,
+        roleSkip : 6,       //从第六条开始
+        limit : 10,
         // key : selector
         ui: {
-            planningNoticeMask:'#planning-notice-mask',
-            noticeLayerTitle : ".planning-notice-layer-title",
-            noticeLayerContent : ".planning-notice-layer-content"
+            planningRolesMask:'#planning-roles-mask',
+            rolesLayerTitle : "#planning-roles-layer-title",
+            rolesLayerContent : ".planning-roles-wrapper"
         },
         //事件添加
         events: {
-            'click @ui.planningNoticeMask' : "hidePlanningNoticeHandle"
+            'click @ui.planningRolesMask' : "hidePlanningRolesHandler",
+            'click @ui.rolesLayerContent' : "onRolesLayerClickHandler"
         },
         /**初始化**/
         initialize: function () {
@@ -43,8 +44,6 @@ define([
         },
         show : function(){
             var self = this;
-            self.authorNick = self.parentView.moderatorNick;
-            self.currentNotice = self.parentView.currentNotice;
             self._initView();
         },
         /**
@@ -53,15 +52,6 @@ define([
          */
         _initView : function(){
             var self = this;
-            if(self.currentNotice){
-                var time = utils.formatTime(self.currentNotice.createdAt, "yyyy.MM.dd HH:mm");
-                var titleTemp = '<div class="planning-notice-layer-type">' +
-                    self.currentNotice.description + '</div>'+
-                    '<div class="planning-notice-layer-author"><span>' +self.authorNick +
-                    '</span><span>' + time+'</span></div>';
-                self.ui.noticeLayerTitle.html(titleTemp);
-                self.ui.noticeLayerContent.html(self.currentNotice.content);
-            }
         },
         //页间动画已经完成，当前page已经加入到document
         pageIn: function () {
@@ -70,6 +60,7 @@ define([
             }
             this._isShow = true;
             this._animate(false);
+            $ (window).unbind ('scroll');
         },
         /**页面关闭时调用，此时不会销毁页面**/
         close: function () {
@@ -108,24 +99,41 @@ define([
             }
             this._isShow = false;
             this._animate(true);
+            $ (window).on ('scroll');
         },
         /**
          * 点击遮罩时候事件
          * @param e
          * @private
          */
-        hidePlanningNoticeHandle : function(e){
+        hidePlanningRolesHandler : function(e){
             e.preventDefault();
             e.stopPropagation();
-            mn.triggerMethodOn(this, "hide:planning:notice:handle");
+            mn.triggerMethodOn(this, "hide:planning:roles:handler");
 
+        },
+        /**
+         *
+         * @param e
+         */
+        onRolesLayerClickHandler : function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            mn.triggerMethodOn(this, "hide:planning:roles:handler");
+            var self = this;
+            var target = e.target;
+            var $target = $(target);
+            var roleId = $target.attr("role-id");
+            if(roleId){
+                app.navigate("userCenter/" + roleId, {replace:false, trigger: true});
+            }
         },
         /**
          * 重置属性和初始状态
          */
         resetData : function(){
             var self = this;
-            self.authorNick = null;
+            self.roleSkip = 0;
             self.currentNotice = null;
         }
     });

@@ -12,11 +12,12 @@ define([
     "module/planning/model/planning_model",
     'common/region/control_view',
     "module/planning/views/planning_notice",
-    'common/views/faceView',
+    "module/planning/views/planning_roles",
     "module/publish/views/publishView",
-    "module/book/views/bookPreviewView"
+    "module/book/views/bookPreviewView",
+    'common/views/BlogItemView'
 ],function(BaseView, tpl, mn,SwitchViewRegion, LoginBarView, MsgBox, PlanningModel, ControlView,PlanningNoticeView,
-           FaceView, PublishView, BookPreviewView) {
+           PlanningRolesView,PublishView, BookPreviewView, BlogItemView) {
     return BaseView.extend({
         id: "gili-love-planning",
         template : _.template(tpl),
@@ -28,6 +29,9 @@ define([
         currentNotice : null,   //当前选中的通告对象
         planName : "",      // 企划名称
         planId : "",    //企划ID
+        limit : 6,      //最少查询6条
+        skip: 0,        //跳过多少条
+        COMMENT_TYPE : 3,   //评论查询的类型
         ui : {
             planningBanner : "#planning-banner",        //企划banner
             planningAuthor : ".planning-author",          //企划用户信息
@@ -42,12 +46,7 @@ define([
             roleContent : ".role-content",                  //参加角色
             moreRole : "#more-role",                            //更多角色
             hottestOpusContent : ".hottest-opus-content",        //最热作品
-            moreOpus : "#more-opus",                           //更多作品
-            dynamicContent : ".dynamic-content",                         //企划动态
-            commonReplyTxt : ".common-reply-txt",               //评论回复框
-            planningFaceBtn : ".planning-face-btn",             //颜表情按钮
-            planningCommentsPublish : ".planning-comments-publish", //发布评论按钮
-            planningFaceContainer : ".planning-face-container"      //颜表情容器
+            dynamicContent : ".dynamic-content"                         //企划动态
         },
         regions : {
             LoginBarRegion: {
@@ -57,16 +56,11 @@ define([
         },
         //事件添加
         events : {
-//            "click @ui.joinPlanning" : "onJoinClickHandle",
-//            "click @ui.subscribePlanning" : "onSubscribeClickHandle",
             "click @ui.planningType" : "onTypeClickHandler",
             "click @ui.roleContent" : "onRoleClickHandler",
             "click @ui.hottestOpusContent" : "onOpusClickHandler",
             "click @ui.moreRole" : "onMoreRoleClickHandler",
-            "click @ui.moreOpus" : "onMoreOpusClickHandler",
             'click @ui.planningNoticeContent' : "onShowNoticeLayerHandler"
-//            'click @ui.planningFaceBtn' : "onFaceBtnClickHandler",
-//            'click @ui.planningCommentsPublish' : "onPublishCommentsHandler"
         },
         /**初始化**/
         initialize : function(){
@@ -75,6 +69,8 @@ define([
             //浏览分享层
             this.planningControlView = new ControlView(this);
             this.planningNoticeView = new PlanningNoticeView({parentView: this});
+            //更多用户的显示层
+            this.planningRolesView = new PlanningRolesView({parentView: this});
         },
         //在开始渲染模板前执行，此时当前page没有添加到document
         onBeforeRender : function(){
@@ -101,7 +97,7 @@ define([
             }, function(err){});
 
             //初始化企划参与角色列表信息
-            PlanningModel.getJoinUserById(self.planId, function(data){
+            PlanningModel.getJoinUserById(self.planId,self.limit, 0, function(data){
                 if(data ){
                     self._initJoinUserView(data);
                 }
@@ -109,8 +105,6 @@ define([
             //初始化评论发布框
             if(self.currentUser){
                 self.resetUserPlanRelationStatus();
-                self.resetCommentOperation();
-//                self._faceView = new FaceView(self.ui.planningFaceContainer);
             }
             app.on("login:ok", this.onLoginOkHandler, this);
             app.on("logOut:ok", this.onLogOutOkHandler, this);
@@ -122,7 +116,6 @@ define([
             var self = this;
             self.currentUser = gili_data.getCurrentUser();
             self.resetUserPlanRelationStatus();
-            self.resetCommentOperation();
         },
         /**
          * 监听用户登出成功事件
@@ -187,19 +180,9 @@ define([
                 console.log(err, 100);
             });
         },
-        /**
-         * 重置评论相关事件和UI
-         */
-        resetCommentOperation : function(){
-            var self = this;
-            self.ui.commonReplyTxt.attr("disabled", false);
-            self.ui.commonReplyTxt.css({color: "#000"});
-            self.ui.commonReplyTxt.attr("placeholder", "你有什么想分享的么");
-            self.ui.planningFaceBtn.on("click",self.onFaceBtnClickHandler.bind(self));
-            self.ui.planningCommentsPublish.on("click",self.onPublishCommentsHandler.bind(self));
-        },
         show : function(){
             this.planningNoticeView.on("hide:planning:notice:handle", this.onPlanningNoticeViewHideHandler, this); //隐藏击事件
+            this.planningRolesView.on("hide:planning:roles:handler", this.onPlanningRolesViewHideHandler, this); //隐藏击事件
         },
         /**
          * 初始化企划信息
@@ -235,6 +218,24 @@ define([
                 }
             },function(err){
 
+            });
+            if(self.planId && self.planName){
+                self.loadDynamicOpus(self.limit, self.skip);
+            }
+
+
+        },
+        loadDynamicOpus : function(limit, skip){
+            var self = this;
+            //查询动态作品
+            PlanningModel.queryDynamicOpus(self.planId, self.planName,limit, skip,function(data){
+                if(data && data.length > 0){
+                    self.skip += data.length;
+                    self.appendDynamicItemView(data);
+                    console.log(data, 99999);
+                }
+            },function(err){
+                console.log(err, "动态")
             });
         },
         /**
@@ -287,18 +288,19 @@ define([
          */
         _initJoinUserView : function(data){
             var self = this;
-            var joinUserTemp = '<div class="join-role-item" role-index="roleIndex">'+
-                '<img  src="joinUserHeaderSrc" role-index="roleIndex" class="itemSelected button"/>'+
-                '<span class="showName common-name-hint" role-index="roleIndex">roleName</span>'+
+            var joinUserTemp = '<div class="join-role-item" role-id="roleId">'+
+                '<img  src="joinUserHeaderSrc" role-id="roleId" class="itemSelected button"/>'+
+                '<span class="showName common-name-hint" role-id="roleId">roleName</span>'+
                 '</div>';
             var joinUserHtml = "", joinUserRepTemp = "";
             for(var i = 0; i < data.length; i++){
                 var obj = data[i];
                 var avatar = obj.get("user").get("avatar");
                 var name = obj.get("user").get("user_nick");
+                var userId = obj.get("user").id;
                 var selectedTemp = i == 0 ? "join-role-item-selected" : "";
                 var isShow = i == 0 ? "show" : "hide";
-                joinUserRepTemp = joinUserTemp.replace(/roleIndex/g, i+1).replace(/itemSelected/g, selectedTemp)
+                joinUserRepTemp = joinUserTemp.replace(/roleId/g, userId).replace(/itemSelected/g, selectedTemp)
                     .replace(/showName/g, isShow).replace(/joinUserHeaderSrc/g, avatar)
                     .replace(/roleName/g, name);
                 joinUserHtml += joinUserRepTemp;
@@ -329,6 +331,19 @@ define([
                 hottestOpusHtml += hottestOpusRepTemp;
             }
             self.ui.hottestOpusContent.html(hottestOpusHtml);
+        },
+        /**
+         * 追加动态作品
+         * @param data
+         */
+        appendDynamicItemView : function(data){
+            var self = this;
+            for(var i = 0; i < data.length; i++){
+                var item = new BlogItemView();
+                item.render();
+                item.initData(data[i], self.COMMENT_TYPE);
+                self.ui.dynamicContent.append(item.$el);
+            }
         },
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
@@ -387,9 +402,9 @@ define([
             var self = this;
             var target = e.target;
             var $target = $(target);
-            var roleIndex = $target.attr("role-index");
+            var roleId = $target.attr("role-id");
             var currentImg , currentSpn;
-            if(roleIndex){
+            if(roleId){
                 //todo 先清除样式
                 var roleImages = self.ui.roleContent.find("img");
                 var roleSpans = self.ui.roleContent.find("span");
@@ -405,7 +420,7 @@ define([
                 currentImg.addClass("join-role-item-selected");
                 currentSpn = $target.find("span");
                 currentSpn.addClass("hide").addClass("show");
-                MsgBox.alert("点击了参与角色"+roleIndex);
+                app.navigate("userCenter/" + roleId, {replace:false, trigger: true});
             }
         },
         /**
@@ -530,7 +545,6 @@ define([
             e.preventDefault();
             var self = this;
             var param = {};
-//            param.type = "topic";
             param.type = "ill";
             param.labels = [self.planName];
             PublishView.show(param);
@@ -543,17 +557,9 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            MsgBox.alert("更多用户点击");
-        },
-        /**
-         * 更多作品点击事件
-         * @param e
-         */
-        onMoreOpusClickHandler : function(e){
-            e.stopPropagation();
-            e.preventDefault();
-            var self = this;
-            MsgBox.alert("更多作品点击");
+            if(self.planningControlView && self.planningRolesView){
+                self.planningControlView.show(self.planningRolesView);
+            }
         },
         /**
          * 显示公告点击的浮层
@@ -577,41 +583,19 @@ define([
                 this.planningControlView.hide(this.planningNoticeView);
             }
         },
-        /**
-         * 颜表情按钮点击事件
-         * @param e
-         */
-        onFaceBtnClickHandler : function(e){
-            e.stopPropagation();
-            e.preventDefault();
-            var self = this;
-            if(self._faceView){
-                self._faceView.show(self.onSelectedFaceHandler.bind(self));
+        onPlanningRolesViewHideHandler : function(){
+            if(this.planningControlView && this.planningRolesView){
+                this.planningControlView.hide(this.planningRolesView);
             }
-        },
-        /**
-         * 颜表情按钮选择回调
-         * @param val
-         */
-        onSelectedFaceHandler : function(val){
-
-        },
-        /**
-         * 发布按钮点击事件
-         * @param e
-         */
-        onPublishCommentsHandler : function(e){
-            e.stopPropagation();
-            e.preventDefault();
-            var self = this;
-            MsgBox.toast("请先登录", false);
         },
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
             var self = this;
             this.planningNoticeView.off("hide:planning:notice:handle", this.onPlanningNoticeViewHideHandler, this);
+            this.planningRolesView.off("hide:planning:roles:handler", this.onPlanningRolesViewHideHandler, this); //隐藏击事件
             if(this.planningControlView && this.planningNoticeView){
                 this.planningControlView.empty(this.planningNoticeView);
+                this.planningControlView.empty(this.planningRolesView);
             }
             self.planId = "";            //企划ID
             self.currentUser = null;    //当前用户
@@ -620,6 +604,8 @@ define([
             self.currentNotice = null;   //当前选中的通告对象
             self.planName = "";      // 企划名称
             self.planId = "";   //企划ID
+            self.limit = 6;
+            self.skip = 0;
             PublishView.hide();
             BookPreviewView.hide();
         },
