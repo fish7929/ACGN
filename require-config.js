@@ -19,6 +19,10 @@ var requirejs={
         marionette: {
             exports: 'Backbone.Marionette',
             deps: ['jquery','backbone']
+        },
+        masonry :{
+            deps : ['jquery'],
+            exports : 'jquery'
         }
 	},
 	paths: {
@@ -30,6 +34,7 @@ var requirejs={
         swiper : 'vendor/swiper',
         showbox : "common/views/ShowBox",
         giliApi : "lib/gili_api",
-        msgbox : "common/views/MsgBox"
+        msgbox : "common/views/MsgBox",
+        masonry : 'vendor/jquery.masonry'
 	}
 }
