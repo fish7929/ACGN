@@ -755,8 +755,11 @@ gili_data.getComment = function (options, cb_ok, cb_err) {
         cb_err("评论对象类型为空!");
     };
 
-    var strCQL = " select include user,* from comment where  status !=1 ";
+    var strCQL = " select include user,* from comment where  status !=1 and comment_id='" + comment_id + "' ";
 
+    if (comment_type) {
+        strCQL += " comment_type=" + comment_type;
+    }
     //排序
     if (orderBy.length > 0) {
         if (isDesc) {
@@ -779,10 +782,7 @@ gili_data.getComment = function (options, cb_ok, cb_err) {
  userid,如果是查询别人的粉丝，必须传别人的用户id
  **/
 gili_data.meFollowerList = function (options, cb_ok, cb_err) {
-    if (!this.getCurrentUser()) {
-        cb_err("请先登录!");
-        return;
-    }
+    
     var follower = options.follower,
         orderby = options.orderby || "createdAt",
         isdesc = options.isdesc,
@@ -838,6 +838,10 @@ gili_data.meFollowerList = function (options, cb_ok, cb_err) {
     if (userid) {
         getUserObj();
     } else {
+        if (!this.getCurrentUser()) {
+            cb_err("请先登录!");
+            return;
+        }
         userCurrent = AV.User.current();
         queryUserObj();
     }
@@ -847,10 +851,7 @@ gili_data.meFollowerList = function (options, cb_ok, cb_err) {
  userid,如果是查询别人的关注，必须传别人的用户id
  **/
 gili_data.meFolloweeList = function (options, cb_ok, cb_err) {
-    if (!this.getCurrentUser()) {
-        cb_err("请先登录!");
-        return;
-    }
+  
     var followee = options.followee,
         orderby = options.orderby || "createdAt",
         isdesc = options.isdesc,
@@ -903,6 +904,10 @@ gili_data.meFolloweeList = function (options, cb_ok, cb_err) {
     if (userid) {
         getUserObj();
     } else {
+        if (!this.getCurrentUser()) {
+            cb_err("请先登录!");
+            return;
+        }
         userCurrent = AV.User.current();
         queryUserObj();
     }
