@@ -120,7 +120,6 @@ define([
             //console.log(option);
 //            _h.__isBackHistory = true;
             if(option && option.animation){
-                console.log(option.animation);
                 this.navigate(backFragment,{trigger:true,replace:true,isBack:true,animation:option.animation});
             }else{
                 this.navigate(backFragment,{trigger:true,replace:true,isBack:true});

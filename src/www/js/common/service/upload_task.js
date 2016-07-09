@@ -28,7 +28,6 @@ define([
                     self.callback = null;
                 }
             }, function(error){
-                console.log(error);
                 if(self._tryCount > 0){
                     self._tryCount --;
                     self.upload();
