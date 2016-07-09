@@ -28,7 +28,8 @@ define([
             "click .info-del":"_clickDelHandler",      //用户只能删除自己的动态话题等
             "click .btnFace":"_clickFaceHandler",       //点击颜表情
             "click .sp_reply":"_clickReplyHandler",    //点击评论
-            "click .btnSend":"_clickSendHandler"       //点击发布
+            "click .btnSend":"_clickSendHandler",       //点击发布
+            "click .reply_userName":"_clickReplyUser"  //点击评论内容里的用户
 //            "mouseover .uc_info_item":"_overItemHandler", //鼠标移入 显示“删除”按钮
 //            "mouseout .uc_info_item":"_outItemHandler" //鼠标移出 隐藏“删除”按钮
         },
@@ -115,11 +116,20 @@ define([
             if(!commentArr || commentArr.length <= 0)return commentHtml;
             for(var i = 0; i < commentArr.length; i++){
                 var comment = commentArr[i];
+                var commentType = comment.comment_type;
                 var commentTime = comment.createdAt ? new Date(comment.createdAt):new Date();
                 var commentTimeStr = utils.formatCreatedTime(commentTime);
                 var cId = comment.id;//评论ID
+                var content = comment.content;
+                var contentStr = "";
+                if(commentType == 5){
+                    content = JSON.parse(content);
+                    contentStr = "回复@<span data-userid='"+content.uid+"' class='reply_userName'>"+content.uname+"</span>:"+content.content||"";
+                }else{
+                    contentStr = content;
+                }
                 commentHtml += this.commentTpl({headUrl:comment.user.avatar,
-                    commentName:comment.user.user_nick,commentTime:commentTimeStr,commentTxt:comment.content,commentUserId:comment.user.userId,commentUserName:comment.user.user_nick,cId:cId});
+                    commentName:comment.user.user_nick,commentTime:commentTimeStr,commentTxt:contentStr,commentUserId:comment.user.userId,commentUserName:comment.user.user_nick,cId:cId});
             }
             commentHtml += '</div>';
             return commentHtml;
@@ -230,7 +240,6 @@ define([
         //点击发送
         _clickSendHandler:function(e){
             var self = this;
-            debugger;
             self.isReply = false;
             //如果是给话题留言  belongId话题ID  commentId话题ID content回复内容
             //如果给话题留言回复 belongId话题ID  commentId被回复留言ID content {"content":"回复信息","uname":“补充回复人昵称”,"uid":“被回复人ID”}
@@ -249,6 +258,7 @@ define([
                 contentObj.content = txt;
                 contentObj.uname = self.replyUserName;
                 contentObj.uid = self.replyUserId;
+                commentType = 5; //给评论回复 类型为5
                 content = JSON.stringify(contentObj);
             }
             if(txt.trim() == ""){
@@ -269,15 +279,13 @@ define([
             },function(err){
                 MsgBox.alert("评论失败");
             });
+        },
+        //点击回复对象用户ID 指向用户中心
+        _clickReplyUser:function(e){
+            var target = $(e.target);
+            var userId = target.data("userid");
+            app.navigate("userCenter/"+userId,{trigger:true,replace:true});
         }
-//        //移入
-//        _overItemHandler:function(e){
-//            console.log("over");
-//        },
-//        //移出
-//        _outItemHandler:function(e){
-//            console.log("out");
-//        }
     });
     return WorkItemView;
 });

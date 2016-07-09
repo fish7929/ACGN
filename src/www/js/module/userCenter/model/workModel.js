@@ -36,7 +36,7 @@ define([],function(){
                     temp.belong_id = data.results[i].get("belong_id");//话题ID
                     temp.comment_id = data.results[i].get("comment_id");      //话题ID或被回复评论ID
                     temp.content = data.results[i].get("content");
-                    temp.comment_type = 1;
+                    temp.comment_type = data.results[i].get("comment_type");
                     temp.user = {};
                     temp.user.userId = data.results[i].get("user").id;
                     temp.user.user_nick = data.results[i].get("user").get("user_nick");
