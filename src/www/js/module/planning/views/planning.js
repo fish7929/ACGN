@@ -30,8 +30,12 @@ define([
         planId: "",    //企划ID
         limit: 6,      //最少查询6条
         skip: 0,        //跳过多少条
-        COMMENT_TYPE: 3,   //评论查询的类型
-        itemList : [],
+        itemList: [],       //清除已经加载的itemView
+        dataFinish: false, //数据请求结束
+        dataLoading : false, //数据正在请求中
+        FIRST : 1,
+        SECOND : 2,
+        THIRD : 3,
         ui: {
             planningBanner: "#planning-banner",        //企划banner
             planningAuthor: ".planning-author",          //企划用户信息
@@ -46,7 +50,9 @@ define([
             roleContent: ".role-content",                  //参加角色
             moreRole: "#more-role",                            //更多角色
             hottestOpusContent: ".hottest-opus-content",        //最热作品
-            dynamicContent: ".dynamic-content"                         //企划动态
+            dynamicContent: ".dynamic-content",                         //企划动态
+            loadingContainer:"#planning-loading-gif",
+            loadMsg:"#planning-sk-text"
         },
         regions: {
             LoginBarRegion: {
@@ -174,7 +180,9 @@ define([
             });
         },
         show: function () {
-
+            var self = this;
+            self.updateMsg(self.SECOND);
+            self.dataFinish = false;
         },
         /**
          * 初始化企划信息
@@ -217,14 +225,33 @@ define([
         },
         loadDynamicOpus: function (limit, skip) {
             var self = this;
+            //如果正在加载新页的过程中，则忽略请求，不予处理
+            if ( !! self.dataLoading ){
+                return;
+            }
+            //如果数据已全部加载完成，则不予处理
+            if ( !! self.dataFinish ){
+                return;
+            }
+            self.dataLoading = true;
+
             //查询动态作品
             PlanningModel.queryDynamicOpus(self.planId, self.planName, limit, skip, function (data) {
-                if (data && data.length > 0) {
-//                    self.skip += data.length;
-                    console.log(data, 99999);
-                    self.appendDynamicItemView(data);
+                if( data.length < self.limit ){
+                    self.dataFinish = true;
+                    self.updateMsg(self.THIRD);
+                } else {
+                    self.dataFinish = false;
+                    self.updateMsg(self.SECOND);
                 }
+                if (data && data.length > 0) {
+                    self.appendDynamicItemView(data);
+                    self.skip += data.length;
+                }
+                self.dataLoading = false;
             }, function (err) {
+                self.dataLoading = false;
+                self.updateMsg(self.FIRST);
                 console.log(err, "动态")
             });
         },
@@ -333,11 +360,16 @@ define([
                 obj = utils.convert_2_json(obj);    //需要JSON数据
                 var item = new BlogItemView();
                 item.render();
-                item.initData(obj, self.COMMENT_TYPE);
+                item.initData(obj, self.THIRD);
+                self.itemList.push(item);
                 self.ui.dynamicContent.append(item.$el);
             }
             self.masonryRefresh(true);
         },
+        /**
+         * 刷新数据
+         * @param needLoad
+         */
         masonryRefresh : function(needLoad){
             var self = this;
             if(needLoad){
@@ -347,6 +379,18 @@ define([
             }else{
                 $('.dynamic-content').masonry('reload');
             }
+        },
+        /**
+         * 清除创建的动态itemview
+         */
+        clearItemList : function(){
+            var self = this;
+            for(var i=0; i<self.itemList.length; i++){
+                self.itemList[i].onDestroy();
+                self.itemList[i] = null;
+            }
+            self.itemList.length = 0;
+            self.ui.dynamicContent.html("");
         },
         //页间动画已经完成，当前page已经加入到document
         pageIn: function () {
@@ -366,8 +410,17 @@ define([
             app.on("update:masonry:list", self.masonryRefresh, self);
             app.on("login:ok", this.onLoginOkHandler, this);
             app.on("logOut:ok", this.onLogOutOkHandler, this);
-            window.onscroll = function (e){
-                console.log(e, 6333);
+                window.onscroll = null;
+                window.onscroll = function (e){
+                var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+                if(scrollTop + window.innerHeight > document.body.offsetHeight - 400){
+                    //实现滚动加载
+                    if(!self.dataFinish){
+                        if (self.planId && self.planName) {
+                            self.loadDynamicOpus(self.limit, self.skip);
+                        }
+                    }
+                }
             };
         },
 
@@ -378,6 +431,7 @@ define([
             app.off("logOut:ok", this.onLogOutOkHandler, this);
             this.planningNoticeView.off("hide:planning:notice:handle", this.onPlanningNoticeViewHideHandler, this);
             this.planningRolesView.off("hide:planning:roles:handler", this.onPlanningRolesViewHideHandler, this); //隐藏击事件
+            window.onscroll = null;
         },
         /**
          * 企划类型点击事件
@@ -617,10 +671,31 @@ define([
                 this.planningControlView.hide(this.planningRolesView);
             }
         },
+        /**
+         * 更新状态
+         * @param type
+         *         索引0： 1:加载出错  2:数据正常加载  3:数据加载结束
+         */
+        updateMsg:function(type){
+            var self = this;
+            self.ui.loadingContainer.find("img").show();
+            self.ui.loadMsg.html("你的大片正在加载...");
+            if(type == self.FIRST){   //加载出错时，有数据只文案提示  无数据显示缺省无网状态且文案提示
+                self.ui.loadingContainer.find("img").hide();
+                self.ui.loadMsg.html("网络不好,请重试");
+            }else if(type == self.SECOND){ //数据正常加载
+                self.ui.loadingContainer.find("img").show();
+                self.ui.loadMsg.html("正在加载");
+            }else if(type == self.THIRD){ //数据加载结束
+                self.ui.loadingContainer.find("img").hide();
+                self.ui.loadMsg.html("没有更多了");
+            }
+        },
         /**页面关闭时调用，此时不会销毁页面**/
         close: function () {
             var self = this;
             self.removeEvent();
+            self.clearItemList();
             if (this.planningControlView && this.planningNoticeView) {
                 this.planningControlView.empty(this.planningNoticeView);
                 this.planningControlView.empty(this.planningRolesView);

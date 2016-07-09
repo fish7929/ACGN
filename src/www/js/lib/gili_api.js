@@ -323,7 +323,7 @@ gili_data.getPlanUserByPlanId = function (options, cb_ok, cb_err) {
  * cb_ok
  * cb_err
  **/
-gili_data.getPlanUserCountByPlanId = function (options, cb_ok, cb_err) {
+gili_data.getPlanUserCountByPlanId = function (opy, cb_ok, cb_err) {
     var plan_id = options.plan_id;
 
     if (!plan_id) {
@@ -381,7 +381,7 @@ gili_data.getPlanUserBlog = function (options, cb_ok, cb_err) {
             followeeList += "'" + data[i].get("user_id") + "',";
         }
         if (followeeList.length > 0) {
-            CQL = " select * from blog where status !=2 and user_id in (" + followeeList.substring(0, followeeList.length - 1) + ") and labels in ('" + plan_name + "') ";
+            CQL = " select include user, * from blog where status !=2 and user_id in (" + followeeList.substring(0, followeeList.length - 1) + ") and labels in ('" + plan_name + "') ";
         }
         if (orderBy.length > 0) {
             if (isDesc) {
@@ -678,7 +678,7 @@ gili_data.getUserBlog = function (options, cb_ok, cb_err) {
                             followeeList += "'" + obj[i].id + "',";
                         }
                         if (followeeList.length > 0) {
-                            strCQL = " select  * from blog where status!=2  and is_delete !=1 and  user_id in (" + followeeList.substring(0, followeeList.length - 1) + ")  limit " + skip + "," + limit + " order by createdAt desc ";
+                            strCQL = " select include user, * from blog where status!=2  and is_delete !=1 and  user_id in (" + followeeList.substring(0, followeeList.length - 1) + ")  limit " + skip + "," + limit + " order by createdAt desc ";
                             gili_data.getBlog(strCQL, function (objs) {
                                 var data = [];
                                 for (var i = 0; i < objs.length; i++) {
