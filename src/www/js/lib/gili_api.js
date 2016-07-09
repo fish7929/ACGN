@@ -204,7 +204,7 @@ gili_data.getPlanNotice = function (options, cb_ok, cb_err) {
     });
 };
 
-/** 查询企划公告
+/** 查询用户
  * skip,
  * limit,
  * cb_ok
@@ -278,6 +278,30 @@ gili_data.getPlanUserByPlanId = function (options, cb_ok, cb_err) {
     //    }, error: cb_err
     //});
 };
+
+/** 根据企划id 查询报名用户总数
+ * plan_id 
+ * cb_ok
+ * cb_err
+ **/
+gili_data.getPlanUserCountByPlanId = function (plan_id, cb_ok, cb_err) {
+    var plan_id = options.plan_id;
+
+    if (!plan_id) {
+        cb_err("plan_id为空！");
+    }
+    var strCQL = " select * from plan_relation where plan_id='" + plan_id + "' and approved=1 and status in (2,3) ";
+    AV.Query.doCloudQuery(strCQL, {
+        success: function (data) {
+            if (data.results) {
+                cb_ok(data.results[0]);
+            } else {
+                cb_err();
+            }
+        },
+        error: cb_err
+    });
+}
 /** 获取加入该企划的用户的作品(最热，最新排序)
  * plan_id,
  * plan_name 企划名字
@@ -733,7 +757,7 @@ gili_data.verifyPhoneMsgCode = function (msgcode, cb_ok, cb_err) {
 
 /** 根据评论对象id查询评论数据
  *  comment_id,评论对象id
- *  comment_type,评论目标类型1-话题插画，2-本子，3-企划，4-留言，5-其他
+ *  comment_type,评论目标类型1-话题插画，2-本子，3-企划，4-留言，5-评论的评论
  * skip, 从第几条开始
  * limit, 每页显示条数
  * orderby, 排序字段
