@@ -22,6 +22,7 @@ define([
         roleInitSkip : 6,       //从第六条开始
         limit : 10,
         maxLength : 0,
+        tempSpanWidth : 70,     //宽度 50 + marginRight 20
         // key : selector
         ui: {
             planningRolesMask:'#planning-roles-mask',
@@ -32,7 +33,8 @@ define([
             rolesLastPage : ".roles-last-page",     //最后一页
             rolesAllPage : ".roles-all-pages",      //所有页
             pageNumberTxt : "#page-number-txt",     //输入值
-            rolesGoToPage : ".roles-go-to-page"     // 跳转页
+            rolesGoToPage : ".roles-go-to-page",     // 跳转页
+            rolesSpanWrapper : ".roles-span-wrapper"    //需要动态计算宽度 self.maxLength* span.outterWidth
         },
         //事件添加
         events: {
@@ -58,7 +60,7 @@ define([
         show : function(){
             var self = this;
             self._initView();
-            self.maxLength = 10;        //页码的总数
+            self.maxLength = 10;        //页码的总数 rolesSpanWrapper
         },
         /**
          * 初始公告内容层
@@ -74,7 +76,6 @@ define([
             }
             this._isShow = true;
             this._animate(false);
-            $ (window).unbind ('scroll');
         },
         /**页面关闭时调用，此时不会销毁页面**/
         close: function () {
@@ -214,6 +215,12 @@ define([
                 $(spanArr[i]).removeClass("roles-page-number-selected");
             }
             $(spanArr[num - 1]).addClass("roles-page-number-selected");
+            //以下为移动5个点的距离
+            var left = (num + 2)*self.tempSpanWidth
+            var containerWidth = self.ui.rolesPageNumber.width();
+            var temp = left - containerWidth ;
+            self.ui.rolesPageNumber.scrollLeft(temp);
+
         },
         /**
          * 重置属性和初始状态
