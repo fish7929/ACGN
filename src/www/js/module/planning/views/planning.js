@@ -31,6 +31,7 @@ define([
         limit: 6,      //最少查询6条
         skip: 0,        //跳过多少条
         COMMENT_TYPE: 3,   //评论查询的类型
+        itemList : [],
         ui: {
             planningBanner: "#planning-banner",        //企划banner
             planningAuthor: ".planning-author",          //企划用户信息
@@ -107,8 +108,6 @@ define([
             if (self.currentUser) {
                 self.resetUserPlanRelationStatus();
             }
-            app.on("login:ok", this.onLoginOkHandler, this);
-            app.on("logOut:ok", this.onLogOutOkHandler, this);
         },
         /**
          * 监听用户登录成功事件
@@ -175,8 +174,7 @@ define([
             });
         },
         show: function () {
-            this.planningNoticeView.on("hide:planning:notice:handle", this.onPlanningNoticeViewHideHandler, this); //隐藏击事件
-            this.planningRolesView.on("hide:planning:roles:handler", this.onPlanningRolesViewHideHandler, this); //隐藏击事件
+
         },
         /**
          * 初始化企划信息
@@ -216,8 +214,6 @@ define([
             if (self.planId && self.planName) {
                 self.loadDynamicOpus(self.limit, self.skip);
             }
-
-
         },
         loadDynamicOpus: function (limit, skip) {
             var self = this;
@@ -333,10 +329,23 @@ define([
         appendDynamicItemView: function (data) {
             var self = this;
             for (var i = 0; i < data.length; i++) {
+                var obj = data[i];
+                obj = utils.convert_2_json(obj);    //需要JSON数据
                 var item = new BlogItemView();
                 item.render();
-                item.initData(data[i], self.COMMENT_TYPE);
+                item.initData(obj, self.COMMENT_TYPE);
                 self.ui.dynamicContent.append(item.$el);
+            }
+            self.masonryRefresh(true);
+        },
+        masonryRefresh : function(needLoad){
+            var self = this;
+            if(needLoad){
+                self.ui.dynamicContent.imagesLoaded(function(){
+                    $('.dynamic-content').masonry('reload');
+                });
+            }else{
+                $('.dynamic-content').masonry('reload');
             }
         },
         //页间动画已经完成，当前page已经加入到document
@@ -344,6 +353,28 @@ define([
             var self = this;
             //显示登录条
             self.LoginBarRegion.show(self._loginBarView);
+            $('.dynamic-content').masonry({
+                itemSelector: '.blogItemView',
+                columnWidth: 2 //每两列之间的间隙为5像素
+            });
+            self.addEvent();
+        },
+        addEvent : function(){
+            var self = this;
+            this.planningNoticeView.on("hide:planning:notice:handle", this.onPlanningNoticeViewHideHandler, this); //隐藏击事件
+            this.planningRolesView.on("hide:planning:roles:handler", this.onPlanningRolesViewHideHandler, this); //隐藏击事件
+            app.on("update:masonry:list", self.masonryRefresh, self);
+            app.on("login:ok", this.onLoginOkHandler, this);
+            app.on("logOut:ok", this.onLogOutOkHandler, this);
+        },
+
+        removeEvent : function(){
+            var self = this;
+            app.off("update:masonry:list", self.masonryRefresh, self);
+            app.off("login:ok", this.onLoginOkHandler, this);
+            app.off("logOut:ok", this.onLogOutOkHandler, this);
+            this.planningNoticeView.off("hide:planning:notice:handle", this.onPlanningNoticeViewHideHandler, this);
+            this.planningRolesView.off("hide:planning:roles:handler", this.onPlanningRolesViewHideHandler, this); //隐藏击事件
         },
         /**
          * 企划类型点击事件
@@ -520,7 +551,6 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            console.log(66633333);
             PlanningModel.cancelSubscribePlan(self.planId, function (data) {
                 //点击报名成功的时候处理UI
                 if (data) {
@@ -587,8 +617,7 @@ define([
         /**页面关闭时调用，此时不会销毁页面**/
         close: function () {
             var self = this;
-            this.planningNoticeView.off("hide:planning:notice:handle", this.onPlanningNoticeViewHideHandler, this);
-            this.planningRolesView.off("hide:planning:roles:handler", this.onPlanningRolesViewHideHandler, this); //隐藏击事件
+            self.removeEvent();
             if (this.planningControlView && this.planningNoticeView) {
                 this.planningControlView.empty(this.planningNoticeView);
                 this.planningControlView.empty(this.planningRolesView);

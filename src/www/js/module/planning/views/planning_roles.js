@@ -55,7 +55,19 @@ define([
         },
         //渲染完模板后执行,此时当前page没有添加到document
         onRender: function () {
+            var self = this;
+            //获取加入用户的总个数
+            PlanningModel.getJoinRolesCount(this.parentView.planId, function(data){
+                if(data){
+                    var currentLength = data.count - self.roleInitSkip;
+                    if(currentLength > 0){
+                        console.log(currentLength);
+                        self.maxLength = Math.ceil(currentLength / self.limit);
+                    }
+                }
+            },function(err){
 
+            });
         },
         show : function(){
             var self = this;

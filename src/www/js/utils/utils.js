@@ -18,7 +18,7 @@
             return false;
         }
         if (!myreg.test(val)) {
-            msgbox.toast.alert("手机号格式不正确", false);
+            msgbox.toast("手机号格式不正确", false);
             return false;
         }
         return true;

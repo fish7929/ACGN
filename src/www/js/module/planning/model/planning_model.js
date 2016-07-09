@@ -244,6 +244,23 @@ define([
             cb_err&&cb_err(err);
         });
     };
+    /**
+     * 获取加入企划用户的总数
+     * @param id
+     * @param cb_ok
+     * @param cb_err
+     */
+    p.getJoinRolesCount = function(id, cb_ok, cb_err){
+        var option = {};
+        option.plan_id = id;
+        gili_data.getPlanUserCountByPlanId(option, function(data){
+            if(data){
+                cb_ok&&cb_ok(data);
+            }
+        },function(err){
+            cb_err&&cb_err(err);
+        });
+    };
     var planningModel = new PlanningModel();
     return planningModel;
 });
