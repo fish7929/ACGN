@@ -299,8 +299,8 @@ gili_data.getPlanUserBlog = function (options, cb_ok, cb_err) {
         return;
     }
     //获取关注该企划的用户列表，取出用户id 拼成CQL,去blog作品表查询 且标签=企划名字
-    gili_data.getPlanUserByPlanId(plan_id, function (data) {
-        if (data) {
+    gili_data.getPlanUserByPlanId({ "plan_id": plan_id }, function (data) {
+        if (data.length>0) {
             var strCQL = dataToCQL(data);
             gili_data.getBlog(strCQL, function (blogs) {
                 cb_ok(blogs);
@@ -755,11 +755,11 @@ gili_data.getComment = function (options, cb_ok, cb_err) {
         cb_err("评论对象类型为空!");
     };
 
-    var strCQL = " select include user,* from comment where  status !=1 and comment_id='" + comment_id + "' ";
+    var strCQL = " select include user,* from comment where  status !=1  belong_id='" + comment_id + "' "; //and comment_id='" + comment_id + "' or
 
-    if (comment_type) {
-        strCQL += " and comment_type=" + comment_type;
-    }
+    //if (comment_type) {
+    //    strCQL += " and comment_type=" + comment_type;
+    //}
     //排序
     if (orderBy.length > 0) {
         if (isDesc) {
