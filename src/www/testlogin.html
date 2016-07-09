@@ -28,7 +28,8 @@
                     type: '3,2',
                     callback: {
                         login: function(data){
-                            alert("login: " + data.screen_name)
+                            console.log(data);
+                            alert(JSON.stringify(data));
                         }, //登录后的回调函数
                         logout: function(){
                             alert('logout');

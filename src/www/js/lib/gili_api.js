@@ -1608,7 +1608,6 @@ gili_data.loginUtils = function(data) {
     var nickname = data.nickname;
     var sexual = data.sexual;
     var headimgurl = data.headimgurl;
-
     //检索对象
     var User = AV.Object.extend("_User");
     var query = new AV.Query(User);
@@ -1619,14 +1618,8 @@ gili_data.loginUtils = function(data) {
                 //用户存在则登陆绑定
                 AV.User.logIn(unionid, "6a063e705a16e625", {
                     success: function (_user) {
-
-                        var jsonUser = JSON.stringify(_user.toJSON());
-
-                        if (!!jsonUser.user_nick) {
-                            jsonUser.user_nick = jsonUser.username || "无";
-                        }
-
-                        window.location.href="http://www.gilieye.com";
+//                        window.location.href="http://www.gililove.com";
+                        app.triggerMethod("login:ok");
                     },
                     error: function (_user, error) {
                         console.log(error.message);
@@ -1639,9 +1632,9 @@ gili_data.loginUtils = function(data) {
                 user.set("password", "6a063e705a16e625"); //me第三方登录
                 user.set('user_nick', nickname);
                 if(!headimgurl){
-                    user.set("user_pic", utils.getRandomHeader());
+                    user.set("avatar", utils.getRandomHeader());
                 }else{
-                    user.set("user_pic", headimgurl);
+                    user.set("avatar", headimgurl);
                 }
                 user.set("sex", sexual);
                 user.signUp(null, {
@@ -1649,12 +1642,8 @@ gili_data.loginUtils = function(data) {
                         //注册成功则登陆
                         AV.User.logIn(unionid, "6a063e705a16e625", {
                             success: function (user) {
-                                var jsonUser = JSON.stringify(_user.toJSON());
-                                if (!!jsonUser.user_nick) {
-                                    jsonUser.user_nick = jsonUser.username || "无";
-                                }
-
-                                window.location.href="http://www.gilieye.com";
+//                                window.location.href="http://www.gililove.com";
+                                app.triggerMethod("login:ok");
                             },
                             error: function (user, error) {
                                 console.log(error.message);
@@ -1678,9 +1667,8 @@ gili_data.loginUtils = function(data) {
  * @returns {{unionid: *, nickname: (*|string), sexual: number, headimgurl: *}}
  */
 gili_data.packageMicroBlogResults = function  (originObj) {
-    console.log(originObj);
     return {
-        unionid: originObj.id.toString(),
+        unionid: originObj.idstr,
         nickname: originObj.name || '',
         sexual: originObj.gender === 'm' ? 1 : originObj.gender === 'f' ? 2 : 0,
         headimgurl: originObj.avatar_large

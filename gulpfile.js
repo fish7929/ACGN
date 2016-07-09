@@ -37,7 +37,7 @@ gulp.task('clean', function (done) {
         done();
     });
 });
-gulp.task('_copyFiles', ['_copyImg', '_copyCss', '_copyJs'], function () {
+gulp.task('_copyFiles', ['_copyImg', '_copyCss', '_copyJs', "_copyHtml"], function () {
 });
 
 gulp.task('_copyImg', function () {
@@ -79,6 +79,11 @@ gulp.task('_release:css', function (done) {
         }))
         .pipe(gulp.dest(destDir + '/css/'))
         .on('end', done);
+});
+
+gulp.task('_copyHtml', function () {
+    return gulp.src(["src/www/qq.html"])
+        .pipe(gulp.dest(destDir));
 });
 
 
