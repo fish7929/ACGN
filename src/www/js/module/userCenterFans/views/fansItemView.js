@@ -20,9 +20,12 @@ define([
         serializeData:function() {
             var self = this;
             data = Marionette.ItemView.prototype.serializeData.apply(this,arguments);
-            data.name = "我就是我";
+            debugger;
+            //guyy todo
+            data.id = self.model.id;
+            data.name = self.model.userName;
             data.avatar = "images/temp/info_pic/head1.png";
-            data.address = "住址";
+            data.address = self.model.userAddress;
             data.brief = "我是简介";
             data.attentionNum = self.model.followee_count || 0;
             data.fansNum = self.model.follower_count || 0;
