@@ -758,7 +758,7 @@ gili_data.getComment = function (options, cb_ok, cb_err) {
     var strCQL = " select include user,* from comment where  status !=1 and comment_id='" + comment_id + "' ";
 
     if (comment_type) {
-        strCQL += " comment_type=" + comment_type;
+        strCQL += " and comment_type=" + comment_type;
     }
     //排序
     if (orderBy.length > 0) {
