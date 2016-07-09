@@ -3,8 +3,8 @@
     border-radius: 10px;
     border: 1px solid rgb(192,192,192);
     float: left;
-    text-align: left;
-    margin-bottom: 40px;
+    text-align: center;
+    margin-bottom: 20px;
 }
 .blogItemView:nth-child(odd) {
     margin-right: 20px;
@@ -31,6 +31,7 @@
     font-size: 18px;
     margin-left: 10px;          //13px  在FirFox中会出错 修改为 10
     float: left;
+    text-align: left;
 }
 
 .blog-item-author-name{
@@ -78,6 +79,11 @@
         background: url(../images/common/praise.png) no-repeat center;
         display: inherit;
     }
+
+    .onSelect{
+        background: url(../images/common/praise_ck.png) no-repeat center !important;
+    }
+
     .blog-item-love-num{
         margin-left: 50px;
         color: #ff4200;

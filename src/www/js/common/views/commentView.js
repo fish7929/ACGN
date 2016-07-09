@@ -10,9 +10,9 @@ define([
     'common/views/faceView',
     'msgbox'
 ],function(ItemView, tpl, mn, FaceView, MsgBox){
-    var htmlTpl = "<div class=\"comment-list-item\" data-id='{dataId}'>" +
+    var htmlTpl = "<div class=\"comment-list-item\" data-id='{dataId}' user-name='{userName}' user-id='{userId}'>" +
             "<div class=\"comment-left-div\">" +
-            "<div class=\"comment-head-pic\" style='background: url(\"{pic}\") no-repeat center; background-size: 100%'></div>" +
+            "<div class=\"comment-head-pic button\" style='background: url(\"{pic}\") no-repeat center; background-size: 100%'></div>" +
             "<div class=\"comment-floor-txt\">{floor}</div>" +
             "</div>" +
             "<div class=\"comment-right-div\">" +
@@ -23,6 +23,7 @@ define([
             "</div>" +
             "<div class=\"clear\"></div>" +
             "</div>";
+    var ReplyTitle = "回复@{name}：";
     return ItemView.extend({
         className : "commentContainer",
         template : _.template(tpl),
@@ -65,7 +66,7 @@ define([
             var self = this;
             self._faceView = new FaceView(self.ui.faceContainer);
             self._onFaceSelect = self.onFaceSelect.bind(self);
-            self.isShow = true;
+            self.$el.hide();
         },
 
         setBlogClass : function(){
@@ -80,19 +81,47 @@ define([
             self.checkLogin();
             self.$el.show();
             self.bindEvent();
+            self.ui.commentText.val("");
+        },
 
-            if(self._isLoaded) return;
+        startLoadData : function(){
+            var self = this;
             self.reset();
             self.addNextPage();
+        },
+
+        loadOneData : function(){
+            var self = this;
+            if(self._isLoaded) return;
+            self.startLoadData();
         },
 
         onCommentListHandle : function(e){
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            if(e.target.className.indexOf("comment-reply") >= 0){
+            var target = e.target;
+            var parent = $(target).parents(".comment-list-item");
+            if(!parent) return;
+            var commentId = parent.attr("data-id");
+            var commentUserName = parent.attr("user-name");
+            var commentUserId = parent.attr("user-id");
+            if(!commentId) return;
+            if(target.className.indexOf("comment-reply") >= 0){
                 self.ui.commentText.focus();
+                self.setReplyObj(commentId, commentUserId, commentUserName);
+                var str = ReplyTitle.replace("{name}", commentUserName);
+                self.ui.commentText.html(str);
+            }else if(target.className.indexOf("comment-head-pic") >= 0){
+                app.navigate("#userCenter/"+commentUserId, {replace: false, trigger: true});
             }
+        },
+
+        setReplyObj : function(c_id, c_user_id, c_user_name){
+            this.replyObj = {};
+            this.replyObj.comment_id = c_id;
+            this.replyObj.user_id = c_user_id;
+            this.replyObj.user_name = c_user_name;
         },
 
         onViewMoreHandle : function(e){
@@ -128,19 +157,20 @@ define([
             opt.comment_id = self._commentObj.comment_id;
             opt.comment_type = self._commentObj.comment_type;
             opt.isdesc = true;
-            opt.pageSize = self.currentPage * self.PageMaxNum;
-            opt.pageNumber = self.PageMaxNum;
+            opt.skip = self.currentPage * self.PageMaxNum;
+            opt.limit = self.PageMaxNum;
             gili_data.getComment(opt, function(data){
                 if(data && data.results){
                     var len = data.results.length;
-                    if(len > 0){
-                        data = utils.convert_2_json(data.results);
-                        self.addCommentItem(data);
-                    }
                     if(len < self.PageMaxNum){
                         self.ui.bnViewMore.hide();
                     }else{
                         self.ui.bnViewMore.show();
+                    }
+
+                    if(len > 0){
+                        data = utils.convert_2_json(data.results);
+                        self.addCommentItem(data);
                     }
                 }else{
                     self.ui.bnViewMore.hide();
@@ -157,21 +187,34 @@ define([
                 html += self.getCommentHtml(data[i]);
             }
             self.ui.commentList.append(html);
+
+            app.triggerMethod("update:masonry:list");
         },
 
         getCommentHtml : function(obj){
             var self = this;
-            var id, user_nick, user_pic, content, createdAt, floor, html = "";
+            var id, user_nick, user_pic, content, createdAt, floor, userId, html = "";
             id = obj.objectId;
             if(self.ui.commentList.find(".comment-list-item[data-id="+id+"]").get(0)){
                 return html;
             }
             floor = "";
+            userId = obj.user.objectId || "";
             user_nick = obj.user.user_nick || "";
             user_pic = obj.user.avatar || "";
             content = obj.content || "";
             createdAt = obj.createdAt || Date.now();
-            html = htmlTpl.replace("{dataId}", id).replace("{floor}", floor).replace("{name}", user_nick).replace("{pic}", user_pic)
+
+            if(obj.comment_type == 5){
+                try {
+                    var contentObj = JSON.parse(content);
+                    content = ReplyTitle.replace("{name}", contentObj.uname) + contentObj.content;
+                }catch(e) {
+                    content = "";
+                }
+            }
+
+            html = htmlTpl.replace("{dataId}", id).replace("{userName}", user_nick).replace("{userId}", userId).replace("{floor}", floor).replace("{name}", user_nick).replace("{pic}", user_pic)
                 .replace("{content}", content).replace("{data}", utils.formatTime(createdAt, "yyyy.MM.dd HH.mm"));
             return html;
         },
@@ -179,6 +222,7 @@ define([
         insertComment : function(data){
             var self = this;
             self.ui.commentList.prepend(self.getCommentHtml(data));
+            app.triggerMethod("update:masonry:list");
         },
 
         /**
@@ -204,13 +248,28 @@ define([
                 return;
             }
             var opt = {};
-            opt.comment_id = self._commentObj.comment_id;
+            opt.belong_id = self._commentObj.comment_id;
+            opt.comment_id = opt.belong_id;
             opt.comment_type = self._commentObj.comment_type;
             opt.content = str;
+            //content,评论内容，blog评论内容：XXXXX ,如果为评论的评论进行回复的评论则为：{"content":"回复信息","uname":“刘德华”,"uid":“用户id”}，显示为：用户头像名字 + 回复@张三+ 回复内容
+            if(self.replyObj){
+                var replyStr = ReplyTitle.replace("{name}", self.replyObj.user_name);
+                if(str.indexOf(replyStr) == 0){
+                    opt.comment_type = 5;
+                    opt.comment_id = self.replyObj.comment_id;
+                    var strJson = {};
+                    strJson.content = str.replace(replyStr, "");
+                    strJson.uname = self.replyObj.user_name;
+                    strJson.uid = self.replyObj.user_id;
+                    opt.content = JSON.stringify(strJson);
+                }
+            }
             gili_data.snsSaveComment(opt, function(data){
                 data = utils.convert_2_json(data);
                 self.insertComment(data);
                 self.ui.commentText.val("");
+                self.replyObj = null;
                 MsgBox.toast(giliConfig.Tip.COMMENT_SUCCESS, true);
             }, function(err){
                 MsgBox.toast(giliConfig.Tip.COMMENT_FAIL+err, false);
