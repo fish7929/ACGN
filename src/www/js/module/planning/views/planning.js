@@ -98,6 +98,7 @@ define([
 
             //初始化企划参与角色列表信息
             PlanningModel.getJoinUserById(self.planId,self.limit, 0, function(data){
+                console.log(data, 888);
                 if(data ){
                     self._initJoinUserView(data);
                 }
@@ -230,7 +231,7 @@ define([
             //查询动态作品
             PlanningModel.queryDynamicOpus(self.planId, self.planName,limit, skip,function(data){
                 if(data && data.length > 0){
-                    self.skip += data.length;
+//                    self.skip += data.length;
                     self.appendDynamicItemView(data);
                     console.log(data, 99999);
                 }

@@ -76,6 +76,7 @@
     display: inline-block;
     text-align: center;
     width: 50px;
+    float: left;
 }
 
 
@@ -83,12 +84,17 @@
     display: inline-block;
     margin-left: 20px;
     width: 370px;
+    height: 50px;
+    float: left;
+    overflow-x: auto;
+    overflow-y: hidden;
 }
 .roles-page-number span{
     display: inline-block;
     text-align: center;
     margin-right: 20px;
     width: 50px;
+    float: left;
 }
 .roles-page-number span:last-child{
     margin-right: 0

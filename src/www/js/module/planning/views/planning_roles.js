@@ -21,6 +21,7 @@ define([
         parentView : null,  //父对象
         roleInitSkip : 6,       //从第六条开始
         limit : 10,
+        maxLength : 0,
         // key : selector
         ui: {
             planningRolesMask:'#planning-roles-mask',
@@ -57,6 +58,7 @@ define([
         show : function(){
             var self = this;
             self._initView();
+            self.maxLength = 10;        //页码的总数
         },
         /**
          * 初始公告内容层
@@ -172,8 +174,21 @@ define([
          * @param val
          */
         checkInputTex : function(val){
+            var self = this;
             var res = true;
-            console.log(val, 6666);
+            if(!val){
+                MsgBox.toast("请输入有效的页码", false);
+                self.ui.pageNumberTxt.val("");
+                res = false
+            }else if ( val > self.maxLength){
+                MsgBox.toast("页码超过总页数", false);
+                self.ui.pageNumberTxt.val("");
+                res = false
+            }else if ( val < 1){
+                MsgBox.toast("页码不得少于一页", false);
+                self.ui.pageNumberTxt.val("");
+                res = false
+            }
             return res;
         },
         /**
