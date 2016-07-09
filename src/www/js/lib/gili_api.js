@@ -736,16 +736,16 @@ gili_data.verifyPhoneMsgCode = function (msgcode, cb_ok, cb_err) {
  *  comment_type,评论目标类型1-话题插画，2-本子，3-企划，4-留言，5-其他
  * skip, 从第几条开始
  * limit, 每页显示条数
- * orderBy, 排序字段
- * isDesc,是否降序
+ * orderby, 排序字段
+ * orderby,是否降序
  **/
 gili_data.getComment = function (options, cb_ok, cb_err) {
     var comment_type = options.comment_type,
         comment_id = options.comment_id,
         orderBy = options.orderby || "createdAt",
         isDesc = options.isdesc,
-        skip = options.pageSize || 0,
-        limit = options.pageNumber || 6;
+        skip = options.skip || 0,
+        limit = options.limit || 6;
 
     if (!comment_id) {
         cb_err("评论对象为空!");
@@ -755,7 +755,7 @@ gili_data.getComment = function (options, cb_ok, cb_err) {
         cb_err("评论对象类型为空!");
     };
 
-    var strCQL = " select include user,* from comment where  status !=1  belong_id='" + comment_id + "' "; //and comment_id='" + comment_id + "' or
+    var strCQL = " select include user,* from comment where  status !=1 and belong_id='" + comment_id + "' "; //and comment_id='" + comment_id + "' or
 
     //if (comment_type) {
     //    strCQL += " and comment_type=" + comment_type;
