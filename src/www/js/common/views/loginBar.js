@@ -68,7 +68,6 @@ define([
         init : function(){
             var self = this;
             self.currentUser = gili_data.getCurrentUserJSON();
-            console.log(self.currentUser, 6333333);
             var headUrl = "./images/login/common-user.jpg";
             var userName = "道道好劲道";
             if(self.currentUser){
