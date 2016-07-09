@@ -323,7 +323,7 @@ gili_data.getPlanUserByPlanId = function (options, cb_ok, cb_err) {
  * cb_ok
  * cb_err
  **/
-gili_data.getPlanUserCountByPlanId = function (opy, cb_ok, cb_err) {
+gili_data.getPlanUserCountByPlanId = function (options, cb_ok, cb_err) {
     var plan_id = options.plan_id;
 
     if (!plan_id) {

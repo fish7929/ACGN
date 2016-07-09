@@ -62,6 +62,7 @@ define([
         },
         //事件添加
         events: {
+            "click @ui.planningAuthor" : "onAuthorClickHandler",
             "click @ui.planningType": "onTypeClickHandler",
             "click @ui.roleContent": "onRoleClickHandler",
             "click @ui.hottestOpusContent": "onOpusClickHandler",
@@ -113,6 +114,20 @@ define([
             //初始化评论发布框
             if (self.currentUser) {
                 self.resetUserPlanRelationStatus();
+            }
+        },
+        /**
+         * 版主头像点击事件
+         * @param e
+         */
+        onAuthorClickHandler : function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            var self = this;
+            var target = e.target;
+            var moderatorId = target.getAttribute("moderator-id");
+            if(moderatorId){
+                app.navigate("userCenter/" + moderatorId, {replace: false, trigger: true});
             }
         },
         /**
@@ -192,7 +207,7 @@ define([
         _initPlanInfoView: function (data) {
             var self = this;
             var authorTemp = '<div class="planning-cover" style="background: url(myPlanningCover) center no-repeat"></div>' +
-                '<img class="planning-moderator" src="myPlanningModerator"/>' +
+                '<img class="planning-moderator button" src="myPlanningModerator" moderator-id="moderatorId" />' +
                 '<span class="planning-moderator-nick">myPlanningModeratorNick</span>' +
                 '<span class="planning-moderator-hint">企划主</span>';
             var bgImg = data.bg_img;
@@ -205,7 +220,7 @@ define([
                 self.moderatorNick = author.user_nick;
             }
             authorTemp = authorTemp.replace("myPlanningCover", cover).replace("myPlanningModerator", author.avatar)
-                .replace("myPlanningModeratorNick", author.user_nick);
+                .replace("myPlanningModeratorNick", author.user_nick).replace("moderatorId", author.objectId);
             self.ui.planningBanner.css({"background": "url('" + bgImg + "') center no-repeat"});
             self.ui.planningAuthor.html(authorTemp);
             self.ui.planningDetailTitle.html(self.planName);
