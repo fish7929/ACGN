@@ -59,6 +59,7 @@ define([
         },
         show : function(){
             var self = this;
+
             self._initView();
             self.maxLength = 10;        //页码的总数 rolesSpanWrapper
         },
