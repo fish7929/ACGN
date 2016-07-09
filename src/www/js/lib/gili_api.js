@@ -401,7 +401,7 @@ gili_data.getBlogData = function (options, cb_ok, cb_err) {
         limit = options.limit || 1000,
         orderBy = options.orderBy || "createdAt",
         isDesc = options.isDesc;
-    var CQL = " select include user,* from blog where status !=2 and is_delete !=1 "
+    var CQL = " select include user,* from blog where status !=2 and  type in (2,3) and is_delete !=1  "
     if (orderBy.length > 0) {
         if (isDesc) {
             CQL += " order by " + orderBy + " desc ";
