@@ -366,6 +366,9 @@ define([
             app.on("update:masonry:list", self.masonryRefresh, self);
             app.on("login:ok", this.onLoginOkHandler, this);
             app.on("logOut:ok", this.onLogOutOkHandler, this);
+            window.onscroll = function (e){
+                console.log(e, 6333);
+            };
         },
 
         removeEvent : function(){

@@ -310,6 +310,11 @@
 .hottest-opus-item:last-child{
     margin-right: 0;
 }
+.hottest-opus-item img{
+    width: 175px;
+    height: 229px;
+    border-radius: 10px;
+}
 .hottest-opus-item-selected{
     border: 4px solid #fe5313  !important;
     border-radius: 14px !important;
@@ -342,176 +347,6 @@
 .dynamic-content{
     width: 100%;
     margin-top: 27px;
-}
-
-.dynamic-item{
-    width: 570px;
-    border-radius: 10px;
-    border: 1px solid rgb(192,192,192);
-    float: left;
-    text-align: left;
-}
-.dynamic-item:nth-child(odd) {
-    margin-right: 20px;
-}
-.dynamic-item-author{
-    height: 153px;
-    padding: 27px 16px 46px;
-    border-bottom: 1px solid rgb(192,192,192);
-}
-.dynamic-item-author img{
-    width: 80px;
-    height: 80px;
-    border-radius: 100%;
-    float: left;
-}
-.dynamic-item-author span{
-    float: left;
-    font-size: 18px;
-    margin-left: 10px;          //13px  在FirFox中会出错 修改为 10
-    margin-top: 6px;
-    color: #fe5313;
-}
-.dynamic-item-author span:last-child{
-    margin-top: 10px !important;
-    color: #3d3d3d !important;
-    display: inline-block;
-}
-.dynamic-item-statistics{
-    width: 100%;
-    height: 70px;
-    position: relative;
-}
-.dynamic-item-statistics div{
-    position: absolute;
-    left: 127px;
-    display: inline-block;
-    height: 70px;
-    line-height: 70px;
-    text-indent: 37px;
-    color: #ff4200;
-    background: url(../images/common/comment.png) left center no-repeat;
-}
-
-.dynamic-item-statistics div:last-child{
-    left: 335px !important;
-    color: #333 !important;
-    background: url(../images/common/praise.png) left center no-repeat !important;
-}
-
-.common-reply{
-    width: 100%;
-    padding: 15px 16px;
-    height: 165px;
-    font-family: FZLanTingHei-L-GBK;
-    font-size: 18px;
-    background: #eeeeee;
-}
-.common-reply-txt{
-    width: 100%;
-    border: 1px solid #c0c0c0;
-    border-radius: 10px;
-    height: 70px;
-    color: #c0c0c0;
-    background: #fff;
-    padding: 14px;
-    resize: none;
-    outline: 0;
-}
-.common-reply-btn{
-    width: 100%;
-    height: 50px;
-    margin-top: 15px;
-    position: relative;
-
-}
-.common-reply-btn span{
-    width: 150px;
-    display: inline-block;
-}
-
-.common-reply-btn span:first-child{
-    height: 40px;
-    position: absolute;
-    top: 5px;
-    left: 0;
-    border-radius: 19.5px;
-    background: url(../images/common/face.png);
-}
-
-.common-reply-btn span:last-child{
-    height: 50px;
-    border-radius: 24.5px;
-    background: #ff4500;
-    line-height: 48px;
-    text-align: center;
-    float: right;
-    color: #fff;
-}
-.planning-comments{
-    width: 100%;
-    background: #eeeeee;
-    font-family: FZLanTingHei-L-GBK;
-    font-size: 14px;
-    color: #333333;
-    padding-bottom: 39px;
-}
-.comment-item{
-    position: relative;
-    width: 100%;
-    height: 88px;
-    padding: 16.5px 16px;
-    border-bottom: 1px solid #C0C0C0;
-}
-
-.comment-item:last-child{
-    border-bottom: 0px  !important;
-}
-
-.comment-item img{
-    width: 55px;
-    height: 55px;
-    border-radius: 100%;
-    float: left;
-}
-.comment-brief{
-    margin-left: 17px;
-    margin-top: 3px;
-    display: inline-block;
-    float: left;
-}
-.comment-brief span{
-    font-size: 18px;
-}
-.comment-brief span:first-child{
-    color: #ff4200;
-}
-
-.comment-created{
-    margin-left: 17px;
-    margin-top: 16px;
-    float: left;
-    display: inline-block;
-}
-
-.comment-revert{
-    position: absolute;
-    right: 16px;
-    bottom: 22px;
-}
-
-.comment-more{
-    width: 100%;
-    height: 30px;
-    margin-top: 16px;
-    text-align: center;
-}
-.comment-more-btn{
-    width: 100px;
-    height: 30px;
-    display: inline-block;
-    background: url(../images/common/more-v.png) center no-repeat;
-    margin: 0 auto;
 }
 
 @import "planning_notice.scss";
