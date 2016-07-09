@@ -7,8 +7,10 @@
 define([
     'common/base/item_view',
     'text!module/planning/templates/planning_roles.html',
-    "marionette"
-],function(ItemView,tpl, mn) {
+    "marionette",
+    "module/planning/model/planning_model",
+    "msgbox"
+],function(ItemView,tpl, mn, PlanningModel,MsgBox) {
     /**
      * 活动类型
      */
@@ -17,18 +19,28 @@ define([
         template: _.template(tpl),
         _isShow: false,
         parentView : null,  //父对象
-        roleSkip : 6,       //从第六条开始
+        roleInitSkip : 6,       //从第六条开始
         limit : 10,
         // key : selector
         ui: {
             planningRolesMask:'#planning-roles-mask',
             rolesLayerTitle : "#planning-roles-layer-title",
-            rolesLayerContent : ".planning-roles-wrapper"
+            rolesLayerContent : ".planning-roles-wrapper",
+            rolesFirstPage: ".roles-first-page",    //起始页
+            rolesPageNumber: ".roles-page-number",   //中间页序容器
+            rolesLastPage : ".roles-last-page",     //最后一页
+            rolesAllPage : ".roles-all-pages",      //所有页
+            pageNumberTxt : "#page-number-txt",     //输入值
+            rolesGoToPage : ".roles-go-to-page"     // 跳转页
         },
         //事件添加
         events: {
             'click @ui.planningRolesMask' : "hidePlanningRolesHandler",
-            'click @ui.rolesLayerContent' : "onRolesLayerClickHandler"
+            'click @ui.rolesLayerContent' : "onRolesLayerClickHandler",
+            'click @ui.rolesFirstPage' : "onPageNumClickHandler",
+            'click @ui.rolesPageNumber' : "onPageNumClickHandler",
+            'click @ui.rolesLastPage' : "onPageNumClickHandler",
+            'click @ui.rolesGoToPage' : "onRolesGoToPageClickHandler"
         },
         /**初始化**/
         initialize: function () {
@@ -99,7 +111,6 @@ define([
             }
             this._isShow = false;
             this._animate(true);
-            $ (window).on ('scroll');
         },
         /**
          * 点击遮罩时候事件
@@ -127,6 +138,67 @@ define([
             if(roleId){
                 app.navigate("userCenter/" + roleId, {replace:false, trigger: true});
             }
+        },
+        /**
+         * 跳转页
+         * @param e
+         */
+        onPageNumClickHandler : function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            var self = this;
+            var target = e.target;
+            var pageNum = target.getAttribute("data-num");
+            if(pageNum){
+                self.jumpPageOperation(pageNum);
+            }
+
+        },
+        /**
+         * 跳转页
+         * @param e
+         */
+        onRolesGoToPageClickHandler : function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            var self = this;
+            var pageNum = self.ui.pageNumberTxt.val();
+            if(self.checkInputTex(pageNum)){
+                self.jumpPageOperation(pageNum);
+            }
+        },
+        /**
+         * 检测输入框的值是否有效
+         * @param val
+         */
+        checkInputTex : function(val){
+            var res = true;
+            console.log(val, 6666);
+            return res;
+        },
+        /**
+         * 跳转页的实现
+         * @param pageNum
+         */
+        jumpPageOperation : function(pageNum){
+            var self = this;
+            pageNum = parseInt(pageNum);
+            var skip = self.roleInitSkip + self.limit * (pageNum - 1);
+            self.resetSpanSelected(pageNum);
+            MsgBox.toast("点击了第"+pageNum+"页--"+ skip);
+            //todo 查询数据更改页面
+        },
+        /**
+         *
+         * @param num
+         */
+        resetSpanSelected : function (num){
+            var self = this;
+            var spanArr = self.ui.rolesPageNumber.find("span");
+            for(var i = 0; i < spanArr.length; i++){
+                $(spanArr[i]).removeClass("roles-page-number-selected");
+            }
+            $(spanArr[num - 1]).addClass("roles-page-number-selected");
         },
         /**
          * 重置属性和初始状态

@@ -128,3 +128,13 @@
     background: #fe5313;
     border-radius: 100%;
 }
+/**
+*去掉输入框的箭头
+*/
+#page-number-txt::-webkit-outer-spin-button,
+#page-number-txt::-webkit-inner-spin-button{
+    -webkit-appearance: none !important;
+    margin: 0;
+}
+
+#page-number-txt{-moz-appearance:textfield;}
