@@ -68,7 +68,7 @@ define([
 
     BookPreviewView.prototype.setImage = function(url, imageWidth, imageHeight){
         var self = this;
-        self._bookImage.css({"width": imageWidth+"px", "height":+imageHeight+"px", "background":"url('"+url+"') no-repeat center"});
+        self._bookImage.css({"width": imageWidth+"px", "height":+imageHeight+"px", "background":"url('"+url+"') no-repeat top center"});
         self.setPos(imageWidth, imageHeight);
     };
 
