@@ -29,6 +29,7 @@ define([
             self._loading = false;
             self.worksArr.length = 0;//清空数组
             self.worksArr = [];
+            utils.fansListTemp1 = false;
             self._load(type);
         },
         _load:function(type){

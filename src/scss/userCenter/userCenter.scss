@@ -55,7 +55,7 @@
   width:932px; margin:0 auto; overflow: hidden;
   .fans-item { width: 466px; height: 166px; float: left; margin-top: 68px; box-sizing: border-box;border-right: 1px solid #c0c0c0;
     .fans-item-head { width: 104px; margin-right: 20px;  float: left;}
-    .fans-item-head-img { width: 104px;  height: 104px;  margin-bottom: 12px; border: 2px solid #fff;}
+    .fans-item-head-img { width: 104px;  height: 104px;  margin-bottom: 12px; border: 2px solid #fff; border-radius: 50%;}
     .btnAttention { width: 100px;  height: 50px; text-align: center; line-height: 50px;  color: #ffffff; background: orangered;
       font-size: 14px; font-weight: bold; border-radius: 24px; cursor:pointer;}
 //    已关注
@@ -79,6 +79,7 @@
     .data_p {
     }
   }
+//  .fans-item:nth-child(even){padding-left: 66px; box-sizing: border-box; border-right: 0; }
   .fans-item-2{padding-left: 66px; box-sizing: border-box; border-right: 0; }
 }
 

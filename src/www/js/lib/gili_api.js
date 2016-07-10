@@ -1,3 +1,4 @@
+/// <reference path="http://localhost:17391/gili/avos/av2.js" />
 // 文件名称: gli_api.js
 // 创 建 人: nyh
 // 创建日期: 2016/6/25
@@ -1760,7 +1761,7 @@ gili_data.getClubUserByClubId = function (options, cb_ok, cb_err) {
         cb_err("社团id为空");
         return;
     }
-    var strCQL = " select include user, * from club where club_id='" + club_id + "' and status!=1 and approved=1   limit " + skip + "," + limit + " order by createdAt desc ";
+    var strCQL = " select include user, * from club where objectId='" + club_id + "' and status!=1 and approved=1   limit " + skip + "," + limit + " order by createdAt desc ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
             cb_ok(data.results);
@@ -1783,7 +1784,7 @@ gili_data.getClubJoinUser = function (options, cb_ok, cb_err) {
         cb_err("社团id为空");
         return;
     }
-    var strCQL = " select include user, * from join_club where club_id='" + club_id + "' and status!=1 and approved=1   limit " + skip + "," + limit + " order by createdAt desc ";
+    var strCQL = " select include user, * from join_club where objectId='" + club_id + "' and status!=1 and approved=1   limit " + skip + "," + limit + " order by createdAt desc ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
             cb_ok(data.results);

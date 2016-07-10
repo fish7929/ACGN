@@ -106,15 +106,16 @@ define([
         //滚动容器添加滚动事件
         addOnScroll:function(){
             var self = this;
-            $(window).scroll(function(e){
+            window.onscroll = function(e){
                 var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
                 if(scrollTop + window.innerHeight > document.body.offsetHeight-600){
                     if(!self.data_finish)
                         self._workListView.scrollUpdate();
                 }
-            });
+            }
         },
-        destroy:function(){
+        close:function(){
+            window.onscroll = null;
             this._loginBarView = null;
             this._workListView = null;
             app.off("common:works:liked",this.likedChangeHandler,this);
