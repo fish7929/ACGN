@@ -14,17 +14,20 @@ define([
         id:"userCenterFansContainer",
         template: _.template(UserCenterFansTpl),
         _userId:"",
+        type:1,     //1粉丝  2关注
         data_finish:false,
         initialize:function(){
             var self = this;
             self._loginBarView = new LoginBarView();
             self.userCenterHeadView = new UserCenterHeadView();
-            self.userCenterHeadView.on("fansView:clickNav",self.fansViewClickNavHandler,self);
             self.fansListView = new FansListView();
             self.fansListView.on("fansListView:change",self._fansListChangeHandler,self);
         },
         regions : {
-            "loginBar":"#userCenterLogin",
+            LoginBarRegion: {
+                el: "#userCenterLogin",
+                regionClass: SwitchViewRegion
+            },
             "headCon":"#userCenterFansHeaderCon",
             "fansCon":"#userCenterFansInfo"
         },
@@ -33,7 +36,7 @@ define([
             "loadMsg":"#mz-square-sk-text"
         },
         onRender:function(){
-            this.getRegion("loginBar").show(this._loginBarView);
+            this.LoginBarRegion.show(this._loginBarView);
             this.getRegion("headCon").show(this.userCenterHeadView);
             this.getRegion("fansCon").show(this.fansListView);
             this.userCenterHeadView.setSelected(1);
@@ -44,23 +47,18 @@ define([
             var type = self.getOption("type");
             var userId = self.getOption("userId");
             self.userCenterHeadView.setSelected(type);
-            console.log("加载用户"+userId+",的"+type+"数据");
+            self.type = type;
             self.updateMsg([1]);
             self.data_finish = false;
             self.addOnScroll();
+            utils.fansListTemp1 = false;//重置
             self.userCenterHeadView._loadData(userId);
             self.fansListView.loadData(userId,type);
         },
         pageIn:function(){
 
         },
-        /**
-         * 粉丝 关注切换
-         * @param type 1粉丝列表  2关注列表
-         */
-        fansViewClickNavHandler:function(type){
-            console.log("点击"+type)
-        },
+
         //列表状态变化
         _fansListChangeHandler:function(type){
             var self = this;
@@ -92,18 +90,17 @@ define([
         //滚动容器添加滚动事件
         addOnScroll:function(){
             var self = this;
-            $(window).scroll(function(e){
-                var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-                if(scrollTop + window.innerHeight > document.body.offsetHeight-400){
-                    if(!self.data_finish)
-                        self.fansListView.scrollUpdate();
-                }
-            });
+            window.onscroll = function(e){
+                                    var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+                                    if(scrollTop + window.innerHeight > document.body.offsetHeight-400){
+                                        if(!self.data_finish)
+                                            self.fansListView.scrollUpdate();
+                                    }
+                                };
         },
-        destroy:function(){
+        close:function(){
+            window.onscroll = null;
             this._loginBarView = null;
-            this._workListView = null;
-            app.off("common:works:liked",this.likedChangeHandler,this);
         }
     });
     return userCenterFansView;

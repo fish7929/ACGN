@@ -11,16 +11,24 @@ define([
         model: FansCollectionModel,
         tagName:"div",
         userId:"",
+        type:1,     //1粉丝  2关注
         initialize:function(){
             var self = this;
             if(self.collection == null){
                 self.collection = new FansCollectionModel();
                 self.collection.on("fansListView:colModelChange",self._colModelChangeHandler,this);
             }
+            //监听列表状态更新
+            app.on("fansList:attentions:change",self._fansListUpdateHandler,this);
         },
         _colModelChangeHandler:function(type){
             var self = this;
             self.trigger("fansListView:change",type);
+        },
+        //监听关注
+        _fansListUpdateHandler:function(arr){
+            utils.fansListTemp1 = false;
+            this.collection.reset(this.collection.models);
         },
         /**
          * 根据参数获取用户数据
@@ -29,6 +37,7 @@ define([
          */
         loadData:function(userId,type){
             var self = this;
+            self.type = type;
             self.userId = userId;
             //初始加载时先清空，再次进入只需刷新加载，在请求成功后清空重置即可
             if(!self.collection.models || self.collection.models.length <= 0)

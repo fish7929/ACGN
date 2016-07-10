@@ -6,7 +6,7 @@
 (function(window){
     var utils = {};
     window.utils = utils;
-
+    utils.fansListTemp1 = false;//是否第偶数个对象  关注/粉丝列表用
     /**
      * 检测手机号码
      * @param val
