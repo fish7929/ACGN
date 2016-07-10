@@ -628,6 +628,10 @@ gili_data.addBlog = function (options, cb_ok, cb_err) {
         success: function (obj) {
             //当前用户作品总数加1
             gili_data.currentUserCountUpdate(currentUser, "blog_count", 1, cb_ok(obj), cb_err);
+            //如果是社团成员，需要对该用户加入的所有社团的投稿数加1
+            //    gili_data.updateClubCountInfo({"club_id":club_id,"field":"followee_int","num":1},cb_ok(obj),cb_err);
+            //获取该用户加入的社团
+
         },
         error: cb_err
     });
@@ -1520,14 +1524,18 @@ gili_data.followeeClub = function (options, cb_ok, cb_err) {
                     //如果存在则 update  取消关注
                     obj.set("status", 1);
                     obj.save(null, {
-                        success: cb_ok,
+                        success: function (obj) {
+                            gili_data.updateClubCountInfo({ "club_id": club_id, "field": "followee_int", "num": -1 }, cb_ok(obj), cb_err);
+                        },
                         error: cb_err
                     });
                 } else {
-                    //如果存在则 update  取消关注
+                    //如果存在则 update
                     obj.set("status", 0);
                     obj.save(null, {
-                        success: cb_ok,
+                        success: function (obj) {
+                            gili_data.updateClubCountInfo({ "club_id": club_id, "field": "followee_int", "num": 1 }, cb_ok(obj), cb_err);
+                        },
                         error: cb_err
                     });
                 }
@@ -1546,12 +1554,43 @@ gili_data.followeeClub = function (options, cb_ok, cb_err) {
         obj.set("user_id", currentUser.id);
         obj.set("status", 0);
         obj.save(null, {
-            success: cb_ok,
+            success: function (obj) {
+                gili_data.updateClubCountInfo({ "club_id": club_id, "field": "followee_int", "num": 1 }, cb_ok(obj), cb_err);
+            },
             error: cb_err
         });
     }
 };
 
+/** 根据社团id对社团属性的总数进行 加减
+ * club_id
+ **/
+gili_data.updateClubCountInfo = function (options, cb_ok, cb_err) {
+    var club_id = options.club_id,
+        field = options.field,
+        num = options.num;
+
+    var strCQL = " select  * from club where objectId='" + club_id + "' ";
+    AV.Query.doCloudQuery(strCQL, {
+        success: function (data) {
+            if (data.results.length > 0) {
+                var obj = data.results[0];
+                var his_num = obj.get(field) || 0;
+                if (his_num <= 0) {
+                    obj.increment(field, 0);
+                } else {
+                    obj.increment(field, num);
+                }
+                obj.save(null, {
+                    success: cb_ok, error: cb_err
+                });
+            } else {
+                cb_ok(null);
+            }
+        },
+        error: cb_err
+    });
+}
 /** 根据用户id,社团id查看用户和社团加入的关系
  * user_id,
  *  club_id,
@@ -1674,7 +1713,7 @@ gili_data.getClubUserBlog = function (options, cb_ok, cb_err) {
         return;
     }
     //获取关注该社团的用户列表，取出用户id 拼成CQL,去blog作品表查询
-    gili_data.getClubUserByClubId({"club_id":club_id}, function (data) {
+    gili_data.getClubUserByClubId({ "club_id": club_id }, function (data) {
         if (data.length > 0) {
             var strCQL = dataToCQL(data);
             gili_data.getBlog(strCQL, function (blogs) {
