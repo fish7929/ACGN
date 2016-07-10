@@ -223,6 +223,9 @@ define([
             var self = this;
             self.ui.commentList.prepend(self.getCommentHtml(data));
             app.triggerMethod("update:masonry:list");
+            if(self.addCommentCallBack){
+                self.addCommentCallBack();
+            }
         },
 
         /**
@@ -234,7 +237,7 @@ define([
         setCommentTarget : function(obj){
             var self = this;
             self._commentObj = obj;
-
+            self.addCommentCallBack = obj.addCommentCallBack;
         },
 
         onCommitHandle : function(e){

@@ -78,6 +78,10 @@ define([
             self.ui.blogLoveNum.html(likeNum);
 
             var opt = {comment_id: id, comment_type: commentType};
+            opt.addCommentCallBack = function(){
+                var val = self.ui.blogMsgNum.html();
+                self.ui.blogMsgNum.html(parseInt(val) + 1);
+            };
             self._commentView.setCommentTarget(opt);
 
             var isLike = utils.isLiked(id);

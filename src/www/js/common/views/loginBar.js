@@ -4,16 +4,17 @@
 // 创建日期: 2016/6/22 15:22
 // 描    述: 登陆通用栏
 define([
-    'common/base/item_view',
+    'common/base/base_view',
     'text!common/templates/loginBar.html',
     'marionette',
+    'common/region/switch_view_region',
     'showbox',
-    "msgbox"
-],function(ItemView, tpl, mn, ShowBox, MsgBox){
-    return ItemView.extend({
+    "msgbox",
+    'module/publish/views/publishOptionView'
+],function(BaseView, tpl, mn, SwitchViewRegion, ShowBox, MsgBox, PublishOptView){
+    return BaseView.extend({
         className : "loginBarContainer",
         template : _.template(tpl),
-
         _mouseLock : false,
         currentUser : null, //当前用户
         isShowUserOperationLayer : false,   //默认不显示用户操作界面
@@ -38,10 +39,18 @@ define([
             "click @ui.userPic" : "onSwitchUserOperationLayerHandle",
             "click @ui.loginSetting" : "onLoginSettingHandle",
             "click @ui.loginOut" : "onLoginOutHandle"
-
         },
+
+        regions : {
+            PublishOptRegion: {
+                el: ".loginBar-publish-div",
+                regionClass: SwitchViewRegion
+            }
+        },
+
         /**初始化**/
         initialize : function(){
+            this._publishOptView = new PublishOptView();
         },
 
         //在开始渲染模板前执行，此时当前page没有添加到document
@@ -50,7 +59,6 @@ define([
 
         //渲染完模板后执行,此时当前page没有添加到document
         onRender : function(){
-
         },
 
         //页间动画已经完成，当前page已经加入到document
@@ -95,7 +103,14 @@ define([
         onPublishHandle : function(e){
             e.stopPropagation();
             e.preventDefault();
-            app.navigate("#publish" , {replace: false, trigger: true});
+
+            var self = this;
+            console.log(self._publishOptView.isShow);
+            if(self._publishOptView.isShow){
+                self.PublishOptRegion.hide(self._publishOptView);
+            }else{
+                self.PublishOptRegion.show(self._publishOptView);
+            }
         },
 
         onLoginHandle : function(e){
@@ -175,6 +190,5 @@ define([
         //当页面销毁时触发
         onDestroy : function(){
         }
-
     });
 });

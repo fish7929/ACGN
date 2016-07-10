@@ -56,6 +56,15 @@ define([
             return this;
         },
 
+        hide : function(view){
+            var isDifferentView = view !== this.currentView;
+            if(isDifferentView) return;
+            if(view.close){
+                view.close();
+            }
+            this.currentView = null;
+        },
+
 
         /**
          * 打开视图
@@ -99,7 +108,6 @@ define([
         },
 
         _destroyView: function(view) {
-
             if (view.destroy && !view.isDestroyed) {
                 view.destroy();
             } else if (view.remove) {

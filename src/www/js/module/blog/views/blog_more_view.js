@@ -57,7 +57,7 @@ define([
 
             $(self.ListName).masonry({
                 itemSelector: '.blogItemView',
-                gutterWidth: 40 //每两列之间的间隙为5像素
+                gutterWidth: 20 //每两列之间的间隙为5像素
             });
 
             self.ui.blogList.html("");
