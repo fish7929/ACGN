@@ -1674,7 +1674,7 @@ gili_data.getClubUserBlog = function (options, cb_ok, cb_err) {
         return;
     }
     //获取关注该社团的用户列表，取出用户id 拼成CQL,去blog作品表查询
-    gili_data.getClubUserByClubId(club_id, function (data) {
+    gili_data.getClubUserByClubId({"club_id":club_id}, function (data) {
         if (data.length > 0) {
             var strCQL = dataToCQL(data);
             gili_data.getBlog(strCQL, function (blogs) {
