@@ -1681,7 +1681,7 @@ gili_data.getClubUserBlog = function (options, cb_ok, cb_err) {
                 cb_ok(blogs);
             }, cb_err);
         } else {
-            cb_err("社团加入用户为空！");
+            cb_ok([]);
             return;
         }
     }, cb_err);
