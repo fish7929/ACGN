@@ -19,6 +19,10 @@ body {
     background: #EDEDED;
     overflow-y: scroll;
     zoom: 0.75;
+    -moz-transform:scale(0.75);
+    -moz-transform-origin:top center;
+    -o-transform:scale(0.75);
+    -o-transform-origin:top center;
 }
 
 li {
