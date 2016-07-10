@@ -1578,7 +1578,7 @@ gili_data.getUserClubRelation = function (options, cb_ok, cb_err) {
  **/
 gili_data.getUserFlloweeClubRelation = function (options, cb_ok, cb_err) {
     var user_id = options.user_id,
-        plan_id = options.plan_id;
+        club_id = options.club_id;
 
     var strCQL = " select * from followee_club where user_id='" + user_id + "' and  club_id='" + club_id + "' ";
     AV.Query.doCloudQuery(strCQL, {
