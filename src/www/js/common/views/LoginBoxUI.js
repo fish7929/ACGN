@@ -143,6 +143,9 @@ define([
                 self._hide();
 //                console.log(user, 6666);
                 app.triggerMethod("login:ok");
+                //查询当前登录用户已关注用户ID列表 已点赞话题(插画)ID列表
+                utils.loadAttentionList(user.id);
+                utils.loadLikedTplList(user.id);
             }, function (error) {
                 if (error.code == 211) {
                     MsgBox.toast("该用户未注册，去注册", false);

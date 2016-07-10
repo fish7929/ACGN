@@ -1968,6 +1968,9 @@ gili_data.loginUtils = function (data) {
                     success: function (_user) {
                         //                        window.location.href="http://www.gililove.com";
                         app.triggerMethod("login:ok");
+                        //查询当前登录用户已关注用户ID列表 已点赞话题(插画)ID列表
+                        utils.loadAttentionList(_user.id);
+                        utils.loadLikedTplList(_user.id);
                     },
                     error: function (_user, error) {
                         console.log(error.message);
@@ -1992,6 +1995,9 @@ gili_data.loginUtils = function (data) {
                             success: function (user) {
                                 //                                window.location.href="http://www.gililove.com";
                                 app.triggerMethod("login:ok");
+                                //查询当前登录用户已关注用户ID列表 已点赞话题(插画)ID列表
+                                utils.loadAttentionList(user.id);
+                                utils.loadLikedTplList(user.id);
                             },
                             error: function (user, error) {
                                 console.log(error.message);
