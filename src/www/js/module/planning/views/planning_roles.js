@@ -19,8 +19,8 @@ define([
         template: _.template(tpl),
         _isShow: false,
         parentView : null,  //父对象
-        roleInitSkip : 1,       //从第六条开始 // 6  TODO 暂时测试更好为 roleInitSkip 1，limit 1后期替换为6 10
-        limit : 1,     //10
+        roleInitSkip : 6,       //从第六条开始 // 6  TODO 暂时测试更好为 roleInitSkip 1，limit 1后期替换为6 10
+        limit : 10,     //10
         maxLength : 0,
         tempSpanWidth : 70,     //宽度 50 + marginRight 20
         planId : "",    //父容器的企划ID
