@@ -1541,7 +1541,7 @@ gili_data.followeeClub = function (options, cb_ok, cb_err) {
     var insert = function (obj) {
         var followee_club = AV.Object.extend("followee_club");
         var obj = new followee_club();
-        obj.set("plan_id", club_id);
+        obj.set("club_id", club_id);
         obj.set("user", currentUser);
         obj.set("user_id", currentUser.id);
         obj.set("status", 0);
