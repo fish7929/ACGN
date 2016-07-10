@@ -7,34 +7,42 @@ define([
     'marionette',
     'common/region/switch_view_region',
     'common/views/loginBar',
-    'module/Associations/model/associationsModel',
+    'module/Associations/views/associationsHeadView',
+    'module/Associations/views/associationsMemberView',
+    'module/Associations/views/associationsFansView',
     'module/userCenter/views/workListView',
     'msgbox'
-],function(BaseView,AssociationsTpl,mn,SwitchViewRegion,LoginBarView,AssociationsModel,WorkListView,MsgBox){
+],function(BaseView,AssociationsTpl,mn,SwitchViewRegion,LoginBarView,AssociationsHeadView,AssociationsMemberView,AssociationsFansView,WorkListView,MsgBox){
     var associationsView = BaseView.extend({
         id:"AssociationsContainer",
         template: _.template(AssociationsTpl),
-        _associateId:"",
         _assoId:"", //当前社团ID
         initialize:function(){
             var self = this;
-            self.model = new AssociationsModel();
-            this._loginBarView = new LoginBarView();
-            this._workListView = new WorkListView();
-            this._workListView.on("workListView:change",self._workListChangeHandler,self);
+            self._loginBarView = new LoginBarView();
+            self._associationsHeadView = new AssociationsHeadView();
+            self._associationsMemberView = new AssociationsMemberView();
+            self._associationsFansView = new AssociationsFansView();
+            self._workListView = new WorkListView();
+            self._workListView.on("workListView:change",self._workListChangeHandler,self);
         },
         regions : {
             LoginBarRegion: {
                 el: "#associationsLogin",
                 regionClass: SwitchViewRegion
             },
+            "headInfo":"#associations_header",
+            "memberList":"#associateMember",
+            "fansList":"#associateAttention",
             "workList":"#main_left"
         },
         onRender:function(){
             var self = this;
             self.LoginBarRegion.show(self._loginBarView);
-            this.getRegion("workList").show(this._workListView);
-            //社团成员  关注用户
+            self.getRegion("headInfo").show(self._associationsHeadView);
+            self.getRegion("memberList").show(self._associationsMemberView);
+            self.getRegion("fansList").show(self._associationsFansView);
+            self.getRegion("workList").show(self._workListView);
         },
         show:function(){
             var self = this;
@@ -43,11 +51,11 @@ define([
                 MsgBox.alert("无效路由");
                 return;
             }
-            debugger;
             //根据社团ID查询社团对象
-            self.model.getAssociationsById(self._assoId);
+            self._associationsHeadView._loadData(self._assoId);
+            self._associationsMemberView._loadData(self._assoId);
+            self._associationsFansView._loadData(self._assoId);
             self._workListView.loadData("577a773d0a2b58393762f328");//guyy todo
-//            self._workListView.loadData(self._associateId)
         },
         pageIn:function(){},
         //列表状态更新

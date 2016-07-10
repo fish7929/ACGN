@@ -14,14 +14,16 @@
         span{display: block; margin-bottom:5px; font-weight: bold;}
       }
       .btnS{ height: 130px; padding-top: 30px; text-align: left;}
-      #btnAdd{ width:190px; height: 70px; line-height:70px; background: url("../images/associations/icon01.png") no-repeat; font-size: 24px; color:#ffffff; display: inline-block; text-align: center;}
-      #btnAttention{ width:190px; height: 70px; line-height:70px; background: url("../images/associations/icon02.png") no-repeat; font-size: 24px; color:#ffffff;display: inline-block; text-align: center; margin-left: 30px;}
+      #btnAdd {cursor:pointer; width:190px; height: 70px; line-height:70px; background: url("../images/associations/icon01.png") no-repeat; font-size: 24px; color:#ffffff; display: inline-block; text-align: center;}
+      #btnAdd.btnAdd_ck{width:190px; height: 70px; line-height:70px; background: url("../images/associations/icon03.png") no-repeat center;}
+      #btnAttention{ cursor:pointer;width:190px; height: 70px; line-height:70px; background: url("../images/associations/icon02.png") no-repeat; font-size: 24px; color:#ffffff;display: inline-block; text-align: center; margin-left: 30px;}
+      #btnAttention.btnAttention_ck{width:190px; height: 70px; line-height:70px;background: url("../images/associations/icon03.png") no-repeat center;}
     }
 }
 #associations_main{ width:1200px; margin:35px auto 0 auto; overflow: hidden;
   #main_left{width:900px; float:left; }
   #main_right { width: 300px; height: 300px; float: left;
-    .memberImgItem {width: 57px;  height: 57px;  margin-right: 12px; margin-bottom: 12px; float:left;}
+    .memberImgItem {width: 57px;  height: 57px;  margin-right: 12px; margin-bottom: 12px; float:left; border-radius:50%; cursor:pointer;}
     #associateMember p, #associateAttention p { font-size: 24px;  color: #3d3d3d;  margin-bottom: 20px; text-align: left; clear:left;}
     #associateMember{overflow: hidden;}
     #associateAttention{margin-top: 42px; overflow: hidden;}

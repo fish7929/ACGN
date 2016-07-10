@@ -379,5 +379,31 @@
         }
         return result;
     }
+    //格式化收藏数的显示
+    utils.formatCollectCount = function(num) {
+        //3600000
+//        console.log(num);
+        if(num < 0){
+            num = 0;
+            return num;
+        }else if (num < 10000)
+            return num;
+        if (num < 10000*10 && num >= 10000){
+            if(num % 10000 == 0){
+                return (num / 10000) + "万";
+            }else{
+                return (num / 10000).toFixed(2) + "万";
+            }
+        }
+        if (num < 10000*100 && num >= 10000*10){
+            if(num % 10000 == 0){
+                return (num / 10000) + "万";
+            }else{
+                return (num / 10000).toFixed(1) + "万";
+            }
+        }
+        if (num >= 10000*100)
+            return Math.round(num / 10000) + "万";
+    };
 
 })(window);
