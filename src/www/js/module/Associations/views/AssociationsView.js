@@ -84,7 +84,6 @@ define([
          */
         updateMsg:function(typeArr){
             var self = this;
-            debugger;
             self.ui.loadingContainer.find("img").show();
             self.ui.loadMsg.html("你的大片正在加载...");
             if(typeArr && typeArr.length > 0){

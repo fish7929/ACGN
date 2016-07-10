@@ -6,8 +6,9 @@ define([
     'text!module/userCenter/templates/workItem.html',
     'marionette',
     'msgbox',
-    'common/views/faceView'
-],function(workModel,workItemTpl,mn,MsgBox,FaceView){
+    'common/views/faceView',
+    'module/book/views/bookPreviewView'
+],function(workModel,workItemTpl,mn,MsgBox,FaceView,BookPreviewView){
     var WorkItemView = Marionette.ItemView.extend({
         template: _.template(workItemTpl),
         model:workModel,
@@ -24,6 +25,7 @@ define([
         events:{
             "click .info-detail-comment":"_clickCommentHandler",
             "click .commentMore":"_clickCommentMoreHandler", //查看该作品更多评论
+            "click .uc-info-pic":"_clickPicHandler", //点击查看大图
             "click .info-detail-zan":"_clickZanHandler",
             "click .info-del":"_clickDelHandler",      //用户只能删除自己的动态话题等
             "click .btnFace":"_clickFaceHandler",       //点击颜表情
@@ -159,6 +161,13 @@ define([
                 });
             }
         },
+        //点击查看大图列表
+        _clickPicHandler:function(e){
+            //guyy todo
+            return;
+            if(this.model.get("pictures"))
+            BookPreviewView.show(this.model.get("pictures"));
+        },
         //点击该动态更多评论
         _clickCommentMoreHandler:function(e){
             var self = this;
@@ -193,8 +202,9 @@ define([
         //点击打开颜表情
         _clickFaceHandler:function(e){
             var self = this;
+            //guyy todo
             self.faceView.show(function(data){
-                debugger;
+//                debugger;
             });
         },
         //删除
@@ -285,6 +295,9 @@ define([
             var target = $(e.target);
             var userId = target.data("userid");
             app.navigate("userCenter/"+userId,{trigger:true,replace:true});
+        },
+        close:function(){
+            BookPreviewView.hide();
         }
     });
     return WorkItemView;

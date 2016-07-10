@@ -60,7 +60,8 @@ define([
             }
             var options = {"user_id":userId,"club_id":clubId};
             gili_data.getUserFlloweeClubRelation(options,function(data){
-                if(!data){
+                debugger;
+                if(!data || data.status == 0){
                     self.set({"attentionsTxt":"关注社团","attentionsClass":""});
                     return;
                 }
@@ -94,7 +95,6 @@ define([
         attentions:function(type,clubId,cb_ok){
             var self = this;
             var options = {"club_id":clubId};
-            debugger;
             if(type == 1){
                 options.status = 1;
                 //默认关注成功

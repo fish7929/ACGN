@@ -61,6 +61,7 @@ define([
                 skip:self.worksArr.length,
                 limit:self.pageSize
             };
+            debugger;
             gili_data.getClubUserBlog(options,function(data){
                 debugger;
                 self.loadOk(data);
@@ -107,7 +108,6 @@ define([
             var self = this;
             //根据作品id判断是否存在，存在则删除
             for(var i = 0; i < self.worksArr.length; i++){
-                debugger;
                 var tempWork = self.worksArr[i];
                 if(tempWork.objectId == gid){
                     self.worksArr.splice(i,1);
