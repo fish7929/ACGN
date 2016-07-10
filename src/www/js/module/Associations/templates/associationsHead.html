@@ -1,10 +1,17 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
-
-</body>
-</html>
+<div id="header_data">
+    <img id="header_img" src="images/temp/asso/icon01.JPG" alt=""/>
+    <div id="header_p"><span class="sp_name"><%=name %></span><span class="sp_authorName">创建者：<%=author%></span></div>
+    <div class="header_desc"><%=brief%></div>
+    <div class="header_main">
+        <div class="numS">
+            <div class="num num1"><span><%=blogNum%></span>投稿数</div>
+            <div class="num num2"><span><%=joinNum%></span>社团人数</div>
+            <div class="num num3"><span><%=bookNum%></span>本子数</div>
+            <div class="num num4"><span><%=attentionsNum%></span>关注人数</div>
+        </div>
+        <div class="btnS">
+            <div id="btnAdd" class="<%=joinClass %>"><%=joinTxt%></div>
+            <div id="btnAttention" class="<%=attentionsClass %>"><%=attentionsTxt%></div>
+        </div>
+    </div>
+</div>

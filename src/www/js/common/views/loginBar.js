@@ -71,6 +71,8 @@ define([
             app.on("login:ok",this.onLoginOkHandle, this);
             //登出成功
             app.on("logOut:ok",this.onLoginOkHandle, this);
+
+            app.on("hide:publishOptView", this.onHidePublish, this);
         },
 
         init : function(){
@@ -105,7 +107,6 @@ define([
             e.preventDefault();
 
             var self = this;
-            console.log(self._publishOptView.isShow);
             if(self._publishOptView.isShow){
                 self.PublishOptRegion.hide(self._publishOptView);
             }else{
@@ -182,9 +183,15 @@ define([
             return false;
         },
 
+        onHidePublish : function(){
+            this.PublishOptRegion.hide(this._publishOptView);
+        },
+
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
             this.$el.hide();
+
+            app.off("hide:publishOptView", this.onHidePublish, this);
         },
 
         //当页面销毁时触发

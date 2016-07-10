@@ -7,8 +7,9 @@ define([
     'common/base/item_view',
     'text!module/publish/templates/publishOptionView.html',
     'marionette',
-    'msgbox'
-],function(ItemView, tpl, mn, MsgBox){
+    'msgbox',
+    'module/publish/views/publishView'
+],function(ItemView, tpl, mn, MsgBox, PublishView){
     return ItemView.extend({
         id : "publishOptContainer",
         template : _.template(tpl),
@@ -57,10 +58,10 @@ define([
                 MsgBox.toast(giliConfig.Tip.NOLOGIN, false);
                 return
             }
-
-            // var param = {};
-            // param.type = "topic";
-            // PublishView.show(param);
+            var param = {};
+            param.type = "topic";
+            PublishView.show(param);
+            app.triggerMethod("hide:publishOptView")
         },
 
         onBnIllustrationHandle : function(e){
@@ -72,21 +73,24 @@ define([
                 return
             }
 
-            // var param = {};
-            // param.type = "ill";
-            // PublishView.show(param);
+            var param = {};
+            param.type = "ill";
+            PublishView.show(param);
+            app.triggerMethod("hide:publishOptView")
         },
 
         onBnPlanningHandle : function(e){
             e.stopPropagation();
             e.preventDefault();
             MsgBox.toast(giliConfig.Tip.UNDEVELOPED, false);
+            app.triggerMethod("hide:publishOptView")
         },
 
         onBnBookHandle : function(e){
             e.stopPropagation();
             e.preventDefault();
             MsgBox.toast(giliConfig.Tip.UNDEVELOPED, false);
+            app.triggerMethod("hide:publishOptView")
         },
 
         /**页面关闭时调用，此时不会销毁页面**/
@@ -94,8 +98,6 @@ define([
             var self = this;
             self.isShow = false;
             self.$el.hide();
-
-            // PublishView.hide();
         },
 
         //当页面销毁时触发

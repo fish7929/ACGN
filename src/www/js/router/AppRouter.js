@@ -24,8 +24,6 @@ define([
             "associations/:assoId" : "Associations", //社团 add by guYY
             //同人本详情
             "book/:bookId" : "book",
-            //发布页面
-            "publish" : "publish",
             //更多优秀插画
             "blogMore" : "blogMore"
         },
