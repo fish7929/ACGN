@@ -423,7 +423,7 @@ define([
             self.LoginBarRegion.show(self._loginBarView);
             $('.dynamic-content').masonry({
                 itemSelector: '.blogItemView',
-                gutterWidth: 40 //每两列之间的间隙为5像素
+                gutterWidth: 20 //每两列之间的间隙为5像素
             });
             self.addEvent();
         },
