@@ -6,7 +6,8 @@ define([
     'module/userCenter/controller',
     'module/Associations/controller',
     'module/book/controller',
-    'module/publish/controller'
+    'module/publish/controller',
+    'module/blog/controller'
 ],function(){
     var controllers = {
     };

@@ -16,11 +16,13 @@ define([
         itemList : [],
         // key : selector
         ui : {
-            blogList : ".home-blog-list"
+            blogList : ".home-blog-list",
+            bnBlogMore : ".home-blog-bnMore"
         },
 
         //事件添加
         events : {
+            "click @ui.bnBlogMore" : "onClickHandle"
         },
 
         /**初始化**/
@@ -45,7 +47,7 @@ define([
             self.addEvent();
             $('.home-blog-list').masonry({
                 itemSelector: '.blogItemView',
-                columnWidth: 2 //每两列之间的间隙为5像素
+                gutterWidth: 40 //每两列之间的间隙为5像素
             });
         },
 
@@ -83,6 +85,13 @@ define([
             }else{
                 $('.home-blog-list').masonry('reload');
             }
+        },
+
+        onClickHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+
+            app.navigate("#blogMore", {replace: false, trigger: true});
         },
 
         addEvent : function(){

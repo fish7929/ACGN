@@ -197,7 +197,6 @@ define([
 
         //当页面销毁时触发
         onDestroy : function(){
-            console.log("book onDestroy")
         }
     });
 });

@@ -25,7 +25,9 @@ define([
             //同人本详情
             "book/:bookId" : "book",
             //发布页面
-            "publish" : "publish"
+            "publish" : "publish",
+            //更多优秀插画
+            "blogMore" : "blogMore"
         },
         /**当前路由，如果调用返回，返回到指定路由**/
         backRoutes: {

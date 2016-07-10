@@ -1,13 +1,13 @@
 .blogItemView{
-    width: 570px;
+    width: 580px;
     border-radius: 10px;
     border: 1px solid rgb(192,192,192);
     float: left;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 40px;
 }
 .blogItemView:nth-child(odd) {
-    margin-right: 20px;
+    //margin-right: 20px;
 }
 
 .blog-item-image{
@@ -17,6 +17,7 @@
 }
 .blog-item-image img{
     width: 100%;
+    max-width: 580px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
 }
