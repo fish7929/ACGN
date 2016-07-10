@@ -19,10 +19,11 @@ define([
         template: _.template(tpl),
         _isShow: false,
         parentView : null,  //父对象
-        roleInitSkip : 6,       //从第六条开始
-        limit : 10,
+        roleInitSkip : 1,       //从第六条开始 // 6
+        limit : 1,     //10
         maxLength : 0,
         tempSpanWidth : 70,     //宽度 50 + marginRight 20
+        planId : "",    //父容器的企划ID
         // key : selector
         ui: {
             planningRolesMask:'#planning-roles-mask',
@@ -48,6 +49,7 @@ define([
         /**初始化**/
         initialize: function () {
             this.parentView = this.getOption("parentView");
+            this.planId = this.parentView.planId;
         },
         //在开始渲染模板前执行，此时当前page没有添加到document
         onBeforeRender: function () {
@@ -62,7 +64,9 @@ define([
                     var currentLength = data.count - self.roleInitSkip;
                     if(currentLength > 0){
                         console.log(currentLength);
-                        self.maxLength = Math.ceil(currentLength / self.limit);
+                        self.maxLength = Math.ceil(currentLength / self.limit); //页码的总数 rolesSpanWrapper
+                        //根据页总数初始化设置页序
+                        self._initView();
                     }
                 }
             },function(err){
@@ -71,9 +75,22 @@ define([
         },
         show : function(){
             var self = this;
-
-            self._initView();
-            self.maxLength = 10;        //页码的总数 rolesSpanWrapper
+            //查询跳过的首页信息
+            self.loadRolesByPageNum(self.limit, self.roleInitSkip);
+        },
+        /**
+         * 安装页去查询加入用户信息
+         * @param limit
+         * @param skip
+         */
+        loadRolesByPageNum : function(limit, skip){
+            var self = this;
+            //查询跳过的首页信息
+            PlanningModel.getJoinUserById(self.planId, limit, skip, function(data){
+                if(data){
+                    self.resetRoleData(data);
+                }
+            }, function(err){});
         },
         /**
          * 初始公告内容层
@@ -81,6 +98,40 @@ define([
          */
         _initView : function(){
             var self = this;
+            var tempSpan = "";
+            var spanSelected = "";
+            var width = self.maxLength * self.tempSpanWidth;
+            self.ui.rolesSpanWrapper.css({"width": width + "px" }); //动态设置 span 容器的宽度
+            for(var i = 0; i < self.maxLength; i++){
+                spanSelected =  i == 0 ? "roles-page-number-selected" : "";
+                tempSpan += '<span class="button '+spanSelected+'" data-num="'+ (i + 1)+'">'+(i+1)+'</span>';
+            }
+            self.ui.rolesSpanWrapper.html(tempSpan);
+            self.ui.rolesLastPage.attr("data-num", self.maxLength);
+            self.ui.rolesAllPage.html("共"+self.maxLength+"页");
+        },
+        /**
+         * 根据页数据重置角色容器
+         * @param data
+         */
+        resetRoleData : function(data){
+            var self = this;
+            self.ui.rolesLayerContent.html("");
+            var roleTemp = '<div class="role-layer-item" role-id="roleId">'+
+                '<img src="roleHeader" role-id="roleId" class="button">'+
+                '<span class="role-layer-name-hint" role-id="roleId">roleName</span>'+
+                '</div>';
+            var roleHtml = "", roleTempRep = "";
+            for(var i = 0; i < data.length; i++){
+                var obj = data[i];
+                var avatar = obj.get("user").get("avatar");
+                var name = obj.get("user").get("user_nick");
+                var userId = obj.get("user").id;
+                roleTempRep = roleTemp.replace(/roleId/g, userId).replace(/roleHeader/g, avatar)
+                    .replace(/roleName/g, name);
+                roleHtml += roleTempRep;
+            }
+            self.ui.rolesLayerContent.html(roleHtml);
         },
         //页间动画已经完成，当前page已经加入到document
         pageIn: function () {
@@ -214,8 +265,9 @@ define([
             pageNum = parseInt(pageNum);
             var skip = self.roleInitSkip + self.limit * (pageNum - 1);
             self.resetSpanSelected(pageNum);
-            MsgBox.toast("点击了第"+pageNum+"页--"+ skip);
+//            MsgBox.toast("点击了第"+pageNum+"页--"+ skip);
             //todo 查询数据更改页面
+            self.loadRolesByPageNum(self.limit, skip);
         },
         /**
          *

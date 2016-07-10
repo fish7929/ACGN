@@ -72,6 +72,7 @@ define([
         /**初始化**/
         initialize: function () {
             var self = this;
+            self.planId = self.getOption("planId");
             self._loginBarView = new LoginBarView();
             //浏览分享层
             this.planningControlView = new ControlView(this);
@@ -87,7 +88,7 @@ define([
         onRender: function () {
             var self = this;
             //获取参数
-            self.planId = self.getOption("planId");
+//            self.planId = self.getOption("planId");
             self.currentUser = gili_data.getCurrentUser();
             //初始化企划基本信息
             PlanningModel.getPlanById(self.planId, function (data) {
@@ -422,7 +423,7 @@ define([
             self.LoginBarRegion.show(self._loginBarView);
             $('.dynamic-content').masonry({
                 itemSelector: '.blogItemView',
-                columnWidth: 2 //每两列之间的间隙为5像素
+                gutterWidth: 40 //每两列之间的间隙为5像素
             });
             self.addEvent();
         },
