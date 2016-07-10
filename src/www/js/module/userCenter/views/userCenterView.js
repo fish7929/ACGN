@@ -25,18 +25,11 @@ define([
             //点赞列表发生变化
             app.on("common:works:liked",self.likedChangeHandler,self);
         },
-//        regions : {
-//            LoginBarRegion: {
-//                el: "#login-nav",
-//                regionClass: SwitchViewRegion
-//            }
-//        },
         regions : {
             LoginBarRegion: {
                 el: "#userCenterLogin",
                 regionClass: SwitchViewRegion
             },
-//            "loginBar":"#userCenterLogin",
             "headerCon":"#userCenterHeaderCon",
             "workCon":"#userCenterInfo"
         },
@@ -47,7 +40,6 @@ define([
         onRender:function(){
             var self = this;
             self.LoginBarRegion.show(self._loginBarView);
-//            this.getRegion("loginBar").show(this._loginBarView);
             this.getRegion("headerCon").show(this.userCenterHeadView);
             this.userCenterHeadView.setSelected(0);
             this.getRegion("workCon").show(this._workListView);
@@ -116,7 +108,7 @@ define([
             var self = this;
             $(window).scroll(function(e){
                 var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-                if(scrollTop + window.innerHeight > document.body.offsetHeight-400){
+                if(scrollTop + window.innerHeight > document.body.offsetHeight-600){
                     if(!self.data_finish)
                         self._workListView.scrollUpdate();
                 }
