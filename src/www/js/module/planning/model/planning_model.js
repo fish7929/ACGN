@@ -237,9 +237,7 @@ define([
         option.isDesc = true;
         option.orderBy = "createdAt";
         gili_data.getPlanUserBlog(option, function(data){
-            if(data&&data.length > 0){
-                cb_ok&&cb_ok(data);
-            }
+            cb_ok&&cb_ok(data);
         },function(err){
             cb_err&&cb_err(err);
         });

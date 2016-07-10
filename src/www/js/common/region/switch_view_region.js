@@ -28,7 +28,6 @@ define([
 
             //如果是不同的view或者强制显示下一个view,才显示下一个view
             var _shouldShowView = isDifferentView || forceShow;
-
             this.showingView = view;
             if (_shouldShowView) {
                 //view.once('destroy', this.empty, this);

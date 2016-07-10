@@ -72,7 +72,6 @@ define([
             self._previewView = new BDPreviewView();
             self._hotView = new BDHotView();
             self._commentView = new CommentView();
-            console.log("book initialize")
         },
 
         //在开始渲染模板前执行，此时当前page没有添加到document
