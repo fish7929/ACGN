@@ -10,8 +10,9 @@ define([
     'common/region/switch_view_region',
     'showbox',
     "msgbox",
-    'module/publish/views/publishOptionView'
-],function(BaseView, tpl, mn, SwitchViewRegion, ShowBox, MsgBox, PublishOptView){
+    'module/publish/views/publishOptionView',
+    "module/publish/views/publishView"
+],function(BaseView, tpl, mn, SwitchViewRegion, ShowBox, MsgBox, PublishOptView, PublishView){
     return BaseView.extend({
         className : "loginBarContainer",
         template : _.template(tpl),
@@ -189,13 +190,13 @@ define([
 
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
-            this.$el.hide();
-
-            app.off("hide:publishOptView", this.onHidePublish, this);
         },
 
         //当页面销毁时触发
         onDestroy : function(){
+            this.$el.hide();
+            PublishView.hide();
+            app.off("hide:publishOptView", this.onHidePublish, this);
         }
     });
 });

@@ -83,14 +83,12 @@ define([
             e.stopPropagation();
             e.preventDefault();
             MsgBox.toast(giliConfig.Tip.UNDEVELOPED, false);
-            app.triggerMethod("hide:publishOptView")
         },
 
         onBnBookHandle : function(e){
             e.stopPropagation();
             e.preventDefault();
             MsgBox.toast(giliConfig.Tip.UNDEVELOPED, false);
-            app.triggerMethod("hide:publishOptView")
         },
 
         /**页面关闭时调用，此时不会销毁页面**/

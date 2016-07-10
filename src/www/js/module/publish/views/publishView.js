@@ -50,6 +50,8 @@ define([
 
         self.faceContainer = self.$el.find(".publish-face-container");
 
+        self.loadingCircle = self.$el.find(".loadingCircle");
+
         self.MAXIMAGENUM = 10;
         //发布类型
         self.publishType = 1;
@@ -60,6 +62,7 @@ define([
         self._topicImage = "";
 
         self._onSelectFaceHandle = self.onSelectFaceHandle.bind(this);
+
     };
 
     /**
@@ -127,6 +130,7 @@ define([
         self.inputLabel.val("");
         self.checkInputLabel();
         self.checkDelLabelBtn();
+        self.loadingCircle.hide();
 
     };
 
@@ -170,6 +174,7 @@ define([
         }
 
         if(uploadTaskSchedule.isFinish == false) {
+            self.loadingCircle.show();
             app.off("upload_taskschedule_finished").on("upload_taskschedule_finished", function () {
                 self.onUploadTaskComplete();
                 app.off("upload_taskschedule_finished");
@@ -184,10 +189,12 @@ define([
         var self = this;
         var data = self.getPublishData();
         gili_data.addBlog(data, function(){
+            self.loadingCircle.hide();
             MsgBox.toast(giliConfig.Tip.PUBLISH_SUCCESS, true);
             self.hide();
         }, function(err){
             MsgBox.toast(giliConfig.Tip.PUBLISH_FAIL+err, false);
+            self.loadingCircle.hide();
         })
 
     };

@@ -208,4 +208,24 @@
       background-color: #fd4200;
     }
   }
+
+  .loadingCircle{
+    position: fixed;
+    width: 1280px;
+    height: 100%;
+    top: 0;
+    display: none;
+
+    .loading-gif{
+      position: relative;
+      top: 480px;
+    }
+
+    .loading-gif img{
+      width: 60px;
+      height: 60px;
+    }
+
+
+  }
 }
