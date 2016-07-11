@@ -806,6 +806,7 @@ gili_data.sendPhoneMsg = function (phone, cb_ok, cb_err) {
 }
 
 /** 验证手机短信
+msgcode,验证码
  phone，手机号码
  **/
 gili_data.verifyPhoneMsgCode = function (msgcode，phone, cb_ok, cb_err) {
