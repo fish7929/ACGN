@@ -6,9 +6,10 @@
     text-align: center;
     margin-bottom: 40px;
 }
-.blogItemView:nth-child(odd) {
-    //margin-right: 20px;
-}
+
+//.blogItemView:nth-child(odd) {
+//  margin-right: 20px;
+//}
 
 .blog-item-image{
     width: 100%;
@@ -68,9 +69,14 @@
 .blog-item-msg{
     .blog-item-msg-btn{
         width: 50px;
-        background: url(../images/common/comment.png) center no-repeat;
+        background: url(../images/common/comment2.png) center no-repeat;
         display: inherit;
     }
+
+    .blog-item-msg-btn:hover{
+        background: url(../images/common/comment.png) center no-repeat;
+    }
+
     .blog-item-msg-num{
         margin-left: 50px;
         color: #ff4200;
@@ -85,6 +91,10 @@
         width: 50px;
         background: url(../images/common/praise.png) no-repeat center;
         display: inherit;
+    }
+
+    .blog-item-love-btn:hover{
+        background: url(../images/common/praise.png) no-repeat center;
     }
 
     .onSelect{

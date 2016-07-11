@@ -76,6 +76,9 @@ define([
         if(self._isShow) return;
 
         self._isShow = true;
+
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        self.$el.css({top:scrollTop});
         document.body.appendChild(self.el);
         self.reset();
         switch (param.type){
@@ -286,7 +289,7 @@ define([
         var color = utils.getLabelRandomColor();
         var newSpan = $("<span style='background-color: "+color+"'></span>");
         newSpan.text(val);
-        newSpan.insertBefore(self.inputLabel);
+        newSpan.appendTo(self.labelDiv);
         self.inputLabel.val("");
         self.checkInputLabel();
         self.checkDelLabelBtn();
@@ -301,7 +304,7 @@ define([
         var lastSpan = self.labelDiv.find("span:last");
         var maxWidth = self.labelDiv.width();
         if(allSpan.length > 0){
-            var totalWidth = lastSpan.position().left + lastSpan.outerWidth() + self.inputLabel.outerWidth() + 30;
+            var totalWidth = lastSpan.position().left + lastSpan.outerWidth() + 100;
             if(totalWidth >= maxWidth){
                 self.inputLabel.hide();
             }else{

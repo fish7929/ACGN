@@ -124,7 +124,7 @@
     };
 
     utils.getLabelRandomColor = function(){
-        var tempColors = ["#0000ff", "#00ff00", "#00b7ee", "#22ac38", "#ff0000", "#ff00ff"];
+        var tempColors = ["#ff675d", "#f9a64d", "#f5ce53", "#64d73e", "#57b9f5", "#cd73e0", "#cca89c"];
         var index = Math.floor(Math.random() * tempColors.length);
         return tempColors[index];
     }

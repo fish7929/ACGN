@@ -1,9 +1,10 @@
 //js库配置
 //加载所需的依赖包
+console.log("require")
 require.config({
     //开发模式下给地址加动态参数
     //防止缓存
-    urlArgs: "bust=" + (new Date()).getTime(),
+//    urlArgs: "bust=" + (new Date()).getTime(),
     shim: {
         underscore: {
             exports : '_'
@@ -38,7 +39,7 @@ require.config({
     },
     waitSeconds: 0
 });
-
+console.log("require file")
 //应用程序入口
 require([
     'jquery',
@@ -55,6 +56,7 @@ require([
     'msgbox',
     'masonry'
 ], function($,Backbone, BackboneHistory, app, Controller, AppRouter) {
+    console.log("main reqire ok")
     //实例化AV
     AV.initialize("oCjYs9w05WuNmCk6sDblt7hY-gzGzoHsz", "yaREoDyiyoy5iWV2iWAODk5X");
 

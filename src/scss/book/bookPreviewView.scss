@@ -1,23 +1,31 @@
 .previewContainer{
-  position: relative;
-  width: 1280px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
   margin: 0 auto;
   z-index: 9999;
+  top: 0;
 
   .previewHeadMask{
     position: fixed;
-    width: 1280px;
+    width: 100%;
     height: 100%;
     top: 0;
-    background-color: rgba(0,0,0,0);
+    background-color: rgba(0,0,0,0.6);
   }
 
-  .previewMask{
-    position: fixed;
-    width: 1280px;
-    height: 100%;
-    top: 64px;
-    background-color: rgba(0,0,0,0.6);
+    .previewImagePageCount{
+      margin-top: 20px;
+      margin-bottom: 16px;
+      font-size: 18px;
+      color: #ffffff;
+      height: 24px;
+    }
+
+    .previewImagePageCount>span{
+      font-size: 24px;
+      color: #feba02;
+    }
 
     .previewContent{
       width: 100%;
@@ -26,9 +34,8 @@
       position: relative;
 
       .previewImage{
-        //max-width: 1280px;
+        max-width: 750px;
         //max-height: 100%;
-        width: 100%;
         height: 100%;
         margin: 0 auto;
       }
@@ -63,6 +70,14 @@
       height: 64px;
       background: url("../images/common/deleteBtn.png") no-repeat center;
     }
-  }
+
+    .previewBigBtn{
+      position: absolute;
+      top: 50px;
+      width: 121px;
+      height: 31px;
+      display: none;
+      background: url("../images/common/viewPicBtn.png") no-repeat center;
+    }
 }
 

@@ -71,7 +71,7 @@ define([
                 $(image).addClass("button");
                 self.ui.blogImageDiv.append(image)
             }
-            self.ui.authorPic.css({background:"url('"+userPic+"') no-repeat center"});
+            self.ui.authorPic.css({background:"url('"+userPic+"') no-repeat center","background-size":"cover"});
             self.ui.authorName.html(userName);
             self.ui.authorBrief.html(brief);
             self.ui.blogMsgNum.html(comment_int);

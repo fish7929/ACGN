@@ -192,6 +192,10 @@ define([
         close : function(){
             var self = this;
             self._previewView.hideBookPreview();
+            self.LoginBarRegion.hide(self._loginBarView);
+            self.PreviewViewRegion.hide(self._previewView);
+            self.HotViewRegion.hide(self._hotView);
+            self.MessageRegion.hide(self._commentView);
         },
 
         //当页面销毁时触发

@@ -10,7 +10,7 @@ define([
     'module/book/model/BookModel'
 ],function(ItemView, tpl, mn, BookModel){
     var htmlTpl = '<div class="book-item button {3}" attr="{0}">' +
-        '<div class="book-pic" style="background: url(\'{1}\') no-repeat center; background-size: 100%"></div>' +
+        '<div class="book-pic" style="background: url(\'{1}\') no-repeat center; background-size: auto 100%"></div>' +
         '<div class="book-name">{2}</div>' +
         '</div>';
     return ItemView.extend({

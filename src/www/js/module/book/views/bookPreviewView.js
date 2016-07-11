@@ -17,6 +17,8 @@ define([
         self._bookImage = self.$el.find(".previewImage");
         self._nextBtn = self.$el.find(".previewRightBtn");
         self._preBtn = self.$el.find(".previewLeftBtn");
+        self._pageNumTxt = self.$el.find(".previewImagePageCount");
+        self._viewBigBtn = self.$el.find(".previewBigBtn");
 
         self._closeBtn = self.$el.find(".previewClose");
     };
@@ -31,11 +33,18 @@ define([
 
         if(self._isShow) return;
         self._isShow = true;
+        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        self.$el.css({top:scrollTop});
         document.body.appendChild(self.el);
         self._picIndex = 0;
         self._picArr = arr;
         self.showPic();
         self.bindEvent();
+    };
+
+    BookPreviewView.prototype.showPicNum = function(){
+        var self = this;
+        self._pageNumTxt.html("<span>"+(self._picIndex+1)+"</span>/"+self._picArr.length);
     };
 
     BookPreviewView.prototype.showPic = function(){
@@ -52,6 +61,7 @@ define([
         };
         image.src = url;
         self.setBtnVi();
+        self.showPicNum();
     };
 
     BookPreviewView.prototype.showNextPic = function(){
@@ -69,19 +79,9 @@ define([
     BookPreviewView.prototype.setImage = function(url, imageWidth, imageHeight){
         var self = this;
         var imageCssObj = {};
-        // imageCssObj.width = imageWidth+"px";
-        // imageCssObj.height = imageHeight+"px";
-        imageCssObj.background = "url('"+url+"') no-repeat center";
-
-        var maxWidth = self._bookImage.width();
-        var maxHeight = self._bookImage.height();
-        if(imageWidth > maxWidth || imageHeight > maxHeight ){
-            if(imageHeight / imageWidth < maxHeight / maxWidth){
-                imageCssObj["background-size"] = "100% auto";
-            }else{
-                imageCssObj["background-size"] = "auto 100%";
-            }
-        }
+        imageCssObj.background = "url('"+url+"') no-repeat center top";
+        imageCssObj["background-size"] = "100% auto";
+        imageCssObj.height = imageHeight;
         self._bookImage.css(imageCssObj);
 
         self.setPos(imageWidth, imageHeight);
@@ -106,6 +106,7 @@ define([
         var self = this;
         var leftCssObj = {};
         // leftCssObj.height = "100%";
+        imageWidth = Math.min(750, imageWidth);
         leftCssObj.left = "calc(50% - " + (imageWidth / 2 + 80) + "px)";
         self._preBtn.css(leftCssObj);
 
@@ -113,6 +114,10 @@ define([
         // rightCssObj.height = "100%";
         rightCssObj.right = "calc(50% - " + (imageWidth / 2 + 80) + "px)";
         self._nextBtn.css(rightCssObj);
+        var btnBigCssObj = {};
+        btnBigCssObj.right = "calc(50% - " + (imageWidth / 2 - 10) + "px)";
+        self._viewBigBtn.css(btnBigCssObj);
+        self._viewBigBtn.show();
     };
 
     BookPreviewView.prototype.bindEvent = function(){
@@ -127,6 +132,13 @@ define([
 
         self._closeBtn.bind("click", function(e){
             self.hide();
+        });
+
+        self._viewBigBtn.bind("click", function(e){
+            var url = self._picArr[self._picIndex];
+            if(url){
+                window.open(url);
+            }
         })
     };
 
@@ -135,6 +147,7 @@ define([
         self._preBtn.unbind("click");
         self._nextBtn.unbind("click");
         self._closeBtn.unbind("click");
+        self._viewBigBtn.unbind("click");
     };
 
     BookPreviewView.prototype.hide = function(){

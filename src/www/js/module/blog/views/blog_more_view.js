@@ -159,7 +159,9 @@ define([
 
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
+            var self = this;
             $(window).scroll = null;
+            self.LoginBarRegion.hide(self._loginBarView);
         },
 
         //当页面销毁时触发

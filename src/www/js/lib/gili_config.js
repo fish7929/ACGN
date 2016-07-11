@@ -122,12 +122,9 @@ gili_config.Tip = {
  * 友情链接
  */
 gili_config.Link = [
-    {src : "./images/link/link1.jpg", link : "http://www.baidu.com"},
-    {src : "./images/link/link2.jpg", link : "http://www.baidu.com"},
-    {src : "./images/link/link3.jpg", link : "http://www.baidu.com"},
-    {src : "./images/link/link4.jpg", link : "http://www.baidu.com"},
-    {src : "./images/link/link5.jpg", link : "http://www.baidu.com"},
-    {src : "./images/link/link6.jpg", link : "http://www.baidu.com"}
+    {src : "./images/link/link2.png", link : "http://www.bearead.com"},
+    {src : "./images/link/link1.png", link : "http://www.buhua.la"},
+    {src : "./images/link/link3.png", link : "http://www.comicdd.com"}
 ]
 
 window.giliConfig = gili_config;

@@ -1,5 +1,5 @@
 .publishContainer{
-  position: fixed;
+  position: absolute;
   width: 1280px;
   top: 0px;
   left: calc(50% - 640px);
@@ -10,7 +10,7 @@
     position: fixed;
     width: 1280px;
     height: 100%;
-    top: 64px;
+    top: 0px;
     background-color: rgba(0, 0, 0, 0.6);
   }
 
@@ -123,7 +123,7 @@
       margin-top: 12px;
       padding-left: 12px;
 
-      .publish-label-txt, span{
+      span{
         height: 100%;
         border-radius: 20px;
         padding: 0 10px;
@@ -131,20 +131,11 @@
         line-height: 30px;
         border: 1px solid #999999;
         float: left;
-      }
-
-      span{
         color: #ffffff;
         margin-right: 20px;
       }
 
-      .publish-label-txt{
-        width: 130px;
-        height: 100%;
-        font-size: 18px;
-        color: #808080;
-        outline: none;
-      }
+
 
       .publish-label-del{
         width: 18px;
@@ -162,10 +153,24 @@
       padding-left: 12px;
       margin-top: 17px;
       width: 100%;
-      height: 24px;
+      height: 30px;
       font-size: 18px;
       color: #808080;
       text-align: left;
+      line-height: 30px;
+    }
+
+    .publish-label-txt{
+      border-radius: 20px;
+      padding: 0 10px;
+      font-size: 18px;
+      line-height: 30px;
+      border: 1px solid #999999;
+      width: 130px;
+      height: 100%;
+      color: #808080;
+      outline: none;
+      margin-left: 20px;
     }
   }
 
@@ -197,6 +202,7 @@
       float: right;
       line-height: 40px;
       text-align: center;
+      color: #ffffff;
     }
 
     .bn-cancel{

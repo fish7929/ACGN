@@ -45,6 +45,13 @@ define([
             });
             self.$el.show();
             self.addEvent();
+
+        },
+
+        initMasonry : function(){
+            var self = this;
+            if(self._initMasonry) return;
+            self._initMasonry = true;
             $('.home-blog-list').masonry({
                 itemSelector: '.blogItemView',
                 gutterWidth: 20 //每两列之间的间隙为5像素
@@ -78,6 +85,7 @@ define([
 
         masonryRefresh : function(needLoad){
             var self = this;
+            self.initMasonry();
             if(needLoad){
                 self.ui.blogList.imagesLoaded(function(){
                     $('.home-blog-list').masonry('reload');

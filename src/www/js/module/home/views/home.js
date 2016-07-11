@@ -156,6 +156,13 @@ define([
         close : function(){
             var self = this;
             self.LoginBarRegion.hide(self._loginBarView);
+            self.QHDCRegion.hide(self._qhdcView);
+            self.ActiveUserRegion.hide(self._aUserView);
+            self.BookRegion.hide(self._bookView);
+            self.CollegeRegion.hide(self._collegeView);
+            self.ExcellentBookRegion.hide(self._homeBlog);
+            self.HomeLinkRegion.hide(self._homeLinkView);
+            self.HomeFooterRegion.hide(self._homeFooterView);
         },
 
         //当页面销毁时触发
