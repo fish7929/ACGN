@@ -1722,7 +1722,11 @@ gili_data.getClubUserBlog = function (options, cb_ok, cb_err) {
         if (data.length > 0) {
             var strCQL = dataToCQL(data);
             gili_data.getBlog(strCQL, function (blogs) {
-                cb_ok(blogs);
+                var data = [];
+                for (var i = 0; i < blogs.length; i++) {
+                    data[i] = blogs[i].toJSON();
+                }
+                cb_ok(data);
             }, cb_err);
         } else {
             cb_ok([]);
