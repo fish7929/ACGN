@@ -126,16 +126,12 @@ define([
             && utils.checkNickIsEmpty(nick, MsgBox)&& utils.checkPassword(password, MsgBox)){
             //todo 此处直接注册
 //            self.registerAccount(nick, account, password);
-            gili_data.verifyPhoneMsgCode(verify, function(data){
-                if(data.result){
-                    self.registerAccount(nick, account, password);
-                }else{
-                    MsgBox.toast("邀请码错误,请填写正确的邀请码", false);
-                }
+            gili_data.verifyPhoneMsgCode(verify, account, function(){
+                self.registerAccount(nick, account, password);
             },function(err){
                 console.log(err);
                 if (err.code == 1 || err.code == 603) {
-                    MsgBox.alert("无效的短信验证码");
+                    MsgBox.toast("无效的短信验证码", false);
                     return;
                 }
                 if(err.error == "验证码不匹配!"){
