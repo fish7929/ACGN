@@ -28,7 +28,7 @@ define([
             btnRegister : ".loginBar-bnRegister",
             userInfoLayer : ".loginBar-UserInfo",
             loginBtnsLayer : ".loginBar-Btns",
-            userOperationLayer : ".loginBar-user-operation",
+            userOperationLayer : "#loginBar-user-operation-layer",
             loginSetting : "#login-setting",
             loginOut : "#login-out"
         },
@@ -37,7 +37,11 @@ define([
             "click @ui.bnPublish" : "onPublishHandle",
             "click @ui.btnLogin" : "onLoginHandle",
             "click @ui.btnRegister" : "onRegisterHandle",
-            "click @ui.userPic" : "onSwitchUserOperationLayerHandle",
+            "click @ui.userPic" : "onGoToUserCenterHandle",
+            "mouseover @ui.userPic" : "onOpenUserOperationLayerHandle",
+            "mouseout @ui.userPic" : "onCloseUserOperationLayerHandle",
+            "mouseover @ui.userOperationLayer" : "onOpenUserOperationLayerHandle",
+            "mouseout @ui.userOperationLayer" : "onCloseUserOperationLayerHandle",
             "click @ui.loginSetting" : "onLoginSettingHandle",
             "click @ui.loginOut" : "onLoginOutHandle"
         },
@@ -93,13 +97,16 @@ define([
             if(self.currentUser){
                 var headUrl = self.currentUser.avatar;
                 var userName = self.currentUser.user_nick;
+                var userId = self.currentUser.objectId;
+//                console.log(self.ui.userPic, self.ui.userName, self.ui.userInfoLayer, self.ui.loginBtnsLayer, "第二次变成字符串");
                 self.ui.userPic.css({"background" : "url('"+headUrl+"') repeat center", "background-size" : "100%"});
+                self.ui.userPic.attr("user-id", userId);
                 self.ui.userName.html(userName);
                 self.ui.userInfoLayer.show();
                 self.ui.loginBtnsLayer.hide();
             }else{
-                self.ui.userInfoLayer.hide();
-                self.ui.loginBtnsLayer.show();
+                self.ui.userInfoLayer.hide&&self.ui.userInfoLayer.hide();
+                self.ui.loginBtnsLayer.show&&self.ui.loginBtnsLayer.show();
             }
             self.hideUserOperationLayer();
         },
@@ -131,30 +138,39 @@ define([
             self.currentUser = gili_data.getCurrentUserJSON();      //TODO 重新获取用户信息
             self._initView();
         },
-        onSwitchUserOperationLayerHandle : function(event){
+        onGoToUserCenterHandle : function(event){
             event.stopPropagation();
             event.preventDefault();
             var self = this;
-            var e = event || window.event;
-            var x = e.screenX;
-            var tempX = (self.ui.userInfoLayer.parent()).width() - x;
-            if(!self.isShowUserOperationLayer){
-                self.showUserOperationLayer(tempX);
-            }else{
-                self.hideUserOperationLayer();
+            var $target = $(event.target);
+            var userId = $target.attr("user-id");
+            if(userId){
+                app.navigate("userCenter/"+userId,{replace : false, trigger : true});
             }
+        },
+        onOpenUserOperationLayerHandle : function(event){
+            event.stopPropagation();
+            event.preventDefault();
+            var self = this;
+            self.showUserOperationLayer();
+        },
+        onCloseUserOperationLayerHandle : function(event){
+            event.stopPropagation();
+            event.preventDefault();
+            var self = this;
+            self.hideUserOperationLayer();
         },
         showUserOperationLayer : function(tempX){
             var self = this;
             self.isShowUserOperationLayer = true;
 //            var marginRight = tempX - self.ui.userOperationLayer.width();
 //            self.ui.userOperationLayer.css({"margin-right":  marginRight+"px"});
-            self.ui.userOperationLayer.show();
+            self.ui.userOperationLayer.show&&self.ui.userOperationLayer.show();
         },
         hideUserOperationLayer : function(){
             var self = this;
             self.isShowUserOperationLayer = false;
-            self.ui.userOperationLayer.hide();
+            self.ui.userOperationLayer.hide&&self.ui.userOperationLayer.hide();
         },
         onLoginOutHandle : function(e){
             e.stopPropagation();
@@ -164,6 +180,8 @@ define([
                 if (type == MsgBox.YES) {
                     gili_data.logOut();
                     app.triggerMethod("logOut:ok");
+                    utils.loginOut();
+                    app.navigate("",{replace : true, trigger : true});
                 }
             });
         },
@@ -190,13 +208,14 @@ define([
 
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
+            this.$el.hide();
+            PublishView.hide();
+            app.off("hide:publishOptView", this.onHidePublish, this);
         },
 
         //当页面销毁时触发
         onDestroy : function(){
-            this.$el.hide();
-            PublishView.hide();
-            app.off("hide:publishOptView", this.onHidePublish, this);
+
         }
     });
 });

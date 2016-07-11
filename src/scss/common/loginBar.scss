@@ -11,7 +11,7 @@
     background-color: rgba(255, 255, 255, 0.9);
     top: 0;
     //left: 0;
-    border-bottom: 4px solid #ff4200;
+    border-bottom: 4px solid #feba02;
     z-index: 999;
 }
 
@@ -61,6 +61,7 @@
         width: 42px;
         height: 42px;
         float: left;
+        border-radius: 100%;
         margin-right: 10px;
     }
 
@@ -84,11 +85,17 @@
     }
 }
 
-.loginBar-user-operation {
+#loginBar-user-operation-layer{
     position: relative;
     float: right;
-    margin-top: 5px;
+    width: 182px;
+    height: 140px;
+    margin-top: -12px;
+    padding-top: 17px;
     margin-right: 150px;
+    display: none;
+}
+.loginBar-user-operation {
     border: 1px solid #c0c0c0;
     width: 182px;
     height: 106px;
@@ -96,7 +103,6 @@
     border-radius: 10px;
     font-size: 18px;
     color: #808080;
-    display: none;
 }
 
 .loginBar-setting-common {

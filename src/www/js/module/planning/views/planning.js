@@ -744,6 +744,7 @@ define([
             self.skip = 0;
             PublishView.hide();
             BookPreviewView.hide();
+            self.LoginBarRegion.hide(self._loginBarView);
         },
 
         //当页面销毁时触发
