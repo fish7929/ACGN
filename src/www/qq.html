@@ -1,9 +1,10 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
+﻿<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta property="qc:admins" content="2336345717671415156375"/>
     <title></title>
     <script src="http://www.gilieye.com/js/vendor/av.js"></script>
+    <script src="js/lib/gili_api.js"></script>
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function () {
             //实例化AV
@@ -123,7 +124,7 @@
                         user.set('user_nick', nickname);
                         user.set("avatar", headimgurl);
                         user.set("sex", sexual);
-                        user.signUp(null, {
+                        gili_data.signUp(user, {
                             success: function (user) {
                                 //注册成功则登陆
                                 AV.User.logIn(unionid, "6a063e705a16e625", {
