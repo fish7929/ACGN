@@ -1734,7 +1734,7 @@ gili_data.getClubUserBlog = function (options, cb_ok, cb_err) {
             followeeList += "'" + data[i].get("user_id") + "',";
         }
         if (followeeList.length > 0) {
-            CQL = " select * from blog where status !=2 and user_id in (" + followeeList.substring(0, followeeList.length - 1) + ") order by createdAt desc  ";
+            CQL = " select * from blog where status !=2 and user_id in (" + followeeList.substring(0, followeeList.length - 1) + ") ";
         }
         if (orderBy.length > 0) {
             if (isDesc) {
