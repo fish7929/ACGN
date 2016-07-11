@@ -809,7 +809,7 @@ gili_data.sendPhoneMsg = function (phone, cb_ok, cb_err) {
 msgcode,验证码
  phone，手机号码
  **/
-gili_data.verifyPhoneMsgCode = function (msgcode，phone, cb_ok, cb_err) {
+gili_data.verifyPhoneMsgCode = function (msgcode,phone, cb_ok, cb_err) {
     if (!msgcode) {
         cb_err("验证码为空!");
         return;
