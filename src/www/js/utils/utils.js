@@ -405,5 +405,11 @@
         if (num >= 10000*100)
             return Math.round(num / 10000) + "万";
     };
-
+    //退出登录 清缓存
+    utils.loginOut = function(){
+        window.attentionUserList = [];
+        window.attentionUserList.length = 0;
+        window.likedWorkList = [];
+        window.likedWorkList.length = 0;
+    }
 })(window);
