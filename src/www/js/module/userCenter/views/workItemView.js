@@ -6,9 +6,8 @@ define([
     'text!module/userCenter/templates/workItem.html',
     'marionette',
     'msgbox',
-    'common/views/faceView',
     'module/book/views/bookPreviewView'
-],function(workModel,workItemTpl,mn,MsgBox,FaceView,BookPreviewView){
+],function(workModel,workItemTpl,mn,MsgBox,BookPreviewView){
     var WorkItemView = Marionette.ItemView.extend({
         template: _.template(workItemTpl),
         model:workModel,
@@ -31,7 +30,8 @@ define([
             "click .btnFace":"_clickFaceHandler",       //点击颜表情
             "click .sp_reply":"_clickReplyHandler",    //点击评论
             "click .btnSend":"_clickSendHandler",       //点击发布
-            "click .reply_userName":"_clickReplyUser"  //点击评论内容里的用户
+            "click .reply_userName":"_clickReplyUser",  //点击评论内容里的用户
+            "click .face-item":"_clickFaceItemHandler"  //点击颜表情项
 //            "mouseover .uc_info_item":"_overItemHandler", //鼠标移入 显示“删除”按钮
 //            "mouseout .uc_info_item":"_outItemHandler" //鼠标移出 隐藏“删除”按钮
         },
@@ -40,10 +40,6 @@ define([
         },
         render:function(){
             Marionette.ItemView.prototype.render.call(this);
-
-            var self = this;
-            if(!self.faceView)
-                self.faceView = new FaceView(self.ui.faceCon);
         },
         serializeData:function() {
             var self = this;
@@ -79,7 +75,12 @@ define([
                 data.delShow = "display:none";
             }
             data.commentHtml = self.getComment();
-
+            //是否打开颜表情窗口  guyy todo
+            if(self.model.faceOpen){
+                data.faceTxtHtml = self.getFace();
+            }else{
+                data.faceTxtHtml = "";
+            }
             return data;
         },
         //获取类型为1的话题 内容
@@ -139,6 +140,19 @@ define([
         commentTpl: _.template('<div class="commentItem"><div class="commentHead" style="background:url(\'<%=headUrl%>\') no-repeat #f7f7f7 center; background-size:cover;"></div><div class="commentData">'+
             '<div class="commentName"><%=commentName %>&nbsp;<span class="sp_time"><%=commentTime %></span><span data-cId="<%=cId %>" data-userId="<%=commentUserId %>" data-userName="<%=commentUserName %>" class="sp_reply">回复</span></div>'+
             '<div class="commentContext"><%=commentTxt %></div></div></div>'),
+        //填充颜表情窗口
+        getFace:function(){
+            var html = "", self = this;
+            var list = giliConfig.FaceList;
+            for(var i = 0; i<list.length; i++){
+                html += self.faceTpl({faceTxt:list[i]});
+            }
+            return self.faceConTpl({faceConTxt:html});
+        },
+        //颜表情项
+        faceTpl: _.template('<div class="face-item button nowrapTxt"><%=faceTxt %></div>'),
+        //颜表情容器
+        faceConTpl: _.template('<div><div class="face-mask"></div><div class="face-container"><div class="fac-list-div"><%=faceConTxt %></div></div></div>'),
         //点击评论图片，显示评论列表或隐藏
         _clickCommentHandler:function(e){
             var self = this;
@@ -202,10 +216,8 @@ define([
         //点击打开颜表情
         _clickFaceHandler:function(e){
             var self = this;
-            //guyy todo
-            self.faceView.show(function(data){
-//                debugger;
-            });
+            self.model.faceOpen = !self.model.faceOpen;
+            self.render();
         },
         //删除
         _clickDelHandler:function(e){
@@ -295,6 +307,10 @@ define([
             var target = $(e.target);
             var userId = target.data("userid");
             app.navigate("userCenter/"+userId,{trigger:true,replace:true});
+        },
+        //点击颜表情项
+        _clickFaceItemHandler:function(e){
+            //guyy todo
         },
         close:function(){
             BookPreviewView.hide();

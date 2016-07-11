@@ -3,6 +3,7 @@
  */
 define([],function(){
     var WorkModel = Backbone.Model.extend({
+        faceOpen:false,//是否打开颜表情窗口
         constructor:function(){
             Backbone.Model.apply(this,arguments);
         },
