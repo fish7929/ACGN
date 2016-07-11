@@ -808,14 +808,14 @@ gili_data.sendPhoneMsg = function (phone, cb_ok, cb_err) {
 /** 验证手机短信
  phone，手机号码
  **/
-gili_data.verifyPhoneMsgCode = function (msgcode, cb_ok, cb_err) {
+gili_data.verifyPhoneMsgCode = function (msgcode，phone, cb_ok, cb_err) {
     if (!msgcode) {
         cb_err("验证码为空!");
         return;
     }
-    AV.Cloud.verifySmsCode(msgcode).then(
+    AV.Cloud.verifySmsCode(msgcode, phone).then(
         cb_ok,
-        cb_err//err.code =1||err.code=603 --无效的短信验证码
+        cb_err//err.code =1||err.code=603 --无效的短信验证码);
     );
 }
 
