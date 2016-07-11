@@ -116,6 +116,10 @@ define([
             if (self.currentUser) {
                 self.resetUserPlanRelationStatus();
             }
+
+            //需要对应不同状态绑定不同事件,初始化加入和订阅事件
+            self.ui.joinPlanning.off("click").on("click", self.onJoinClickHandler.bind(self));
+            self.ui.subscribePlanning.off("click").on("click", self.onSubscribeClickHandler.bind(self));
         },
         /**
          * 版主头像点击事件
@@ -575,6 +579,7 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
+            console.log(666666);
             if (!self.currentUser) {
                 MsgBox.toast("亲，请先登录！", false);
                 return;
@@ -618,6 +623,7 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
+            console.log(777777);
             if (!self.currentUser) {
                 MsgBox.toast("亲，请先登录！", false);
                 return;
