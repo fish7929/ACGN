@@ -30,10 +30,12 @@ define([
             loginBtnsLayer : ".loginBar-Btns",
             userOperationLayer : "#loginBar-user-operation-layer",
             loginSetting : "#login-setting",
-            loginOut : "#login-out"
+            loginOut : "#login-out",
+            logoBtn : ".loginBar-Logo"
         },
         //事件添加
         events : {
+            "click @ui.logoBtn" : "onGoToHomeHandle",
             "click @ui.bnPublish" : "onPublishHandle",
             "click @ui.btnLogin" : "onLoginHandle",
             "click @ui.btnRegister" : "onRegisterHandle",
@@ -184,6 +186,11 @@ define([
                     app.navigate("",{replace : true, trigger : true});
                 }
             });
+        },
+        onGoToHomeHandle : function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            app.navigate("",{replace : true, trigger : true});
         },
         onLoginSettingHandle : function(e){
             e.stopPropagation();
