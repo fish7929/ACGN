@@ -156,7 +156,7 @@ define([
         user.set("password", password);
         user.set("brief", "什么都没有");
         user.set("user_type", 2);   //用户类型 1 画师， 2 社团主  。3
-        user.signUp(null, {
+        gili_data.signUp(user, {
             success: function (user) {
                 console.log(user);
 //                app.triggerMethod("login:ok");
