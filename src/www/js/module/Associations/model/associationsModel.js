@@ -210,6 +210,7 @@ define([
         },
         //根据社团ID获取成员列表
         getAssociationsMembers:function(id,cb_ok){
+            debugger;
             var self = this,
                 options = {
                     club_id:id,
@@ -224,6 +225,7 @@ define([
         },
         //根据社团ID获取粉丝列表
         getAssociationsFans:function(id,cb_ok){
+            debugger;
             var self = this,
                 options = {
                     club_id:id,
