@@ -55,9 +55,10 @@ gulp.task('_copyJs', function () {
 });
 
 gulp.task('_release:html', function () {
+    var urlArgs = (new Date()).getTime();
     return gulp.src("src/www/index.html")
         .pipe(htmlmin({collapseWhitespace: true}))
-//        .pipe(replace('<script src="js/debug.js"></script>', ''))
+        .pipe(replace(/timespan/g, urlArgs))
         .pipe(rename({basename: 'index'}))
         .pipe(gulp.dest(destDir))
 });
