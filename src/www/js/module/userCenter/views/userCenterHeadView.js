@@ -46,6 +46,10 @@ define([
         _clickAttentionHandler:function(e){
             var self = this;
             var target = $(e.target);
+            if(!gili_data.getCurrentUser()){
+                MsgBox.toast(gili_config.Tip.NOLOGIN,false);
+                return;
+            }
             //点击取消关注
             if(target.hasClass("uc_btn_ck")){
                 MsgBox.ask("确定取消关注吗?","",function(type){
@@ -101,9 +105,11 @@ define([
             var self = this;
             self.currentUserId = userId;
             self.currentUser = gili_data.getCurrentUser();
-            //查询当前登录用户已关注用户ID列表 已点赞话题(插画)ID列表
-            utils.loadAttentionList(self.currentUser.id);
-            utils.loadLikedTplList(self.currentUser.id);
+            if(self.currentUser) {
+                //查询当前登录用户已关注用户ID列表 已点赞话题(插画)ID列表
+                utils.loadAttentionList(self.currentUser.id);
+                utils.loadLikedTplList(self.currentUser.id);
+            }
             //头像 昵称 简介 关注数 动态数 粉丝数
             if(self.currentUser && self.currentUser.id == userId) {
                 self.model.setOtherShow(true,self.currentUserId);

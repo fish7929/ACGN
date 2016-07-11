@@ -25,8 +25,6 @@ define([
             self._associationsFansView = new AssociationsFansView();
             self._workListView = new WorkListView();
             self._workListView.on("workListView:change",self._workListChangeHandler,self);
-            //点赞列表发生变化
-            app.on("common:works:liked",self.likedChangeHandler,self);
         },
         ui:{
             "loadingContainer":".loading-gif",
@@ -45,7 +43,6 @@ define([
         },
         onRender:function(){
             var self = this;
-            self.LoginBarRegion.show(self._loginBarView);
             self.getRegion("headInfo").show(self._associationsHeadView);
             self.getRegion("memberList").show(self._associationsMemberView);
             self.getRegion("fansList").show(self._associationsFansView);
@@ -53,6 +50,7 @@ define([
         },
         show:function(){
             var self = this;
+            self.LoginBarRegion.show(self._loginBarView);
             self._assoId = self.getOption("assoId");
             if(!self._assoId) {
                 MsgBox.alert("无效路由");
@@ -67,7 +65,16 @@ define([
             self._associationsFansView._loadData(self._assoId);
             self._workListView.loadAssociationsData(self._assoId);
         },
-        pageIn:function(){},
+        onLoginOkHandler:function(){
+            this.show();
+        },
+        pageIn:function(){
+            var self = this;
+            //点赞列表发生变化
+            app.on("common:works:liked",self.likedChangeHandler,self);
+            //登录登出刷新
+            app.on("login:ok", self.onLoginOkHandler, self);
+        },
         //列表状态更新
         _workListChangeHandler:function(type){
             var self = this;
@@ -116,9 +123,10 @@ define([
         },
         close:function(){
             window.onscroll = null;
-            this._loginBarView = null;
-            this._workListView = null;
             app.off("common:works:liked",this.likedChangeHandler,this);
+            this.LoginBarRegion.hide(this._loginBarView);
+            //登录登出刷新
+            app.off("login:ok", this.onLoginOkHandler, this);
         }
     });
     return associationsView;

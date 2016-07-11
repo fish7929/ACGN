@@ -22,8 +22,6 @@ define([
             this.userCenterHeadView = new UserCenterHeadView();
             this._workListView = new WorkListView();
             this._workListView.on("workListView:change",self._workListChangeHandler,self);
-            //点赞列表发生变化
-            app.on("common:works:liked",self.likedChangeHandler,self);
         },
         regions : {
             LoginBarRegion: {
@@ -39,13 +37,13 @@ define([
         },
         onRender:function(){
             var self = this;
-            self.LoginBarRegion.show(self._loginBarView);
             this.getRegion("headerCon").show(this.userCenterHeadView);
             this.userCenterHeadView.setSelected(0);
             this.getRegion("workCon").show(this._workListView);
         },
         show:function(){
             var self = this;
+            self.LoginBarRegion.show(self._loginBarView);
             self.loginUser = gili_data.getCurrentUser();
             self._userId = self.getOption("userId");
             if(!self._userId) {
@@ -69,7 +67,11 @@ define([
             self._workListView.loadData(self._userId);
         },
         pageIn:function(){
-
+            var self = this;
+            //点赞列表发生变化
+            app.on("common:works:liked",self.likedChangeHandler,self);
+            //登录登出刷新
+            app.on("login:ok", this.onLoginOkHandler, this);
         },
         //列表状态更新
         _workListChangeHandler:function(type){
@@ -79,6 +81,11 @@ define([
         //点赞插画列表发生变化触发  全局
         likedChangeHandler:function(arr){
             this._workListView.collection.reset(this._workListView.collection.models);
+        },
+        //登录，刷新页面
+        onLoginOkHandler:function(){
+            var self = this;
+            self.show();
         },
         /**
          * 更新状态
@@ -115,10 +122,11 @@ define([
             }
         },
         close:function(){
+            var self = this;
             window.onscroll = null;
-            this._loginBarView = null;
-            this._workListView = null;
             app.off("common:works:liked",this.likedChangeHandler,this);
+            self.LoginBarRegion.hide(self._loginBarView);
+            app.off("login:ok", this.onLoginOkHandler, this);
         }
     });
     return userCenterView;

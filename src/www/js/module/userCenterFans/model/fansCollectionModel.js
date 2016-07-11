@@ -2,8 +2,9 @@
  * Created by GYY on 2016/7/7
  */
 define([
-    'module/userCenterFans/model/userModel'
-],function(UserModel){
+    'module/userCenterFans/model/userModel',
+    'msgbox'
+],function(UserModel,MsgBox){
     var FansColModel = Backbone.Collection.extend({
         model:UserModel,
         worksArr:[],                //当前已读取粉丝列表
@@ -91,6 +92,7 @@ define([
             var self = this;
             self._loading = false;
             self.trigger("fansListView:colModelChange",[0]);
+            MsgBox.toast(err,false);
         }
     });
     return FansColModel;
