@@ -1989,6 +1989,57 @@ gili_data.logOut = function () {
 };
 
 /**
+ * user,用户对象
+ */
+gili_data.signUp = function (user,cb_ok, cb_err) {
+    user.signUp(null, {
+        success: function (new_user) {
+            cb_ok(new_user);
+            //d关注，粉d
+            gili_data.signUpFollow(new_user, function (new_user) {
+                //不执行任何操作
+            }, function (new_user,error) {
+                //不执行任何操作
+            });
+        },
+        error: cb_err
+    });
+};
+
+/** signUp的时候关注某个用户
+ new_user,新注册的用户
+ **/
+gili_data.signUpFollow = function (new_user,cb_ok, cb_err) {
+    //获取用户对象
+    var did = "57836872a341310061d47454";
+
+    new_user.follow(did).then(
+        function (obj) {
+            //1、当前用户关注总数加一，2、对方用户粉丝总数加一
+            gili_data.currentUserCountUpdate(new_user, "followee_count", 1, function (data) {
+                gili_data.updateUser({ "follower_count": 1 }, did, function (obj) {
+                    d_follow();
+                }, cb_err);
+            }, cb_err);
+        }, cb_err
+        );
+
+    var d_follow = function () {
+        gili_data.getUserById(did, function (d_obj) { 
+            obj.follow(new_user.id).then(
+            function (obj) {
+                //1、当前用户关注总数加一，2、对方用户粉丝总数加一
+                gili_data.currentUserCountUpdate(d_obj, "followee_count", 1, function (data) {
+                    gili_data.updateUser({ "follower_count": 1 }, new_user.id, cb_ok(obj), cb_err);
+                }, cb_err);
+            }, cb_err
+        );
+        },cb_err);
+    }
+   
+     
+};
+/**
  * 第三方登录需要的接口
  * @param data
  */
@@ -2005,7 +2056,7 @@ gili_data.loginUtils = function (data) {
         success: function (user) {
             if (user.length > 0) {
                 //用户存在则登陆绑定
-                AV.User.logIn(unionid, "6a063e705a16e625", {
+                gili_data.logIn(unionid, "6a063e705a16e625", {
                     success: function (_user) {
                         //                        window.location.href="http://www.gililove.com";
                         app.triggerMethod("login:ok");
@@ -2029,12 +2080,12 @@ gili_data.loginUtils = function (data) {
                     user.set("avatar", headimgurl);
                 }
                 user.set("sex", sexual);
-                user.signUp(null, {
-                    success: function (user) {
+
+                gili_data.signUp(user,{
+                    success: function (userobj) {
                         //注册成功则登陆
-                        AV.User.logIn(unionid, "6a063e705a16e625", {
+                        gili_data.logIn(unionid, "6a063e705a16e625", {
                             success: function (user) {
-                                //                                window.location.href="http://www.gililove.com";
                                 app.triggerMethod("login:ok");
                                 //查询当前登录用户已关注用户ID列表 已点赞话题(插画)ID列表
                                 utils.loadAttentionList(user.id);
@@ -2043,7 +2094,7 @@ gili_data.loginUtils = function (data) {
                             error: function (user, error) {
                                 console.log(error.message);
                             }
-                        })
+                        }) 
                     },
                     error: function (user, error) {
                         console.log(error.message);
@@ -2056,6 +2107,7 @@ gili_data.loginUtils = function (data) {
         }
     });
 };
+
 /**
  * 重新封装微博反会的数据
  * @param originObj
