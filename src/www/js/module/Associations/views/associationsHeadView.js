@@ -32,6 +32,10 @@ define([
         _clickJoinHandler:function(e){
             var self = this;
             var target = $(e.target);
+            if(!gili_data.getCurrentUser()){
+                MsgBox.toast(gili_config.Tip.NOLOGIN,false);
+                return;
+            }
             if(self.joinLock)return;
             //加入
             if(!target.hasClass("btnAdd_ck")){
@@ -45,6 +49,10 @@ define([
         _clickAttentionsHandler:function(e){
             var self = this;
             var target = $(e.target);
+            if(!gili_data.getCurrentUser()){
+                MsgBox.toast(gili_config.Tip.NOLOGIN,false);
+                return;
+            }
             if(self.attentionsLock)return;
             self.attentionsLock = true;
             if(target.hasClass("btnAttention_ck")){ //取消关注

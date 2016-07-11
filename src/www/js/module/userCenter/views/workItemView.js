@@ -22,16 +22,18 @@ define([
             "faceCon":".faceCon"
         },
         events:{
-            "click .info-detail-comment":"_clickCommentHandler",
+            "click .info-detail-comment":"_clickCommentHandler",//点击打开评论
             "click .commentMore":"_clickCommentMoreHandler", //查看该作品更多评论
             "click .uc-info-pic":"_clickPicHandler", //点击查看大图
             "click .info-detail-zan":"_clickZanHandler",
             "click .info-del":"_clickDelHandler",      //用户只能删除自己的动态话题等
             "click .btnFace":"_clickFaceHandler",       //点击颜表情
-            "click .sp_reply":"_clickReplyHandler",    //点击评论
+            "click .face-mask":"_clickFaceMaskHandler", //点击颜表情 mask 取消颜表情
+            "click .sp_reply":"_clickReplyHandler",    //点击回复
             "click .btnSend":"_clickSendHandler",       //点击发布
             "click .reply_userName":"_clickReplyUser",  //点击评论内容里的用户
-            "click .face-item":"_clickFaceItemHandler"  //点击颜表情项
+            "click .face-item":"_clickFaceItemHandler",  //点击颜表情项
+            "blur #commentTxt":"_blurCommentHandler"
 //            "mouseover .uc_info_item":"_overItemHandler", //鼠标移入 显示“删除”按钮
 //            "mouseout .uc_info_item":"_outItemHandler" //鼠标移出 隐藏“删除”按钮
         },
@@ -50,6 +52,7 @@ define([
             data.timeStr = self.model.timeStr;
             //话题类型 1文字话题   2插画话题（文字可有可无，图片最多10张）
             data.type = self.model.get("type");
+            data.commentTxt = self.model.commentTxt;//评论文本框 默认为空
             if(data.type == 1) {
                 data.articleHtml = self.getArticle();
                 data.picHtml = "";
@@ -75,7 +78,6 @@ define([
                 data.delShow = "display:none";
             }
             data.commentHtml = self.getComment();
-            //是否打开颜表情窗口  guyy todo
             if(self.model.faceOpen){
                 data.faceTxtHtml = self.getFace();
             }else{
@@ -96,7 +98,10 @@ define([
             var picLen = this.model.get("pictures").length;
             if(picLen > 0) {
                 var firstUrl = this.model.get("pictures")[0];
-                picHtml = this.picTpl({firstImg: firstUrl});
+                if(picLen > 1)
+                    picHtml = this.picTpl({firstImg: firstUrl,picNum:"<span class='picLenSpan'>"+picLen+"p</span>"});
+                else
+                    picHtml = this.picTpl({firstImg: firstUrl,picNum:""});
             }
             return picHtml;
         },
@@ -110,7 +115,7 @@ define([
             return descHtml;
         },
         topicTpl: _.template('<div class="info-article"><%=topicStr%></div>'),
-        picTpl: _.template('<img class="uc-info-pic" src="<%=firstImg %>" alt="" style="display: block; margin:23px auto 0 auto; max-width: 600px; "/>'),
+        picTpl: _.template('<div><%=picNum%><img class="uc-info-pic" src="<%=firstImg %>" alt="" style="display: block; margin:23px auto 0 auto; max-width: 600px; "/></div>'),
         topic2Tpl: _.template('<div class="info-article"><%=topicStr%></div>'),
         //获取评论列表
         getComment:function(){
@@ -164,6 +169,7 @@ define([
             }
             //如果评论列表隐藏，点击图标时判断列表是否存在数据，存在直接显示即可，不存在需查询该动态的评论数据
             this.model.commentShow = true;
+            this.model.commentTxt = "";
             var commentArr = self.model.commentList;
             if(commentArr && commentArr.length > 0){
                 self.render();
@@ -177,8 +183,6 @@ define([
         },
         //点击查看大图列表
         _clickPicHandler:function(e){
-            //guyy todo
-            return;
             if(this.model.get("pictures"))
             BookPreviewView.show(this.model.get("pictures"));
         },
@@ -195,6 +199,10 @@ define([
         _clickZanHandler:function(e){
             var self = this;
             var target = $(e.target);
+            if(!gili_data.getCurrentUser()){
+                MsgBox.toast(gili_config.Tip.NOLOGIN,false);
+                return;
+            }
             var gId = self.model.get("objectId");
             if(target.data("zan") == "praise" && !utils.isLiked(gId)){ //点赞
                 utils.likeTopic(1,gId,function(){
@@ -215,6 +223,12 @@ define([
         },
         //点击打开颜表情
         _clickFaceHandler:function(e){
+            var self = this;
+            self.model.faceOpen = !self.model.faceOpen;
+            self.render();
+        },
+        //点击取消颜表情
+        _clickFaceMaskHandler:function(e){
             var self = this;
             self.model.faceOpen = !self.model.faceOpen;
             self.render();
@@ -262,6 +276,10 @@ define([
         //点击发送
         _clickSendHandler:function(e){
             var self = this;
+            if(!gili_data.getCurrentUser()){
+                MsgBox.toast(gili_config.Tip.NOLOGIN,false);
+                return;
+            }
             self.isReply = false;
             //如果是给话题留言  belongId话题ID  commentId话题ID content回复内容
             //如果给话题留言回复 belongId话题ID  commentId被回复留言ID content {"content":"回复信息","uname":“补充回复人昵称”,"uid":“被回复人ID”}
@@ -293,13 +311,14 @@ define([
                 comment_type:commentType,
                 content:content
             };
-            console.log(options);
             gili_data.snsSaveComment(options,function(data){
                 self.model.addComment(data);
                 self.removeReply();
+                self.model.commentInt++;
                 self.render();
+                MsgBox.toast(gili_config.Tip.COMMENT_SUCCESS);
             },function(err){
-                MsgBox.alert("评论失败");
+                MsgBox.toast(gili_config.Tip.COMMENT_FAIL,false);
             });
         },
         //点击回复对象用户ID 指向用户中心
@@ -310,7 +329,16 @@ define([
         },
         //点击颜表情项
         _clickFaceItemHandler:function(e){
-            //guyy todo
+            var self = this;
+            var target = $(e.target);
+            var txt = target.html();
+            self.model.faceOpen = false;
+            self.model.commentTxt = self.ui.commentTxt.val()+""+txt;
+            self.render();
+        },
+        _blurCommentHandler:function(e){
+            var self = this;
+            self.model.commentTxt = self.ui.commentTxt.val();
         },
         close:function(){
             BookPreviewView.hide();
@@ -318,3 +346,4 @@ define([
     });
     return WorkItemView;
 });
+

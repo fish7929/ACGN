@@ -4,6 +4,7 @@
 define([],function(){
     var WorkModel = Backbone.Model.extend({
         faceOpen:false,//是否打开颜表情窗口
+        commentTxt:"",//默认评论内容为空
         constructor:function(){
             Backbone.Model.apply(this,arguments);
         },

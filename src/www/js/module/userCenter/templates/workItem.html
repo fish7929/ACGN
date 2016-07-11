@@ -3,15 +3,15 @@
     <%=picHtml %>
     <%=descHtml %>
     <div class="info-detail">
-        <div class="info-detail-comment"><img src="images/common/comment2.png" alt="" class="info-detail-img"/><%=commentInt %></div>
+        <div class="info-detail-comment"><div  class="commit-img"></div><%=commentInt %></div>
         <div class="info-detail-zan"><img src="images/common/<%=zanName %>.png"  data-zan="<%=zanName %>" class="info-detail-img"/><%=likeInt %></div>
         <div class="info-detail-date"><span class="info-del" style=" <%=delShow %>">删除&nbsp;</span><%=timeStr%></div>
     </div>
     <div class="info-detail-list" <%=commentShow %>>
-        <textarea name="commentTxt" id="commentTxt" cols="30" rows="10"></textarea>
+        <textarea name="commentTxt" id="commentTxt" cols="30" rows="10"><%=commentTxt %></textarea>
         <div class="btnList">
-            <div class="btnFace"><%=faceTxtHtml %></div>
-            <div class="faceCon" style="margin-top: 40px;"></div>
+            <div class="btnFace"></div>
+            <div class="faceCon"><%=faceTxtHtml %></div>
             <div class="btnSend">发布</div>
         </div>
         <%=commentHtml %>

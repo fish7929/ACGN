@@ -23,23 +23,27 @@
 #userCenterInfo{width:726px; margin:0 auto;}
 .workList{
   .uc_info_item{ width:726px; border-bottom: 1px solid #cccccc;}
+    .picLenSpan{display: inline-block; font-size: 18px; color:#333333; width:40px; height: 40px; border:1px solid #808080; text-align: center; line-height: 35px; border-radius: 50%;}
     .info-detail{width:600px; margin:36px auto; height: 20px; line-height: 20px; font-size: 18px; color: #333333;}
       .info-detail-comment{width:33%; height: 20px; line-height: 20px; display: inline-block; text-align: left; cursor: pointer;}
       .info-detail-zan{width:33%;height: 20px; line-height: 20px; text-align: center; display: inline-block; cursor: pointer;}
       .info-detail-date{width:33%;height: 20px; line-height: 20px; display: inline-block; text-align: right; float: right;}
       .info-del{font-size: 18px; color:red; cursor:pointer;}
       .info-detail-img{vertical-align: middle; margin-right: 12px; margin-top: -3px;}
+      .commit-img{display: inline-block; width:25px;height: 20px; background: url("../images/common/comment2.png") no-repeat; vertical-align: middle; margin-right: 12px; margin-top: -3px;}
+      .commit-img:hover{background: url("../images/common/comment.png") no-repeat;}
     .info-article{ margin-top: 25px;padding:0px 63px; line-height: 33px; text-align: left; color:#3d3d3d; font-size: 14px; line-height: 20px;}
     .info-detail-list{width:600px; margin:0 auto;}
       #commentTxt{width:600px; height: 120px; border:1px solid #fe5313; border-radius: 10px; font-size: 24px; color:#808080; resize: none;}
       .btnList{width:600px; height: 50px; margin-top: 20px; margin-bottom: 20px;}
         .btnFace{ width:150px; height: 40px; float:left; background: url("../images/common/face.png") no-repeat; cursor: pointer;}
+        .faceCon{ position: absolute; margin-top: 40px;}
         .btnSend{ width:150px; height: 50px; float:right; border-radius: 24px; background: #f15313; color:#ffffff; line-height: 50px; text-align: center; margin-left: 300px;
                     cursor:pointer;}
       .commentListCon{width:600px; overflow: hidden;
         .commentItem{border-bottom: 1px solid #cccccc; overflow: hidden; padding-bottom: 27px; padding-top: 20px;}
         .commentItem:last-child{border-bottom: 0;}
-          .commentHead{width:82px; height: 82px; float: left;}
+          .commentHead{width:82px; height: 82px; float: left; border-radius: 50%;}
           .commentData{width:488px; text-align: left; margin-left: 30px; float:left;}
             .commentName{color: #f15313; font-size: 18px; margin-bottom: 19px;
               .sp_time{color:#999999;}
