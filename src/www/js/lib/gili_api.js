@@ -1139,10 +1139,7 @@ gili_data.getFolloweeAllList = function (options, cb_ok, cb_err) {
  isDesc
  **/
 gili_data.followeeList = function (options, cb_ok, cb_err) {
-    if (!this.getCurrentUser()) {
-        cb_err("请先登录!");
-        return;
-    }
+
     var orderBy = options.orderBy || "createdAt",
         isDesc = options.isDesc,
         skip = options.skip || 0,
@@ -1186,6 +1183,10 @@ gili_data.followeeList = function (options, cb_ok, cb_err) {
     if (user_id) {
         getUserObj();
     } else {
+        if (!this.getCurrentUser()) {
+            cb_err("请先登录!");
+            return;
+        }
         userCurrent = AV.User.current();
         queryFollowee();
     }
@@ -1199,10 +1200,7 @@ gili_data.followeeList = function (options, cb_ok, cb_err) {
  isDesc
  **/
 gili_data.followerList = function (options, cb_ok, cb_err) {
-    if (!this.getCurrentUser()) {
-        cb_err("请先登录!");
-        return;
-    }
+
     var orderBy = options.orderBy || "createdAt",
         isDesc = options.isDesc,
         skip = options.skip || 0,
@@ -1246,6 +1244,10 @@ gili_data.followerList = function (options, cb_ok, cb_err) {
     if (user_id) {
         getUserObj();
     } else {
+        if (!this.getCurrentUser()) {
+            cb_err("请先登录!");
+            return;
+        }
         userCurrent = this.getCurrentUser();
         queryFollower();
     }
