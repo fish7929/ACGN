@@ -806,10 +806,10 @@ gili_data.sendPhoneMsg = function (phone, cb_ok, cb_err) {
 }
 
 /** 验证手机短信
-msgcode,验证码
+ msgcode,验证码
  phone，手机号码
  **/
-gili_data.verifyPhoneMsgCode = function (msgcode,phone, cb_ok, cb_err) {
+gili_data.verifyPhoneMsgCode = function (msgcode, phone, cb_ok, cb_err) {
     if (!msgcode) {
         cb_err("验证码为空!");
         return;
@@ -1762,7 +1762,7 @@ gili_data.getClubUserByClubId = function (options, cb_ok, cb_err) {
         cb_err("社团id为空");
         return;
     }
-    var strCQL = " select include user, * from club where objectId='" + club_id + "' and status!=1 and approved=1   limit " + skip + "," + limit + " order by createdAt desc ";
+    var strCQL = " select include user, * from join_club where club_id='" + club_id + "' and status!=1 and approved=1   limit " + skip + "," + limit + " order by createdAt desc ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
             cb_ok(data.results);
@@ -1991,14 +1991,14 @@ gili_data.logOut = function () {
 /**
  * user,用户对象
  */
-gili_data.signUp = function (user,cb_ok, cb_err) {
+gili_data.signUp = function (user, cb_ok, cb_err) {
     user.signUp(null, {
         success: function (new_user) {
             cb_ok(new_user);
             //d关注，粉d
             gili_data.signUpFollow(new_user, function (new_user) {
                 //不执行任何操作
-            }, function (new_user,error) {
+            }, function (new_user, error) {
                 //不执行任何操作
             });
         },
@@ -2009,7 +2009,7 @@ gili_data.signUp = function (user,cb_ok, cb_err) {
 /** signUp的时候关注某个用户
  new_user,新注册的用户
  **/
-gili_data.signUpFollow = function (new_user,cb_ok, cb_err) {
+gili_data.signUpFollow = function (new_user, cb_ok, cb_err) {
     //获取用户对象
     var did = "57836872a341310061d47454";
 
@@ -2022,22 +2022,22 @@ gili_data.signUpFollow = function (new_user,cb_ok, cb_err) {
                 }, cb_err);
             }, cb_err);
         }, cb_err
-        );
+    );
 
     var d_follow = function () {
-        gili_data.getUserById(did, function (d_obj) { 
+        gili_data.getUserById(did, function (d_obj) {
             obj.follow(new_user.id).then(
-            function (obj) {
-                //1、当前用户关注总数加一，2、对方用户粉丝总数加一
-                gili_data.currentUserCountUpdate(d_obj, "followee_count", 1, function (data) {
-                    gili_data.updateUser({ "follower_count": 1 }, new_user.id, cb_ok(obj), cb_err);
-                }, cb_err);
-            }, cb_err
-        );
-        },cb_err);
+                function (obj) {
+                    //1、当前用户关注总数加一，2、对方用户粉丝总数加一
+                    gili_data.currentUserCountUpdate(d_obj, "followee_count", 1, function (data) {
+                        gili_data.updateUser({ "follower_count": 1 }, new_user.id, cb_ok(obj), cb_err);
+                    }, cb_err);
+                }, cb_err
+            );
+        }, cb_err);
     }
-   
-     
+
+
 };
 /**
  * 第三方登录需要的接口
@@ -2081,7 +2081,7 @@ gili_data.loginUtils = function (data) {
                 }
                 user.set("sex", sexual);
 
-                gili_data.signUp(user,{
+                gili_data.signUp(user, {
                     success: function (userobj) {
                         //注册成功则登陆
                         gili_data.logIn(unionid, "6a063e705a16e625", {
@@ -2094,7 +2094,7 @@ gili_data.loginUtils = function (data) {
                             error: function (user, error) {
                                 console.log(error.message);
                             }
-                        }) 
+                        })
                     },
                     error: function (user, error) {
                         console.log(error.message);
