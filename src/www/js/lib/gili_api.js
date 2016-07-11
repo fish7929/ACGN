@@ -814,6 +814,7 @@ gili_data.verifyPhoneMsgCode = function (msgcode, phone, cb_ok, cb_err) {
         cb_err("验证码为空!");
         return;
     }
+    console.log(67462233666);
     AV.Cloud.verifySmsCode(msgcode, phone).then(
         cb_ok,
         cb_err//err.code =1||err.code=603 --无效的短信验证码);
@@ -2058,18 +2059,15 @@ gili_data.loginUtils = function (data) {
         success: function (user) {
             if (user.length > 0) {
                 //用户存在则登陆绑定
-                gili_data.logIn(unionid, "6a063e705a16e625", {
-                    success: function (_user) {
-                        //                        window.location.href="http://www.gililove.com";
-                        app.triggerMethod("login:ok");
-                        //查询当前登录用户已关注用户ID列表 已点赞话题(插画)ID列表
-                        utils.loadAttentionList(_user.id);
-                        utils.loadLikedTplList(_user.id);
-                    },
-                    error: function (_user, error) {
-                        console.log(error.message);
-                    }
-                })
+                gili_data.logIn(unionid, "6a063e705a16e625",  function (_user) {
+                    //                        window.location.href="http://www.gililove.com";
+                    app.triggerMethod("login:ok");
+                    //查询当前登录用户已关注用户ID列表 已点赞话题(插画)ID列表
+                    utils.loadAttentionList(_user.id);
+                    utils.loadLikedTplList(_user.id);
+                }, function (_user, error) {
+                    console.log(error.message);
+                });
             } else {
                 //用户不存在则注册
                 var user = new AV.User();
@@ -2083,25 +2081,19 @@ gili_data.loginUtils = function (data) {
                 }
                 user.set("sex", sexual);
 
-                gili_data.signUp(user, {
-                    success: function (userobj) {
-                        //注册成功则登陆
-                        gili_data.logIn(unionid, "6a063e705a16e625", {
-                            success: function (user) {
-                                app.triggerMethod("login:ok");
-                                //查询当前登录用户已关注用户ID列表 已点赞话题(插画)ID列表
-                                utils.loadAttentionList(user.id);
-                                utils.loadLikedTplList(user.id);
-                            },
-                            error: function (user, error) {
-                                console.log(error.message);
-                            }
-                        })
-                    },
-                    error: function (user, error) {
+                gili_data.signUp(user, function (userobj) {
+                    //注册成功则登陆
+                    gili_data.logIn(unionid, "6a063e705a16e625",function (user) {
+                        app.triggerMethod("login:ok");
+                        //查询当前登录用户已关注用户ID列表 已点赞话题(插画)ID列表
+                        utils.loadAttentionList(user.id);
+                        utils.loadLikedTplList(user.id);
+                    },function (user, error) {
                         console.log(error.message);
-                    }
-                })
+                    });
+                },function (user, error) {
+                    console.log(error.message);
+                });
             }
         },
         error: function (error) {

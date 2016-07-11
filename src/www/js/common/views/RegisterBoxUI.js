@@ -91,7 +91,6 @@ define([
         var self = this;
 //        var nick = self.nickTxt.value;
         var account = self.accountTxt.value;  //手机号码
-        console.log(account);
 //        var password = self.passwordTxt.value;
 //        var verify = self.verifyTxt.value;
         if(utils.checkPhoneNumber(account, MsgBox)){
@@ -105,7 +104,7 @@ define([
                 }else if(err.message == "发送验证类短信已经超过一天五条的限制。"){
                     MsgBox.toast("短信已经超过一天五条的限制", false);
                 }else{
-                    MsgBox.toast("验证码获取失败!", false); //发送失败
+                    MsgBox.toast(err.message, false); //发送失败
                 }
             });
         }
@@ -129,7 +128,6 @@ define([
             gili_data.verifyPhoneMsgCode(verify, account, function(){
                 self.registerAccount(nick, account, password);
             },function(err){
-                console.log(err);
                 if (err.code == 1 || err.code == 603) {
                     MsgBox.toast("无效的短信验证码", false);
                     return;
@@ -152,17 +150,13 @@ define([
         user.set("password", password);
         user.set("brief", "什么都没有");
         user.set("user_type", 2);   //用户类型 1 画师， 2 社团主  。3
-        gili_data.signUp(user, {
-            success: function (user) {
-                console.log(user);
+        gili_data.signUp(user, function (user) {
 //                app.triggerMethod("login:ok");
-                MsgBox.toast("注册成功");
-                self._hide();
-            },
-            error: function (user, error) {
-                if (error.code != 202) {
-                    MsgBox.toast("注册帐号失败", false);
-                }
+            MsgBox.toast("注册成功");
+            self._hide();
+        }, function (user, error) {
+            if (error.code != 202) {
+                MsgBox.toast("注册帐号失败", false);
             }
         });
     }
