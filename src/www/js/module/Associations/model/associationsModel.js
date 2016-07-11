@@ -60,7 +60,6 @@ define([
             }
             var options = {"user_id":userId,"club_id":clubId};
             gili_data.getUserFlloweeClubRelation(options,function(data){
-                debugger;
                 if(!data || data.status == 0){
                     self.set({"attentionsTxt":"关注社团","attentionsClass":""});
                     return;
@@ -210,7 +209,6 @@ define([
         },
         //根据社团ID获取成员列表
         getAssociationsMembers:function(id,cb_ok){
-            debugger;
             var self = this,
                 options = {
                     club_id:id,
@@ -225,7 +223,6 @@ define([
         },
         //根据社团ID获取粉丝列表
         getAssociationsFans:function(id,cb_ok){
-            debugger;
             var self = this,
                 options = {
                     club_id:id,

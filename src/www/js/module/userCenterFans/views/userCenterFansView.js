@@ -36,13 +36,12 @@ define([
             "loadMsg":"#mz-square-sk-text"
         },
         onRender:function(){
-            this.LoginBarRegion.show(this._loginBarView);
             this.getRegion("headCon").show(this.userCenterHeadView);
             this.getRegion("fansCon").show(this.fansListView);
-            this.userCenterHeadView.setSelected(1);
         },
         show:function(){
             var self = this;
+            this.LoginBarRegion.show(this._loginBarView);
             //type 1粉丝列表  2关注列表
             var type = self.getOption("type");
             var userId = self.getOption("userId");
@@ -55,10 +54,15 @@ define([
             self.userCenterHeadView._loadData(userId);
             self.fansListView.loadData(userId,type);
         },
-        pageIn:function(){
-
+        //登录成功
+        onLoginOkHandler:function(){
+            var self = this;
+            self.show();
         },
-
+        pageIn:function(){
+            //登录登出刷新
+            app.on("login:ok", this.onLoginOkHandler, this);
+        },
         //列表状态变化
         _fansListChangeHandler:function(type){
             var self = this;
@@ -100,7 +104,9 @@ define([
         },
         close:function(){
             window.onscroll = null;
-            this._loginBarView = null;
+            this.LoginBarRegion.hide(this._loginBarView);
+            //登录登出刷新
+            app.off("login:ok", this.onLoginOkHandler, this);
         }
     });
     return userCenterFansView;

@@ -61,9 +61,7 @@ define([
                 skip:self.worksArr.length,
                 limit:self.pageSize
             };
-            debugger;
             gili_data.getClubUserBlog(options,function(data){
-                debugger;
                 self.loadOk(data);
             },function(error){
                 self.loadErr(error);
