@@ -64,7 +64,6 @@ define([
                     self.attentionsLock = false;
                 })
             }
-            console.log("关注社团")
         },
         //根据社团ID加载社团数据
         _loadData:function(id){

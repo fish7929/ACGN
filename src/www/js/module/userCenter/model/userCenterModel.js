@@ -10,7 +10,7 @@ define([
         },
         initialize:function(){
             var self = this;
-            self.set({"userHeaderImg":"","userNick":"匿名用户","userBrief":"(个人简介)","fansNum":0,"attentionNum":0});
+            self.set({"userHeaderImg":"","userNick":"匿名用户","userBrief":"一句话介绍一下自己吧，让别人更了解你","fansNum":0,"attentionNum":0});
             self.set({"otherShow":"","btnText":"关注","attEdClass":""});
             self.set({"firstLiShow":"","secondLiShow":"","thirdLiShow":""});
         },
@@ -26,7 +26,7 @@ define([
             if(userBrief && userBrief != ""){
                 this.set({"userBrief":userBrief});
             }else{
-                this.set({"userBrief":"(个人简介)"});
+                this.set({"userBrief":"一句话介绍一下自己吧，让别人更了解你"});
             }
         },
         setHeadImg:function(headImg){

@@ -11,8 +11,9 @@ define([
     'module/Associations/views/associationsMemberView',
     'module/Associations/views/associationsFansView',
     'module/userCenter/views/workListView',
+    'module/home/views/home_footer',
     'msgbox'
-],function(BaseView,AssociationsTpl,mn,SwitchViewRegion,LoginBarView,AssociationsHeadView,AssociationsMemberView,AssociationsFansView,WorkListView,MsgBox){
+],function(BaseView,AssociationsTpl,mn,SwitchViewRegion,LoginBarView,AssociationsHeadView,AssociationsMemberView,AssociationsFansView,WorkListView,FooterView,MsgBox){
     var associationsView = BaseView.extend({
         id:"AssociationsContainer",
         template: _.template(AssociationsTpl),
@@ -25,6 +26,7 @@ define([
             self._associationsFansView = new AssociationsFansView();
             self._workListView = new WorkListView();
             self._workListView.on("workListView:change",self._workListChangeHandler,self);
+            self._footerView = new FooterView();
         },
         ui:{
             "loadingContainer":".loading-gif",
@@ -39,7 +41,8 @@ define([
             "headInfo":"#associations_header",
             "memberList":"#associateMember",
             "fansList":"#associateAttention",
-            "workList":"#main_left"
+            "workList":"#main_left",
+            "footerCon":"#footer"
         },
         onRender:function(){
             var self = this;
@@ -47,6 +50,7 @@ define([
             self.getRegion("memberList").show(self._associationsMemberView);
             self.getRegion("fansList").show(self._associationsFansView);
             self.getRegion("workList").show(self._workListView);
+            self.getRegion("footerCon").show(this._footerView);
         },
         show:function(){
             var self = this;
@@ -93,6 +97,7 @@ define([
             var self = this;
             self.ui.loadingContainer.find("img").show();
             self.ui.loadMsg.html("你的大片正在加载...");
+            self.ui.mainLeft.remove("#noContent");
             if(typeArr && typeArr.length > 0){
                 if(typeArr[0] == 0){   //加载出错时，有数据只文案提示  无数据显示缺省无网状态且文案提示
                     self.ui.loadingContainer.find("img").hide();
@@ -105,7 +110,8 @@ define([
                     self.ui.loadingContainer.find("img").hide();
                     self.ui.loadMsg.html("没有更多了");
                     if(self.ui.mainLeft.find(".uc_info_item").length <= 0){
-                        self.ui.loadMsg.html("暂无话题动态");
+                        self.ui.loadMsg.html("");
+                        self.ui.mainLeft.append("<div id='noContent'>该社团暂无动态消息</div>");
                     }
                 }
             }

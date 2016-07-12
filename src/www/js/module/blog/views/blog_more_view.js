@@ -10,8 +10,9 @@ define([
     'common/region/switch_view_region',
     'common/views/loginBar',
     'msgbox',
-    'common/views/BlogItemView'
-],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, MsgBox, BlogItemView){
+    'common/views/BlogItemView',
+    'module/home/views/home_footer'
+],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, MsgBox, BlogItemView, HomeFooter){
     return BaseView.extend({
         className : "blogMoreContainer",
         template : _.template(tpl),
@@ -33,6 +34,10 @@ define([
             LoginBarRegion: {
                 el: ".blog-more-loginBar-reg",
                 regionClass: SwitchViewRegion
+            },
+            FooterRegion:{
+                el : ".blog-footer-reg",
+                regionClass: SwitchViewRegion
             }
         },
 
@@ -40,6 +45,7 @@ define([
         initialize : function(){
             var self = this;
             self._loginBarView = new LoginBarView();
+            self._footerView = new HomeFooter();
         },
 
         //在开始渲染模板前执行，此时当前page没有添加到document
@@ -141,6 +147,7 @@ define([
             }else if(type == 2){ //数据加载结束
                 self.ui.loadingContainer.find("img").hide();
                 self.ui.loadMsg.html("没有更多了");
+                self.FooterRegion.show(self._footerView);
             }
         },
 
@@ -162,6 +169,7 @@ define([
             var self = this;
             $(window).scroll = null;
             self.LoginBarRegion.hide(self._loginBarView);
+            self.FooterRegion.hide(self._footerView);
         },
 
         //当页面销毁时触发

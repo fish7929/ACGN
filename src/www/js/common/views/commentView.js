@@ -23,6 +23,20 @@ define([
             "</div>" +
             "<div class=\"clear\"></div>" +
             "</div>";
+
+    var htmlTpl2 = "<div class=\"comment-list-item\" data-id='{dataId}' user-name='{userName}' user-id='{userId}'>" +
+            "<div class=\"comment-left-div\">" +
+            "<div class=\"comment-head-pic button\" style='background: url(\"{pic}\") no-repeat center; background-size: 100%'></div>" +
+            "<div class=\"comment-floor-txt\">{floor}</div>" +
+            "</div>" +
+            "<div class=\"comment-right-div\">" +
+            "<div class=\"comment-user-name\">{name}</div>" +
+            "<div class=\"nowrapTxt comment-content\">{content}</div>" +
+            "<div class=\"comment-reply button\">回复</div>" +
+            "<div class=\"clear comment-time\">{data}</div>" +
+            "</div>" +
+            "<div class=\"clear\"></div>" +
+            "</div>";
     var ReplyTitle = "回复@{name}：";
     return ItemView.extend({
         className : "commentContainer",
@@ -187,7 +201,6 @@ define([
                 html += self.getCommentHtml(data[i]);
             }
             self.ui.commentList.append(html);
-
             app.triggerMethod("update:masonry:list");
         },
 
@@ -213,8 +226,11 @@ define([
                     content = "";
                 }
             }
-
-            html = htmlTpl.replace("{dataId}", id).replace("{userName}", user_nick).replace("{userId}", userId).replace("{floor}", floor).replace("{name}", user_nick).replace("{pic}", user_pic)
+            var tpl = htmlTpl;
+            if(self.$el.get(0).className == "commentContainerBlog"){
+                tpl = htmlTpl2;
+            }
+            html = tpl.replace("{dataId}", id).replace("{userName}", user_nick).replace("{userId}", userId).replace("{floor}", floor).replace("{name}", user_nick).replace("{pic}", user_pic)
                 .replace("{content}", content).replace("{data}", utils.formatTime(createdAt, "yyyy.MM.dd HH.mm"));
             return html;
         },

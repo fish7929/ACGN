@@ -11,7 +11,7 @@ define([
     var WorkItemView = Marionette.ItemView.extend({
         template: _.template(workItemTpl),
         model:workModel,
-        pageSize:10, //每页10冬条
+        pageSize:10, //话题每页10条
         isReply:false,    //当前是否给留言回复
         replyUserId:"",   //当前回复评论 评论者昵称
         replyUserName:"", //当前回复评论对象
@@ -82,6 +82,11 @@ define([
                 data.faceTxtHtml = self.getFace();
             }else{
                 data.faceTxtHtml = "";
+            }
+            if(self.model.hasMoreComment){
+                data.hasMoreComment = "";
+            }else{
+                data.hasMoreComment = "style='display:none;'";
             }
             return data;
         },
@@ -236,12 +241,16 @@ define([
         //删除
         _clickDelHandler:function(e){
             var gid = this.model.get("objectId");
-            gili_data.deleteBlog(gid,function(){
-                MsgBox.toast("删除成功");
-                app.trigger("workListView:delWork",[gid]); //触发删除某话题
-            },function(err){
-                MsgBox.alert("删除失败");
-            })
+            MsgBox.ask("确定删除消息吗?","",function(type){
+                if(type == MsgBox.YES){
+                    gili_data.deleteBlog(gid,function(){
+                        MsgBox.toast("删除成功");
+                        app.trigger("workListView:delWork",[gid]); //触发删除某话题
+                    },function(err){
+                        MsgBox.alert("删除失败");
+                    })
+                }
+            });
         },
         //取消当前回复对象
         removeReply:function(){
@@ -315,6 +324,7 @@ define([
                 self.model.addComment(data);
                 self.removeReply();
                 self.model.commentInt++;
+                self.model.commentTxt = "";
                 self.render();
                 MsgBox.toast(gili_config.Tip.COMMENT_SUCCESS);
             },function(err){

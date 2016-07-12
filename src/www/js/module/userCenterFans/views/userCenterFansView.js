@@ -8,8 +8,9 @@ define([
     'common/region/switch_view_region',
     'common/views/loginBar',
     'module/userCenter/views/userCenterHeadView',
-    'module/userCenterFans/views/fansListView'
-],function(BaseView,UserCenterFansTpl,mn,SwitchViewRegion,LoginBarView,UserCenterHeadView,FansListView){
+    'module/userCenterFans/views/fansListView',
+    'module/home/views/home_footer'
+],function(BaseView,UserCenterFansTpl,mn,SwitchViewRegion,LoginBarView,UserCenterHeadView,FansListView,FooterView){
     var userCenterFansView = BaseView.extend({
         id:"userCenterFansContainer",
         template: _.template(UserCenterFansTpl),
@@ -22,6 +23,7 @@ define([
             self.userCenterHeadView = new UserCenterHeadView();
             self.fansListView = new FansListView();
             self.fansListView.on("fansListView:change",self._fansListChangeHandler,self);
+            this._footerView = new FooterView();
         },
         regions : {
             LoginBarRegion: {
@@ -29,7 +31,8 @@ define([
                 regionClass: SwitchViewRegion
             },
             "headCon":"#userCenterFansHeaderCon",
-            "fansCon":"#userCenterFansInfo"
+            "fansCon":"#userCenterFansInfo",
+            "footerCon":"#footer"
         },
         ui:{
             "loadingContainer":".loading-gif",
@@ -38,6 +41,7 @@ define([
         onRender:function(){
             this.getRegion("headCon").show(this.userCenterHeadView);
             this.getRegion("fansCon").show(this.fansListView);
+            this.getRegion("footerCon").show(this._footerView);
         },
         show:function(){
             var self = this;

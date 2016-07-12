@@ -35,11 +35,21 @@ define([
                         if(!user)continue;
                         imgListHtml.push('<img data-userId="'+user.id+'" src="'+user.get("avatar")+'" class="memberImgItem"/>');
                     }
-                    self.model.set("imgList",imgListHtml.join(' '));
+                    if(imgListHtml.length > 0)
+                        self.model.set("imgList",imgListHtml.join(' '));
+                    else
+                        self.noMemberRender();
                 }else{
-                    self.model.set("imgList",imgListHtml.join(' '));
+                    self.noMemberRender();
                 }
+            },function(){
+                self.noMemberRender();
             })
+        },
+        //无成员提示
+        noMemberRender:function(){
+            var self = this;
+            self.model.set("imgList","<div class='noDataDiv'>该社团还未有关注者</div>");
         },
         //点击头像打开用户中心
         _clickMemberHeadHandler:function(e){

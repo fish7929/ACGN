@@ -36,6 +36,7 @@
 }
 
 .blog-item-author-info{
+    width: 440px;
     font-size: 18px;
     margin-left: 10px;          //13px  在FirFox中会出错 修改为 10
     float: left;
@@ -79,10 +80,20 @@
 
     .blog-item-msg-num{
         margin-left: 50px;
-        color: #ff4200;
+        color: grey;
         display: inherit;
     }
     left: 127px;
+}
+
+.blog-item-msg:hover{
+    .blog-item-msg-btn{
+        background: url(../images/common/comment.png) center no-repeat;
+    }
+
+    .blog-item-msg-num{
+        color: #ff4200;
+    }
 }
 
 .blog-item-love{
@@ -93,19 +104,24 @@
         display: inherit;
     }
 
-    .blog-item-love-btn:hover{
-        background: url(../images/common/praise.png) no-repeat center;
-    }
-
     .onSelect{
         background: url(../images/common/praise_ck.png) no-repeat center !important;
     }
 
     .blog-item-love-num{
         margin-left: 50px;
-        color: #ff4200;
+        color: grey;
         display: inherit;
     }
     color: #333;
+}
 
+.blog-item-love:hover{
+    .blog-item-love-num{
+        color: #ff4200;
+    }
+
+    .blog-item-love-btn{
+        background: url(../images/common/praise1.png) no-repeat center;
+    }
 }

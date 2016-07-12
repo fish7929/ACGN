@@ -5,6 +5,8 @@ define([],function(){
     var WorkModel = Backbone.Model.extend({
         faceOpen:false,//是否打开颜表情窗口
         commentTxt:"",//默认评论内容为空
+        hasMoreComment:false, //是否还有更多评论  默认没有
+        commentPageSize :5,//评论每页只5条数据
         constructor:function(){
             Backbone.Model.apply(this,arguments);
         },
@@ -20,17 +22,19 @@ define([],function(){
         //查询评论数据
         searchComment:function(cb_ok,cb_err){
             var self = this;
-            self.pageSize = 10;
-            console.log("已有评论"+self.commentList.length);
+            self.hasMoreComment = false;
             var options = {
                 comment_id:self.get("objectId"),
                 comment_type:1,
                 skip:self.commentList.length,
-                limit:self.pageSize,
+                limit:self.commentPageSize,
                 isdesc:true
             };
             gili_data.getComment(options,function(data){
-                console.log("查询评论列表,话题ID"+self.get("objectId"))+", 跳过"+self.commentList.length+"条";
+                if(data.results.length >= self.commentPageSize)
+                {
+                    self.hasMoreComment = true;
+                }
                 var tempCommentArr = [];
                 for(var i = 0; i < data.results.length; i++){
                     var temp = {};
