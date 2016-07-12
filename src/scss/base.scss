@@ -164,6 +164,11 @@ img {
   clear: both;
 }
 
+.title{
+    font-weight: bold;
+    color: #333333;
+}
+
 @import "vendor/swiper";
 @import "home/home.scss";
 @import "home/qhdc.scss";

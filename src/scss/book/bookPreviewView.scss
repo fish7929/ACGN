@@ -1,5 +1,5 @@
 .previewContainer{
-  position: absolute;
+  position: fixed;
   width: 100%;
   height: 100%;
   margin: 0 auto;
@@ -15,11 +15,11 @@
   }
 
     .previewImagePageCount{
-      margin-top: 20px;
-      margin-bottom: 16px;
+      padding-top: 20px;
+      padding-bottom: 16px;
       font-size: 18px;
       color: #ffffff;
-      height: 24px;
+      height: 64px;
     }
 
     .previewImagePageCount>span{
@@ -32,10 +32,10 @@
       height: 100%;
       //padding-top: 80px;
       position: relative;
+      overflow-y: auto;
 
       .previewImage{
         max-width: 750px;
-        //max-height: 100%;
         height: 100%;
         margin: 0 auto;
       }
@@ -49,21 +49,21 @@
         -moz-transform: scaleX(-1);	      /* Firefox */
         -webkit-transform: scaleX(-1);    /* Safari 和 Chrome */
         -o-transform: scaleX(-1); 	      /* Opera */
-        position: absolute;
-        //top: 80px;
+        position: fixed;
+        top: 0px;
       }
 
       .previewRightBtn{
         width: 100px;
         height: 100%;
         background: url("../images/common/arrow.png") no-repeat center;
-        position: absolute;
-        //top: 80px;
+        position: fixed;
+        top: 0px;
       }
     }
 
     .previewClose{
-      position: absolute;
+      position: fixed;
       top: 20px;
       right: 20px;
       width: 64px;
@@ -72,7 +72,7 @@
     }
 
     .previewBigBtn{
-      position: absolute;
+      position: fixed;
       top: 50px;
       width: 121px;
       height: 31px;

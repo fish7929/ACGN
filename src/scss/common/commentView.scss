@@ -121,6 +121,10 @@
     .comment-list-item:first-child{
       margin-top: 0px;
     }
+
+    .comment-list-item:last-child{
+      border-bottom: 0px;
+    }
   }
 
   .comment-view-more-btn{
@@ -232,8 +236,8 @@
           color: #808080;
           line-height: 24px;
           height: 24px;
-          margin-left: 20px;
-          float: left;
+          margin-top: 40px;
+          text-align: left;
         }
 
         .comment-reply{
@@ -243,11 +247,12 @@
         }
 
         .comment-content{
-          width: 100%;
+          width: 300px;
           font-size: 18px;
           color: #3d3d3d;
           text-align: left;
-          padding: 10px 10px 0px 0px;
+          padding: 0 10px;
+          float: left;
         }
       }
 
@@ -258,7 +263,7 @@
     }
 
     .comment-list-item:last-child{
-      border-bottom: 0px;
+      border-bottom: 0px !important;
     }
   }
 

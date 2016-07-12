@@ -144,6 +144,7 @@ define([
                 autoplay : 2000,
                 speed : 1000,
                 loop : true,
+                paginationClickable :true,
                 onAutoplayStop : function(){
                     setTimeout(function(){
                         self.bannerSwipe.startAutoplay();

@@ -33,13 +33,15 @@ define([
 
         if(self._isShow) return;
         self._isShow = true;
-        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-        self.$el.css({top:scrollTop});
+        // var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        // self.$el.css({top:scrollTop});
         document.body.appendChild(self.el);
         self._picIndex = 0;
         self._picArr = arr;
         self.showPic();
         self.bindEvent();
+
+        window.document.documentElement.style.overflow = "hidden";
     };
 
     BookPreviewView.prototype.showPicNum = function(){
@@ -78,12 +80,22 @@ define([
 
     BookPreviewView.prototype.setImage = function(url, imageWidth, imageHeight){
         var self = this;
+        imageWidth = Math.min(750, imageWidth);
+
         var imageCssObj = {};
         imageCssObj.background = "url('"+url+"') no-repeat center top";
         imageCssObj["background-size"] = "100% auto";
         imageCssObj.height = imageHeight;
-        self._bookImage.css(imageCssObj);
+        imageCssObj.width = imageWidth;
+        var clientHeight = document.documentElement.clientHeight;
+        console.log(imageHeight, clientHeight);
+        if(imageHeight < clientHeight - 128){
+            imageCssObj["margin-top"] = ((clientHeight - imageHeight)/2  - 64)+"px";
+        }else{
+            imageCssObj["margin-top"] = "0px";
+        }
 
+        self._bookImage.css(imageCssObj);
         self.setPos(imageWidth, imageHeight);
     };
 
@@ -105,17 +117,21 @@ define([
     BookPreviewView.prototype.setPos = function(imageWidth, imageHeight){
         var self = this;
         var leftCssObj = {};
-        // leftCssObj.height = "100%";
-        imageWidth = Math.min(750, imageWidth);
+
         leftCssObj.left = "calc(50% - " + (imageWidth / 2 + 80) + "px)";
         self._preBtn.css(leftCssObj);
 
         var rightCssObj = {};
-        // rightCssObj.height = "100%";
         rightCssObj.right = "calc(50% - " + (imageWidth / 2 + 80) + "px)";
         self._nextBtn.css(rightCssObj);
         var btnBigCssObj = {};
         btnBigCssObj.right = "calc(50% - " + (imageWidth / 2 - 10) + "px)";
+        var clientHeight = document.documentElement.clientHeight;
+        if(imageHeight >= clientHeight){
+            btnBigCssObj.top = "74px";
+        }else{
+            btnBigCssObj.top = (clientHeight - imageHeight)/2  + 10;
+        }
         self._viewBigBtn.css(btnBigCssObj);
         self._viewBigBtn.show();
     };
@@ -158,6 +174,7 @@ define([
         this._isShow = false;
         self.removeEvent();
         self.$el.remove();
+        window.document.documentElement.style.overflow = "auto";
     };
 
     return new BookPreviewView();

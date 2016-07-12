@@ -55,11 +55,12 @@ define([
         initData : function(data, commentType){
             var self = this;
             self.data = data;
+            console.log(data);
             var id = data.objectId;
             var pic = data.pictures[0] || "";
             var userPic = data.user.avatar;
             var userName = data.user.user_nick;
-            var brief = data.user.brief;
+            var brief = data.topic;
             var likeNum = data.like_int || 0;
             var comment_int = data.comment_int || 0;
 

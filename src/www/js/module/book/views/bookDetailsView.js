@@ -12,8 +12,9 @@ define([
     'module/book/views/bookDetailsPreview',
     'module/book/views/bookDetailsHot',
     'common/views/commentView',
-    'module/book/model/BookModel'
-],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, BDPreviewView, BDHotView, CommentView, BookModel){
+    'module/book/model/BookModel',
+    'module/home/views/home_footer'
+],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, BDPreviewView, BDHotView, CommentView, BookModel, HomeFooter){
     var labelTpl = "<div class=\"bd-label-item\" style='background-color: {0}'>{1}</div>"
 
     return BaseView.extend({
@@ -23,7 +24,7 @@ define([
         // key : selector
         ui : {
             bookCover : ".bd-image",
-            bookTitle : ".title",
+            bookTitle : ".bd-title",
             bookAuthor : ".bd-author-txt",
             bookOriginal: ".bd-original-txt",
             bookCP : ".bd-cp-txt",
@@ -62,6 +63,11 @@ define([
             MessageRegion:{
                 el: ".bd-book-message-reg",
                 regionClass: SwitchViewRegion
+            },
+
+            FooterRegion:{
+                el: ".bd-book-footer-reg",
+                regionClass: SwitchViewRegion
             }
         },
 
@@ -72,6 +78,7 @@ define([
             self._previewView = new BDPreviewView();
             self._hotView = new BDHotView();
             self._commentView = new CommentView();
+            self._footerView = new HomeFooter();
         },
 
         //在开始渲染模板前执行，此时当前page没有添加到document
@@ -103,6 +110,7 @@ define([
             self._hotView.setParam(self.getOption("bookId"));
             self.HotViewRegion.show(self._hotView);
             self.MessageRegion.show(self._commentView);
+            self.FooterRegion.show(self._footerView);
         },
 
         initData : function(data){
@@ -196,6 +204,7 @@ define([
             self.PreviewViewRegion.hide(self._previewView);
             self.HotViewRegion.hide(self._hotView);
             self.MessageRegion.hide(self._commentView);
+            self.FooterRegion.hide(self._footerView);
         },
 
         //当页面销毁时触发
