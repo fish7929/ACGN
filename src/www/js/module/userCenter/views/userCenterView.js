@@ -33,7 +33,8 @@ define([
         },
         ui:{
             "loadingContainer":".loading-gif",
-            "loadMsg":"#mz-square-sk-text"
+            "loadMsg":"#mz-square-sk-text",
+            "userCenterInfo":"#userCenterInfo"
         },
         onRender:function(){
             var self = this;
@@ -96,6 +97,8 @@ define([
             var self = this;
             self.ui.loadingContainer.find("img").show();
             self.ui.loadMsg.html("你的大片正在加载...");
+            self.ui.userCenterInfo.remove("#noContent");
+            self.loginUser = gili_data.getCurrentUser();
             if(typeArr && typeArr.length > 0){
                 if(typeArr[0] == 0){   //加载出错时，有数据只文案提示  无数据显示缺省无网状态且文案提示
                     self.ui.loadingContainer.find("img").hide();
@@ -107,6 +110,14 @@ define([
                     self.data_finish = true;
                     self.ui.loadingContainer.find("img").hide();
                     self.ui.loadMsg.html("没有更多了");
+                    if(self.ui.userCenterInfo.find(".uc_info_item").length <= 0){
+                        self.ui.loadMsg.html("");
+                        if(self.loginUser && self.loginUser.id == self._userId) {
+                            self.ui.userCenterInfo.append("<div id='noContent'>您还没有发布动态消息</div>");
+                        } else {
+                            self.ui.userCenterInfo.append("<div id='noContent'>TA还没有发布动态消息</div>");
+                        }
+                    }
                 }
             }
         },
