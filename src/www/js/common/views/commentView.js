@@ -111,7 +111,7 @@ define([
                 self.ui.commentText.focus();
                 self.setReplyObj(commentId, commentUserId, commentUserName);
                 var str = ReplyTitle.replace("{name}", commentUserName);
-                self.ui.commentText.html(str);
+                self.ui.commentText.val(str);
             }else if(target.className.indexOf("comment-head-pic") >= 0){
                 app.navigate("#userCenter/"+commentUserId, {replace: false, trigger: true});
             }
