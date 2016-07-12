@@ -368,7 +368,9 @@ define([
             for (var i = 0; i < data.length; i++) {
                 var obj = data[i];
                 var pictures = obj.get("pictures")[0];
-                var topic = obj.get("topic");
+                //changed by zhao
+                // var topic = obj.get("topic");
+                var topic = obj.get("user").get("user_nick");
                 var selectedTemp = i == 0 ? "hottest-opus-item-selected " : "";
                 var hintSelectedClass = i == 0 ? "opus-hint-selected" : "";
                 hottestOpusRepTemp = hottestOpusTemp.replace(/opusIndex/g, i + 1).replace(/itemSelected/g, selectedTemp)
