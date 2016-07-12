@@ -1,0 +1,190 @@
+/*文件名称: setting.css
+*
+* 创 建 人: fishYu
+* 创建日期: 2016/7/12 22:40
+* 描    述: 设置样式
+*/
+
+/**
+*登录样式
+*/
+
+.setting-container-mask{
+    background: rgba(0,0,0,.5);
+    position: absolute;
+    width:100%;
+    height:100%;
+    top:0;
+    left: 0;
+}
+
+.setting-close{
+    position:absolute;
+    z-index:10;
+    right: 60px;
+    top: 20px;
+    width: 32px;
+    height: 32px;
+    background: url("../images/common/deleteBtn.png") no-repeat center;
+}
+
+.setting-container{
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:605px;
+    height:411px;
+    text-align: left;
+    background:#fff;
+    -webkit-transform:translate(-50%,-50%);
+    position:absolute;
+    z-index:10;
+    border: 1px solid #c0c0c0;
+    border-radius: 10px;
+}
+
+.setting-title{
+    width: 100%;
+    height: 60px;
+    border-bottom: 1px solid #feba02;
+    line-height: 59px;
+    color: #3d3d3d;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    padding: 0 22px;
+}
+.setting-title-hint{
+    display: inline-block;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+.setting-title-tab{
+    display: inline-block;
+    margin-left: 90px;
+}
+.setting-content{
+    width: 100%;
+    height: 351px;
+    padding: 21px 58px 0;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+.setting-common-div{
+    height: 40px;
+    width: 329px;
+    margin-bottom: 8px;
+    position: relative;
+}
+
+.setting-common-input{
+    width: 268px;
+    border: 1px solid #c0c0c0;
+    border-radius: 19.5px;
+    height: 100%;
+    outline: none;
+    padding-left: 12px;
+}
+#setting-nick-txt{
+    width: 225px;
+}
+#setting-nick-del{
+    position:absolute;
+    right: 10px;
+    top: 7.5px;
+    width: 25px;
+    height: 25px;
+    background: url("../images/common/del.png") no-repeat center;
+}
+#setting-sex-txt{
+    width: 268px;
+    text-align: center;
+}
+#setting-sex-txt option{
+    text-align: center;
+    width: 268px;
+    border: 1px solid #c0c0c0;
+    border-radius: 19.5px;
+}
+
+.setting-brief-wrapper{
+    height: 70px;
+    width: 100%;
+    margin-bottom: 11px;
+    position: relative;
+}
+.setting-brief-wrapper label{
+    vertical-align: top;
+}
+#setting-brief-txt{
+    width: 425px;
+    height: 100%;
+    outline: none;
+    resize: none;
+    border: 1px solid #c0c0c0;
+    border-radius: 10px;
+    padding-left: 13px;
+    padding-top: 13px;
+}
+
+.brief-length{
+    position: absolute;
+    display: inline-block;
+    right: 13px;
+    bottom: 8px;
+}
+.brief-length span{
+    font-size: 14px;
+    color: #808080;
+}
+.brief-length #current-length{
+    color: #feba02;
+}
+
+.setting-avatar{
+    display: inline-block;
+    width: 137px;
+    height: 137px;
+    position: absolute;
+    overflow:hidden;
+    top: 81px;
+    right: 58px;
+    background: url(../images/login/common-user.jpg) center no-repeat;
+}
+
+#avatar-file{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    opacity: 0;
+}
+.avatar-file-hint{
+    position: absolute;
+    display: inline-block;
+    line-height: 30px;
+    bottom: 0;
+    width: 100%;
+    height: 30px;
+    color: #fff;
+    text-align: center;
+    background: rgba(0,0,0,.5);
+}
+
+.setting-save{
+    width: 150px;
+    height: 40px;
+    margin: 0 auto;
+    background: grey;
+    border-radius: 19.5px;
+    color: #fff;
+    text-align: center;
+    line-height: 38px;
+}
+
+
+
+
+

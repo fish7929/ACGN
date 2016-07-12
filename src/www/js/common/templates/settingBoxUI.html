@@ -1,0 +1,43 @@
+<div class="setting-container" id="setting-container">
+    <div class="setting-title">
+        <div class="setting-title-hint">帐号设置</div>
+        <div class="setting-title-tab">个人资料</div>
+    </div>
+    <div class="setting-content">
+        <div class="setting-common-div">
+            <label>昵称：</label>
+            <input type="text" id="setting-nick-txt" class="setting-common-input"/>
+            <span id="setting-nick-del" class="button"></span>
+        </div>
+        <div class="setting-common-div">
+            <label>性别：</label>
+            <select id="setting-sex-txt" class="setting-common-input">
+                <option value="1">男</option>
+                <option value="2">女</option>
+            </select>
+        </div>
+        <div class="setting-common-div">
+            <label>坐标：</label>
+            <input type="text" placeholder="详细的用户地址" id="setting-address-txt" class="setting-common-input"/>
+        </div>
+        <div class="setting-common-div">
+            <label>手机：</label>
+            <input type="text" id="setting-phone-txt" class="setting-common-input"/>
+        </div>
+        <div class="setting-brief-wrapper">
+            <label>签名：</label>
+            <textarea id="setting-brief-txt" placeholder="这里是不知道写什么的标签"></textarea>
+            <div class="brief-length">
+                <span id="current-length">12</span>
+                <span >/20</span>
+            </div>
+        </div>
+        <div class="setting-avatar button">
+            <input type="file" id="avatar-file" class="button"/>
+            <span class="avatar-file-hint">更换头像</span>
+        </div>
+        <div class="setting-save button" id="save-btn">保存</div>
+    </div>
+</div>
+<div class="setting-close button"></div>
+<div class="setting-container-mask" id="setting-mask"></div>

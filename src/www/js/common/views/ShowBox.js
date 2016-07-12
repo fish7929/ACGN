@@ -5,8 +5,9 @@
 // 描    述: ShowBox
 define([
     'common/views/LoginBoxUI',
-    'common/views/RegisterBoxUI'
-],function(LoginBoxUI,RegisterBoxUI) {
+    'common/views/RegisterBoxUI',
+    'common/views/SettingBoxUI'
+],function(LoginBoxUI,RegisterBoxUI, SettingBoxUI) {
     var ShowBox = {
         init : function(){
             this._container = $("<div class='login-gili-love-container'>");
@@ -30,6 +31,16 @@ define([
          */
         register : function(uiClass){
             uiClass = uiClass || RegisterBoxUI;
+            var showBox = new uiClass();
+            showBox.show(true);
+            return showBox;
+        },
+        /**
+         * 设置弹窗
+         * @return
+         */
+        setting : function(uiClass){
+            uiClass = uiClass || SettingBoxUI;
             var showBox = new uiClass();
             showBox.show(true);
             return showBox;
