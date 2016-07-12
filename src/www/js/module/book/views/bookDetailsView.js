@@ -45,7 +45,9 @@ define([
 
         //事件添加
         events : {
-            "click @ui.attendBtn" : "onAttentionHandle"
+            "click @ui.attendBtn" : "onAttentionHandle",
+            "click @ui.bookAuthorAvatar" : "onAuthorHandle",
+            "click @ui.clubImage" : "onCollegeHandle"
         },
 
         regions : {
@@ -117,8 +119,7 @@ define([
         initData : function(data){
             var self = this;
             self._data = data;
-            console.log(data);
-            var cover = data.avatar || "";
+            var cover = data.cover || "";
             var bookName = data.name || "";
             var author = data.user.user_nick || "";
             var avatar = data.user.avatar || "";
@@ -171,6 +172,22 @@ define([
             obj.comment_type = 2;
             self._commentView.setCommentTarget(obj);
             self._commentView.startLoadData();
+        },
+
+        onAuthorHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            if(!self._data) return;
+            app.navigate("#userCenter/"+self._data.user.objectId, {replace: false, trigger: true});
+        },
+
+        onCollegeHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            if(!self._data) return;
+            app.navigate("#associations/"+self._data.club.objectId, {replace: false, trigger: true});
         },
 
         onAttentionHandle : function(e){

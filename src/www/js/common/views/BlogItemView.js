@@ -32,7 +32,9 @@ define([
         events : {
             "click @ui.blogImageDiv" : "onBlogImageHandle",
             "click @ui.btnComment" : "onBtnCommentHandle",
-            "click @ui.btnLove" : "onBtnLoveHandle"
+            "click @ui.btnLove" : "onBtnLoveHandle",
+            "click @ui.authorPic" : "onAuthorHandle",
+            "click @ui.authorName" : "onAuthorHandle"
         },
 
         /**初始化**/
@@ -89,6 +91,15 @@ define([
                 self.setBtnLoveState(1);
             }else{
                 self.setBtnLoveState(0);
+            }
+        },
+
+        onAuthorHandle : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var self = this;
+            if(self.data && self.data.user && self.data.user.objectId){
+                app.navigate("#userCenter/"+self.data.user.objectId, {replace: false, trigger: true});
             }
         },
 
