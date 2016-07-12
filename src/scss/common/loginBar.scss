@@ -23,9 +23,11 @@
 }
 
 .loginBar-Logo {
-    width: 100%;
-    height: 100%;
+    width: 114px;
+    height: 60px;
     background: url("../images/logo.png") center no-repeat;
+    margin: 0 auto;
+    cursor: pointer;
 }
 
 .loginBar-Btns {

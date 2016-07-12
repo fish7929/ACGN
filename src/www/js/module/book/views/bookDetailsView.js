@@ -25,6 +25,7 @@ define([
         ui : {
             bookCover : ".bd-image",
             bookTitle : ".bd-title",
+            bookAuthorAvatar : ".bd-author-headImage",
             bookAuthor : ".bd-author-txt",
             bookOriginal: ".bd-original-txt",
             bookCP : ".bd-cp-txt",
@@ -116,9 +117,11 @@ define([
         initData : function(data){
             var self = this;
             self._data = data;
-            var cover = data.cover || "";
+            console.log(data);
+            var cover = data.avatar || "";
             var bookName = data.name || "";
             var author = data.user.user_nick || "";
+            var avatar = data.user.avatar || "";
             var originalAuthor = data.original || "";
             var cp = data.cp || "";
             var lang = data.language || "";
@@ -128,6 +131,7 @@ define([
             var brief = data.brief || "";
             var labelArr = data.labels || [];
             self.ui.bookCover.css({"background":"url("+cover+") no-repeat center", "background-size": "100%"});
+            self.ui.bookAuthorAvatar.css({"background":"url("+avatar+") no-repeat center", "background-size": "100%"});
             self.ui.bookTitle.html(bookName);
             self.ui.bookAuthor.html(author);
             self.ui.bookOriginal.html(originalAuthor);

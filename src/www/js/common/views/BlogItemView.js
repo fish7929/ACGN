@@ -55,7 +55,6 @@ define([
         initData : function(data, commentType){
             var self = this;
             self.data = data;
-            console.log(data);
             var id = data.objectId;
             var pic = data.pictures[0] || "";
             var userPic = data.user.avatar;
