@@ -9,8 +9,9 @@ define([
     'common/views/loginBar',
     'module/userCenter/views/userCenterHeadView',
     'module/userCenter/views/workListView',
+    'module/home/views/home_footer',
     'msgbox'
-],function(BaseView,UserCenterTpl,mn,SwitchViewRegion,LoginBarView,UserCenterHeadView,WorkListView,MsgBox){
+],function(BaseView,UserCenterTpl,mn,SwitchViewRegion,LoginBarView,UserCenterHeadView,WorkListView,FooterView,MsgBox){
     var userCenterView = BaseView.extend({
         id:"userCenterContainer",
         template: _.template(UserCenterTpl),
@@ -22,6 +23,7 @@ define([
             this.userCenterHeadView = new UserCenterHeadView();
             this._workListView = new WorkListView();
             this._workListView.on("workListView:change",self._workListChangeHandler,self);
+            this._footerView = new FooterView();
         },
         regions : {
             LoginBarRegion: {
@@ -29,7 +31,8 @@ define([
                 regionClass: SwitchViewRegion
             },
             "headerCon":"#userCenterHeaderCon",
-            "workCon":"#userCenterInfo"
+            "workCon":"#userCenterInfo",
+            "footerCon":"#footer"
         },
         ui:{
             "loadingContainer":".loading-gif",
@@ -41,6 +44,7 @@ define([
             this.getRegion("headerCon").show(this.userCenterHeadView);
             this.userCenterHeadView.setSelected(0);
             this.getRegion("workCon").show(this._workListView);
+            this.getRegion("footerCon").show(this._footerView);
         },
         show:function(){
             var self = this;

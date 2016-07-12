@@ -60,11 +60,11 @@ define([
             }
             var options = {"user_id":userId,"club_id":clubId};
             gili_data.getUserFlloweeClubRelation(options,function(data){
-                if(!data || data.status == 0){
+                if(!data || data.get("status") == 1){
                     self.set({"attentionsTxt":"关注社团","attentionsClass":""});
                     return;
-                }
-                self.set({"attentionsTxt":"取消关注","attentionsClass":"btnAttention_ck"});
+                }else
+                    self.set({"attentionsTxt":"取消关注","attentionsClass":"btnAttention_ck"});
             },function(err){
                 console.log(err);
             })
@@ -75,9 +75,8 @@ define([
             var self = this;
             var options = {"club_id":clubId};
             //默认成功
-            self.set({"joinTxt":"已加入","joinClass":"btnAdd_ck"});
+            self.set({"joinTxt":"审核中","joinClass":"btnAdd_ck"});
             gili_data.joinClub(options,function(data){
-                console.log("加入成功");
                 cb_ok && cb_ok();
             },function(err){
                 //失败 UI重置

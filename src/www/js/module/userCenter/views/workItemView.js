@@ -236,6 +236,7 @@ define([
         //删除
         _clickDelHandler:function(e){
             var gid = this.model.get("objectId");
+            //guyy todo 确定删除？
             gili_data.deleteBlog(gid,function(){
                 MsgBox.toast("删除成功");
                 app.trigger("workListView:delWork",[gid]); //触发删除某话题
