@@ -34,12 +34,13 @@
       .commit-img:hover{background: url("../images/common/comment.png") no-repeat;}
     .info-article{ margin-top: 25px;padding:0px 63px; line-height: 33px; text-align: left; color:#3d3d3d; font-size: 14px; line-height: 20px;}
     .info-detail-list{width:600px; margin:0 auto;}
-      #commentTxt{width:600px; height: 120px; border:1px solid #fe5313; border-radius: 10px; font-size: 24px; color:#808080; resize: none;}
+      #commentTxt{width:600px; height: 120px; border:1px solid #fe5313; border-radius: 10px; font-size: 20px; color:#3d3d3d; resize: none;outline:none;
+        padding:10px; font-family: '微软雅黑';}
       .btnList{width:600px; height: 50px; margin-top: 20px; margin-bottom: 20px;}
         .btnFace{ width:150px; height: 40px; float:left; background: url("../images/common/face.png") no-repeat; cursor: pointer;}
         .faceCon{ position: absolute; margin-top: 40px;}
         .btnSend{ width:150px; height: 50px; float:right; border-radius: 24px; background: #f15313; color:#ffffff; line-height: 50px; text-align: center; margin-left: 300px;
-                    cursor:pointer;}
+                    cursor:pointer; font-size: 18px;}
       .commentListCon{width:600px; overflow: hidden;
         .commentItem{border-bottom: 1px solid #cccccc; overflow: hidden; padding-bottom: 27px; padding-top: 20px;}
         .commentItem:last-child{border-bottom: 0;}

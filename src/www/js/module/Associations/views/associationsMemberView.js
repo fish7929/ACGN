@@ -39,12 +39,21 @@ define([
                        self.model.set("imgList",imgListHtml.join(' '));
                     }else{
                         //列表置空
+                        self.noMemberRender();
                     }
                 }else{
                     //列表置空
+                    self.noMemberRender();
                 }
                 console.log(data);
+            },function(){
+                self.noMemberRender();
             })
+        },
+        //无成员提示
+        noMemberRender:function(){
+            var self = this;
+            self.model.set("imgList","<div class='noDataDiv'>该社团还在招募小伙伴中</div>");
         },
         //点击头像打开用户中心
         _clickMemberHeadHandler:function(e){

@@ -207,7 +207,7 @@ define([
             });
         },
         //根据社团ID获取成员列表
-        getAssociationsMembers:function(id,cb_ok){
+        getAssociationsMembers:function(id,cb_ok,cb_err){
             var self = this,
                 options = {
                     club_id:id,
@@ -218,10 +218,11 @@ define([
                 cb_ok && cb_ok.call(null,data);
             },function(err){
                 MsgBox.alert("查询错误,请稍后再试"+err);
+                cb_err && cb_err();
             })
         },
         //根据社团ID获取粉丝列表
-        getAssociationsFans:function(id,cb_ok){
+        getAssociationsFans:function(id,cb_ok,cb_err){
             var self = this,
                 options = {
                     club_id:id,
@@ -232,6 +233,7 @@ define([
                 cb_ok && cb_ok.call(null,data);
             },function(err){
                 MsgBox.alert("查询错误,请稍后再试"+err);
+                cb_err && cb_err();
             })
         }
 
