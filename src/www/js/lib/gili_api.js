@@ -17,6 +17,7 @@ gili_data.getCurrentUser = function () {
         return null;
     }
 };
+
 /**
  返回当前登录用户对象
  **/
@@ -674,7 +675,9 @@ gili_data.getUserBlog = function (options, cb_ok, cb_err) {
             query.find({
                 success: function (obj) {
                     var followeeList = "";
-                    if (!user_id) {//如果为空说明是查询自己的 动态空间，需要加上用户自己的id 作为查询 blog的条件
+                    if (user_id) {//如果为空说明是查询自己的 动态空间，需要加上用户自己的id 作为查询 blog的条件
+                        followeeList += "'" + user_id + "',";
+                    } else {
                         followeeList += "'" + currentUser.id + "',";
                     }
                     if (obj) {
@@ -2043,8 +2046,6 @@ gili_data.signUpFollow = function (new_user, cb_ok, cb_err) {
             );
         }, cb_err);
     }
-
-
 };
 /**
  * 第三方登录需要的接口
@@ -2063,7 +2064,7 @@ gili_data.loginUtils = function (data) {
         success: function (user) {
             if (user.length > 0) {
                 //用户存在则登陆绑定
-                gili_data.logIn(unionid, "6a063e705a16e625",  function (_user) {
+                gili_data.logIn(unionid, "6a063e705a16e625", function (_user) {
                     //                        window.location.href="http://www.gililove.com";
                     app.triggerMethod("login:ok");
                     //查询当前登录用户已关注用户ID列表 已点赞话题(插画)ID列表
@@ -2087,15 +2088,15 @@ gili_data.loginUtils = function (data) {
 
                 gili_data.signUp(user, function (userobj) {
                     //注册成功则登陆
-                    gili_data.logIn(unionid, "6a063e705a16e625",function (user) {
+                    gili_data.logIn(unionid, "6a063e705a16e625", function (user) {
                         app.triggerMethod("login:ok");
                         //查询当前登录用户已关注用户ID列表 已点赞话题(插画)ID列表
                         utils.loadAttentionList(user.id);
                         utils.loadLikedTplList(user.id);
-                    },function (user, error) {
+                    }, function (user, error) {
                         console.log(error.message);
                     });
-                },function (user, error) {
+                }, function (user, error) {
                     console.log(error.message);
                 });
             }
