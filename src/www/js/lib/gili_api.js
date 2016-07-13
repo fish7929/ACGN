@@ -546,7 +546,7 @@ gili_data.getUsers = function (options, cb_ok, cb_err) {
             success: function (objs) {
                 var count = objs.count;
                 if (count > limit) {
-                    skip = gili_data.getRandom(0, count / limit);
+                    skip = gili_data.getRandom(0, parseInt(count / limit));
                 }
                 gili_data.getRandomDataByTable({ "skip": skip, "limit": limit, "table_name": "_User", "strWhere": strWhere }, cb_ok, cb_err)
             },
