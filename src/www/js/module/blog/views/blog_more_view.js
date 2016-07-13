@@ -61,14 +61,10 @@ define([
             var self = this;
             self.regionShow();
 
-            $(self.ListName).masonry({
-                itemSelector: '.blogItemView',
-                gutterWidth: 20 //每两列之间的间隙为5像素
-            });
-
             self.ui.blogList.html("");
             self.loadData();
             self.addOnScroll();
+            self.addEvent();
         },
 
         regionShow : function(){
@@ -120,13 +116,25 @@ define([
 
         masonryRefresh : function(needLoad){
             var self = this;
+
             if(needLoad){
                 self.ui.blogList.imagesLoaded(function(){
-                    $('.blog-more-item-list').masonry('reload');
+                    self.initMasonry();
+                    $(self.ListName).masonry('reload');
                 });
             }else{
-                $('.blog-more-item-list').masonry('reload');
+                $(self.ListName).masonry('reload');
             }
+        },
+
+        initMasonry : function(){
+            var self = this;
+            if(self._initMasonry) return;
+            self._initMasonry = true;
+            $(self.ListName).masonry({
+                itemSelector: '.blogItemView',
+                gutterWidth: 20 //每两列之间的间隙为5像素
+            });
         },
 
         /**
@@ -164,12 +172,23 @@ define([
             });
         },
 
+        addEvent : function(){
+            var self = this;
+            app.on("update:masonry:list", self.masonryRefresh, self);
+        },
+
+        removeEvent : function(){
+            var self = this;
+            app.off("update:masonry:list", self.masonryRefresh, self);
+        },
+
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
             var self = this;
             $(window).scroll = null;
             self.LoginBarRegion.hide(self._loginBarView);
             self.FooterRegion.hide(self._footerView);
+            self.removeEvent();
         },
 
         //当页面销毁时触发
