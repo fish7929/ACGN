@@ -8,8 +8,9 @@ define([
     'text!common/templates/blogItemView.html',
     'marionette',
     'common/views/commentView',
-    'module/book/views/bookPreviewView'
-],function(ItemView, tpl, mn, CommentView, BookPreviewView){
+    'module/book/views/bookPreviewView',
+    "msgbox"
+],function(ItemView, tpl, mn, CommentView, BookPreviewView, MsgBox){
     return ItemView.extend({
         className : "blogItemView",
         template : _.template(tpl),
@@ -129,6 +130,11 @@ define([
             var self = this;
             var id = self.data.objectId;
             if(!id) return;
+
+            if(gili_data.getCurrentUser()){
+                MsgBox.alert(giliConfig.NOLOGIN);
+                return;
+            }
 
             var isLike = utils.isLiked(id);
             var type = 0;
