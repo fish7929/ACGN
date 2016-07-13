@@ -33,7 +33,7 @@ define([
             if(headImg && headImg != ""){
                 this.set({"userHeaderImg":headImg});
             }else{
-                this.set({"userHeaderImg":"images/temp/head/user_center_icon01.png"});
+                this.set({"userHeaderImg":"images/login/common-user.jpg"});
             }
         },
         setFansNum:function(fansNum){
