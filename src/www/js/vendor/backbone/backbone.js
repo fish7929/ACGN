@@ -1756,7 +1756,6 @@
       // If the root doesn't match, no routes can match either.
       if (!this.matchRoot()) return false;
       fragment = this.fragment = this.getFragment(fragment);
-
       return _.some(this.handlers, function(handler) {
         if (handler.route.test(fragment)) {
           //console.log(handler.callback);
@@ -1789,7 +1788,6 @@
 
       // Strip the hash and decode for matching.
       fragment = this.decodeFragment(fragment.replace(pathStripper, ''));
-
       if (this.fragment === fragment) return;
       this.fragment = fragment;
 
@@ -1811,7 +1809,6 @@
             iWindow.document.open();
             iWindow.document.close();
           }
-
           this._updateHash(iWindow.location, fragment, options.replace);
         }
 
@@ -1828,10 +1825,20 @@
     _updateHash: function(location, fragment, replace) {
       if (replace) {
         var href = location.href.replace(/(javascript:|#).*$/, '');
-        location.replace(href + '#' + fragment);
+        //changed by zhao 路由返回首页不要#
+        if(fragment == ""){
+          location.replace(href);
+        }else{
+          location.replace(href + '#' + fragment);
+        }
       } else {
         // Some browsers require that `hash` contains a leading #.
-        location.hash = '#' + fragment;
+        //changed by zhao 路由返回首页不要#
+        if(fragment == ""){
+          location.hash = "";
+        }else{
+          location.hash = '#' + fragment;
+        }
       }
     }
 
