@@ -36,7 +36,8 @@ define([
         },
         ui:{
             "loadingContainer":".loading-gif",
-            "loadMsg":"#mz-square-sk-text"
+            "loadMsg":"#mz-square-sk-text",
+            "userCenterFansInfo":"#userCenterFansInfo"
         },
         onRender:function(){
             this.getRegion("headCon").show(this.userCenterHeadView);
@@ -81,6 +82,7 @@ define([
             var self = this;
             self.ui.loadingContainer.find("img").show();
             self.ui.loadMsg.html("你的大片正在加载...");
+            self.ui.userCenterFansInfo.find("#noContent").remove();
             if(typeArr && typeArr.length > 0){
                 if(typeArr[0] == 0){   //加载出错时，有数据只文案提示  无数据显示缺省无网状态且文案提示
                     self.ui.loadingContainer.find("img").hide();
@@ -92,6 +94,14 @@ define([
                     self.data_finish = true;
                     self.ui.loadingContainer.find("img").hide();
                     self.ui.loadMsg.html("没有更多了");
+                    if(self.ui.userCenterFansInfo.find(".fans-item").length <= 0){
+                        self.ui.loadMsg.html("");
+                        if(self.type == 1) {
+                            self.ui.userCenterFansInfo.append("<div id='noContent'>暂无粉丝信息</div>");
+                        }else{
+                            self.ui.userCenterFansInfo.append("<div id='noContent'>暂无关注信息</div>");
+                        }
+                    }
                 }
             }
         },
