@@ -15,8 +15,10 @@ define([
     "module/planning/views/planning_roles",
     "module/publish/views/publishView",
     "module/book/views/bookPreviewView",
-    'common/views/BlogItemView'
-], function (BaseView, tpl, mn, SwitchViewRegion, LoginBarView, MsgBox, PlanningModel, ControlView, PlanningNoticeView, PlanningRolesView, PublishView, BookPreviewView, BlogItemView) {
+    'common/views/BlogItemView',
+    'module/home/views/home_footer'
+], function (BaseView, tpl, mn, SwitchViewRegion, LoginBarView, MsgBox, PlanningModel, ControlView, PlanningNoticeView,
+             PlanningRolesView, PublishView, BookPreviewView, BlogItemView, HomeFooterView) {
     return BaseView.extend({
         id: "gili-love-planning",
         template: _.template(tpl),
@@ -58,6 +60,10 @@ define([
             LoginBarRegion: {
                 el: "#login-nav",
                 regionClass: SwitchViewRegion
+            },
+            PlanningFooterRegion : {
+                el : ".planning-footer-container",
+                regionClass : SwitchViewRegion
             }
         },
         //事件添加
@@ -79,6 +85,7 @@ define([
             this.planningNoticeView = new PlanningNoticeView({parentView: this});
             //更多用户的显示层
             this.planningRolesView = new PlanningRolesView({parentView: this});
+            self._planningFooterView = new HomeFooterView();
         },
         //在开始渲染模板前执行，此时当前page没有添加到document
         onBeforeRender: function () {
@@ -428,6 +435,7 @@ define([
             var self = this;
             //显示登录条
             self.LoginBarRegion.show(self._loginBarView);
+            self.PlanningFooterRegion.show(self._planningFooterView);
             $('.dynamic-content').masonry({
                 itemSelector: '.blogItemView',
                 gutterWidth: 20 //每两列之间的间隙为5像素
@@ -753,6 +761,7 @@ define([
             PublishView.hide();
             BookPreviewView.hide();
             self.LoginBarRegion.hide(self._loginBarView);
+            self.PlanningFooterRegion.hide(self._planningFooterView);
         },
 
         //当页面销毁时触发
