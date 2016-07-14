@@ -49,41 +49,35 @@
     .bd-info-txt{
       margin: 30px 0;
       height: 65px;
-      div{
-        margin-bottom: 10px;
-        float: left;
 
+      .spanTitle{
+        margin-right: 0px;
+      }
+
+      span{
+        margin-bottom: 10px;
+        margin-right: 40px;
+        float: left;
       }
 
       .bd-author-txt{
-        width: 110px;
-        margin-right: 10px;
       }
 
       .bd-original-txt{
-        width: 56px;
-        margin-right: 10px;
       }
 
       .bd-cp-txt{
-        width: 110px;
-        margin-right: 10px;
       }
 
       .bd-lang-txt{
-        width: 68px;
       }
 
       .bd-page-txt{
-        width: 58px;
       }
 
       .bd-size-txt{
-        width: 124px;
-        margin-right: 10px;
       }
       .bd-data-txt{
-        width: 180px;
       }
 
     }

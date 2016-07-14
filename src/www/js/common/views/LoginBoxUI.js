@@ -40,7 +40,9 @@ define([
     };
     p._initMicroBlogBtn = function () {
         var self = this;
+        console.log("anyWhere start");
         WB2.anyWhere(function (W) {
+            console.log("anyWhere");
             W.widget.connectButton({
                 id: "micro-blog-login",
                 type: '3,2',
@@ -48,6 +50,7 @@ define([
                     login: function(success){
                         gili_data.loginUtils(gili_data.packageMicroBlogResults(success));
                         WB2.logout(function () {
+                            console.log("退出登录 WB2.logout");
                         });
                         self._hide();
                     }, //登录后的回调函数
