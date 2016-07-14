@@ -64,9 +64,6 @@ define([
             }
             if(self.mouseLock)return;
             self.mouseLock = true;
-            setTimeout(function(){
-                self.mouseLock = false;
-            },1000);
             //点击取消关注
             if(target.hasClass("btnAttentionEd")){
                 MsgBox.ask("确定取消关注吗?","",function(type){
@@ -74,10 +71,14 @@ define([
                         utils.attentionUser(0,self.model.id,function(){
                                 //如果是关注列表，取消关注后删除 列表需整体重新渲染
                                 app.trigger("fansList:attentions:change",[self.model.id,0]);
+                                self.mouseLock = false;
                             },
                             function(err){
                                 MsgBox.toast(err,false);
+                                self.mouseLock = false;
                             });
+                    }else{
+                        self.mouseLock = false;
                     }
                 });
             }else{//点击关注
@@ -85,8 +86,10 @@ define([
                 utils.attentionUser(1,self.model.id,function(){
                     //如果是关注列表，取消关注后删除 列表需整体重新渲染
                     app.trigger("fansList:attentions:change",[self.model.id,1]);
+                    self.mouseLock = false;
                 },function(err){
                     MsgBox.toast(err,false);
+                    self.mouseLock = false;
                 });
             }
         }
