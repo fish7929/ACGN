@@ -12,7 +12,7 @@ define([
         },
         initialize:function(){
             var self = this;
-            self.set({"name":"","authorId":"","author":"无创建者","brief":"(社团简介)","cover":"images/temp/asso/defaultCover.jpg","bookNum":0,"joinNum":0,"attentionsNum":0,"blogNum":0});
+            self.set({"name":"","authorId":"","author":"无创建者","brief":"(社团简介)","cover":"images/associations/default_cover.png","bookNum":0,"joinNum":0,"attentionsNum":0,"blogNum":0});
             self.set({"joinTxt":"加入社团","joinClass":""});
             self.set({"attentionsTxt":"关注社团","attentionsClass":""});
             self.set("imgList",""); //成员列表view用
@@ -159,7 +159,7 @@ define([
         },
         //社团封面
         setCover:function(cover){
-            if(!cover || cover == "")cover = "images/temp/asso/defaultCover.jpg";//默认封面
+            if(!cover || cover == "")cover = "images/associations/default_cover.png";//默认封面
             this.set("cover",cover);
         },
         //设置社团创建者 user为对象

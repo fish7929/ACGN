@@ -1825,20 +1825,10 @@
     _updateHash: function(location, fragment, replace) {
       if (replace) {
         var href = location.href.replace(/(javascript:|#).*$/, '');
-        //changed by zhao 路由返回首页不要#
-        if(fragment == ""){
-          location.replace(href);
-        }else{
-          location.replace(href + '#' + fragment);
-        }
+        location.replace(href + '#' + fragment);
       } else {
         // Some browsers require that `hash` contains a leading #.
-        //changed by zhao 路由返回首页不要#
-        if(fragment == ""){
-          location.hash = "";
-        }else{
-          location.hash = '#' + fragment;
-        }
+        location.hash = '#' + fragment;
       }
     }
 

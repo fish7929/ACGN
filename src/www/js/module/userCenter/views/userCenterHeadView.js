@@ -113,11 +113,7 @@ define([
             //头像 昵称 简介 关注数 动态数 粉丝数
             if(self.currentUser && self.currentUser.id == userId) {
                 self.model.setOtherShow(true,self.currentUserId);
-                self.model.setName(this.currentUser.get("user_nick"));
-                self.model.setBrief(this.currentUser.get("brief"));
-                self.model.setHeadImg(this.currentUser.get("avatar"));
-                self.model.setFansNum(this.currentUser.get("follower_count"));
-                self.model.setAttentionNum(this.currentUser.get("followee_count"));
+                self.model.loadOtherUser(userId);
             }else{
                 self.model.setOtherShow(false,self.currentUserId);
                 self.model.loadOtherUser(userId);

@@ -131,8 +131,8 @@ define([
             var id = self.data.objectId;
             if(!id) return;
 
-            if(gili_data.getCurrentUser()){
-                MsgBox.alert(giliConfig.NOLOGIN);
+            if(!gili_data.getCurrentUser()){
+                MsgBox.alert(giliConfig.Tip.NOLOGIN);
                 return;
             }
 

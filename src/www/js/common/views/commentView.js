@@ -31,7 +31,7 @@ define([
             "</div>" +
             "<div class=\"comment-right-div\">" +
             "<div class=\"comment-user-name\">{name}</div>" +
-            "<div class=\"nowrapTxt comment-content\">{content}</div>" +
+            "<div class=\"wrapTxt comment-content\">{content}</div>" +
             "<div class=\"comment-reply button\">回复</div>" +
             "<div class=\"clear comment-time\">{data}</div>" +
             "</div>" +
@@ -44,7 +44,7 @@ define([
 
         _faceView : null,
         _commentObj : null,
-        PageMaxNum : 10,
+        PageMaxNum : 5,
         currentPage : 0,
         _isLoaded : false,
         isShow : false,
@@ -228,6 +228,8 @@ define([
             }
             var tpl = htmlTpl;
             if(self.$el.get(0).className == "commentContainerBlog"){
+                content = "<span>"+user_nick+"</span>"+content;
+                user_nick = "";
                 tpl = htmlTpl2;
             }
             html = tpl.replace("{dataId}", id).replace("{userName}", user_nick).replace("{userId}", userId).replace("{floor}", floor).replace("{name}", user_nick).replace("{pic}", user_pic)

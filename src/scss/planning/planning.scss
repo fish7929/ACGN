@@ -47,16 +47,16 @@
 //    background: url(../images/planning/cover.jpg) no-repeat center;
 }
 .planning-moderator{
-    width: 88px;
-    height: 88px;
+    width: 80px;
+    height: 80px;
     border-radius: 100%;
-    margin-top: -16px;
+    margin-top: -8px;
     float: left;
-    margin-right: 7px;
+    margin-right: 15px;
 }
 .planning-moderator-nick{
     display: inline-block;
-    margin-top: 13px;
+    margin-top: 5px;
     color: #333333;
     float: left;
     font-size: 24px;
@@ -176,7 +176,7 @@
     width: 23.7%;
     height: 100%;
     display: inline-block;
-    float: left;
+//    float: left;
     margin-right: 1.733%;
     position: relative;
 }
@@ -203,7 +203,7 @@
 .planning-type-detail{
     margin-top: 20px;
     width: 100%;
-    height: 250px;
+//    height: 250px;
     overflow: hidden;
     border-radius: 10px;
     background: #ffefe9;
