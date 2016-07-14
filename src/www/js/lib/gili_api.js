@@ -54,13 +54,18 @@ gili_data.getObjectById = function (class_name, objectId, cb_ok, cb_err) {
  * cb_ok
  * cb_err
  **/
-gili_data.checkUserNick= function (user_nick, cb_ok, cb_err) {
-    var query = new AV.Query("_User");
-    query.equalTo("user_nick", user_nick);
-    query.first({
-        success: cb_ok,
-        error: cb_err
-    });
+gili_data.checkUserNick = function (user_nick, cb_ok, cb_err) {
+    var currentUser = this.getCurrentUser();
+    if (currentUser) {
+        var query = new AV.Query("_User");
+        query.equalTo("user_nick", user_nick);
+        query.notEqualTo("objectId", currentUser.id);
+        query.first({
+            success: cb_ok,
+            error: cb_err
+        });
+    }
+
 };
 
 /** 根据用户id查询用户对象
