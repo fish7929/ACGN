@@ -49,6 +49,20 @@ gili_data.getObjectById = function (class_name, objectId, cb_ok, cb_err) {
         error: cb_err
     });
 };
+/** 匹配user_nick是否被占用
+ * user_nick
+ * cb_ok
+ * cb_err
+ **/
+gili_data.checkUserNick= function (user_nick, cb_ok, cb_err) {
+    var query = new AV.Query("_User");
+    query.equalTo("user_nick", objectId);
+    query.first({
+        success: cb_ok,
+        error: cb_err
+    });
+};
+
 /** 根据用户id查询用户对象
  * objectId ，用户id
  * cb_ok

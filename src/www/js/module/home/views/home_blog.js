@@ -85,9 +85,10 @@ define([
 
         masonryRefresh : function(needLoad){
             var self = this;
-            self.initMasonry();
+
             if(needLoad){
                 self.ui.blogList.imagesLoaded(function(){
+                    self.initMasonry();
                     $('.home-blog-list').masonry('reload');
                 });
             }else{

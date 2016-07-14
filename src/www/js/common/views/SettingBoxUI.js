@@ -21,63 +21,238 @@ define([
         this.el = this.$el.get(0);
         this.$el.html(this._template);
 
-//        this.registerMask = this.el.querySelector("#register-mask");
-
+        this.settingClose = this.el.querySelector(".setting-close");
+        this.settingNickTxt = this.el.querySelector("#setting-nick-txt");    //昵称
+        this.settingNickDel = this.el.querySelector("#setting-nick-del");    //昵称删除按钮
+        this.settingSexTxt = this.el.querySelector("#setting-sex-txt");    //性别
+        this.settingAddressTxt = this.el.querySelector("#setting-address-txt");    //用户地址
+        this.settingPhoneTxt = this.el.querySelector("#setting-phone-txt");    //手机号码
+        this.settingBriefTxt = this.el.querySelector("#setting-brief-txt");    //简介
+        this.currentLength = this.el.querySelector("#current-length");    //简介当前长度
+        this.avatarFile = this.el.querySelector("#avatar-file");    //头像文件
+        this.settingAvatar = this.el.querySelector(".setting-avatar");    //头像文件容器
+        this.saveBtn= this.el.querySelector("#save-btn");    //保存按钮
+        this.currentUser = gili_data.getCurrentUser();      //当前用户对象
+        this.changeAvatarUrl = "";      //需要替换的头像URL
         this._initView();
     };
     var p = SettingBoxUI.prototype;
     p._initView = function(){
         var self = this;
+        self.resetUserInfo();
         self.addListener();
+    };
+    p.resetUserInfo = function() {
+        var self = this;
+        var userNick = self.currentUser.get("user_nick") || "";
+        self.settingNickTxt.value = userNick;
+        var phone = self.currentUser.get("mobilePhoneNumber") || "";
+        self.settingPhoneTxt.value = phone;
+        var sex = self.currentUser.get("sex");
+        if(sex){
+            self.settingSexTxt.selectedIndex = sex - 1;
+            self.settingSexTxt.value = sex;
+        }
+        var address = self.currentUser.get("address") || "";
+        self.settingAddressTxt.value = address;
+        var brief = self.currentUser.get("brief") || "";
+        self.settingBriefTxt.value = brief;
+        self.currentLength.innerHTML = brief.length;
+        var avatar = self.currentUser.get("avatar") || "";
+        self.settingAvatar.style.background ="url("+avatar+") center no-repeat";
     };
     p.addListener = function(){
         /**
-         * 朦层点击
+         * 朦层关闭点击
          */
-//        this._registerMaskHandle = this.registerMaskHandle.bind(this);
-//        this.registerMask.addEventListener("click", this._registerMaskHandle, false);
+        this._onCloseSettingHandler = this.onCloseSettingHandler.bind(this);
+        this.settingClose.addEventListener("click", this._onCloseSettingHandler, false);
+        /**
+         * 点击删除昵称按钮
+         */
+        this._onDelectSettingNickHandler = this.onDelectSettingNickHandler.bind(this);
+        this.settingNickDel.addEventListener("click", this._onDelectSettingNickHandler, false);
+
+        /**
+         * 简介改变事件
+         */
+        this._onChangeBriefHandler = this.onChangeBriefHandler.bind(this);
+        this.settingBriefTxt.addEventListener("input", this._onChangeBriefHandler, false);
+        /**
+         * 头像改变事件
+         */
+        this._onChangeAvatarHandler = this.onChangeAvatarHandler.bind(this);
+        this.avatarFile.addEventListener("change", this._onChangeAvatarHandler, false);
+        /**
+         * 保存按钮事件
+         */
+        this._onSaveUserInfoHandler = this.onSaveUserInfoHandler.bind(this);
+        this.saveBtn.addEventListener("click", this._onSaveUserInfoHandler, false);
     };
     p.removeListener = function() {
         /**
-         * 朦层点击
+         * 朦层关闭点击
          */
-//        this.registerMask.removeEventListener("click", this._registerMaskHandle, false);
-//        this._registerMaskHandle = null;
+        this.settingClose.removeEventListener("click", this._onCloseSettingHandler, false);
+        this._onCloseSettingHandler = null;
+        /**
+         * 点击删除昵称按钮
+         */
+        this.settingNickDel.removeEventListener("click", this._onDelectSettingNickHandler, false);
+        this._onDelectSettingNickHandler = null;
+
+        /**
+         * 简介改变事件
+         */
+        this.settingBriefTxt.removeEventListener("input", this._onChangeBriefHandler, false);
+        this._onChangeBriefHandler = null;
+        /**
+         * 头像改变事件
+         */
+        this.avatarFile.removeEventListener("change", this._onChangeAvatarHandler, false);
+        this._onChangeAvatarHandler = null;
+        /**
+         * 保存按钮事件
+         */
+        this.saveBtn.removeEventListener("click", this._onSaveUserInfoHandler, false);
+        this._onSaveUserInfoHandler = null;
     };
     /**
      * 蒙层点击事件
      * @param e
      */
-    p.registerMaskHandle = function(e){
+    p.onCloseSettingHandler = function(e){
         e.stopPropagation();
         e.preventDefault();
         var self = this;
         self._hide();
     };
     /**
-     * 验证按钮点击事件
+     * 点击删除昵称按钮
      * @param e
      */
-    p.verifyHandle = function(e){
+    p.onDelectSettingNickHandler = function(e){
         e.stopPropagation();
         e.preventDefault();
         var self = this;
+        self.settingNickTxt.value = "";
+        self.settingNickTxt.focus();
+    };
+
+    /**
+     * 简介输入事件
+     * @param e
+     */
+    p.onChangeBriefHandler = function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        var self = this;
+        var len = self.settingBriefTxt.value.length;
+        self.currentLength.innerHTML = len;
+    };
+    p.onChangeAvatarHandler = function(e){
+        e.stopPropagation();
+        e.preventDefault();
+        var self = this;
+        var target = e.target;
+        var fileSize = 0;
+        var limitSize = 200;
+        var file = target.files[0];
+        fileSize = target.files[0].size;
+        var size = fileSize / 1024;
+        if(size>limitSize){
+            MsgBox.toast("图片不能大于"+limitSize+"K", false);
+            target.value="";
+            return;
+        }else{
+            self.readFile(file, function(data){
+                self.settingAvatar.style.background ="url("+data+") center no-repeat";
+                utils.save_image('.jpg', data, function(file){
+                    self.changeAvatarUrl = file.url();
+                },function(err){
+                    console.log(err);
+                });
+            }, function(err){
+                console.log(err);
+            });
+        }
     };
     /**
-     * 注册按钮点击事件
+     * 读取文件为 base64
+     */
+    p.readFile = function(file, cb_ok, cb_err){
+        //判断类型是不是图片
+        if(!/image\/\w+/.test(file.type)){
+            cb_err("请选择图像类型文件");
+            return;
+        }
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function(e){
+            cb_ok(e.target.result);
+        };
+        reader.onerror = function(e){
+            cb_err(e);
+        };
+    },
+    /**
+     * 保存用户信息
      * @param e
      */
-    p.registerHandle = function(e){
+    p.onSaveUserInfoHandler = function(e){
         e.stopPropagation();
         e.preventDefault();
         var self = this;
+        var nick = self.settingNickTxt.value;
+        var sex = self.settingSexTxt.value;
+        sex = parseInt(sex);
+        var address = self.settingAddressTxt.value;
+        var phone = self.settingPhoneTxt.value;
+        var brief = self.settingBriefTxt.value;
+        if(nick){
+            self.currentUser.set("user_nick", nick);
+        }
+        self.currentUser.set("sex", sex);
+        if(address){
+            self.currentUser.set("address", address);
+        }
+        if(phone){
+            self.currentUser.set("mobilePhoneNumber", phone);
+        }
+        if(brief){
+            self.currentUser.set("brief", brief);
+        }
+        if(self.changeAvatarUrl){
+            self.currentUser.set("avatar", self.changeAvatarUrl);
+        }
+
+        self.currentUser.save(null, {
+            success: function(data){
+                MsgBox.toast("修改用户信息成功!");
+                self.changeAvatarUrl = "";
+                //派发修改用户信息
+                app.triggerMethod("login:ok");
+                self._hide();
+            },
+            error: function(err){
+                MsgBox.toast("修改用户信息失败!", false);
+            }
+        });
     };
-    p.registerAccount = function(nick, account, password){
+    /**
+     * 所有失去焦点事件
+     */
+    p.allBlur = function (){
         var self = this;
-    }
+        self.settingNickTxt.blur();   //昵称
+        self.settingAddressTxt.blur();   //用户地址
+        self.settingPhoneTxt.blur();   //手机号码
+        self.settingBriefTxt.blur();     //简介
+    };
     p._hide = function(){
         var self = this;
         self.removeListener();
+        self.allBlur();
         ShowBox.remove(this);
         self.destroy();
     };
@@ -87,6 +262,18 @@ define([
         self._template = null;
         self.$el = null;
         self.el = null;
+        self.settingClose =  null;
+        self.settingNickTxt = null;   //昵称
+        self.settingNickDel =  null;   //昵称删除按钮
+        self.settingSexTxt =  null;    //性别
+        self.settingAddressTxt =  null;   //用户地址
+        self.settingPhoneTxt =  null;    //手机号码
+        self.settingBriefTxt =  null;    //简介
+        self.currentLength =  null;   //简介当前长度
+        self.avatarFile =  null;    //头像文件
+        self.settingAvatar =  null;    //头像文件容器
+        self.saveBtn= null;    //保存按钮
+        self.changeAvatarUrl = "";
 
     };
 

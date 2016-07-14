@@ -1,3 +1,4 @@
+.btnHide{display: none;}
 #userCenterContainer{width:100%; margin:0 auto; overflow: hidden;}
 #userCenterLogin{margin-left: 40px;}
 #userCenterFansContainer{width:100%; margin:0 auto; overflow: hidden;}
@@ -20,7 +21,7 @@
     span{color:#fc4500;pointer-events:none;}
   }
 }
-#userCenterInfo{width:726px; margin:0 auto;}
+#userCenterInfo{width:726px; margin:0 auto; min-height: 500px;}
 .workList{
   .uc_info_item{ width:726px; border-bottom: 1px solid #cccccc;}
     .picLenSpan{display: inline-block; float:left; font-size: 18px; color:#333333; width:40px; height: 40px; border:1px solid #808080; text-align: center; line-height: 35px; border-radius: 50%;}
@@ -56,8 +57,7 @@
       .commentMore{width:97px; height: 30px; background: url("../images/userCenter/comment.png") no-repeat; cursor: pointer; margin:0 auto 30px auto;}
 }
 /*粉丝列表*/
-#userCenterFansInfo{ padding-bottom: 10px;
-  width:932px; margin:0 auto; overflow: hidden;
+#userCenterFansInfo{ padding-bottom: 10px; min-height: 500px; width:932px; margin:0 auto; overflow: hidden;
   .fans-item { width: 466px; height: 166px; float: left; margin-top: 68px; box-sizing: border-box;border-right: 1px solid #c0c0c0;
     .fans-item-head { width: 104px; margin-right: 20px;  float: left;}
     .fans-item-head-img { width: 104px;  height: 104px;  margin-bottom: 12px; border: 2px solid #fff; border-radius: 50%;}

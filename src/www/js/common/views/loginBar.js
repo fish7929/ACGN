@@ -19,6 +19,8 @@ define([
         _mouseLock : false,
         currentUser : null, //当前用户
         isShowUserOperationLayer : false,   //默认不显示用户操作界面
+        UserHeaderWidth : 42,
+        InfoLayerWithTemp : 202,    //角色宽度+margin + 名称margin+ 发布按钮宽度 + right 42 +10 +20+ 90 + 40
         // key : selector
         ui : {
             userPic : ".loginBar-headPic",
@@ -154,7 +156,9 @@ define([
             event.stopPropagation();
             event.preventDefault();
             var self = this;
-            self.showUserOperationLayer();
+            var tempX = self.InfoLayerWithTemp + self.ui.userName.get(0).clientWidth;  //用户信息层宽度
+            tempX = tempX - self.UserHeaderWidth / 2;
+            self.showUserOperationLayer(tempX);
         },
         onCloseUserOperationLayerHandle : function(event){
             event.stopPropagation();
@@ -165,8 +169,8 @@ define([
         showUserOperationLayer : function(tempX){
             var self = this;
             self.isShowUserOperationLayer = true;
-//            var marginRight = tempX - self.ui.userOperationLayer.width();
-//            self.ui.userOperationLayer.css({"margin-right":  marginRight+"px"});
+            var marginRight = tempX - self.ui.userOperationLayer.width() / 2;
+            self.ui.userOperationLayer.css({"margin-right":  marginRight+"px"});
             self.ui.userOperationLayer.show&&self.ui.userOperationLayer.show();
         },
         hideUserOperationLayer : function(){
@@ -196,8 +200,8 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            MsgBox.toast("点击用户设置按钮");
-//            ShowBox.setting();
+//            MsgBox.toast("点击用户设置按钮");
+            ShowBox.setting();
         },
         /*点击事件不可以重复点*/
         _checkMouseLock : function () {

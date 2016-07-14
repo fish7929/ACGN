@@ -114,10 +114,14 @@ define([
 
             //初始化企划参与角色列表信息
             PlanningModel.getJoinUserById(self.planId, self.limit, 0, function (data) {
-                if (data) {
+                if(data.length == 0){
+                    self.ui.roleContent.text("该企划还在招募小伙伴中");
+                }else{
+                    self.ui.roleContent.text("");
                     self._initJoinUserView(data);
                 }
             }, function (err) {
+                console.log(err, "角色");
             });
             //初始化评论发布框
             if (self.currentUser) {
@@ -249,10 +253,14 @@ define([
             //查询热门作品
             PlanningModel.queryHottestOpus(self.planId, self.planName, function (data) {
                 if (data && data.length > 0) {
+                    self.ui.hottestOpusContent.text("");
                     self._initHottestOpusView(data);
                 }
             }, function (err) {
-
+                if(err == "企划关注用户为空！"){
+                    self.ui.hottestOpusContent.text("该企划还未有热门作品");
+                }
+                console.log(err, "热门");
             });
             if (self.planId && self.planName) {
                 self.loadDynamicOpus(self.limit, self.skip);
@@ -280,6 +288,7 @@ define([
                     self.updateMsg(self.SECOND);
                 }
                 if (data && data.length > 0) {
+                    self.ui.dynamicContent.text("");
                     self.appendDynamicItemView(data);
                     self.skip += data.length;
                 }
@@ -287,7 +296,13 @@ define([
 
             }, function (err) {
                 self.dataLoading = false;
-                self.updateMsg(self.FIRST);
+                if(err == "企划关注用户为空！"){
+                    self.ui.dynamicContent.text("该企划还未发布动态");
+                    self.ui.dynamicContent.css("height", "auto");
+                    self.ui.loadingContainer.hide();
+                }else{
+                    self.updateMsg(self.FIRST);
+                }
                 console.log(err, "动态")
             });
         },

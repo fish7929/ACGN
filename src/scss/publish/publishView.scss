@@ -8,9 +8,10 @@
 
   .publishMask {
     position: fixed;
-    width: 1280px;
+    width: 100%;
     height: 100%;
     top: 0px;
+    left: 0px;
     background-color: rgba(0, 0, 0, 0.6);
   }
 
@@ -151,7 +152,7 @@
 
     .publish-label-info{
       padding-left: 12px;
-      margin-top: 17px;
+      margin-top: 12px;
       width: 100%;
       height: 30px;
       font-size: 18px;
@@ -166,7 +167,7 @@
       font-size: 18px;
       line-height: 30px;
       border: 1px solid #999999;
-      width: 130px;
+      width: 210px;
       height: 100%;
       color: #808080;
       outline: none;

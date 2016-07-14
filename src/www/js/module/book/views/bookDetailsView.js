@@ -143,8 +143,10 @@ define([
             self.ui.bookSaleDate.html(utils.formatTime(saleDate, "yyyy.MM"));
             self.ui.bookBrief.html(brief);
             var labelHtml = "", color;
+            var exitColor = [];
             for(var i = 0; i<labelArr.length; i++){
-                color = utils.getLabelRandomColor();
+                color = utils.getLabelRandomColor(exitColor);
+                exitColor.push(color);
                 labelHtml += labelTpl.replace("{0}", color).replace("{1}", labelArr[i]);
             }
             self.ui.bookLabelList.html(labelHtml);
@@ -198,7 +200,7 @@ define([
             if(!self._data) return;
 
             var type = 0;
-            if(self.ui.attendBtn.html() == giliConfig.ATTENTIONED){
+            if(self.ui.attendBtn.html() == giliConfig.Tip.ATTENTIONED){
                 type = 1;
             }
             var userId = self._data.user.objectId;
@@ -211,9 +213,9 @@ define([
         setAttentionStyle : function(val){
             var self = this;
             if(val){
-                self.ui.attendBtn.html(giliConfig.NOT_ATTENTION)
+                self.ui.attendBtn.html(giliConfig.Tip.NOT_ATTENTION)
             }else{
-                self.ui.attendBtn.html(giliConfig.ATTENTIONED);
+                self.ui.attendBtn.html(giliConfig.Tip.ATTENTIONED);
             }
         },
 

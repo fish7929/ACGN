@@ -42,6 +42,11 @@ define([
                 data.btnName = "取消关注";
                 data.attentionClass = "btnAttentionEd";
             }
+            var loginUser = gili_data.getCurrentUser();
+            //当前用户不可关注或取消关注，按钮隐藏
+            if(loginUser && loginUser.id == self.model.id){
+                data.attentionClass = "btnHide";
+            }
             return data;
         },
         clickHeaderHandler:function(e){

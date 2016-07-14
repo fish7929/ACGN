@@ -10,7 +10,7 @@ define([
     'common/service/upload_taskschedule',
     'msgbox'
 ],function(tpl, FaceView, uploadTaskSchedule, MsgBox){
-    var ImageTpl = "<div class=\"publishImageItem\" style='background: url(\"{0}\") no-repeat center; background-size: 100% {1}'> " +
+    var ImageTpl = "<div class=\"publishImageItem\" style='background: url(\"{0}\") no-repeat center; background-size: auto 100% {1}'> " +
         "<div class=\"publishImageItem-del button\"></div>" +
         "</div>";
     var PublishView = function(){
@@ -108,7 +108,8 @@ define([
         self.setTitle(giliConfig.Tip.PUBLISHTOPICTITLE);
         self.publishType = 1;
         self.imageContent.hide();
-        self.btnImageAddSingle.show();
+        // self.btnImageAddSingle.show();
+        self.btnImageAddSingle.hide();
     };
 
     /**
@@ -134,6 +135,7 @@ define([
         self.checkInputLabel();
         self.checkDelLabelBtn();
         self.loadingCircle.hide();
+        self.colorList = [];
 
     };
 
@@ -286,7 +288,8 @@ define([
      */
     PublishView.prototype.addNewLabel = function(val){
         var self = this;
-        var color = utils.getLabelRandomColor();
+        var color = utils.getLabelRandomColor(self.colorList);
+        self.colorList.push(color);
         var newSpan = $("<span style='background-color: "+color+"'></span>");
         newSpan.text(val);
         newSpan.appendTo(self.labelDiv);

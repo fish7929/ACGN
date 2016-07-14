@@ -234,6 +234,7 @@ define([
     };
 
     p.show = function () {
+        this._initMicroBlogBtn();
         ShowBox.add(this);
     };
 

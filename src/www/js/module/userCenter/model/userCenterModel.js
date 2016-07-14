@@ -10,7 +10,7 @@ define([
         },
         initialize:function(){
             var self = this;
-            self.set({"userHeaderImg":"","userNick":"匿名用户","userBrief":"一句话介绍一下自己吧，让别人更了解你","fansNum":0,"attentionNum":0});
+            self.set({"userHeaderImg":"","userNick":"","userBrief":"一句话介绍一下自己吧，让别人更了解你","fansNum":0,"attentionNum":0});
             self.set({"otherShow":"","btnText":"关注","attEdClass":""});
             self.set({"firstLiShow":"","secondLiShow":"","thirdLiShow":""});
         },
@@ -18,7 +18,7 @@ define([
             if(name && name != ""){
                 this.set({"userNick":name});
             }else{
-                this.set({"userNick":"匿名用户"});
+                this.set({"userNick":""});
             }
         },
         //简介
@@ -33,7 +33,7 @@ define([
             if(headImg && headImg != ""){
                 this.set({"userHeaderImg":headImg});
             }else{
-                this.set({"userHeaderImg":"images/temp/head/user_center_icon01.png"});
+                this.set({"userHeaderImg":"images/login/common-user.jpg"});
             }
         },
         setFansNum:function(fansNum){
@@ -53,6 +53,7 @@ define([
         //获取他人用户信息
         loadOtherUser:function(otherUID){
             var self = this;
+            var loginUser = gili_data.getCurrentUser();
             gili_data.getObjectById("_User",otherUID,function(data){
                 var userImg = data.avatar;
                 var userName = data.user_nick;
@@ -62,6 +63,15 @@ define([
                 self.setHeadImg(userImg);
                 self.setFansNum(data.follower_count);
                 self.setAttentionNum(data.followee_count);
+                //判断如果是当前登录用户，重置其缓存数据
+                if(loginUser && loginUser.id == otherUID) {
+                    //缓存用户对象重置
+                    loginUser.set("user_nick", userName);
+                    loginUser.set("brief", userBrief);
+                    loginUser.set("avatar", userImg);
+                    loginUser.set("follower_count", data.follower_count);
+                    loginUser.set("followee_count", data.followee_count);
+                }
             },function(){});
         },
         //是否当前登录用户
