@@ -229,10 +229,9 @@ define([
             var tpl = htmlTpl;
             if(self.$el.get(0).className == "commentContainerBlog"){
                 content = "<span>"+user_nick+"</span>"+content;
-                user_nick = "";
                 tpl = htmlTpl2;
             }
-            html = tpl.replace("{dataId}", id).replace("{userName}", user_nick).replace("{userId}", userId).replace("{floor}", floor).replace("{name}", user_nick).replace("{pic}", user_pic)
+            html = tpl.replace("{dataId}", id).replace("{userName}", user_nick).replace("{userId}", userId).replace("{floor}", floor).replace("{name}", "").replace("{pic}", user_pic)
                 .replace("{content}", content).replace("{data}", utils.formatTime(createdAt, "yyyy.MM.dd HH.mm"));
             return html;
         },

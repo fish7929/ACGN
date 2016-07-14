@@ -96,6 +96,8 @@ define([
         pageIn : function(){
             var self = this;
 
+
+
             var book_id = self.getOption("bookId");
             if(!book_id) return;
             BookModel.getBookById(book_id, function(data){
@@ -104,6 +106,13 @@ define([
                 utils.log(error);
             });
             self.regionShow();
+
+            app.on("common:works:attention", self.onCommonWorksAttention, self);
+            self.currentUser = gili_data.getCurrentUser();
+            if(self.currentUser) {
+                //查询当前登录用户已关注用户ID列表 已点赞话题(插画)ID列表
+                utils.loadAttentionList(self.currentUser.id);
+            }
         },
 
         regionShow : function(){
@@ -213,10 +222,18 @@ define([
         setAttentionStyle : function(val){
             var self = this;
             if(val){
-                self.ui.attendBtn.html(giliConfig.Tip.NOT_ATTENTION)
+                self.ui.attendBtn.html(giliConfig.Tip.NOT_ATTENTION);
+                self.ui.attendBtn.css({"background-color": "#cccccc"})
             }else{
                 self.ui.attendBtn.html(giliConfig.Tip.ATTENTIONED);
             }
+        },
+
+        onCommonWorksAttention : function(){
+            console.log("onCommonWorksAttention");
+            var self = this;
+            if(!self._data) return;
+            self.setAttentionStyle(utils.isAttention(self._data.user.objectId));
         },
 
         /**页面关闭时调用，此时不会销毁页面**/
@@ -228,6 +245,7 @@ define([
             self.HotViewRegion.hide(self._hotView);
             self.MessageRegion.hide(self._commentView);
             self.FooterRegion.hide(self._footerView);
+            app.off("common:works:attention", self.onCommonWorksAttention);
         },
 
         //当页面销毁时触发

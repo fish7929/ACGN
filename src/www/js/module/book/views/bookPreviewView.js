@@ -19,15 +19,15 @@ define([
         self._preBtn = self.$el.find(".previewLeftBtn");
         self._pageNumTxt = self.$el.find(".previewImagePageCount");
         self._viewBigBtn = self.$el.find(".previewBigBtn");
-
         self._closeBtn = self.$el.find(".previewClose");
+        self._content = self.$el.find(".previewContent");
     };
 
     /**
      * 显示要预览的书本
      * @param arr 图片数组
      */
-    BookPreviewView.prototype.show = function(arr){
+    BookPreviewView.prototype.show = function(arr, index){
         var self = this;
         if(!arr || arr.length == 0) return;
 
@@ -36,7 +36,7 @@ define([
         // var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
         // self.$el.css({top:scrollTop});
         document.body.appendChild(self.el);
-        self._picIndex = 0;
+        self._picIndex = parseInt(index) || 0;
         self._picArr = arr;
         self.showPic();
         self.bindEvent();
@@ -139,23 +139,40 @@ define([
     BookPreviewView.prototype.bindEvent = function(){
         var self = this;
         self._preBtn.bind("click", function(e){
+            e.stopPropagation();
+            e.preventDefault();
             self.showPrePic();
         });
 
         self._nextBtn.bind("click", function(e){
+            e.stopPropagation();
+            e.preventDefault();
             self.showNextPic();
         });
 
         self._closeBtn.bind("click", function(e){
+            e.stopPropagation();
+            e.preventDefault();
             self.hide();
         });
 
         self._viewBigBtn.bind("click", function(e){
+            e.stopPropagation();
+            e.preventDefault();
             var url = self._picArr[self._picIndex];
             if(url){
                 window.open(url);
             }
-        })
+        });
+
+        self._content.bind("click", function(e){
+            e.stopPropagation();
+            e.preventDefault();
+            var target = e.target;
+            if(target == self._content.get(0)){
+                self.hide();
+            }
+        });
     };
 
     BookPreviewView.prototype.removeEvent = function(){
@@ -164,6 +181,7 @@ define([
         self._nextBtn.unbind("click");
         self._closeBtn.unbind("click");
         self._viewBigBtn.unbind("click");
+        self._content.unbind("click");
     };
 
     BookPreviewView.prototype.hide = function(){

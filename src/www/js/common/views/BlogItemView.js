@@ -14,6 +14,7 @@ define([
     return ItemView.extend({
         className : "blogItemView",
         template : _.template(tpl),
+        isLoving : false,
 
         // key : selector
         ui : {
@@ -136,12 +137,15 @@ define([
                 return;
             }
 
+            if(self.isLoving) return;
+            self.isLoving = true;
             var isLike = utils.isLiked(id);
             var type = 0;
             if(!isLike){
                 type = 1;
             }
             utils.likeTopic(type, id, function(data){
+                self.isLoving = false;
                 self.setBtnLoveState(type);
                 self.setLoveNum(type);
             })

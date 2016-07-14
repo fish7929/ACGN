@@ -24,8 +24,8 @@
 }
 
 .blog-item-author{
-    height: 153px;
-    padding: 27px 16px 46px;
+    //height: 153px;
+    padding: 27px 16px;
     border-bottom: 1px solid rgb(192,192,192);
 }
 .blog-item-author-pic{
@@ -51,6 +51,7 @@
 .blog-item-author-brief{
     margin-top: 10px;
     color: #3d3d3d;
+    word-break: break-word;
 }
 
 .blog-item-statistics{

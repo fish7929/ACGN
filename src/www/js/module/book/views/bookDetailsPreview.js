@@ -9,7 +9,7 @@ define([
     'marionette',
     'module/book/views/bookPreviewView'
 ],function(ItemView, tpl, mn, BookPreviewView){
-    var htmlTpl = "<div class='bd-preview-item'><div class='bd-preview-pic button' style='background: url(\"{0}\") no-repeat center; background-size: 100%'></div></div>";
+    var htmlTpl = "<div class='bd-preview-item' data-index='{1}'><div class='bd-preview-pic button' style='background: url(\"{0}\") no-repeat center; background-size: 100%'></div></div>";
     return ItemView.extend({
         className : "bookDetailsPreviewContainer",
         template : _.template(tpl),
@@ -51,7 +51,7 @@ define([
             self._data = data;
             for(var i=0; i<data.length; i++){
                 if(i >= self.MaxImage) break;
-                html += htmlTpl.replace("{0}", data[i]);
+                html += htmlTpl.replace("{0}", data[i]).replace("{1}", i);
             }
             self.ui.list.html(html);
         },
@@ -60,8 +60,12 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
+            var target = e.target;
+            var parent = $(target).parents(".bd-preview-item")
+            if(!parent) return;
+            var index = parent.attr("data-index");
             if(self._data && self._data.length){
-                BookPreviewView.show(self._data);
+                BookPreviewView.show(self._data, index);
             }
         },
 

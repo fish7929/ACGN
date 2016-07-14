@@ -107,8 +107,10 @@ define([
             self.regionShow();
             //查询当前登录用户已关注用户ID列表 已点赞话题(插画)ID列表 add by guYY 7/14 20:50
             var _user = gili_data.getCurrentUser();
-            utils.loadAttentionList(_user.id);
-            utils.loadLikedTplList(_user.id);
+            if(_user){
+                utils.loadAttentionList(_user.id);
+                utils.loadLikedTplList(_user.id);
+            }
             HomeModel.queryBannerData(function(data){
                 self.initBanner(data);
             }, function(err){

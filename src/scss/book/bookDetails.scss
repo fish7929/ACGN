@@ -102,7 +102,7 @@
         float: left;
 
         .bd-label-item{
-          width: 70px;
+          //width: 70px;
           height: 30px;
           line-height: 30px;
           background-color: red;
@@ -110,6 +110,7 @@
           float: left;
           text-align: center;
           margin-left: 20px;
+          padding: 0 10px;
         }
       }
 
@@ -119,7 +120,6 @@
 
     .book-brief{
       margin: 30px 0;
-      height: 72px;
     }
 
 
@@ -172,6 +172,7 @@
     border-radius: 100%;
     top: -62px;
     left: calc(50% - 62px);
+    border: 1px solid silver;
   }
 
   .bd-author-name{
