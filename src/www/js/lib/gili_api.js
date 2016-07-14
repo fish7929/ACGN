@@ -56,7 +56,7 @@ gili_data.getObjectById = function (class_name, objectId, cb_ok, cb_err) {
  **/
 gili_data.checkUserNick= function (user_nick, cb_ok, cb_err) {
     var query = new AV.Query("_User");
-    query.equalTo("user_nick", objectId);
+    query.equalTo("user_nick", user_nick);
     query.first({
         success: cb_ok,
         error: cb_err
