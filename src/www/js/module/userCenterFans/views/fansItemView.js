@@ -10,6 +10,7 @@ define([
     var FansItemView = Marionette.ItemView.extend({
         template: _.template(fansItemTpl),
         model:userModel,
+        mouseLock:false,//按钮锁
         events:{
             "click .fans-item-head-img":"clickHeaderHandler", //点击头像进入用户中心
             "click .btnAttention":"clickAttentionsHandler" //点击关注/取消关注
@@ -57,6 +58,15 @@ define([
         clickAttentionsHandler:function(e){
            var self = this;
             var target = $(e.target);
+            if(!gili_data.getCurrentUser()){
+                MsgBox.toast(gili_config.Tip.NOLOGIN,false);
+                return;
+            }
+            if(self.mouseLock)return;
+            self.mouseLock = true;
+            setTimeout(function(){
+                self.mouseLock = false;
+            },1000);
             //点击取消关注
             if(target.hasClass("btnAttentionEd")){
                 MsgBox.ask("确定取消关注吗?","",function(type){

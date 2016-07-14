@@ -17,6 +17,8 @@ define([
         replyUserName:"", //当前回复评论对象
         replyCId:"",      //当前回复评论ID
         replyKey:"",      //格式 ："回复@张三:"
+        zanLock:false, //点赞操作是否锁定
+        mouseLock:false,//按钮锁
         ui:{
             "commentTxt":"#commentTxt",
             "faceCon":".faceCon"
@@ -208,22 +210,31 @@ define([
                 MsgBox.toast(gili_config.Tip.NOLOGIN,false);
                 return;
             }
+            if(self.zanLock)
+                return;
+            self.zanLock = true;
             var gId = self.model.get("objectId");
             if(target.data("zan") == "praise" && !utils.isLiked(gId)){ //点赞
                 utils.likeTopic(1,gId,function(){
                     self.model.likeInt++;
+                    self.zanLock = false;
                     self.render();
                 },function(){
                     console.log("点赞失败");
+                    self.zanLock = false;
                 });
 
             }else if(target.data("zan") == "praise_ck" && utils.isLiked(gId)) { //取消点赞
                 utils.likeTopic(0,gId,function(){
                     self.model.likeInt--;
                     self.render();
+                    self.zanLock = false;
                 },function(){
                     console.log("取消点赞失败");
+                    self.zanLock = false;
                 });
+            }else{
+                self.zanLock = false;
             }
         },
         //点击打开颜表情
@@ -289,6 +300,11 @@ define([
                 MsgBox.toast(gili_config.Tip.NOLOGIN,false);
                 return;
             }
+            if(self.mouseLock)return;
+            self.mouseLock = true;
+            setTimeout(function(){
+                self.mouseLock = false;
+            },1000);
             self.isReply = false;
             //如果是给话题留言  belongId话题ID  commentId话题ID content回复内容
             //如果给话题留言回复 belongId话题ID  commentId被回复留言ID content {"content":"回复信息","uname":“补充回复人昵称”,"uid":“被回复人ID”}

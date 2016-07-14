@@ -15,6 +15,7 @@ define([
         currentUser:null,       //当前登录用户
         attLock:false,          //关注状态更新锁
         _type:0,                 // 0动态  1粉丝  2关注
+        mouseLock:false,        //按钮锁
         initialize:function(){
             this.model = new userCenterModel();
             this.model.on("change",this.render,this);
@@ -50,6 +51,11 @@ define([
                 MsgBox.toast(gili_config.Tip.NOLOGIN,false);
                 return;
             }
+            if(self.mouseLock)return;
+            self.mouseLock = true;
+            setTimeout(function(){
+                self.mouseLock = false;
+            },1000);
             //点击取消关注
             if(target.hasClass("uc_btn_ck")){
                 MsgBox.ask("确定取消关注吗?","",function(type){
