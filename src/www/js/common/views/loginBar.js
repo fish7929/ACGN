@@ -200,8 +200,8 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            MsgBox.toast("点击用户设置按钮");
-//            ShowBox.setting();
+//            MsgBox.toast("点击用户设置按钮");
+            ShowBox.setting();
         },
         /*点击事件不可以重复点*/
         _checkMouseLock : function () {

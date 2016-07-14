@@ -123,10 +123,26 @@
         return tempHeaders[index].avatar_url;
     };
 
-    utils.getLabelRandomColor = function(){
+    utils.getLabelRandomColor = function(colors){
         var tempColors = ["#ff675d", "#f9a64d", "#f5ce53", "#64d73e", "#57b9f5", "#cd73e0", "#cca89c"];
-        var index = Math.floor(Math.random() * tempColors.length);
-        return tempColors[index];
+        var temp = [], exist = false;
+        for(var i=0; i<tempColors.length; i++){
+            exist = false;
+            for(var j=0; j<colors.length; j++){
+                if(tempColors[i] == colors[j]){
+                    exist = true;
+                    break;
+                }
+            }
+            if(!exist){
+                temp.push(tempColors[i]);
+            }
+        }
+        if(temp.length == 0){
+            temp = tempColors;
+        }
+        var index = Math.floor(Math.random() * temp.length);
+        return temp[index];
     }
 
     /**
