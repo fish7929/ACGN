@@ -105,11 +105,15 @@ define([
             });
             //初始化企划公告基本信息
             PlanningModel.getNoticeById(self.planId, function (data) {
-                if (data) {
+                if (data.length == 0) {
+                    self.ui.planningNoticeContent.text("该企划还未发布公告");
+                }else{
                     self.noticeObj = data;
                     self._initNoticeInfoView(data);
+                    self.ui.planningNoticeContent.text("");
                 }
             }, function (err) {
+                console.log(err,"公告");
             });
 
             //初始化企划参与角色列表信息
@@ -118,6 +122,7 @@ define([
                     self.ui.roleContent.text("该企划还在招募小伙伴中");
                 }else{
                     self.ui.roleContent.text("");
+                    self.ui.moreRole.show();
                     self._initJoinUserView(data);
                 }
             }, function (err) {
@@ -165,7 +170,8 @@ define([
                 .html("报名企划");
             self.ui.joinPlanning.off("click").on("click", self.onJoinClickHandler.bind(self));
             //订阅
-            self.ui.subscribePlanning.html("订阅企划");
+            self.ui.subscribePlanning.css({"background-image": "url(./images/common/btn-yellow.png)"})
+                .html("订阅企划");
             self.ui.subscribePlanning.on("click", self.onSubscribeClickHandler.bind(self));
         },
         /**
@@ -205,10 +211,12 @@ define([
                 if (data) {
                     //判断当前用户和企划的关系，更改状态按钮
                     if (data.get("status") == 1) {   //关注的用户
-                        self.ui.subscribePlanning.html("订阅企划");
+                        self.ui.subscribePlanning.css({"background-image": "url(./images/common/btn-yellow.png)"})
+                            .html("订阅企划");
                         self.ui.subscribePlanning.on("click", self.onSubscribeClickHandler.bind(self));
                     } else if (data.get("status") == 0) {  //取消关注的用户
-                        self.ui.subscribePlanning.html("已订阅");
+                        self.ui.subscribePlanning.css({"background-image": "url(./images/common/btn-gray.png)"})
+                            .html("已订阅");
                         self.ui.subscribePlanning.off("click").on("click", self.onCancelSubscribeClickHandler.bind(self));
                     }
                 } else {
@@ -604,7 +612,6 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            console.log(666666);
             if (!self.currentUser) {
                 MsgBox.toast("亲，请先登录！", false);
                 return;
@@ -648,7 +655,6 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            console.log(777777);
             if (!self.currentUser) {
                 MsgBox.toast("亲，请先登录！", false);
                 return;
@@ -656,9 +662,10 @@ define([
             PlanningModel.subscribePlan(self.planId, function (data) {
                 //点击报名成功的时候处理UI
                 if (data) {
-                    self.ui.subscribePlanning.html("已订阅");
+                    self.ui.subscribePlanning.css({"background-image": "url(./images/common/btn-gray.png)"})
+                        .html("已订阅");
                     self.ui.subscribePlanning.off("click").on("click", self.onCancelSubscribeClickHandler.bind(self));
-                    MsgBox.alert("订阅企划成功");
+                    MsgBox.toast("订阅企划成功");
                 }
             }, function (err) {
                 console.log(err);
@@ -675,9 +682,10 @@ define([
             PlanningModel.cancelSubscribePlan(self.planId, function (data) {
                 //点击报名成功的时候处理UI
                 if (data) {
-                    self.ui.subscribePlanning.html("订阅企划");
+                    self.ui.subscribePlanning.css({"background-image": "url(./images/common/btn-yellow.png)"})
+                        .html("订阅企划");
                     self.ui.subscribePlanning.off("click").on("click", self.onSubscribeClickHandler.bind(self));
-                    MsgBox.alert("取消订阅企划成功");
+                    MsgBox.toast("取消订阅企划成功");
                 }
             }, function (err) {
                 console.log(err);

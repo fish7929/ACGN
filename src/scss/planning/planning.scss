@@ -132,7 +132,7 @@
 //    background-image: url(../images/common/btn-gray.png) !important;
 //}
 .planning-operation-btn:last-child{
-    background-image: url(../images/common/btn-yellow.png) !important;
+    background-image: url(../images/common/btn-yellow.png);
     margin-right: 0;
 }
 /**
@@ -248,6 +248,9 @@
     float: right;
     background: url(../images/common/more-h.png) no-repeat center;
 }
+#more-role{
+    display: none;
+}
 
 #more-opus{
     display: none;
@@ -341,6 +344,7 @@
 
 .dynamic-content{
     width: 100%;
+    min-height: 400px;
     margin-top: 27px;
 }
 

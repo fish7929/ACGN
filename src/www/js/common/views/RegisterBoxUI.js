@@ -150,9 +150,13 @@ define([
         user.set("password", password);
         user.set("brief", "什么都没有");
         user.set("user_type", 1);   //用户类型 1 画师， 2 社团主  。3
-        user.set("mobilePhoneNumber", account);   //手机号码
+        user.set("phone", account);   //手机号码
         gili_data.signUp(user, function (user) {
 //                app.triggerMethod("login:ok");
+            gili_data.logIn(account, password, function (user) {
+                console.log(9999999);
+                app.triggerMethod("login:ok");
+            },function(err){console.log(err)});
             MsgBox.toast("注册成功");
             self._hide();
         }, function (user, error) {

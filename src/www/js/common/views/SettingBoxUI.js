@@ -34,6 +34,7 @@ define([
         this.saveBtn= this.el.querySelector("#save-btn");    //保存按钮
         this.currentUser = gili_data.getCurrentUser();      //当前用户对象
         this.changeAvatarUrl = "";      //需要替换的头像URL
+        this.isNickOk = true;       //昵称是否可以保存
         this._initView();
     };
     var p = SettingBoxUI.prototype;
@@ -45,8 +46,12 @@ define([
     p.resetUserInfo = function() {
         var self = this;
         var userNick = self.currentUser.get("user_nick") || "";
-        self.settingNickTxt.value = userNick;
-        var phone = self.currentUser.get("mobilePhoneNumber") || "";
+        if(userNick){
+            self.settingNickDel.style.background = "url('./images/common/ok.png') center no-repeat";
+            self.settingNickDel.style.display = "block";
+            self.settingNickTxt.value = userNick;
+        }
+        var phone = self.currentUser.get("phone") || "";
         self.settingPhoneTxt.value = phone;
         var sex = self.currentUser.get("sex");
         if(sex){
@@ -60,6 +65,7 @@ define([
         self.currentLength.innerHTML = brief.length;
         var avatar = self.currentUser.get("avatar") || "";
         self.settingAvatar.style.background ="url("+avatar+") center no-repeat";
+        self.settingAvatar.style.backgroundSize = "auto 100%";
     };
     p.addListener = function(){
         /**
@@ -70,8 +76,8 @@ define([
         /**
          * 点击删除昵称按钮
          */
-        this._onDelectSettingNickHandler = this.onDelectSettingNickHandler.bind(this);
-        this.settingNickDel.addEventListener("click", this._onDelectSettingNickHandler, false);
+//        this._onDelectSettingNickHandler = this.onDelectSettingNickHandler.bind(this);
+//        this.settingNickDel.addEventListener("click", this._onDelectSettingNickHandler, false);
 
         /**
          * 简介改变事件
@@ -88,6 +94,12 @@ define([
          */
         this._onSaveUserInfoHandler = this.onSaveUserInfoHandler.bind(this);
         this.saveBtn.addEventListener("click", this._onSaveUserInfoHandler, false);
+
+        /**
+         * 判断昵称是否被使用
+         */
+        this._onCheckUserNickHandler = this.onCheckUserNickHandler.bind(this);
+        this.settingNickTxt.addEventListener("blur", this._onCheckUserNickHandler, false);
     };
     p.removeListener = function() {
         /**
@@ -98,8 +110,8 @@ define([
         /**
          * 点击删除昵称按钮
          */
-        this.settingNickDel.removeEventListener("click", this._onDelectSettingNickHandler, false);
-        this._onDelectSettingNickHandler = null;
+//        this.settingNickDel.removeEventListener("click", this._onDelectSettingNickHandler, false);
+//        this._onDelectSettingNickHandler = null;
 
         /**
          * 简介改变事件
@@ -116,6 +128,12 @@ define([
          */
         this.saveBtn.removeEventListener("click", this._onSaveUserInfoHandler, false);
         this._onSaveUserInfoHandler = null;
+
+        /**
+         * 判断昵称是否被使用
+         */
+        this.settingNickTxt.removeEventListener("blur", this._onCheckUserNickHandler, false);
+        this._onCheckUserNickHandler = null;
     };
     /**
      * 蒙层点击事件
@@ -126,6 +144,31 @@ define([
         e.preventDefault();
         var self = this;
         self._hide();
+    };
+    /**
+     * 判断昵称是否被应用
+     */
+    p.onCheckUserNickHandler = function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        var self = this;
+        var nick = self.settingNickTxt.value;
+        if(nick) {
+            gili_data.checkUserNick(nick, function (data) {
+                if (data) {
+                    self.settingNickDel.style.background = "url('./images/common/del.png') center no-repeat";
+                    self.settingNickDel.style.display = "block";
+                    MsgBox.toast("该昵称已被占用", false);
+                    self.isNickOk = false;
+                } else {
+                    self.settingNickDel.style.background = "url('./images/common/ok.png') center no-repeat";
+                    self.settingNickDel.style.display = "block";
+                    self.isNickOk = true;
+                }
+            }, function (err) {
+                console.log(err);
+            });
+        }
     };
     /**
      * 点击删除昵称按钮
@@ -167,6 +210,7 @@ define([
         }else{
             self.readFile(file, function(data){
                 self.settingAvatar.style.background ="url("+data+") center no-repeat";
+                self.settingAvatar.style.backgroundSize = "auto 100%";
                 utils.save_image('.jpg', data, function(file){
                     self.changeAvatarUrl = file.url();
                 },function(err){
@@ -210,6 +254,10 @@ define([
         var phone = self.settingPhoneTxt.value;
         var brief = self.settingBriefTxt.value;
         if(nick){
+            if(!self.isNickOk){
+                MsgBox.toast("请输入正确的昵称", false);
+                return false;
+            }
             self.currentUser.set("user_nick", nick);
         }
         self.currentUser.set("sex", sex);
@@ -217,7 +265,7 @@ define([
             self.currentUser.set("address", address);
         }
         if(phone){
-            self.currentUser.set("mobilePhoneNumber", phone);
+            self.currentUser.set("phone", phone);
         }
         if(brief){
             self.currentUser.set("brief", brief);
@@ -274,6 +322,7 @@ define([
         self.settingAvatar =  null;    //头像文件容器
         self.saveBtn= null;    //保存按钮
         self.changeAvatarUrl = "";
+        self.isNickOk = true;       //昵称是否可以保存
 
     };
 

@@ -1,17 +1,12 @@
 .app-toast-box{
     position: fixed;
-    width:1280px;
+    width:100%;
     height:-webkit-calc(100% - 64px);
     height:-ms-calc(100% - 64px);
     height:-o-calc(100% - 64px);
     height:-moz-calc(100% - 64px);
     height:calc(100% - 64px);
     top:64px;
-    left: 50%;
-    -webkit-transform: translateX(-50%);
-    -moz-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    transform: translateX(-50%);
 }
 .toast-msg-box{
     position: fixed;

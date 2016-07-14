@@ -23,9 +23,9 @@
     z-index:10;
     right: 60px;
     top: 20px;
-    width: 32px;
-    height: 32px;
-    background: url("../images/common/deleteBtn.png") no-repeat center;
+    width: 40px;
+    height: 40px;
+    background: url("../images/common/preivewBtnClose.png") no-repeat center;
 }
 
 .setting-container{
@@ -61,7 +61,7 @@
 }
 .setting-title-tab{
     display: inline-block;
-    margin-left: 90px;
+    margin-left: 150px;
 }
 .setting-content{
     width: 100%;
@@ -84,6 +84,7 @@
     height: 100%;
     outline: none;
     padding-left: 12px;
+    font-size: 18px;
 }
 #setting-nick-txt{
     width: 225px;
@@ -94,6 +95,7 @@
     top: 7.5px;
     width: 25px;
     height: 25px;
+    display: none;
     background: url("../images/common/del.png") no-repeat center;
 }
 #setting-sex-txt{
@@ -125,6 +127,7 @@
     border-radius: 10px;
     padding-left: 13px;
     padding-top: 13px;
+    font-size: 18px;
 }
 
 .brief-length{
@@ -177,7 +180,7 @@
     width: 150px;
     height: 40px;
     margin: 0 auto;
-    background: grey;
+    background: rgb(254, 186, 2);
     border-radius: 19.5px;
     color: #fff;
     text-align: center;
