@@ -154,7 +154,6 @@ define([
         gili_data.signUp(user, function (user) {
 //                app.triggerMethod("login:ok");
             gili_data.logIn(account, password, function (user) {
-                console.log(9999999);
                 app.triggerMethod("login:ok");
             },function(err){console.log(err)});
             MsgBox.toast("注册成功");
