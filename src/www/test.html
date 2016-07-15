@@ -1,17 +1,22 @@
 <!DOCTYPE html>
-<html xmlns:wb="http://open.weibo.com/wb"  lang="en">
+<html  lang="en">
 <head>
     <meta charset="UTF-8">
     <meta property="qc:admins" content="2336345717671415156375"/>
     <title>测试微博登录</title>
+    <style>
+        #testwb .WB_loginButton{
+            display: none;
+        }
+    </style>
 </head>
 <body>
-<script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=834787454" type="text/javascript" charset="utf-8"></script>
-<button id="testwb">testwblogin</button>
+<script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=2720439896" type="text/javascript" charset="utf-8"></script>
+<button id="testwb" >testwblogin</button>
 </body>
 
 <script>
-
+    //onclick="goto();"
    function packageWblogResults (originObj) {
        console.log(originObj);
        return {
@@ -22,6 +27,8 @@
         };
     }
     window.onload=function(){
+        var testObj = document.getElementById("testwb");
+        testObj.addEventListener("click", goto, false);
             WB2.anyWhere(function (W) {
                 W.widget.connectButton({
                     id: "testwb",
@@ -38,5 +45,16 @@
                 });
             });
     }
+    function goto(e){
+        console.log(e);
+        e.stopPropagation();
+        e.preventDefault();
+        var _url = "https://api.weibo.com/2/oauth2/authorize?client_id=2720439896&response_type=token&display=js&transport=html5&referer=" + location.href;
+//        window.open(_url, "_blank");
+        window.open (_url,'_blank','height=200,width=400,top=30%,left=30%,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
+        console.log(33333);
+//        location.href = "https://api.weibo.com/oauth2/authorize?client_id=2720439896&response_type=code&redirect_uri=http://www.gilieye.com/weibo.html";
+    }
+
 </script>
 </html>
