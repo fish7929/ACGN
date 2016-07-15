@@ -124,7 +124,11 @@ gili_config.Tip = {
 gili_config.Link = [
     {src : "./images/link/link2.png", link : "http://www.bearead.com"},
     {src : "./images/link/link1.png", link : "http://www.buhua.la"},
-    {src : "./images/link/link3.png", link : "http://www.comicdd.com"}
+    {src : "./images/link/link3.png", link : "http://www.comicdd.com"},
+    {src : "./images/link/link4.png", link : "http://www.xianyuwen.com"},
+    {src : "./images/link/link5.jpg", link : "http://www.nomo.cn"},
+    {src : "./images/link/link6.jpg", link : "http://www.yimoe.cc"},
+    {src : "./images/link/link7.jpg", link : "http://cosplay.la"}
 ]
 
 window.giliConfig = gili_config;

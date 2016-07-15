@@ -1,6 +1,7 @@
 .linkContainer{
   width: 100%;
   padding: 0 20px;
+  text-align: left;
 }
 
 .link-header{
@@ -29,7 +30,6 @@
 
   .link-item{
     display: inline-block;
-    margin-right: 40px;
-    margin-top: 20px;
+    margin:40px 0 0 40px;
   }
 }
