@@ -65,14 +65,14 @@ define([
                        utils.attentionUser(0,self.currentUserId,function(){},
                            function(err){
                                MsgBox.toast(err,false);
-                               target.html("已关注");
+                               target.html("取消关注");
                                target.addClass("uc_btn_ck");
                            });
                    }
                 });
             }else{ //点击关注
                 //默认关注成功
-                target.html("已关注");
+                target.html("取消关注");
                 target.addClass("uc_btn_ck");
                 utils.attentionUser(1,self.currentUserId,function(){
                 },function(err){
