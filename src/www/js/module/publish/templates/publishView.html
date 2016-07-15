@@ -3,13 +3,16 @@
     <div class="publishContent">
         <div class="publishTitle title">发布话题</div>
         <div class="publishImagesContent">
-            <input class="publishImageInput" name="images" type="file" accept="image/*" multiple />
             <div class="publishImageEmpty">
-                <div class="publishImageEmptyImage button"></div>
+                <div class="publishImageEmptyImage button">
+                    <input class="inputImage ImageEmptyAddBtn" type="file" accept="image/*" multiple />
+                </div>
                 <div class="publishImageEmptyTxt">最多可上传10张图</div>
             </div>
             <div class="publishImageList">
-                <div class="publishImageAddItem button"></div>
+                <div class="publishImageAddItem button">
+                    <input class="inputImage ImageItemAddBtn" type="file" accept="image/*" multiple />
+                </div>
             </div>
         </div>
         <div class="publishTopicContent">
@@ -23,7 +26,7 @@
         </div>
         <div class="publish-btns">
             <div class="btn-face button"></div>
-            <div class="btn-image-single button"></div>
+            <div class="btn-image-single button"><input class="inputImage ImageSingleAddBtn" type="file" accept="image/*" multiple /></div>
             <div class="bn-publish btn button">发布</div>
             <div class="bn-cancel btn button">取消</div>
         </div>

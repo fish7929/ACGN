@@ -22,17 +22,18 @@ define([
         self.titleTxt = self.$el.find(".publishTitle");
         //
         self.imageContent = self.$el.find(".publishImagesContent");
-
         self.imageListDiv = self.$el.find(".publishImageList");
+        //空图片input
+        self.imageEmptyAddBtn = self.$el.find(".ImageEmptyAddBtn");
+        //单个图片input
+        self.imageSingleAddBtn = self.$el.find(".ImageSingleAddBtn");
         //单个图片增加
         self.btnImageAddSingle = self.$el.find(".btn-image-single");
         //新增图片按钮
+        //更多
+        self.imageItemAddBtn = self.$el.find(".ImageItemAddBtn");
         self.btnImageAdd = self.$el.find(".publishImageAddItem");
         self.imageEmptyDiv = self.$el.find(".publishImageEmpty");
-        //选择图片按钮
-        self.btnEmptyImage = self.$el.find(".publishImageEmptyImage");
-        //input image
-        self.inputImage = self.$el.find(".publishImageInput");
         //颜表情按钮
         self.bnFace = self.$el.find(".btn-face");
         //取消按钮
@@ -336,11 +337,12 @@ define([
      * 点击按钮选择图片
      */
     PublishView.prototype.onImageListDivClick = function(e){
-        e.stopPropagation();
-        e.preventDefault();
+        // e.stopPropagation();
+        // e.preventDefault();
         var target = e.target;
         if(target.className.indexOf("publishImageItem-del")>=0){
             $(target).parents(".publishImageItem:first").remove();
+            this.checkImageButtonAdd();
         }
     };
 
@@ -360,9 +362,6 @@ define([
         self.inputImage.on("change", function(evt){
             self.onInputImageChange(evt);
         });
-
-        var event = utils.createEvent("click");
-        input.dispatchEvent(event);
     };
 
     PublishView.prototype.onInputImageChange = function(e){
@@ -387,8 +386,7 @@ define([
             utils.log(err);
         });
 
-        self.inputImage.off("change");
-        self.inputImage.get(0).value = "";
+        e.target.value = "";
     };
 
     PublishView.prototype.addIllImages = function(list){
@@ -400,9 +398,6 @@ define([
                 style += ";margin-right:0";
             }
 
-            if((len+i+1) > 4){
-                style += ";margin-top:8px";
-            }
             newImage = $(ImageTpl.replace("{0}", list[i]).replace("{1}", style));
             newImage.insertBefore(self.btnImageAdd);
 
@@ -520,14 +515,14 @@ define([
         self.labelDel.on("click", function(e){
             self.onLabelDelHandle(e);
         });
-        self.btnEmptyImage.on("click", function(e){
-            self.onAddImageHandle(e);
+        self.imageEmptyAddBtn.on("change", function(e){
+            self.onInputImageChange(e);
         });
-        self.btnImageAdd.on("click", function(e){
-            self.onAddImageHandle(e);
+        self.imageItemAddBtn.on("change", function(e){
+            self.onInputImageChange(e);
         });
-        self.btnImageAddSingle.on("click", function(e){
-            self.onAddImageHandle(e);
+        self.imageSingleAddBtn.on("change", function(e){
+            self.onInputImageChange(e);
         });
         self.imageListDiv.on("click", function(e){
             self.onImageListDivClick(e);
@@ -544,9 +539,9 @@ define([
         self.bnFace.off("click");
         self.inputLabel.off("keydown");
         self.labelDel.off("click");
-        self.btnEmptyImage.off("click");
-        self.btnImageAdd.off("click");
-        self.btnImageAddSingle.off("click");
+        self.imageEmptyAddBtn.off("change");
+        self.imageItemAddBtn.off("change");
+        self.imageSingleAddBtn.off("change");
         self.imageListDiv.off("click");
     };
 

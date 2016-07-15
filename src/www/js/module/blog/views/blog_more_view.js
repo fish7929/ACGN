@@ -102,7 +102,6 @@ define([
         },
 
         appendList : function(data){
-            console.log(data);
             if(data.length == 0) return;
             var self = this;
             for(var i = 0; i < data.length; i++){
