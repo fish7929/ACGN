@@ -466,8 +466,16 @@ define([
             //判断类型是不是图片
             if(!/image\/\w+/.test(file.type)){
                 cb_err("请选择图像类型文件");
+                MsgBox.alert("请选择图像类型文件");
                 return;
             }
+
+            if(file.size > 20 * 1024 * 1024){
+                cb_err(file.name+"大于20M，请重新选择");
+                MsgBox.alert(file.name+"大于20M，请重新选择");
+                return;
+            }
+
             var reader = new FileReader();
             reader.readAsDataURL(file);
             reader.onload = function(e){
@@ -477,6 +485,7 @@ define([
                 cb_err(e);
             };
         };
+
         if(fileList.length == 0){
             cb_ok(result);
             return;
@@ -487,7 +496,7 @@ define([
             result.push(data);
             self.readFileList(fileList, result, cb_ok, cb_err);
         }, function(e){
-            cb_err(e);
+            self.readFileList(fileList, result, cb_ok, cb_err);
         })
     };
 
