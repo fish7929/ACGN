@@ -8,7 +8,7 @@ define([
     'text!module/home/templates/home_link.html',
     'marionette'
 ],function(ItemView, tpl, mn){
-    var htmlTpl = "<a href='{0}' target='_blank'><div class='link-item' style='background: url(\"{1}\") no-repeat center; background-size:100% auto'></div></a>"
+    var htmlTpl = "<a href='{0}' target='_blank'><img class='link-item' src='{1}' /></a>"
     return ItemView.extend({
         className : "linkContainer",
         template : _.template(tpl),
