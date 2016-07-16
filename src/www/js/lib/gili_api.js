@@ -490,10 +490,10 @@ gili_data.getBlogData = function (options, cb_ok, cb_err) {
     if (label.length > 0) {
         var labelArray = label.split(',');
         var labStr = "";
-        for (var i = 0; i < label.length; i++) {
-            labStr += "'" + label[i] + "',";
+        for (var i = 0; i < labelArray.length; i++) {
+            labStr += "'" + labelArray[i] + "',";
         }
-        CQL += " and label in (" + labStr.substring(0, labStr.length - 1) + ") "
+        CQL += " and labels in (" + labStr.substring(0, labStr.length - 1) + ") "
     }
 
     if (orderBy.length > 0) {
