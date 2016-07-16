@@ -508,6 +508,28 @@ gili_data.getBlogData = function (options, cb_ok, cb_err) {
         cb_ok(blogs);
     }, cb_err);
 }
+/** 获取活动插画总数
+ * label 数组标签，用于活动则有值，其他为空
+ **/
+gili_data.getBlogCount = function (options, cb_ok, cb_err) {
+    var label = options.label || [];
+    var CQL = " select count(*) from blog where status !=2 and  type in (2,3) and is_delete !=1  "
+    if (label.length > 0) {
+        var labelArray = label.split(',');
+        var labStr = "";
+        for (var i = 0; i < labelArray.length; i++) {
+            labStr += "'" + labelArray[i] + "',";
+        }
+        CQL += " and labels in (" + labStr.substring(0, labStr.length - 1) + ") "
+    }
+    AV.Query.doCloudQuery(CQL, {
+        success: function (data) {
+            cb_ok(data);
+        }, error: cb_err
+    }
+    );
+}
+
 /** 按类型 获取用户总数
  * table_name
  * field 字段名
