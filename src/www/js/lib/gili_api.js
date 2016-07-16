@@ -472,18 +472,30 @@ gili_data.getSubjectBanner = function (cb_ok, cb_err) {
     });
 };
 
-/** 查询首页插画的作品(最热，最新排序)
+/** 查询插画的作品（首页、活动等）
  * skip,
  * limit
  * orderBy
  * isDesc
+ * label 数组标签，用于活动则有值，其他为空
  **/
 gili_data.getBlogData = function (options, cb_ok, cb_err) {
     var skip = options.skip || 0,
         limit = options.limit || 1000,
         orderBy = options.orderBy || "createdAt",
-        isDesc = options.isDesc;
+        isDesc = options.isDesc,
+        label = options.label || [];
+
     var CQL = " select include user,* from blog where status !=2 and  type in (2,3) and is_delete !=1  "
+    if (label.length > 0) {
+        var labelArray = label.split(',');
+        var labStr = "";
+        for (var i = 0; i < label.length; i++) {
+            labStr += "'" + label[i] + "',";
+        }
+        CQL += " and label in (" + labStr.substring(0, labStr.length - 1) + ") "
+    }
+
     if (orderBy.length > 0) {
         if (isDesc) {
             CQL += " order by " + orderBy + " desc ";
