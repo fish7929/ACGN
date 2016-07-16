@@ -149,7 +149,7 @@ define([
         user.set("username", account);
         user.set("password", password);
         user.set("brief", "什么都没有");
-        user.set("user_type", 1);   //用户类型 1 画师， 2 社团主  。3
+        user.set("user_type", 0);   //用户类型 1 画师， 2 社团主  。3
         user.set("phone", account);   //手机号码
         gili_data.signUp(user, function (user) {
 //                app.triggerMethod("login:ok");
