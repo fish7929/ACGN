@@ -83,8 +83,8 @@ define([
             self.$el.hide();
         },
 
-        setBlogClass : function(){
-            this.$el.get(0).className = "commentContainerBlog";
+        setBlogClass : function(className){
+            this.$el.get(0).className = className || "commentContainerBlog";
         },
 
         //页间动画已经完成，当前page已经加入到document
@@ -206,14 +206,14 @@ define([
 
         getCommentHtml : function(obj){
             var self = this;
-            var id, user_nick, user_pic, content, createdAt, floor, userId, html = "";
+            var id, user_nick, name, user_pic, content, createdAt, floor, userId, html = "";
             id = obj.objectId;
             if(self.ui.commentList.find(".comment-list-item[data-id="+id+"]").get(0)){
                 return html;
             }
             floor = "";
             userId = obj.user.objectId || "";
-            user_nick = obj.user.user_nick || "";
+            name = user_nick = obj.user.user_nick || "";
             user_pic = obj.user.avatar || "";
             content = obj.content || "";
             createdAt = obj.createdAt || Date.now();
@@ -230,8 +230,9 @@ define([
             if(self.$el.get(0).className == "commentContainerBlog"){
                 content = "<span>"+user_nick+"</span>"+content;
                 tpl = htmlTpl2;
+                name = "";
             }
-            html = tpl.replace("{dataId}", id).replace("{userName}", user_nick).replace("{userId}", userId).replace("{floor}", floor).replace("{name}", "").replace("{pic}", user_pic)
+            html = tpl.replace("{dataId}", id).replace("{userName}", user_nick).replace("{userId}", userId).replace("{floor}", floor).replace("{name}", name).replace("{pic}", user_pic)
                 .replace("{content}", content).replace("{data}", utils.formatTime(createdAt, "yyyy.MM.dd HH.mm"));
             return html;
         },

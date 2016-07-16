@@ -544,6 +544,5 @@ define([
         self.imageSingleAddBtn.off("change");
         self.imageListDiv.off("click");
     };
-
-    return new PublishView();
+    return new PublishView()
 });

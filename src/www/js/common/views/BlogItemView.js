@@ -99,6 +99,7 @@ define([
         onAuthorHandle : function(e){
             e.stopPropagation();
             e.preventDefault();
+
             var self = this;
             if(self.data && self.data.user && self.data.user.objectId){
                 app.navigate("#userCenter/"+self.data.user.objectId, {replace: false, trigger: true});

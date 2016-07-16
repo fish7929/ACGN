@@ -185,6 +185,8 @@ textarea{
 @import "home/home_blog.scss";
 @import "common/loginBar.scss";
 @import "common/commentView.scss";
+@import "common/blogCommentView.scss";
+@import "common/activityCommentView.scss";
 @import "common/faceView.scss";
 @import "common/blogItemView.scss";
 @import "planning/planning.scss";
@@ -201,3 +203,6 @@ textarea{
 @import "publish/publishView.scss";
 
 @import "blog/blogMoreView.scss";
+
+@import "activity/activity.scss";
+@import "activity/activityBlogView.scss";

@@ -488,7 +488,7 @@ gili_data.getBlogData = function (options, cb_ok, cb_err) {
 
     var CQL = " select include user,* from blog where status !=2 and  type in (2,3) and is_delete !=1  "
     if (label.length > 0) {
-        var labelArray = label.split(',');
+        var labelArray = label;
         var labStr = "";
         for (var i = 0; i < labelArray.length; i++) {
             labStr += "'" + labelArray[i] + "',";
@@ -515,7 +515,7 @@ gili_data.getBlogCount = function (options, cb_ok, cb_err) {
     var label = options.label || [];
     var CQL = " select count(*) from blog where status !=2 and  type in (2,3) and is_delete !=1  "
     if (label.length > 0) {
-        var labelArray = label.split(',');
+        var labelArray = label;
         var labStr = "";
         for (var i = 0; i < labelArray.length; i++) {
             labStr += "'" + labelArray[i] + "',";

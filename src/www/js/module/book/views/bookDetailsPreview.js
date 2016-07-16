@@ -61,7 +61,7 @@ define([
             e.preventDefault();
             var self = this;
             var target = e.target;
-            var parent = $(target).parents(".bd-preview-item")
+            var parent = $(target).parents(".bd-preview-item");
             if(!parent) return;
             var index = parent.attr("data-index");
             if(self._data && self._data.length){

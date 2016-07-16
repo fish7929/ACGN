@@ -15,9 +15,10 @@ define([
     'module/home/views/home_blog',
     'module/home/views/home_link',
     'module/home/views/home_footer',
-    'module/home/model/HomeModel'
+    'module/home/model/HomeModel',
+    'module/book/views/bookPreviewView'
 ],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, QHDCView, ActiveUserView, HomeBookView, HomeCollegeView,
-           HomeBlogView, HomeLinkView, HomeFooterView, HomeModel) {
+           HomeBlogView, HomeLinkView, HomeFooterView, HomeModel, BookPreviewView) {
     var bannerHtmlTpl = "<div class='swiper-slide {2}' data-link='{1}' style=\"background: url('{0}') no-repeat center \"></div>";
 
     return BaseView.extend({
@@ -169,6 +170,7 @@ define([
             self.ExcellentBookRegion.hide(self._homeBlog);
             self.HomeLinkRegion.hide(self._homeLinkView);
             self.HomeFooterRegion.hide(self._homeFooterView);
+            BookPreviewView.hide();
         },
 
         //当页面销毁时触发

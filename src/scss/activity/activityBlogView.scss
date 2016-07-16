@@ -1,0 +1,171 @@
+.activity-blog-list{
+  width: 1160px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.activity-blog-item{
+  width: 300px;
+  height: 507px;
+  padding: 20px;
+  border: 1px solid #e5e5e5;
+  border-left: 0;
+  box-sizing: border-box;
+  float: left;
+
+  .activity-blog-pic{
+    width: 260px;
+    height: 264px;
+    border-radius: 20px;
+  }
+
+  .activity-blog-name{
+    font-size: 28px;
+    margin-top: 20px;
+  }
+
+  .activity-blog-likeAndComment{
+    margin-top: 10px;
+    font-size: 20px;
+    color: #808080;
+  }
+
+  .activity-blog-likeAndComment span{
+    color: #f9305d;
+  }
+
+  .activity-blog-like-btn{
+    width: 230px;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    border-radius: 30px;
+    font-size: 24px;
+    color: #333333;
+    background-color: #ffd202;
+    margin: 20px auto 30px auto;
+  }
+
+  .onSelect{
+    background-color: #808080;
+  }
+}
+
+.activity-blog-item:nth-child(4n){
+  width: 280px;
+  padding-right: 0;
+  border-right: 0;
+}
+
+.activity-blog-item:nth-child(4n+1){
+  width: 280px;
+  padding-left: 0;
+}
+
+.activity-blog-item:nth-child(n + 5){
+  border-top: 0;
+}
+
+
+.activity-blog-pagination{
+  width: 760px;
+  height: 50px;
+  text-align: left;
+  line-height: 50px;
+  margin: 30px auto;
+
+  .blog-first-page{
+    display: inline-block;
+    text-align: center;
+    width: 50px;
+    float: left;
+  }
+
+  .blog-page-number{
+    margin: 0 10px;
+    display: inline-block;
+    height: 50px;
+    float: left;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .blog-span-wrapper{
+    width : 680px;      //宽度需要动态计算
+  }
+
+  .blog-span-wrapper span{
+    text-align: center;
+    margin-right: 20px;
+    width: 50px;
+    float: left;
+  }
+
+  .blog-span-wrapper span:last-child{
+    margin-right: 0;
+  }
+
+  .blog-last-page{
+    display: inline-block;
+    text-align: center;
+    width: 50px;
+    margin-right: 20px;
+  }
+
+  .blog-all-pages{
+    display: inline-block;
+    width: 60px;
+    margin-right: 20px;
+  }
+
+  .blog-page-number-input{
+    display: inline-block;
+    margin-right: 20px;
+  }
+
+  .blog-page-input{
+    width: 40px;
+    height: 20px;
+    border-radius: 5px;
+    border: 1px solid #c9c9c9;
+    display: inline-block;
+  }
+
+  /**
+  *去掉输入框的箭头
+  */
+  .blog-page-input::-webkit-outer-spin-button,
+  .blog-page-input::-webkit-inner-spin-button{
+    -webkit-appearance: none !important;
+    margin: 0;
+  }
+  .blog-page-input{-moz-appearance:textfield;}
+
+  .blog-go-to-page{
+    display: inline-block;
+    width: 50px;
+    text-align: center;
+  }
+
+  .blog-page-number-selected{
+    width: 50px;
+    height: 50px;
+    background: #ffd202;
+    border-radius: 100%;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

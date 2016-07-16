@@ -114,7 +114,9 @@ gili_config.Tip = {
     ATTENTIONED : "关注",
     COMMENT_ERROR : "请输入评论内容！",
     COMMENT_SUCCESS : "评论发布成功",
-    COMMENT_FAIL :"评论发布失败:"
+    COMMENT_FAIL :"评论发布失败:",
+    ACTIVITY_LIKED :"已点赞",
+    ACTIVITY_LIKE :"点赞",
 };
 
 

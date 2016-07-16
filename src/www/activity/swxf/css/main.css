@@ -1,0 +1,45 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    width: 1280px;
+    /*overflow: hidden;*/
+}
+
+.button{
+    cursor: pointer;
+}
+
+.container{
+    margin: 0 auto;
+    background: url("../images/activeBg.jpg") no-repeat center;
+    width: 1280px;
+    height: 4630px;
+}
+
+.btnJoin{
+    position: absolute;
+    top: 800px;
+    left: 490px;
+    width: 306px;
+    height: 86px;
+    background: url("../images/btnJoin.png") no-repeat center;
+}
+
+.btns{
+    position: absolute;
+    top: 1000px;
+    left: 350px;
+    width: 588px;
+    height: 60px;
+    background: url("../images/goto.png") no-repeat center;
+}
+
+.btns>div{
+    width: 196px;
+    height: 60px;
+    float: left;
+}
