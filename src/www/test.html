@@ -28,32 +28,35 @@
     }
     window.onload=function(){
         var testObj = document.getElementById("testwb");
+//        testObj.addEventListener("click", goto, false);
+//            WB2.anyWhere(function (W) {
+//                W.widget.connectButton({
+//                    id: "testwb",
+//                    type: '3,2',
+//                    callback: {
+//                        login: function(data){
+//                            console.log(data);
+//                            alert(JSON.stringify(data));
+//                        }, //登录后的回调函数
+//                        logout: function(){
+//                            alert('logout');
+//                        } //退出后的回调函数
+//                    }
+//                });
+//            });
         testObj.addEventListener("click", goto, false);
-            WB2.anyWhere(function (W) {
-                W.widget.connectButton({
-                    id: "testwb",
-                    type: '3,2',
-                    callback: {
-                        login: function(data){
-                            console.log(data);
-                            alert(JSON.stringify(data));
-                        }, //登录后的回调函数
-                        logout: function(){
-                            alert('logout');
-                        } //退出后的回调函数
-                    }
-                });
-            });
     }
     function goto(e){
         console.log(e);
         e.stopPropagation();
         e.preventDefault();
-        var _url = "https://api.weibo.com/2/oauth2/authorize?client_id=2720439896&response_type=token&display=js&transport=html5&referer=" + location.href;
+//        var _url = "https://api.weibo.com/2/oauth2/authorize?client_id=2720439896&response_type=token&display=js&transport=html5&referer=" + location.href;
 //        window.open(_url, "_blank");
-        window.open (_url,'_blank','height=200,width=400,top=30%,left=30%,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
+//        window.open (_url,'_blank','height=200,width=400,top=30%,left=30%,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
         console.log(33333);
-//        location.href = "https://api.weibo.com/oauth2/authorize?client_id=2720439896&response_type=code&redirect_uri=http://www.gilieye.com/weibo.html";
+//        location.href = "https://api.weibo.com/oauth2/authorize?client_id=2720439896&client_secrect=49df09be0f1fc7e4ef082a23ac385e97&response_type=code&redirect_uri=http://www.gilieye.com/weibo.html";
+        var _url = "https://api.weibo.com/oauth2/authorize?client_id=2720439896&client_secrect=49df09be0f1fc7e4ef082a23ac385e97&response_type=code&redirect_uri=http://www.gilieye.com/weibo.html";
+        window.open(_url, "_blank");
     }
 
 </script>

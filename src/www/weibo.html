@@ -9,13 +9,31 @@
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function () {
             //实例化AV
-            AV.initialize("oCjYs9w05WuNmCk6sDblt7hY-gzGzoHsz", "yaREoDyiyoy5iWV2iWAODk5X");
+            AV.initialize({appId: "oCjYs9w05WuNmCk6sDblt7hY-gzGzoHsz", appKey:"yaREoDyiyoy5iWV2iWAODk5X"});
             var code = getParam(location.href, "code");
             console.log(code);
             var _url = "https://api.weibo.com/oauth2/access_token?client_id=2720439896&client_secret=49df09be0f1fc7e4ef082a23ac385e97&grant_type=authorization_code&redirect_uri=http://www.gilieye.com/test.html&code=" + code;
-            $.get(_url, function(data){
-                console.log(data);
-            });
+//            $.post(_url, function(data){
+//                console.log(data);
+//            });
+            $.ajax({
+                //请求类型，这里为POST
+                type: 'POST',
+                //你要请求的api的URL
+                url: _url ,
+                //是否使用缓存
+                cache:false,
+                //数据类型，这里我用的是json
+                dataType: "json",
+                //必要的时候需要用JSON.stringify() 将JSON对象转换成字符串
+                 //data: {key:value}, //添加额外的请求头
+                 headers : {'Access-Control-Allow-Origin':'http://www.gilieye.com'},
+                  //请求成功的回调函数
+                  success: function(data){
+                    //函数参数 "data" 为请求成功服务端返回的数据
+                      console.log(data);
+                  }
+              });
         });
 
         /**
