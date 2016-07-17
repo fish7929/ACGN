@@ -12,8 +12,9 @@ define([
     'module/activity/views/activity_blog_view',
     'common/views/commentView',
     'module/activity/model/activityModel',
-    'module/publish/views/publishView'
-],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, ActivityBlogView, CommentView, activityModel, PublishView){
+    'module/publish/views/publishView',
+    'module/home/views/home_footer'
+],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, ActivityBlogView, CommentView, activityModel, PublishView, HomeFooter){
     return BaseView.extend({
         className : "activityContainer",
         template : _.template(tpl),
@@ -23,10 +24,12 @@ define([
             iFrameDiv : ".activity-frame",
             commentDiv : ".activity-commit-container",
             blogTitle : ".activity-work-title",
-            commentTitle : ".activity-comment-title"
+            commentTitle : ".activity-comment-title",
+            bnGoTop : ".activity-go-Top"
         },
         //事件添加
         events : {
+            "click @ui.bnGoTop" : "onClickHandler"
         },
 
         regions : {
@@ -42,6 +45,11 @@ define([
             CommentBlogRegion:{
                 el: ".activity-comment-reg",
                 regionClass: SwitchViewRegion
+            },
+
+            FooterRegion:{
+                el: ".activity-footer-reg",
+                regionClass: SwitchViewRegion
             }
         },
 
@@ -50,6 +58,7 @@ define([
             var self = this;
             self._loginBarView = new LoginBarView();
             self._joinBlogView = new ActivityBlogView();
+            self._footerView = new HomeFooter();
         },
 
         //在开始渲染模板前执行，此时当前page没有添加到document
@@ -77,11 +86,20 @@ define([
 
             window.fastJump = function(type){
                 if(type == "work"){
-                    $("body").scrollTop(self.ui.blogTitle.offset().top - 100);
+                    $(window).scrollTop(self.ui.blogTitle.offset().top - 100);
                 }else if(type == "comment"){
-                    $("body").scrollTop(self.ui.commentTitle.offset().top - 100);
+                    $(window).scrollTop(self.ui.commentTitle.offset().top - 100);
+                }else{
+                    $(window).scrollTop(type);
                 }
             };
+        },
+
+        onClickHandler : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+
+            $(window).scrollTop(0);
         },
 
         //页间动画已经完成，当前page已经加入到document
@@ -99,19 +117,28 @@ define([
             activityModel.queryActivityData(activityId, function(data){
                 self.initActivityData(data);
             });
-            // var obj = {};
-            // obj.comment_id = "5785c9c07db2a200630487b5";
-            // obj.comment_type = 2;
-            // self._commentView.setCommentTarget(obj);
-            // self._commentView.startLoadData();
-            //
             self.regionShow();
+            self.addOnScroll();
+        },
+
+        //滚动容器添加滚动事件
+        addOnScroll:function(){
+            var self = this;
+            self.ui.bnGoTop.hide();
+            $(window).scroll(function(e){
+                var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+                if(scrollTop >= window.innerHeight / 2){
+                    self.ui.bnGoTop.show();
+                }else{
+                    self.ui.bnGoTop.hide();
+                }
+            });
         },
 
         initActivityData : function(data){
             var self = this;
-            var link = data.link;
-            // var link = "http://localhost:63342/workspace/ACGN/src/www/activity/swxf/index.html";
+            // var link = data.link;
+            var link = "http://localhost:63342/ACGN/src/www/activity/swxf/index.html";
             self.ui.iFrameDiv.get(0).src = link;
             self.activityLabel = data.label;
             self._joinBlogView.setActivityLabel(self.activityLabel);
@@ -128,13 +155,18 @@ define([
             self.LoginBarRegion.show(self._loginBarView);
             self.ActivityBlogRegion.show(self._joinBlogView);
             self.CommentBlogRegion.show(self._commentView);
+            self.FooterRegion.show(self._footerView);
         },
 
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
             var self = this;
+            $(window).unbind('scroll');
+
             self.LoginBarRegion.hide(self._loginBarView);
             self.ActivityBlogRegion.hide(self._joinBlogView);
+            self.CommentBlogRegion.hide(self._commentView);
+            self.FooterRegion.hide(self._footerView);
         },
 
         //当页面销毁时触发

@@ -28,3 +28,12 @@
   width: 100%;
   text-align: center;
 }
+
+.blog-go-top{
+  position: fixed;
+  width: 34px;
+  height: 98px;
+  background: url("../images/common/btnGoTop.png") no-repeat center;
+  top: 30%;
+  right: calc(50% - 634px);
+}

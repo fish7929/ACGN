@@ -28,14 +28,22 @@ define([
         //banner轮播
         bannerSwipe : null,
         ui : {
-            bannerWrapper : ".swiper-wrapper"
+            bannerWrapper : ".swiper-wrapper",
+            bnGoTop : ".home-go-Top"
         },
 
         //事件添加
         events : {
-            "click @ui.bannerWrapper" : "onBannerHandler"
+            "click @ui.bannerWrapper" : "onBannerHandler",
+            "click @ui.bnGoTop" : "onGoTopHandler"
         },
 
+        onGoTopHandler : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+
+            $(window).scrollTop(0);
+        },
 
         onBannerHandler : function(e){
             e.stopPropagation();
@@ -117,6 +125,22 @@ define([
             }, function(err){
 
             })
+
+            self.addOnScroll();
+        },
+
+        //滚动容器添加滚动事件
+        addOnScroll:function(){
+            var self = this;
+            self.ui.bnGoTop.hide();
+            $(window).scroll(function(e){
+                var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+                if(scrollTop >= window.innerHeight / 2){
+                    self.ui.bnGoTop.show();
+                }else{
+                    self.ui.bnGoTop.hide();
+                }
+            });
         },
 
         regionShow : function(){
@@ -162,6 +186,7 @@ define([
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
             var self = this;
+            $(window).unbind('scroll');
             self.LoginBarRegion.hide(self._loginBarView);
             self.QHDCRegion.hide(self._qhdcView);
             self.ActiveUserRegion.hide(self._aUserView);
@@ -175,50 +200,6 @@ define([
 
         //当页面销毁时触发
         onDestroy : function(){
-            // var self = this;
-            // self._loginBarView.onDestroy();
-            // self._loginBarView = null;
-            // self._qhdcView.onDestroy();
-            // self._qhdcView = null;
-            // self._aUserView.onDestroy();
-            // self._aUserView = null;
-            // self._bookView.onDestroy();
-            // self._bookView = null;
-            // self._collegeView.onDestroy();
-            // self._collegeView = null;
-            // self._homeBlog.onDestroy();
-            // self._homeBlog = null;
-            // self._homeLinkView.onDestroy();
-            // self._homeLinkView = null;
-            // self._homeFooterView.onDestroy();
-            // self._homeFooterView = null;
-
-            // self.LoginBarRegion.empty(self._loginBarView);
-            // self.QHDCRegion.empty(self._qhdcView);
-            // self.ActiveUserRegion.empty(self._aUserView);
-            // self.BookRegion.empty(self._bookView);
-            // self.CollegeRegion.empty(self._collegeView);
-            // self.ExcellentBookRegion.empty(self._homeBlog);
-            // self.HomeLinkRegion.empty(self._homeLinkView);
-            // self.HomeFooterRegion.empty(self._homeFooterView);
-            //
-            // self.LoginBarRegion.destroy();
-            // self.QHDCRegion.destroy();
-            // self.ActiveUserRegion.destroy();
-            // self.BookRegion.destroy();
-            // self.CollegeRegion.destroy();
-            // self.ExcellentBookRegion.destroy();
-            // self.HomeLinkRegion.destroy();
-            // self.HomeFooterRegion.destroy();
-            //
-            // self.LoginBarRegion = null;
-            // self.QHDCRegion = null;
-            // self.ActiveUserRegion = null;
-            // self.BookRegion = null;
-            // self.CollegeRegion = null;
-            // self.ExcellentBookRegion = null;
-            // self.HomeLinkRegion = null;
-            // self.HomeFooterRegion = null;
         }
     });
 });

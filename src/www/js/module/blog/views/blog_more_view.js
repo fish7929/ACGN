@@ -23,11 +23,13 @@ define([
         ui : {
             blogList : ".blog-more-item-list",
             loadingContainer : ".loading-gif",
-            loadMsg : ".loadMsg-text"
+            loadMsg : ".loadMsg-text",
+            bnGoTop : ".blog-go-top"
         },
 
         //事件添加
         events : {
+            "click @ui.bnGoTop" : "onGoTopHandler"
         },
 
         regions : {
@@ -65,6 +67,13 @@ define([
             self.loadData();
             self.addOnScroll();
             self.addEvent();
+        },
+
+        onGoTopHandler : function(e){
+            e.stopPropagation();
+            e.preventDefault();
+
+            $(window).scrollTop(0);
         },
 
         regionShow : function(){
@@ -161,12 +170,20 @@ define([
         //滚动容器添加滚动事件
         addOnScroll:function(){
             var self = this;
+
+            self.ui.bnGoTop.hide();
             $(window).scroll(function(e){
                 var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
                 if(scrollTop + window.innerHeight > document.body.offsetHeight-400){
                     if(!self.data_finish){
                         self.loadData();
                     }
+                }
+
+                if(scrollTop >= window.innerHeight / 2){
+                    self.ui.bnGoTop.show();
+                }else{
+                    self.ui.bnGoTop.hide();
                 }
             });
         },
@@ -184,7 +201,7 @@ define([
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
             var self = this;
-            $(window).scroll = null;
+            $(window).unbind('scroll');
             self.LoginBarRegion.hide(self._loginBarView);
             self.FooterRegion.hide(self._footerView);
             self.removeEvent();

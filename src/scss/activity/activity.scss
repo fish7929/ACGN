@@ -9,3 +9,11 @@
   font-size: 48px;
 }
 
+.activity-go-Top{
+  position: fixed;
+  width: 34px;
+  height: 98px;
+  background: url("../images/common/btnGoTop.png") no-repeat center;
+  top: 30%;
+  right: calc(50% - 640px);
+}
