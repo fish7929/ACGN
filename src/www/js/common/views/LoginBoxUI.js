@@ -20,7 +20,7 @@ define([
         this.$el = $("<div>");
         this.el = this.$el.get(0);
         this.$el.html(this._template);
-
+        this.loginContainer = this.el.querySelector(".login-container");
         this.loginContainerMask = this.el.querySelector(".login-container-mask");
         this.loginAccount = this.el.querySelector(".account-txt");
         this.loginPassword = this.el.querySelector(".password-txt");
@@ -94,6 +94,12 @@ define([
              */
             self._microBlogLoginHandle = self.microBlogLoginHandle.bind(self);
             self.microBlogLogin.addEventListener("click", self._microBlogLoginHandle, false);
+
+            /**
+             * 监听回撤事件
+             */
+            self._onEnterKeyHandler = self.onEnterKeyHandler.bind(self);
+            self.loginContainer.addEventListener("keydown", self._onEnterKeyHandler, false);
         };
     p.removeListener = function () {
         var self = this;
@@ -127,6 +133,11 @@ define([
          */
         self.microBlogLogin.removeEventListener("click", self._microBlogLoginHandle, false);
         self._microBlogLoginHandle = null;
+        /**
+         * 监听回撤事件
+         */
+        self.loginContainer.removeEventListener("keydown", self._onEnterKeyHandler, false);
+        self._onEnterKeyHandler = null;
     };
     /**
      * 蒙层点击事件
@@ -136,7 +147,6 @@ define([
         e.stopPropagation();
         e.preventDefault();
         var self = this;
-        console.log(e, "loginMaskHandle");
         self._hide();
     }
     /**
@@ -223,6 +233,21 @@ define([
         var self = this;
         self._hide();
         window.open('https://graph.qq.com/oauth2.0/authorize?response_type=token&client_id=101326661&redirect_uri='+ encodeURIComponent("http://www.gilieye.com/qq.html?platform=qq&v="+ Math.random()) +'', '_self')
+    };
+    /**
+     * 回撤事件
+     * @param e
+     */
+    p.onEnterKeyHandler = function(e) {
+        var self = this;
+        // 兼容FF和IE和Opera
+        var theEvent = e || window.event;
+        var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+        if (code == 13) {
+            self.loginHandle(e);
+            return false;
+        }
+        return true;
     };
     p._hide = function () {
         var self = this;

@@ -28,6 +28,9 @@ define([
         this.verifyTxt = this.el.querySelector("#register-verify-txt");
         this.verifyBtn = this.el.querySelector("#verify-hint");
         this.registerBtn = this.el.querySelector("#register-btn");
+        //以下为增加的
+        this.microBlogLogin = this.el.querySelector(".micro-blog-login");
+        this.qqLogin = this.el.querySelector(".qq-login");
 
         this._initView();
     };
@@ -37,38 +40,62 @@ define([
         self.addListener();
     };
     p.addListener = function(){
+        var self = this;
         /**
          * 朦层点击
          */
-        this._registerMaskHandle = this.registerMaskHandle.bind(this);
-        this.registerMask.addEventListener("click", this._registerMaskHandle, false);
+        self._registerMaskHandle = self.registerMaskHandle.bind(self);
+        self.registerMask.addEventListener("click", self._registerMaskHandle, false);
         /**
          * 验证消息处理事件
          */
-        this._verifyHandle = this.verifyHandle.bind(this);
-        this.verifyBtn.addEventListener("click", this._verifyHandle, false);
+        self._verifyHandle = self.verifyHandle.bind(self);
+        self.verifyBtn.addEventListener("click", self._verifyHandle, false);
         /**
          * 注册处理事件
          */
-        this._registerHandle = this.registerHandle.bind(this);
-        this.registerBtn.addEventListener("click", this._registerHandle, false);
+        self._registerHandle = self.registerHandle.bind(self);
+        self.registerBtn.addEventListener("click", self._registerHandle, false);
+
+        /**
+         * QQ登录
+         */
+        self._qqLoginHandle = self.qqLoginHandle.bind(self);
+        self.qqLogin.addEventListener("click", self._qqLoginHandle, false);
+        /**
+         * 微博登录
+         */
+        self._microBlogLoginHandle = self.microBlogLoginHandle.bind(self);
+        self.microBlogLogin.addEventListener("click", self._microBlogLoginHandle, false);
     };
     p.removeListener = function(){
+        var self = this;
         /**
          * 朦层点击
          */
-        this.registerMask.removeEventListener("click", this._registerMaskHandle, false);
-        this._registerMaskHandle = null;
+        self.registerMask.removeEventListener("click", self._registerMaskHandle, false);
+        self._registerMaskHandle = null;
         /**
          * 验证消息处理事件
          */
-        this.verifyBtn.removeEventListener("click", this._verifyHandle, false);
-        this._verifyHandle = null;
+        self.verifyBtn.removeEventListener("click", self._verifyHandle, false);
+        self._verifyHandle = null;
         /**
          * 注册处理事件
          */
-        this.registerBtn.removeEventListener("click", this._registerHandle, false);
-        this._registerHandle = null;
+        self.registerBtn.removeEventListener("click", self._registerHandle, false);
+        self._registerHandle = null;
+
+        /**
+         * QQ登录
+         */
+        self.qqLogin.removeEventListener("click", self._qqLoginHandle, false);
+        self._qqLoginHandle = null;
+        /**
+         * 微博登录
+         */
+        self.microBlogLogin.removeEventListener("click", self._microBlogLoginHandle, false);
+        self._microBlogLoginHandle = null;
     };
     /**
      * 蒙层点击事件
@@ -163,7 +190,30 @@ define([
                 MsgBox.toast("注册帐号失败", false);
             }
         });
-    }
+    };
+    /**
+     * 第三方登录--微博登录点击事件
+     * @param e
+     */
+    p.microBlogLoginHandle = function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        var self = this;
+//        console.log(e, "microBlogLoginHandle");
+        var _url = "https://api.weibo.com/oauth2/authorize?client_id=2720439896&client_secrect=49df09be0f1fc7e4ef082a23ac385e97&response_type=code&redirect_uri=http://www.gilieye.com/weibo.html?v="+ Math.random();
+        location.href = _url;
+    };
+    /**
+     *第三方登录--QQ登录点击事件
+     * @param e
+     */
+    p.qqLoginHandle = function (e) {
+        e.stopPropagation();
+        e.preventDefault();
+        var self = this;
+        self._hide();
+        window.open('https://graph.qq.com/oauth2.0/authorize?response_type=token&client_id=101326661&redirect_uri='+ encodeURIComponent("http://www.gilieye.com/qq.html?platform=qq&v="+ Math.random()) +'', '_self')
+    };
     p._hide = function(){
         var self = this;
         self.removeListener();
