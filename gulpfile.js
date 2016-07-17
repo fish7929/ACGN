@@ -83,7 +83,7 @@ gulp.task('_release:css', function (done) {
 });
 
 gulp.task('_copyHtml', function () {
-    return gulp.src(["src/www/qq.html"])
+    return gulp.src(["src/www/qq.html","src/www/weibo.html"])
         .pipe(gulp.dest(destDir));
 });
 

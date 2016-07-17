@@ -55,7 +55,7 @@ require([
     'masonry'
 ], function($,Backbone, BackboneHistory, app, Controller, AppRouter) {
     //实例化AV
-    AV.initialize("oCjYs9w05WuNmCk6sDblt7hY-gzGzoHsz", "yaREoDyiyoy5iWV2iWAODk5X");
+    AV.initialize({appId:"oCjYs9w05WuNmCk6sDblt7hY-gzGzoHsz", appKey:"yaREoDyiyoy5iWV2iWAODk5X"});
 
     $(document).ready(readyHandle);
     function readyHandle (){
