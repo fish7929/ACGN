@@ -262,6 +262,12 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
+
+            if(!gili_data.getCurrentUser()){
+                MsgBox.alert(giliConfig.Tip.NOLOGIN);
+                return;
+            }
+
             if(!self._commentObj || !self._commentObj.comment_type || !self._commentObj.comment_id) return;
             var str = self.ui.commentText.val();
             if(str == ""){
@@ -301,6 +307,11 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
+            if(!gili_data.getCurrentUser()){
+                MsgBox.alert(giliConfig.Tip.NOLOGIN);
+                return;
+            }
+
             self._faceView.show(self._onFaceSelect)
         },
 

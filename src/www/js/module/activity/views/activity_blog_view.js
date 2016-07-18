@@ -11,7 +11,7 @@ define([
     'module/book/views/bookPreviewView',
     'msgbox'
 ],function(BaseView, tpl, mn, activityModel, BookPreviewView, MsgBox){
-    var htmlTpl = '<div class="activity-blog-item" data-id="{id}">' +
+    var htmlTpl = '<div class="activity-blog-item" data-id="{id}" data-user-id="{userId}">' +
         '<div class="activity-blog-pic button" style="background: url({pic}) no-repeat center; background-size: 100%"></div>' +
         '<div class="activity-blog-name nowrapTxt">{name}</div>' +
         '<div class="activity-blog-likeAndComment"><span class="likeSpan">{likeCnt}</span>次点赞/<span>{commentCnt}</span>人评论</div>' +
@@ -194,6 +194,7 @@ define([
                 obj = data[i];
                 var pic = obj.pictures[0];
                 var name = obj.user.user_nick || "";
+                var userId = obj.user.objectId
                 var likeInt = obj.like_int || 0;
                 var commentInt = obj.comment_int || 0;
                 var likeStyle = "";
@@ -204,7 +205,7 @@ define([
                 }
                 html += htmlTpl.replace("{id}", obj.objectId).replace("{pic}", pic).replace("{name}", name)
                     .replace("{likeCnt}", likeInt).replace("{commentCnt}", commentInt).replace("{likeStyle}", likeStyle)
-                    .replace("{likeName}", likeName)
+                    .replace("{likeName}", likeName).replace("{userId}", userId);
             }
             self.ui.blogList.html(html);
         },
@@ -223,6 +224,10 @@ define([
                 self.onPreview(dataId);
             }else if(target.className.indexOf("activity-blog-like-btn") >= 0){
                 self.onLike(parent, dataId);
+            }else if(target.className.indexOf("activity-blog-name") >= 0){
+                var userId = parent.attr("data-user-id");
+                if(!userId) return;
+                app.navigate("#userCenter/"+userId, {replace: false, trigger: true});
             }
         },
 

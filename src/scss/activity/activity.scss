@@ -1,5 +1,13 @@
 .activity-frame{
   width: 100%;
+  top: 64px;
+  left: 0;
+  border: 0;
+  position: absolute;
+}
+
+.activity-frame-div{
+  width: 100%;
   margin-top: 64px;
   border: 0px;
 }

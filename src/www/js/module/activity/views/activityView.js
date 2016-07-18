@@ -21,11 +21,12 @@ define([
 
         // key : selector
         ui : {
-            iFrameDiv : ".activity-frame",
+            iFrameDiv : ".activity-frame-div",
             commentDiv : ".activity-commit-container",
             blogTitle : ".activity-work-title",
             commentTitle : ".activity-comment-title",
-            bnGoTop : ".activity-go-Top"
+            bnGoTop : ".activity-go-Top",
+            iFrame : ".activity-frame"
         },
         //事件添加
         events : {
@@ -73,6 +74,7 @@ define([
 
             window.changeIframeHeight = function(height){
                 self.ui.iFrameDiv.css({"height":height+"px"});
+                self.ui.iFrame.css({"height":height+"px"});
             };
 
             window.joinActivity = function(){
@@ -139,7 +141,8 @@ define([
             var self = this;
             var link = data.link;
             // var link = "http://localhost:63342/ACGN/src/www/activity/swxf/index.html";
-            self.ui.iFrameDiv.get(0).src = link;
+            var link = "http://localhost:63342/ACGN/src/www/activity/swxf/index.html";
+            self.ui.iFrame.get(0).src = link;
             self.activityLabel = data.label;
             self._joinBlogView.setActivityLabel(self.activityLabel);
 
