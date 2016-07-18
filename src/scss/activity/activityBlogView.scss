@@ -68,11 +68,14 @@
 
 
 .activity-blog-pagination{
-  width: 760px;
   height: 50px;
-  text-align: left;
+  text-align: center;
   line-height: 50px;
   margin: 30px auto;
+
+  .activity-blog-pagination-align{
+    display: inline-block;
+  }
 
   .blog-first-page{
     display: inline-block;
@@ -84,6 +87,7 @@
   .blog-page-number{
     margin: 0 10px;
     display: inline-block;
+    width: 370px;
     height: 50px;
     float: left;
     overflow-x: auto;

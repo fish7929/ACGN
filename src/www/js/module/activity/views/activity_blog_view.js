@@ -97,8 +97,6 @@ define([
             self.ui.pageNoWrapper.html(tempSpan);
             self.ui.btnLastPage.attr("data-num", self.maxPage);
             self.ui.pageTotalTxt.html("共"+self.maxPage+"页");
-            width += self.paginationWidth;
-            self.ui.paginationDiv.css({"width": width + "px" });
         },
 
         /**
@@ -177,10 +175,9 @@ define([
             $(spanArr[num - 1]).addClass("blog-page-number-selected");
             //以下为移动5个点的距离
             var left = (num + 2)*self.tempSpanWidth;
-            var containerWidth = self.ui.pageNoWrapper.width();
+            var containerWidth = self.ui.pageNumber.width();
             var temp = left - containerWidth ;
-            self.ui.pageNoWrapper.scrollLeft(temp);
-
+            self.ui.pageNumber.scrollLeft(temp);
         },
 
         getBlogDataByPage : function(){
