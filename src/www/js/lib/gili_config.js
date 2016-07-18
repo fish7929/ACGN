@@ -116,7 +116,7 @@ gili_config.Tip = {
     COMMENT_SUCCESS : "评论发布成功",
     COMMENT_FAIL :"评论发布失败:",
     ACTIVITY_LIKED :"已点赞",
-    ACTIVITY_LIKE :"点赞",
+    ACTIVITY_LIKE :"点赞"
 };
 
 
@@ -130,7 +130,8 @@ gili_config.Link = [
     {src : "./images/link/link4.png", link : "http://www.xianyuwen.com"},
     {src : "./images/link/link5.jpg", link : "http://www.nomo.cn"},
     {src : "./images/link/link6.jpg", link : "http://www.yimoe.cc"},
-    {src : "./images/link/link7.jpg", link : "http://cosplay.la"}
+    {src : "./images/link/link7.jpg", link : "http://cosplay.la"},
+    {src : "./images/link/link8.png", link : "http://www.kankelu.com"}
 ]
 
 window.giliConfig = gili_config;

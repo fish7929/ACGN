@@ -140,8 +140,7 @@ define([
         initActivityData : function(data){
             var self = this;
             var link = data.link;
-            // var link = "http://localhost:63342/ACGN/src/www/activity/swxf/index.html";
-            var link = "http://localhost:63342/ACGN/src/www/activity/swxf/index.html";
+            //var link = "http://localhost:63342/ACGN/src/www/activity/swxf/index.html";
             self.ui.iFrame.get(0).src = link;
             self.activityLabel = data.label;
             self._joinBlogView.setActivityLabel(self.activityLabel);

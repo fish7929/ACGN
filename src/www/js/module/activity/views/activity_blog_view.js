@@ -13,7 +13,7 @@ define([
 ],function(BaseView, tpl, mn, activityModel, BookPreviewView, MsgBox){
     var htmlTpl = '<div class="activity-blog-item" data-id="{id}" data-user-id="{userId}">' +
         '<div class="activity-blog-pic button" style="background: url({pic}) no-repeat center; background-size: 100%"></div>' +
-        '<div class="activity-blog-name nowrapTxt">{name}</div>' +
+        '<div class="activity-blog-name button nowrapTxt">{name}</div>' +
         '<div class="activity-blog-likeAndComment"><span class="likeSpan">{likeCnt}</span>次点赞/<span>{commentCnt}</span>人评论</div>' +
         '<div class="activity-blog-like-btn button {likeStyle}">{likeName}</div>' +
         '</div>'
@@ -80,7 +80,6 @@ define([
                 }else{
                     self.ui.paginationDiv.hide();
                 }
-                console.log(data);
             });
         },
 
@@ -90,6 +89,7 @@ define([
             var spanSelected = "";
             var width = self.maxPage * self.tempSpanWidth;
             self.ui.pageNoWrapper.css({"width": width + "px" }); //动态设置 span 容器的宽度
+            self.ui.pageNumber.css({"width": width + "px" });
             for(var i = 0; i < self.maxPage; i++){
                 spanSelected =  i == 0 ? "blog-page-number-selected" : "";
                 tempSpan += '<span class="button '+spanSelected+'" data-num="'+ (i + 1)+'">'+(i+1)+'</span>';

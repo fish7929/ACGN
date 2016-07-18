@@ -7,7 +7,7 @@
 body{
     width: 100%;
     /*overflow: hidden;*/
-    background-color: #0000AA;
+    background-color: rgba(0, 0, 0, 1);
 }
 
 .button{
@@ -25,7 +25,7 @@ body{
 .btnJoin{
     position: absolute;
     top: 800px;
-    left: 490px;
+    left: calc(50% - 153px);
     width: 306px;
     height: 86px;
     background: url("../images/btnJoin.png") no-repeat center;
@@ -34,7 +34,7 @@ body{
 .btns{
     position: absolute;
     top: 1000px;
-    left: 350px;
+    left: calc(50% - 294px);
     width: 588px;
     height: 60px;
     background: url("../images/goto.png") no-repeat center;
