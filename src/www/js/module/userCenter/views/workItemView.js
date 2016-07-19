@@ -35,7 +35,9 @@ define([
             "click .btnSend":"_clickSendHandler",       //点击发布
             "click .reply_userName":"_clickReplyUser",  //点击评论内容里的用户
             "click .face-item":"_clickFaceItemHandler",  //点击颜表情项
-            "blur #commentTxt":"_blurCommentHandler"
+            "blur #commentTxt":"_blurCommentHandler",
+            "click .commentHead":"_clickCommentHeadHandler", //点击评论头像
+            "click .commentName":"_clickCommentHeadHandler"//点击评论者昵称
 //            "mouseover .uc_info_item":"_overItemHandler", //鼠标移入 显示“删除”按钮
 //            "mouseout .uc_info_item":"_outItemHandler" //鼠标移出 隐藏“删除”按钮
         },
@@ -149,8 +151,8 @@ define([
             commentHtml += '</div>';
             return commentHtml;
         },
-        commentTpl: _.template('<div class="commentItem"><div class="commentHead" style="background:url(\'<%=headUrl%>\') no-repeat #f7f7f7 center; background-size:cover;"></div><div class="commentData">'+
-            '<div class="commentName"><%=commentName %>&nbsp;<span class="sp_time"><%=commentTime %></span><span data-cId="<%=cId %>" data-userId="<%=commentUserId %>" data-userName="<%=commentUserName %>" class="sp_reply">回复</span></div>'+
+        commentTpl: _.template('<div class="commentItem"><div class="commentHead" data-userid="<%=commentUserId %>" style="background:url(\'<%=headUrl%>\') no-repeat #f7f7f7 center; background-size:cover;"></div><div class="commentData">'+
+            '<div class="commentName"  data-userid="<%=commentUserId %>"><%=commentName %>&nbsp;<span class="sp_time"><%=commentTime %></span><span data-cId="<%=cId %>" data-userId="<%=commentUserId %>" data-userName="<%=commentUserName %>" class="sp_reply">回复</span></div>'+
             '<div class="commentContext"><%=commentTxt %></div></div></div>'),
         //填充颜表情窗口
         getFace:function(){
@@ -376,6 +378,12 @@ define([
         _blurCommentHandler:function(e){
             var self = this;
             self.model.commentTxt = self.ui.commentTxt.val();
+        },
+        //评论列表头像
+        _clickCommentHeadHandler:function(e){
+            var target = $(e.target);
+            var userId = target.data("userid");
+            app.navigate("userCenter/"+userId,{trigger:true,replace:true});
         },
         close:function(){
             BookPreviewView.hide();
