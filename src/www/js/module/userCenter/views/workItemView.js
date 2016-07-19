@@ -215,22 +215,33 @@ define([
             self.zanLock = true;
             var gId = self.model.get("objectId");
             if(target.data("zan") == "praise" && !utils.isLiked(gId)){ //点赞
+                //默认点赞成功
+                self.model.likeInt++;
+                utils.addLikeTpl(gId,1);
+                self.render();
                 utils.likeTopic(1,gId,function(){
-                    self.model.likeInt++;
                     self.zanLock = false;
-                    self.render();
                 },function(){
                     console.log("点赞失败");
+                    //点赞失败，数据重置
+                    self.model.likeInt--;
+                    utils.addLikeTpl(gId,0);
+                    self.render();
                     self.zanLock = false;
                 });
 
             }else if(target.data("zan") == "praise_ck" && utils.isLiked(gId)) { //取消点赞
+                //默认点赞成功 ，失败再重置UI
+                self.model.likeInt--;
+                utils.addLikeTpl(gId,0);
+                self.render();
                 utils.likeTopic(0,gId,function(){
-                    self.model.likeInt--;
-                    self.render();
                     self.zanLock = false;
                 },function(){
                     console.log("取消点赞失败");
+                    self.model.likeInt++;
+                    utils.addLikeTpl(gId,1);
+                    self.render();
                     self.zanLock = false;
                 });
             }else{

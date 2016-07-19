@@ -209,13 +209,13 @@
         if(type == 1){
             options.like_opration = "like";
             gili_data.snsSaveLike(options,function(){
-                self.addLikeTpl(topicId,type);
+                self.addLikeTpl(topicId,type); //点赞默认成功，此处渲染需要，需写在请求之前 这里可要可不要 update by guYY 2016/7/19 15:11
                 cb_ok && cb_ok();
             },cb_err);
         }else{
             options.like_opration = "cancerlike";
             gili_data.snsSaveLike(options,function(){
-                self.addLikeTpl(topicId,type);
+                self.addLikeTpl(topicId,type);//取消赞默认成功，此处渲染需要，需写在请求之前 这里可要可不要update by guYY 2016/7/19 15:11
                 cb_ok && cb_ok();
             },cb_err);
         }
