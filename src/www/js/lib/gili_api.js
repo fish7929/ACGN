@@ -1636,8 +1636,10 @@ gili_data.updateClubCountInfo = function (options, cb_ok, cb_err) {
             if (data.results.length > 0) {
                 var obj = data.results[0];
                 var his_num = obj.get(field) || 0;
-                if (his_num <0) {
-                    obj.increment(field, 0);
+                if (his_num =0 && num<0) {
+                    obj.set(field, 0);
+                } else if (his_num < 0) {
+                    obj.set(field, 0);
                 } else {
                     obj.increment(field, num);
                 }
