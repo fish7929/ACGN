@@ -1,4 +1,3 @@
-/// <reference path="http://localhost:17391/gili/avos/av2.js" />
 // 文件名称: gli_api.js
 // 创 建 人: nyh
 // 创建日期: 2016/6/25
@@ -19,7 +18,7 @@ gili_data.getCurrentUser = function () {
 };
 
 /**
- 返回当前登录用户对象
+ 返回当前登录用户对象 
  **/
 gili_data.getCurrentUserJSON = function () {
     var currentUser = AV.User.current();
@@ -1631,13 +1630,13 @@ gili_data.updateClubCountInfo = function (options, cb_ok, cb_err) {
         field = options.field,
         num = options.num;
 
-    var strCQL = " select  * from club where objectId='" + club_id + "' ";
+    var strCQL = " select * from club where objectId='" + club_id + "' ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
             if (data.results.length > 0) {
                 var obj = data.results[0];
                 var his_num = obj.get(field) || 0;
-                if (his_num <= 0) {
+                if (his_num <0) {
                     obj.increment(field, 0);
                 } else {
                     obj.increment(field, num);
