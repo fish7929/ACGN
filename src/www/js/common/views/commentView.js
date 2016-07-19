@@ -228,7 +228,7 @@ define([
             }
             var tpl = htmlTpl;
             if(self.$el.get(0).className == "commentContainerBlog"){
-                content = "<span>"+user_nick+"</span>"+content;
+                content = "<span>"+user_nick+"：</span>"+content;
                 tpl = htmlTpl2;
                 name = "";
             }

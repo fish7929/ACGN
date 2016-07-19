@@ -11,7 +11,9 @@ define([
     };
 
     app.navigate = function(url,obj){
-        app.router.navigate(url,obj);
+        url = url.indexOf("#") == 0 ? url : "#"+url;
+        window.open(url);
+//        app.router.navigate(url,obj);
     };
 
     app.goBack = function(option){
