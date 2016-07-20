@@ -4,9 +4,10 @@ define([
     'module/activity/views/activityView'
 ],function(activityView){
     return {
-        activity : function(activityId){
+        activity : function(activityId, pos){
             var opt = {};
             opt.activityId = activityId;
+            opt.pos = pos;
             app.page.show(activityView, opt);
         }
     };

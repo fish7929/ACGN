@@ -26,7 +26,8 @@ define([
             "book/:bookId" : "book",
             //更多优秀插画
             "blogMore" : "blogMore",
-            "activity/:activityId" : "activity"
+            "activity/:activityId" : "activity",
+            "activity/:activityId/:pos" : "activity"
         },
         /**当前路由，如果调用返回，返回到指定路由**/
         backRoutes: {
