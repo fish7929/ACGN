@@ -156,10 +156,13 @@ define([
             if(!isLike){
                 type = 1;
             }
+            self.setBtnLoveState(type);
+            self.setLoveNum(type);
             utils.likeTopic(type, id, function(data){
                 self.isLoving = false;
-                self.setBtnLoveState(type);
-                self.setLoveNum(type);
+            }, function(){
+                self.setBtnLoveState(!type);
+                self.setLoveNum(!type);
             })
         },
 
