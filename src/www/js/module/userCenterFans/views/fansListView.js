@@ -46,6 +46,7 @@ define([
         },
         scrollUpdate:function(){
             var self = this;
+            console.log("more")
             self.collection.more();
         }
     });

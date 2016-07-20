@@ -110,9 +110,10 @@ define([
             var self = this;
             window.onscroll = function(e){
                                     var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-                                    if(scrollTop + window.innerHeight > document.body.offsetHeight-400){
-                                        if(!self.data_finish)
+                                    if(scrollTop + window.innerHeight > document.body.offsetHeight-400) {
+                                        if (!self.data_finish) {
                                             self.fansListView.scrollUpdate();
+                                        }
                                     }
                                 };
         },

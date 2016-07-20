@@ -63,7 +63,7 @@ define([
         //加载更多
         more:function(){
             var self = this;
-            self._load();
+            self._load(self._type);
         },
         _loadNetData:function(arr){
             var self = this;
