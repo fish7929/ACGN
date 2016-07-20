@@ -131,7 +131,9 @@ gili_config.Link = [
     {src : "./images/link/link5.jpg", link : "http://www.nomo.cn"},
     {src : "./images/link/link6.jpg", link : "http://www.yimoe.cc"},
     {src : "./images/link/link7.jpg", link : "http://cosplay.la"},
-    {src : "./images/link/link8.png", link : "http://www.kankelu.com"}
+    {src : "./images/link/link8.png", link : "http://www.kankelu.com"},
+    {src : "./images/link/link9.jpg", link : "http://www.moeyinshe.com"},
+    {src : "./images/link/link10.jpg", link : "http://www.kicokico.com"}
 ]
 
 window.giliConfig = gili_config;
