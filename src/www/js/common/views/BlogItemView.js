@@ -50,7 +50,7 @@ define([
 
         onWorksLiked : function(){
             var self = this;
-            var isLike = utils.isLiked(id);
+            var isLike = utils.isLiked(self.data.objectId);
             if(isLike){
                 self.setBtnLoveState(1);
             }else{
