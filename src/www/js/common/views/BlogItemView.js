@@ -41,10 +41,21 @@ define([
 
         /**初始化**/
         initialize : function(){
+            app.on("common:works:liked",this.onWorksLiked, this);
         },
 
         //在开始渲染模板前执行，此时当前page没有添加到document
         onBeforeRender : function(){
+        },
+
+        onWorksLiked : function(){
+            var self = this;
+            var isLike = utils.isLiked(id);
+            if(isLike){
+                self.setBtnLoveState(1);
+            }else{
+                self.setBtnLoveState(0);
+            }
         },
 
         //渲染完模板后执行,此时当前page没有添加到document
@@ -173,6 +184,7 @@ define([
 
         //当页面销毁时触发
         onDestroy : function(){
+            app.off("common:works:liked", this.onWorksLiked, this);
         }
     });
 });

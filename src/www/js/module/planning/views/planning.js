@@ -97,6 +97,10 @@ define([
             //获取参数
 //            self.planId = self.getOption("planId");
             self.currentUser = gili_data.getCurrentUser();
+
+            if(self.currentUser){
+                utils.loadLikedTplList(self.currentUser.id);
+            }
             //初始化企划基本信息
             PlanningModel.getPlanById(self.planId, function (data) {
                 self._initPlanInfoView(data);
