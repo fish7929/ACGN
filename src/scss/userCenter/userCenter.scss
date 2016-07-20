@@ -33,7 +33,9 @@
       .info-detail-img{vertical-align: middle; margin-right: 12px; margin-top: -3px;}
       .commit-img{display: inline-block; width:25px;height: 20px; background: url("../images/common/comment2.png") no-repeat; vertical-align: middle; margin-right: 12px; margin-top: -3px;}
       .commit-img:hover{background: url("../images/common/comment.png") no-repeat;}
-    .info-article{ margin-top: 25px;padding:0px 63px; line-height: 33px; text-align: left; color:#3d3d3d; font-size: 14px; line-height: 20px;}
+    .info-article{ margin-top: 25px;padding:0px 63px; line-height: 33px; text-align: left; color:#3d3d3d; font-size: 14px; line-height: 20px;
+      word-wrap: break-word;
+      word-break: normal; }
     .info-detail-list{width:600px; margin:0 auto;}
       #commentTxt{width:600px; height: 120px; border:1px solid #fe5313; border-radius: 10px; font-size: 20px; color:#3d3d3d; resize: none;outline:none;
         padding:10px; font-family: '微软雅黑'; background:#fff3ef;}
@@ -52,7 +54,8 @@
               .sp_reply{ font-size: 18px; color:#f15313; float:right; cursor:pointer; }
             }
             .reply_userName{color:#f15313; cursor:pointer;}
-            .commentContext{ font-size: 18px; color: #3d3d3d;}
+            .commentContext{ font-size: 18px; color: #3d3d3d;word-wrap: break-word;
+              word-break: normal;}
       }
       .commentMore{width:97px; height: 30px; background: url("../images/userCenter/comment.png") no-repeat; cursor: pointer; margin:0 auto 30px auto;}
 }
