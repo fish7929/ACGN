@@ -17,23 +17,28 @@ define([
 ],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, BDPreviewView, BDHotView, CommentView, BookModel, HomeFooter){
     var labelTpl = "<div class=\"bd-label-item\" style='background-color: {0}'>{1}</div>"
 
-    var bookInfo = "<span class=\"spanTitle\">作者：</span><span class=\"fontRed\">{author}</span>"
-        + "<span class=\"spanTitle\">原作：</span><span class=\"fontRed\">{original}</span>"
-        + "<span class=\"spanTitle\">CP：</span><span class=\"fontRed\">{cp}</span>"
-        + "<span class=\"spanTitle\">语言：</span><span class=\"fontRed\">{lang}</span>"
-        + "<span class=\"spanTitle\">页数：</span><span class=\"fontRed\">{page}</span>"
-        + "<span class=\"spanTitle\">尺寸：</span><span class=\"fontRed\">{size}</span>"
-        + "<span class=\"spanTitle\">发售日期：</span><span class=\"fontRed\">{data}</span>";
+    var bookInfo = [
+        {title: "作者：", key : "user_nick"},
+        {title: "原作：", key : "original"},
+        {title: "CP：", key : "cp"},
+        {title: "语言：", key : "language"},
+        {title: "页数：", key : "page"},
+        {title: "尺寸：", key : "size"},
+        {title: "发售日期：", key : "sale_date"}
+    ];
 
-    var gameInfo = "<span class=\"spanTitle\">出品：</span><span class=\"fontRed\">{produce}</span>"
-        + "<span class=\"spanTitle\">原作：</span><span class=\"fontRed\">{original}</span>"
-        + "<span class=\"spanTitle\">平台：</span><span class=\"fontRed\">{platform}</span>"
-        + "<span class=\"spanTitle\">语言：</span><span class=\"fontRed\">{lang}</span>"
-        + "<span class=\"spanTitle\">性向：</span><span class=\"fontRed\">{sex}</span>"
-        + "<span class=\"spanTitle\">年龄限制：</span><span class=\"fontRed\">{age}</span>"
-        + "<span class=\"spanTitle\">游戏类型：</span><span class=\"fontRed\">{gametype}</span>"
-        + "<span class=\"spanTitle\">发售日期：</span><span class=\"fontRed\">{data}</span>"
-        + "<span class=\"spanTitle\">状态：</span><span class=\"fontRed\">{status}</span>"
+    var gameInfo = [
+        {title: "出品：", key : "produce"},
+        {title: "原作：", key : "original"},
+        {title: "平台：", key : "plateform"},
+        {title: "语言：", key : "language"},
+        {title: "性向：", key : "sex"},
+        {title: "年龄限制：", key : "age_limit"},
+        {title: "游戏类型：", key : "game_type"},
+        {title: "发售日期：", key : "sale_date"},
+        {title: "状态：", key : "game_progress"}
+    ];
+
     return BaseView.extend({
         id : "bookDetailsContainer",
         template : _.template(tpl),
@@ -141,30 +146,35 @@ define([
             var bookName = data.name || "";
             var author = data.user.user_nick || "";
             var avatar = data.user.avatar || "";
-            var originalAuthor = data.original || "";
-            var cp = data.cp || "";
-            var lang = data.language || "";
-            var page = data.page || "";
-            var size = data.size || "";
-            var saleDate = utils.formatTime(data.sale_date, "yyyy.MM");
             var brief = data.brief || "";
             var labelArr = data.labels || [];
-            var produce = data.produce || "";
-            var platform = data.plateform || "";
-            var sex = data.sex || "";
-            var age = data.age_limit || "";
-            var gametype = data.game_type || "";
-            var status = data.game_progress || "";
 
-            var infoHtml = "";
+            var infoHtml = "", tempArr, obj;
             if(data.b_type == 2){
-                infoHtml = gameInfo.replace("{produce}", produce).replace("{original}", originalAuthor).replace("{platform}", platform)
-                    .replace("{lang}", lang).replace("{sex}", sex).replace("{age}", age).replace("{gametype}", gametype)
-                    .replace("{data}", saleDate).replace("{status}", status);
+                tempArr = gameInfo;
             }else{
-                infoHtml = bookInfo.replace("{author}", author).replace("{original}", originalAuthor).replace("{cp}", cp)
-                    .replace("{lang}", lang).replace("{page}", page).replace("{size}", size).replace("{data}", saleDate);
+                tempArr = bookInfo;
             }
+
+            for(var i = 0; i < tempArr.length; i++){
+                obj = tempArr[i];
+                var value = "";
+                switch (obj.key){
+                    case "user_nick":
+                        value = data.user.user_nick;
+                        break;
+                    case "sale_date":
+                        value = utils.formatTime(data.sale_date || Date.now(), "yyyy.MM");
+                        break;
+                    default:
+                        value = data[obj.key];
+                        break;
+                }
+                if(value){
+                    infoHtml += "<span class=\"spanTitle\">"+obj.title+"</span><span class=\"fontRed\">"+value+"</span>"
+                }
+            }
+
             self.ui.bookInfoDiv.html(infoHtml);
 
             self.ui.bookCover.css({"background":"url("+cover+") no-repeat center", "background-size": "100%"});

@@ -47,16 +47,17 @@
     }
 
     .bd-info-txt{
-      margin-top: 30px;
+      margin: 30px 0 10px 0;
 
       .spanTitle{
         margin-right: 0px;
+        line-height: 40px;
       }
 
       span{
-        margin-bottom: 10px;
+        //margin-bottom: 10px;
         margin-right: 40px;
-        display: inline-block;
+        //display: inline-block;
       }
     }
 
