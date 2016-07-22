@@ -2058,10 +2058,10 @@ gili_data.logOut = function () {
 gili_data.signUp = function (user, cb_ok, cb_err) {
     user.signUp(null, {
         success: function (new_user) {
-            cb_ok(new_user);
             //d关注，粉d
             gili_data.signUpFollow(new_user, function (new_user) {
                 //不执行任何操作
+                cb_ok(new_user);
             }, function (new_user, error) {
                 //不执行任何操作
             });
