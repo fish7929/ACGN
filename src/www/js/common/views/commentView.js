@@ -233,7 +233,7 @@ define([
                 name = "";
             }
             html = tpl.replace("{dataId}", id).replace("{userName}", user_nick).replace("{userId}", userId).replace("{floor}", floor).replace("{name}", name).replace("{pic}", user_pic)
-                .replace("{content}", content).replace("{data}", utils.formatTime(createdAt, "yyyy.MM.dd HH.mm"));
+                .replace("{content}", content).replace("{data}", utils.formatTime(createdAt, "yyyy.MM.dd HH:mm"));
             return html;
         },
 
