@@ -2082,7 +2082,7 @@ gili_data.signUpFollow = function (new_user, cb_ok, cb_err) {
             //1、当前用户关注总数加一，2、对方用户粉丝总数加一
             gili_data.currentUserCountUpdate(new_user, "followee_count", 1, function (data) {
                 gili_data.updateUser({ "follower_count": 1 }, did, function (obj) {
-                    d_follow();
+                    cb_ok(obj);
                 }, cb_err);
             }, cb_err);
         }, cb_err
