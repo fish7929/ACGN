@@ -8,9 +8,12 @@
 
   .activity-bg{
     margin: 0 auto;
-    background: url('../images/activity/snqx/activeBg.jpg') no-repeat center;
     width: 100%;
     height: 4000px;
+  }
+
+  .activity-bg > img{
+    display: inherit;
   }
 
   .btnJoin {
