@@ -11,9 +11,12 @@ define([
     };
 
     app.navigate = function(url,obj){
-        url = url.indexOf("#") == 0 ? url : "#"+url;
-        window.open(url);
-//        app.router.navigate(url,obj);
+        if(url == ""){
+            app.router.navigate(url,obj);
+        }else{
+            url = url.indexOf("#") == 0 ? url : "#"+url;
+            window.open(url);
+        }
     };
 
     app.goBack = function(option){

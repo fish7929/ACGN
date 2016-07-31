@@ -1,0 +1,72 @@
+
+.activitySNQXContainer{
+  position: absolute;
+  width: 100%;
+  top: 0px;
+  left: 0px;
+  background-color: rgba(0, 0, 0, 1);
+
+  .activity-bg{
+    margin: 0 auto;
+    background: url('../images/activity/snqx/activeBg.jpg') no-repeat center;
+    width: 100%;
+    height: 4000px;
+  }
+
+  .btnJoin {
+    position: absolute;
+    top: 576px;
+    left: calc(50% - 130px);
+    width: 260px;
+    height: 78px;
+    background: url("../images/activity/snqx/btnJoin.png") no-repeat center;
+  }
+
+  .activity-blog-title{
+    font-size: 72px;
+  }
+
+  .btn-commit{
+    background-color: #ffb400 !important;
+    border-radius: 0px !important;
+  }
+
+  .activity-foot-line{
+    width: 100%;
+    height: 80px;
+    background: url("../images/activity/snqx/footer-line.jpg") no-repeat top center #3f4041;
+  }
+
+  .footerContainer{
+    background-color: #3f4041;
+  }
+
+  .activity-go-btns{
+    position: fixed;
+    top: 30%;
+    right: calc(50% - 640px);
+    width: 118px;
+  }
+
+  .activity-go-btns > div{
+    width: 118px;
+    height: 51px;
+    margin-top: 10px;
+  }
+
+  .activity-go-activity{
+    background: url("../images/activity/snqx/btn-activity.png") no-repeat center;
+  }
+
+  .activity-go-work{
+    background: url("../images/activity/snqx/btn-work.png") no-repeat center;
+  }
+
+  .activity-go-comment{
+    background: url("../images/activity/snqx/btn-comment.png") no-repeat center;
+  }
+
+  .activity-go-top{
+    background: url("../images/activity/snqx/btn-top.png") no-repeat center;
+  }
+}
