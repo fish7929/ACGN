@@ -71,7 +71,7 @@ define([
 
         initData : function(data){
             var self = this;
-            console.log(data);
+            self.author = data.user.user_nick;
             var brief = "<span>" + data.user.user_nick + "：</span>" + data.user.brief;
             var createdAt = data.createdAt || Date.now();
             var voteInt = '<span>'+(data.votes || 0)+'</span>人投票';
@@ -98,7 +98,7 @@ define([
                 MsgBox.alert(giliConfig.Tip.NOLOGIN);
                 return;
             }
-            activityModel.voteWork(self.blogId, 2, function(){
+            activityModel.voteWork(self.blogId, 1, function(){
                 MsgBox.alert("投票成功!");
             }, function(err){
                 MsgBox.alert(err.data);
@@ -106,11 +106,13 @@ define([
         },
 
         onShareQQHandler : function(e){
-            utils.shareVoteViewToQQ(self.blogId);
+            utils.shareVoteViewToQQ(self.blogId, self.author);
+            activityModel.voteWork(self.blogId, 2);
         },
 
         onShareWBHandler : function(e){
-            utils.shareVoteViewToWB(self.blogId);
+            utils.shareVoteViewToWB(self.blogId, self.author);
+            activityModel.voteWork(self.blogId, 2);
         },
 
         addEvent : function(){

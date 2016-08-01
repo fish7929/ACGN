@@ -11,7 +11,7 @@ define([
     'module/book/views/bookPreviewView',
     'msgbox'
 ],function(BaseView, tpl, mn, activityModel, BookPreviewView, MsgBox){
-    var htmlTpl = '<div class="activity-blog-item" data-id="{id}" data-user-id="{userId}">' +
+    var htmlTpl = '<div class="activity-blog-item" data-id="{id}" data-user-id="{userId}" data-user-nick="{user-nick}">' +
         '<div class="activity-blog-pic-div">' +
         '<div class="activity-blog-pic" style="background: url({pic}) no-repeat center; background-size: 100%"></div>' +
         '<div class="activity-blog-share-btn">' +
@@ -208,7 +208,7 @@ define([
                 var voteInt = obj.votes || 0;
 
                 html += htmlTpl.replace("{id}", obj.objectId).replace("{pic}", pic).replace("{name}", name)
-                    .replace("{voteCnt}", voteInt).replace("{userId}", userId);
+                    .replace("{voteCnt}", voteInt).replace("{userId}", userId).replace("{user-nick}", name);
             }
             self.ui.blogList.html(html);
         },
@@ -222,6 +222,7 @@ define([
             var parent = $(target).parents(".activity-blog-item");
             if(!parent) return;
             var dataId = parent.attr("data-id");
+            var dataName = parent.attr("data-user-nick");
             if(!dataId) return;
             if(target.className.indexOf("activity-blog-pic") >= 0){
                 // self.onPreview(dataId);
@@ -242,9 +243,11 @@ define([
                 var btnDivs = parent.find(".activity-blog-share-btn");
                 btnDivs.show();
             }else if(target.className.indexOf("activity-blog-btn-weibo") >= 0){
-                utils.shareVoteViewToWB(dataId)
+                utils.shareVoteViewToWB(dataId, dataName);
+                activityModel.voteWork(dataId, 2);
             }else if(target.className.indexOf("activity-blog-btn-qq") >= 0){
-                utils.shareVoteViewToQQ(dataId)
+                utils.shareVoteViewToQQ(dataId, dataName);
+                activityModel.voteWork(dataId, 2);
             }
         },
 
