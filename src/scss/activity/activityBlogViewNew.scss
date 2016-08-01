@@ -28,6 +28,15 @@
       display: none;
     }
 
+    .activity-blog-btn-close{
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      background: url("../images/activity/snqx/activity-close.png") no-repeat center;
+    }
+
     .activity-blog-btn-weibo, .activity-blog-btn-qq{
       width: 50%;
       height: 100%;

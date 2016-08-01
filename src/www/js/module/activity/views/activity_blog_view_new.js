@@ -13,8 +13,9 @@ define([
 ],function(BaseView, tpl, mn, activityModel, BookPreviewView, MsgBox){
     var htmlTpl = '<div class="activity-blog-item" data-id="{id}" data-user-id="{userId}" data-user-nick="{user-nick}">' +
         '<div class="activity-blog-pic-div">' +
-        '<div class="activity-blog-pic" style="background: url({pic}) no-repeat center; background-size: 100%"></div>' +
+        '<div class="activity-blog-pic button" style="background: url({pic}) no-repeat center; background-size: 100%"></div>' +
         '<div class="activity-blog-share-btn">' +
+        '<div class="activity-blog-btn-close button"></div>' +
         '<div class="activity-blog-btn-weibo button"></div>' +
         '<div class="activity-blog-btn-qq button"></div>' +
         '</div></div>' +
@@ -218,7 +219,7 @@ define([
             e.stopPropagation();
             e.preventDefault();
             var self = this;
-            var target = e.target;
+            var target = e.target, btnDivs;
             var parent = $(target).parents(".activity-blog-item");
             if(!parent) return;
             var dataId = parent.attr("data-id");
@@ -226,7 +227,7 @@ define([
             if(!dataId) return;
             if(target.className.indexOf("activity-blog-pic") >= 0){
                 // self.onPreview(dataId);
-                // app.navigate("#activityVote/" + dataId, {replace: false, trigger: true});
+                app.navigate("#activityVote/" + dataId, {replace: false, trigger: true});
             }else if(target.className.indexOf("activity-blog-like-btn") >= 0){
                 self.onLike(parent, dataId);
             }else if(target.className.indexOf("activity-blog-name") >= 0) {
@@ -240,7 +241,7 @@ define([
                 }
                 self.blogVote(dataId);
             }else if(target.className.indexOf("activity-blog-support-btn") >= 0){       //应援
-                var btnDivs = parent.find(".activity-blog-share-btn");
+                btnDivs = parent.find(".activity-blog-share-btn");
                 btnDivs.show();
             }else if(target.className.indexOf("activity-blog-btn-weibo") >= 0){
                 utils.shareVoteViewToWB(dataId, dataName);
@@ -248,6 +249,9 @@ define([
             }else if(target.className.indexOf("activity-blog-btn-qq") >= 0){
                 utils.shareVoteViewToQQ(dataId, dataName);
                 activityModel.voteWork(dataId, 2);
+            }else if(target.className.indexOf("activity-blog-btn-close") >= 0){
+                btnDivs = parent.find(".activity-blog-share-btn");
+                btnDivs.hide();
             }
         },
 

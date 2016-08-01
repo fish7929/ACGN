@@ -1,4 +1,3 @@
-
 .activitySNQXContainer{
   position: absolute;
   width: 100%;
@@ -12,8 +11,34 @@
     height: 4000px;
   }
 
-  .activity-bg > img{
-    display: inherit;
+  .activity-bg-01{
+    width: 100%;
+    height: 791px;
+    background: url("../images/activity/snqx/active_bg_01.jpg") no-repeat center;
+  }
+
+  .activity-bg-02{
+    width: 100%;
+    height: 827px;
+    background: url("../images/activity/snqx/active_bg_02.jpg") no-repeat center;
+  }
+
+  .activity-bg-03{
+    width: 100%;
+    height: 667px;
+    background: url("../images/activity/snqx/active_bg_03.jpg") no-repeat center;
+  }
+
+  .activity-bg-04{
+    width: 100%;
+    height: 722px;
+    background: url("../images/activity/snqx/active_bg_04.jpg") no-repeat center;
+  }
+
+  .activity-bg-05{
+    width: 100%;
+    height: 942px;
+    background: url("../images/activity/snqx/active_bg_05.jpg") no-repeat center;
   }
 
   .btnJoin {

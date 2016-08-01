@@ -13,8 +13,9 @@ define([
     'common/views/commentView',
     'module/activity/model/activityModel',
     'module/publish/views/publishView',
-    'module/home/views/home_footer'
-],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, ActivityBlogView, CommentView, activityModel, PublishView, HomeFooter){
+    'module/home/views/home_footer',
+    'common/views/bottomLoginBar'
+],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, ActivityBlogView, CommentView, activityModel, PublishView, HomeFooter, BottomLoginView){
     return BaseView.extend({
         className : "activitySNQXContainer",
         template : _.template(tpl),
@@ -51,6 +52,11 @@ define([
             FooterRegion:{
                 el: ".activity-footer-reg",
                 regionClass: SwitchViewRegion
+            },
+
+            BottomLoginRegion:{
+                el: ".activity-bottom-login-reg",
+                regionClass: SwitchViewRegion
             }
         },
 
@@ -60,6 +66,7 @@ define([
             self._loginBarView = new LoginBarView();
             self._joinBlogView = new ActivityBlogView();
             self._footerView = new HomeFooter();
+            self._bottomLoginView = new BottomLoginView();
         },
 
         //在开始渲染模板前执行，此时当前page没有添加到document
@@ -79,6 +86,10 @@ define([
             self.ActivityBlogRegion.show(self._joinBlogView);
             self.CommentBlogRegion.show(self._commentView);
             self.FooterRegion.show(self._footerView);
+            var _user = gili_data.getCurrentUser();
+            if(!_user){
+                self.BottomLoginRegion.show(self._bottomLoginView)
+            }
         },
 
         //页间动画已经完成，当前page已经加入到document
@@ -100,6 +111,11 @@ define([
             });
             self.regionShow();
             self.addOnScroll();
+
+            //登录成功
+            app.on("login:ok",self.onLoginOkHandle, self);
+            //登出成功
+            app.on("logOut:ok",self.onLoginOkHandle, self);
         },
 
         //滚动容器添加滚动事件
@@ -161,6 +177,16 @@ define([
             PublishView.show(param);
         },
 
+        onLoginOkHandle : function(){
+            var self = this;
+            var _user = gili_data.getCurrentUser();
+            if(!_user){
+                self.BottomLoginRegion.show(self._bottomLoginView)
+            }else{
+                self.BottomLoginRegion.hide(self._bottomLoginView)
+            }
+        },
+
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
             var self = this;
@@ -169,6 +195,12 @@ define([
             self.ActivityBlogRegion.hide(self._joinBlogView);
             self.CommentBlogRegion.hide(self._commentView);
             self.FooterRegion.hide(self._footerView);
+            self.BottomLoginRegion.hide(self._bottomLoginView);
+
+            //登录成功
+            app.off("login:ok",this.onLoginOkHandle, this);
+            //登出成功
+            app.off("logOut:ok",this.onLoginOkHandle, this);
         },
 
         //当页面销毁时触发

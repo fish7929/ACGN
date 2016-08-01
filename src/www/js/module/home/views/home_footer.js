@@ -14,10 +14,12 @@ define([
 
         // key : selector
         ui : {
+            "btnsDiv" : ".home-footer-btns"
         },
 
         //事件添加
         events : {
+            "click @ui.btnsDiv" : "onClickHandler"
         },
 
         /**初始化**/
@@ -35,6 +37,14 @@ define([
         //页间动画已经完成，当前page已经加入到document
         pageIn : function(){
             this.$el.show();
+        },
+
+        onClickHandler : function(e){
+            var target = e.target;
+            var type = target.getAttribute("attr");
+            if(type == "aboutUs"){
+                app.navigate("#aboutUs", {replace: false, trigger: true});
+            }
         },
 
         /**页面关闭时调用，此时不会销毁页面**/

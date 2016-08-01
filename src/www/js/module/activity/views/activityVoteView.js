@@ -10,8 +10,9 @@ define([
     'common/region/switch_view_region',
     'common/views/loginBar',
     'msgbox',
-    'module/activity/model/activityModel'
-],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, MsgBox, activityModel){
+    'module/activity/model/activityModel',
+    'common/views/bottomLoginBar'
+],function(BaseView, tpl, mn, SwitchViewRegion, LoginBarView, MsgBox, activityModel, BottomLoginView){
     return BaseView.extend({
         className : "activity-vote-view",
         template : _.template(tpl),
@@ -39,6 +40,11 @@ define([
             LoginBarRegion: {
                 el: ".activity-vote-loginBar-reg",
                 regionClass: SwitchViewRegion
+            },
+
+            BottomLoginRegion:{
+                el: ".activity-bottom-login-reg",
+                regionClass: SwitchViewRegion
             }
         },
 
@@ -46,6 +52,7 @@ define([
         initialize : function(){
             var self = this;
             self._loginBarView = new LoginBarView();
+            self._bottomLoginView = new BottomLoginView();
         },
 
         //在开始渲染模板前执行，此时当前page没有添加到document
@@ -86,6 +93,10 @@ define([
         regionShow : function(){
             var self = this;
             self.LoginBarRegion.show(self._loginBarView);
+            var _user = gili_data.getCurrentUser();
+            if(!_user){
+                self.BottomLoginRegion.show(self._bottomLoginView)
+            }
         },
 
         onHeadPicHandler : function(e){
@@ -115,18 +126,37 @@ define([
             activityModel.voteWork(self.blogId, 2);
         },
 
+        onLoginOkHandle : function(){
+            var self = this;
+            var _user = gili_data.getCurrentUser();
+            if(!_user){
+                self.BottomLoginRegion.show(self._bottomLoginView)
+            }else{
+                self.BottomLoginRegion.hide(self._bottomLoginView)
+            }
+        },
+
         addEvent : function(){
             var self = this;
+            //登录成功
+            app.on("login:ok",self.onLoginOkHandle, self);
+            //登出成功
+            app.on("logOut:ok",self.onLoginOkHandle, self);
         },
 
         removeEvent : function(){
             var self = this;
+            //登录成功
+            app.off("login:ok",self.onLoginOkHandle, self);
+            //登出成功
+            app.off("logOut:ok",self.onLoginOkHandle, self);
         },
 
         /**页面关闭时调用，此时不会销毁页面**/
         close : function(){
             var self = this;
             self.LoginBarRegion.hide(self._loginBarView);
+            self.BottomLoginRegion.hide(self._bottomLoginView);
             self.removeEvent();
         },
 
