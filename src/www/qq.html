@@ -6,6 +6,8 @@
     <script src="http://www.gilieye.com/js/vendor/av.js"></script>
     <script src="js/lib/gili_api.js"></script>
     <script type="text/javascript">
+        var url = getUrlParam(location.href, 'url')
+
         document.addEventListener('DOMContentLoaded', function () {
             //实例化AV
             AV.initialize("oCjYs9w05WuNmCk6sDblt7hY-gzGzoHsz", "yaREoDyiyoy5iWV2iWAODk5X");
@@ -73,12 +75,27 @@
             return queryObj[name];
         }
 
+
+        function getUrlParam(url, param) {
+            var iLen = param.length;
+            var iStart = url.indexOf(param);
+            if (iStart == -1) {
+                return "";
+            }
+            iStart += iLen + 1;
+            var iEnd = url.indexOf("&", iStart);
+            if (iEnd == -1) {
+                return url.substring(iStart);
+            }
+            return url.substring(iStart, iEnd);
+        }
+
         /**
          * 获取Token
          */
         function getTokenParam() {
             var url = location.href;
-            var queryString = url.substring(url.indexOf('#') + 1, url.lastIndexOf('&'));
+            var queryString = url.substring(url.lastIndexOf('#') + 1, url.lastIndexOf('&'));
 
             return queryString.split('=')[1];
         }
@@ -110,7 +127,7 @@
                         //用户存在则登陆绑定
                         AV.User.logIn(unionid, "6a063e705a16e625", {
                             success: function (_user) {
-                                window.location.href = 'http://www.gilieye.com';
+                                window.location.href = url;
                             },
                             error: function (_user, error) {
                                 console.log(error.message);
@@ -128,7 +145,7 @@
                             //注册成功则登陆
                             AV.User.logIn(unionid, "6a063e705a16e625", {
                                 success: function (user) {
-                                    window.location.href = 'http://www.gilieye.com';
+                                    window.location.href = url;
                                 },
                                 error: function (user, error) {
                                     console.log(error.message);
