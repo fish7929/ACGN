@@ -256,8 +256,12 @@ define([
         },
 
         blogVote : function(blogId){
+            var self = this;
             activityModel.voteWork(blogId, 1, function(){
                 MsgBox.alert("投票成功!");
+                var voteSpan = self.ui.blogList.find(".activity-blog-item[data-id='"+blogId+"']").find(".voteSpan");
+                var val = voteSpan.html();
+                voteSpan.html(parseInt(val)+1);
             }, function(err){
                 MsgBox.alert(err.data);
             });

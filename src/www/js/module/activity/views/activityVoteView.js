@@ -79,7 +79,8 @@ define([
         initData : function(data){
             var self = this;
             self.author = data.user.user_nick;
-            var brief = "<span>" + data.user.user_nick + "：</span>" + data.user.brief;
+            console.log(data);
+            var brief = "<span>" + data.user.user_nick + "：</span>" + (data.user.brief || "");
             var createdAt = data.createdAt || Date.now();
             var voteInt = '<span>'+(data.votes || 0)+'</span>人投票';
             var pic = data.pictures[0] || "";
@@ -110,6 +111,9 @@ define([
                 return;
             }
             activityModel.voteWork(self.blogId, 1, function(){
+                var voteSpan = self.ui.blogVote.find("span");
+                var val = voteSpan.html();
+                voteSpan.html(parseInt(val)+1);
                 MsgBox.alert("投票成功!");
             }, function(err){
                 MsgBox.alert(err.data);

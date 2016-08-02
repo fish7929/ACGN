@@ -2335,7 +2335,6 @@ gili_data.blogVote = function (options,cb_ok,cb_err) {
                 **/
                 //相同一天的数据拎出来
                 getForData();
-
                 if(blog_array.length>0){
                     //如果大于2条投票数据说明已经不能再去投票了
                     if(blog_array.length>=2){
@@ -2343,7 +2342,9 @@ gili_data.blogVote = function (options,cb_ok,cb_err) {
                         return;
                     } else if(share_array.length>=1&&blog_array.length==1){//如果分享过一次，并且只发过一条，可以进行投票
                         insert();
-                    }else{
+                    }else if (blog_array.length == 1 && vote_type==2) {
+                        insert();
+                    } else{
                         cb_err({"status":"failed","data":"投票无效,只能投一票"});
                         return;
                     }
@@ -2358,6 +2359,7 @@ gili_data.blogVote = function (options,cb_ok,cb_err) {
         error: cb_err
     });
     var insert = function () {
+        console.log("insert")
         var blog_activity = AV.Object.extend("blog_activity");
         var obj = new blog_activity();
         obj.set("blog_id", blog_id);
@@ -2366,6 +2368,7 @@ gili_data.blogVote = function (options,cb_ok,cb_err) {
         obj.set("vote_date",new Date());
         obj.save(null, {
             success: function (obj) {
+                console.log(vote_type)
                 if(vote_type==2){
                     cb_ok(obj);//如果是分享不累计加1
                 }else{
