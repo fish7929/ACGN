@@ -7,7 +7,8 @@ define([
     'module/Associations/controller',
     'module/book/controller',
     'module/blog/controller',
-    'module/activity/controller'
+    'module/activity/controller',
+    'module/aboutUs/controller'
 ],function(){
     var controllers = {
     };

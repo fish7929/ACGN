@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GiliLove活动-守望先锋</title>
+    <link rel="stylesheet" href="./css/main.css"/>
+</head>
+<body>
+<div class="container">
+    <div class="btnJoin button" onclick="onJoinClick()"></div>
+</div>
+
+<script>
+    var onJoinClick = function(){
+        if(parent && parent.parent && parent.parent.joinActivity){
+            parent.parent.joinActivity();
+        }
+    };
+
+    var fastJump = function(type){
+        if(parent && parent.parent && parent.parent.fastJump){
+            parent.parent.fastJump(type);
+        }
+    };
+
+    if(parent && parent.parent && parent.parent.changeIframeHeight){
+        parent.parent.changeIframeHeight(4000);
+    }
+</script>
+</body>
+</html>

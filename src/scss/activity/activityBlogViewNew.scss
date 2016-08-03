@@ -1,0 +1,207 @@
+.activityBlogView-new{
+
+  .activity-blog-list{
+    width: 960px;
+    margin: 0 auto;
+    text-align: left;
+  }
+
+  .activity-blog-item{
+    width: 226px;
+    border-left: 0;
+    margin-right: 18px;
+    box-sizing: border-box;
+    float: left;
+
+    .activity-blog-pic-div{
+      width: 226px;
+      height: 226px;
+      position: relative;
+    }
+
+    .activity-blog-share-btn{
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      top: 0px;
+      display: none;
+    }
+
+    .activity-blog-btn-close{
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 30px;
+      height: 30px;
+      background: url("../images/activity/snqx/activity-close.png") no-repeat center;
+    }
+
+    .activity-blog-btn-weibo, .activity-blog-btn-qq{
+      width: 50%;
+      height: 100%;
+      float: left;
+    }
+
+    .activity-blog-btn-weibo{
+      background: url("../images/activity/snqx/btn-weibo.png") no-repeat center;
+    }
+
+    .activity-blog-btn-qq{
+      background: url("../images/activity/snqx/btn-qq.png") no-repeat center;
+    }
+
+    .activity-blog-pic{
+      width: 100%;
+      height: 100%;
+      border-radius: 2px;
+      border: 1px solid #c0c0c0;
+    }
+
+    .activity-blog-name{
+      font-size: 24px;
+      margin-top: 20px;
+    }
+
+    .activity-blog-vote{
+      margin-top: 10px;
+      font-size: 18px;
+      color: #808080;
+    }
+
+    .activity-blog-vote span{
+      color: #ffb400;
+    }
+
+    .activity-blog-btns{
+      margin-top: 20px;
+      padding: 0 8px;
+    }
+
+    .activity-blog-vote-btn, .activity-blog-support-btn{
+      width: 100px;
+      height: 50px;
+      text-align: center;
+      line-height: 50px;
+      font-size: 18px;
+      color: #252525;
+      background-color: #ffb400;
+      float: left;
+      margin-right: 10px;
+    }
+    .activity-blog-support-btn{
+      margin-right: 0px;
+    }
+
+    .onSelect{
+      background-color: #808080;
+      color: #FFFFFF;
+    }
+  }
+
+  .activity-blog-item:nth-child(4n){
+    margin-right: 0;
+  }
+
+  .activity-blog-item:nth-child(4n+1){
+    padding-left: 0;
+  }
+
+  .activity-blog-item:nth-child(n+5){
+    margin-top: 60px;
+  }
+
+  .activity-blog-pagination{
+    height: 52px;
+    text-align: center;
+    line-height: 52px;
+    margin: 60px auto 0 auto;
+    font-size: 24px;
+
+    .activity-blog-pagination-align{
+      display: inline-block;
+    }
+
+    .blog-first-page{
+      display: inline-block;
+      text-align: center;
+      width: 50px;
+      float: left;
+    }
+
+    .blog-page-number{
+      margin: 0 10px;
+      display: inline-block;
+      max-width: 370px;
+      width: 370px;
+      height: 52px;
+      float: left;
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    .blog-span-wrapper{
+      width : 680px;      //宽度需要动态计算
+    }
+
+    .blog-span-wrapper span{
+      text-align: center;
+      margin-right: 20px;
+      width: 52px;
+      float: left;
+    }
+
+    .blog-span-wrapper span:last-child{
+      margin-right: 0;
+    }
+
+    .blog-last-page{
+      display: inline-block;
+      text-align: center;
+      width: 50px;
+      margin-right: 20px;
+    }
+
+    .blog-all-pages{
+      display: inline-block;
+      margin-right: 20px;
+    }
+
+    .blog-page-number-input{
+      display: inline-block;
+      margin-right: 20px;
+    }
+
+    .blog-page-input{
+      width: 40px;
+      height: 32px;
+      border-radius: 5px;
+      border: 1px solid #c9c9c9;
+      display: inline-block;
+    }
+
+    /**
+    *去掉输入框的箭头
+    */
+    .blog-page-input::-webkit-outer-spin-button,
+    .blog-page-input::-webkit-inner-spin-button{
+      -webkit-appearance: none !important;
+      margin: 0;
+    }
+    .blog-page-input{-moz-appearance:textfield;}
+
+    .blog-go-to-page{
+      display: inline-block;
+      width: 52px;
+      text-align: center;
+    }
+
+    .blog-page-number-selected{
+      width: 52px;
+      height: 52px;
+      background: url("../images/activity/snqx/circle-bg.png") no-repeat center;
+    }
+  }
+
+
+}

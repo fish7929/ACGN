@@ -1,0 +1,84 @@
+.bottomLoginBar{
+  position: fixed;
+  left: 0px;
+  bottom: 0px;
+  width: 100%;
+  height: 288px;
+  background-color: rgba(0, 0, 0, 0.8);
+
+  .bottom-login-title{
+    width: 100%;
+    height: 27px;
+    margin-top: 14px;
+    background: url("../images/common/bottomLoginTitle.png") no-repeat center;
+  }
+
+  .login-button, .register-button{
+    width: 250px;
+    height: 40px;
+    text-align: center;
+    margin: 14px auto 0 auto;
+    font-size: 24px;
+    color: #3d3d3d;
+    line-height: 40px;
+  }
+
+  .login-button{
+    background: url("../images/common/bottomLoginBg.png") no-repeat center;
+  }
+
+  .register-button{
+    background: url("../images/common/bottomRegisterBg.png") no-repeat center;
+  }
+
+  .bottom-login-middle{
+    width: 100%;
+    height: 40px;
+    margin-top: 14px;
+    text-align: center;
+    position: relative;
+  }
+
+  .bottom-login-middle > div{
+    display: inline-block;
+  }
+
+  .login-line{
+    position: absolute;
+    height: 40px;
+    left: 0;
+    width: 100%;
+    background: url("../images/common/bottomLoginLine.png") no-repeat center;
+  }
+
+  .login-line-txt{
+    font-size: 14px;
+    height: 100%;
+    line-height: 40px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .login-qq, .login-wb{
+    width: 50px;
+    height: 45px;
+    display: inline-flex;
+    line-height: 114px;
+    color: #FFFFFF;
+  }
+
+  .login-btns{
+    width: 100%;
+    text-align: center;
+    margin-top: 14px;
+  }
+
+  .login-qq{
+    margin-right: 80px;
+    background: url("../images/common/bottomLoginQQ.png") no-repeat center;
+  }
+
+  .login-wb{
+    background: url("../images/common/bottomLoginWB.png") no-repeat center;
+  }
+
+}

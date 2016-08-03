@@ -18,7 +18,7 @@ gili_data.getCurrentUser = function () {
 };
 
 /**
- 返回当前登录用户对象 
+ 返回当前登录用户对象
  **/
 gili_data.getCurrentUserJSON = function () {
     var currentUser = AV.User.current();
@@ -212,8 +212,8 @@ gili_data.followeePlan = function (options, cb_ok, cb_err) {
 gili_data.getPlan = function (options, cb_ok, cb_err) {
     var pageNumber = options.pageNumber || 0,
         pageSize = options.pageSize || 1000,
-        name=options.name,
-        labels=options.label;
+        name = options.name || "",
+        labels = options.label;
 
     var limit = pageSize;
     var skip = 0;
@@ -224,8 +224,8 @@ gili_data.getPlan = function (options, cb_ok, cb_err) {
         skip = pageNumber;
     }
     var strCql = "";
-    strCql = " select include author, * from plan ";
-    var CQL="";
+    strCql = " select include user, * from plan ";
+    var CQL = "";
     if (labels) {
         var labelArray = labels;
         var labStr = "";
@@ -234,15 +234,15 @@ gili_data.getPlan = function (options, cb_ok, cb_err) {
         }
         CQL += "  where labels in (" + labStr.substring(0, labStr.length - 1) + ") "
     }
-    if(name.length>0){
-        if(CQL.length>0){
+    if (name.length > 0) {
+        if (CQL.length > 0) {
             CQL += " and  name like '%" + name + "%' ";
-        }else{
+        } else {
             CQL += " where  name like '%" + name + "%' ";
         }
     }
-    if(CQL.length>0){
-        strCql+=CQL;
+    if (CQL.length > 0) {
+        strCql += CQL;
     }
     //翻页
     if (skip >= 0 && limit > 0) {
@@ -503,7 +503,20 @@ gili_data.getUserFlloweePlanRelation = function (options, cb_ok, cb_err) {
  *
  **/
 gili_data.getSubjectBanner = function (cb_ok, cb_err) {
-    var strCQL = "select * from subject order by order_num desc ";
+    var strCQL = "select * from subject where approved=1 limit 1000 order by order_num desc ";
+    AV.Query.doCloudQuery(strCQL, {
+        success: function (objs) {
+            cb_ok(objs.results);
+        },
+        error: cb_err
+    });
+};
+
+/** 查询专题banner数据
+ *
+ **/
+gili_data.getSubjectAdmin = function (cb_ok, cb_err) {
+    var strCQL = "select * from subject  limit 100 order by createdAt desc ";
     AV.Query.doCloudQuery(strCQL, {
         success: function (objs) {
             cb_ok(objs.results);
@@ -525,11 +538,11 @@ gili_data.getBlogData = function (options, cb_ok, cb_err) {
         orderBy = options.orderBy || "createdAt",
         isDesc = options.isDesc,
         data_type = options.data_type,
-        topic=options.topic||"",
+        topic = options.topic || "",
         label = options.label;
 
     var CQL = "";
-    if (data_type=="all") {
+    if (data_type == "all") {
         CQL = " select include user,* from blog where is_delete !=1 ";
     } else {
         CQL = " select include user,* from blog where status !=2 and  type in (2,3) and is_delete !=1  ";
@@ -542,7 +555,7 @@ gili_data.getBlogData = function (options, cb_ok, cb_err) {
         }
         CQL += " and labels in (" + labStr.substring(0, labStr.length - 1) + ") "
     }
-    if(topic.length>0){
+    if (topic.length > 0) {
         CQL += " and topic like '%" + topic + "%' ";
     }
     if (orderBy.length > 0) {
@@ -759,7 +772,7 @@ gili_data.getBlog = function (CQL, cb_ok, cb_err) {
  * cb_err
  * */
 gili_data.getBlogById = function (blog_id, cb_ok, cb_err) {
-    var CQL=" select include user, * from blog where objectId='"+blog_id+"' "
+    var CQL = " select include user, * from blog where objectId='" + blog_id + "' "
     AV.Query.doCloudQuery(CQL, {
         success: function (data) {
             cb_ok(data.results);
@@ -1481,7 +1494,7 @@ gili_data.snsSaveComment = function (options, cb_ok, cb_err) {;
         belong_id = options.belong_id || "",//便于查询评论列表
         userObj = options.userObj;
     var current_user = this.getCurrentUser();
-         
+
     if (userObj) {
         current_user = userObj;
     }
@@ -2055,6 +2068,59 @@ gili_data.getBooks = function (options, cb_ok, cb_err) {
     });
 };
 
+/** 查询本子list
+ * skip
+ * limit
+
+ **/
+gili_data.getBookList = function (options, cb_ok, cb_err) {
+    var pageNumber = options.pageNumber || 0,
+        pageSize = options.pageSize || 1000,
+        name = options.name || "",
+        labels = options.label;
+
+    var limit = pageSize;
+    var skip = 0;
+
+    if (pageNumber != 0) {
+        skip = pageSize * pageNumber - pageSize;
+    } else {
+        skip = pageNumber;
+    }
+    var strCql = "";
+    strCql = " select include user, * from book ";
+    var CQL = "";
+    if (labels) {
+        var labelArray = labels;
+        var labStr = "";
+        for (var i = 0; i < labelArray.length; i++) {
+            labStr += "'" + labelArray[i] + "',";
+        }
+        CQL += "  where labels in (" + labStr.substring(0, labStr.length - 1) + ") "
+    }
+    if (name.length > 0) {
+        if (CQL.length > 0) {
+            CQL += " and  name like '%" + name + "%' ";
+        } else {
+            CQL += " where  name like '%" + name + "%' ";
+        }
+    }
+    if (CQL.length > 0) {
+        strCql += CQL;
+    }
+    //翻页
+    if (skip >= 0 && limit > 0) {
+        strCql += " order by createdAt desc limit " + skip + "," + limit;
+    }
+    AV.Query.doCloudQuery(strCql, {
+        success: function (data) {
+            cb_ok(data.results);
+        }, error: cb_err
+    }
+    );
+};
+
+
 /** 查询本子总数
  **/
 gili_data.getBooksCount = function (cb_ok, cb_err) {
@@ -2249,28 +2315,28 @@ gili_data.packageMicroBlogResults = function (originObj) {
     };
 };
 //修改插画 投票总数
-gili_data.updateBlogVote=function(blog_id,cb_ok,cb_err){
+gili_data.updateBlogVote = function (blog_id, cb_ok, cb_err) {
     var query = new AV.Query("blog");
     query.equalTo("objectId", blog_id);
     query.first({
         success: function (data) {
             if (data) {
                 var votes = data.get("votes") || 0;
-                if (votes <0) {
+                if (votes < 0) {
                     data.set("votes", 0);
-                }else{
+                } else {
                     data.increment("votes", 1);
                 }
                 data.save(null, {
                     success: function (obj) {
-                        cb_ok({"status":"success","data":obj});
+                        cb_ok({ "status": "success", "data": obj });
                     },
                     error: cb_err
                 });
-            }else{
+            } else {
                 cb_err("未找到数据");
             }
-        },  error: cb_err
+        }, error: cb_err
     });
 }
 
@@ -2280,16 +2346,16 @@ gili_data.updateBlogVote=function(blog_id,cb_ok,cb_err){
  vote_type,投票类型：1-投票按钮，2-分享成功
  cb_ok,{"status":success/failed,"data":obj/error massage}
  **/
-gili_data.blogVote = function (options,cb_ok,cb_err) {
+gili_data.blogVote = function (options, cb_ok, cb_err) {
     var blog_id = options.blog_id,
         vote_type = options.vote_type;
-		
-    var activityDate=new Date("2016-8-8");
-    if(new Date()<activityDate){
+
+    var activityDate = new Date("2016-8-8");
+    if (new Date() < activityDate) {
         cb_ok({ "status": "success", "data": "敬请期待8月8日" });
         return;
     }
-		
+
     var currentUser = this.getCurrentUser();
     if (!blog_id) {
         cb_err("插画id为空！");
@@ -2299,7 +2365,7 @@ gili_data.blogVote = function (options,cb_ok,cb_err) {
         cb_err("请先登录!");
         return;
     }
-    var cb_ok_fun=function(num){
+    var cb_ok_fun = function (num) {
 
     }
 
@@ -2307,17 +2373,17 @@ gili_data.blogVote = function (options,cb_ok,cb_err) {
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
             if (data.results.length > 0) {
-                var datas=data.results;
+                var datas = data.results;
 
-                var share_array=[];
-                var blog_array=[];
-                var getForData=function(){
-                    var dateNow=new Date();
-                    for(var i=0;i<datas.length;i++){
-                        var dateN=datas[i].get("vote_date");
-                        if(datas[i].get("vote_type")==1&&dateN.getFullYear()==dateNow.getFullYear()&&dateN.getMonth()==dateNow.getMonth()&&dateN.getDate()==dateNow.getDate()){//如果年，月，日都相同则为一天
+                var share_array = [];
+                var blog_array = [];
+                var getForData = function () {
+                    var dateNow = new Date();
+                    for (var i = 0; i < datas.length; i++) {
+                        var dateN = datas[i].get("vote_date");
+                        if (datas[i].get("vote_type") == 1 && dateN.getFullYear() == dateNow.getFullYear() && dateN.getMonth() == dateNow.getMonth() && dateN.getDate() == dateNow.getDate()) {//如果年，月，日都相同则为一天
                             blog_array.push(datas[i]);
-                        }  else if(datas[i].get("vote_type")==2&&dateN.getFullYear()==dateNow.getFullYear()&&dateN.getMonth()==dateNow.getMonth()&&dateN.getDate()==dateNow.getDate()){
+                        } else if (datas[i].get("vote_type") == 2 && dateN.getFullYear() == dateNow.getFullYear() && dateN.getMonth() == dateNow.getMonth() && dateN.getDate() == dateNow.getDate()) {
                             share_array.push(datas[i]);
                         }
                     }
@@ -2326,35 +2392,36 @@ gili_data.blogVote = function (options,cb_ok,cb_err) {
 
                 /**
                  if(vote_type==1){ //1.当天投过返回
-                     if(getForData(1).length>0){
-                         cb_ok({"status":"failed","data":"今天已经投过票了啦"});
-                     }else{
-                         insert();
-                     }
-                 }else{ //2.当天分享过
-                     if(getForData(2).length>0){
-                         cb_ok({"status":"failed","data":"今天分享已经使用了，不再累计投票数"});
-                     }else{
-                         insert();
-                     }
-                 }
+                    if(getForData(1).length>0){
+                        cb_ok({"status":"failed","data":"今天已经投过票了啦"});
+                    }else{
+                        insert();
+                    }
+                }else{ //2.当天分享过
+                    if(getForData(2).length>0){
+                        cb_ok({"status":"failed","data":"今天分享已经使用了，不再累计投票数"});
+                    }else{
+                        insert();
+                    }
+                }
                  **/
                 //相同一天的数据拎出来
                 getForData();
-                if(blog_array.length>0){
+
+                if (blog_array.length > 0) {
                     //如果大于2条投票数据说明已经不能再去投票了
-                    if(blog_array.length>=2){
-                        cb_err({"status":"failed","data":"投票无效,投票次数超过一天2票"});
+                    if (blog_array.length >= 2) {
+                        cb_err({ "status": "failed", "data": "投票无效,投票次数超过一天2票" });
                         return;
-                    } else if(share_array.length>=1&&blog_array.length==1){//如果分享过一次，并且只发过一条，可以进行投票
+                    } else if (share_array.length >= 1 && blog_array.length == 1) {//如果分享过一次，并且只发过一条，可以进行投票
                         insert();
-                    }else if (blog_array.length == 1 && vote_type==2) {
+                    } else if (blog_array.length == 1 && vote_type == 2) {
                         insert();
-                    } else{
-                        cb_err({"status":"failed","data":"投票无效,只能投一票"});
+                    } else {
+                        cb_err({ "status": "failed", "data": "投票无效,只能投一票" });
                         return;
                     }
-                }else{
+                } else {
                     insert();
                 }
             } else {
@@ -2365,19 +2432,17 @@ gili_data.blogVote = function (options,cb_ok,cb_err) {
         error: cb_err
     });
     var insert = function () {
-        console.log("insert")
         var blog_activity = AV.Object.extend("blog_activity");
         var obj = new blog_activity();
         obj.set("blog_id", blog_id);
         obj.set("user_id", currentUser.id);
-        obj.set("vote_type",vote_type);
-        obj.set("vote_date",new Date());
+        obj.set("vote_type", vote_type);
+        obj.set("vote_date", new Date());
         obj.save(null, {
             success: function (obj) {
-                console.log(vote_type)
-                if(vote_type==2){
+                if (vote_type == 2) {
                     cb_ok(obj);//如果是分享不累计加1
-                }else{
+                } else {
                     gili_data.updateBlogVote(blog_id, cb_ok, cb_err);
                 }
             },

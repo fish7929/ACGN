@@ -1,0 +1,121 @@
+.activitySNQXContainer{
+  position: absolute;
+  width: 100%;
+  top: 0px;
+  left: 0px;
+  background-color: #f8f8f8;
+  display: inline-table;
+
+  .activity-bg{
+    margin: 64px auto 0 auto;
+    width: 100%;
+    height: 4000px;
+  }
+
+  .activity-bg-01{
+    width: 100%;
+    height: 791px;
+    background: url("../images/activity/snqx/active_bg_01.jpg") no-repeat center;
+  }
+
+  .activity-bg-02{
+    width: 100%;
+    height: 827px;
+    background: url("../images/activity/snqx/active_bg_02.jpg") no-repeat center;
+  }
+
+  .activity-bg-03{
+    width: 100%;
+    height: 667px;
+    background: url("../images/activity/snqx/active_bg_03.jpg") no-repeat center;
+  }
+
+  .activity-bg-04{
+    width: 100%;
+    height: 722px;
+    background: url("../images/activity/snqx/active_bg_04.jpg") no-repeat center;
+  }
+
+  .activity-bg-05{
+    width: 100%;
+    height: 942px;
+    background: url("../images/activity/snqx/active_bg_05.jpg") no-repeat center;
+  }
+
+  .btnJoin {
+    position: absolute;
+    top: 576px;
+    left: calc(50% - 130px);
+    width: 260px;
+    height: 78px;
+    background: url("../images/activity/snqx/btnJoin.png") no-repeat center;
+  }
+
+  .activity-work-title{
+    width: 100%;
+    height: 55px;
+    background: url("../images/activity/snqx/activity_blog_title.png") no-repeat center;
+  }
+
+  .activity-comment-title{
+    width: 100%;
+    height: 55px;
+    background: url("../images/activity/snqx/activity_comment_title.png") no-repeat center;
+  }
+
+  .activity-blog-title{
+    font-size: 72px;
+  }
+
+  .btn-commit{
+    background-color: #ffb400 !important;
+    border-radius: 0px !important;
+  }
+
+  .activity-foot-line{
+    width: 100%;
+    height: 80px;
+    background: url("../images/activity/snqx/footer-line.jpg") no-repeat top center #3f4041;
+  }
+
+  .footerContainer{
+    background-color: #3f4041;
+  }
+
+  .activity-go-btns{
+    position: fixed;
+    top: 30%;
+    right: calc(50% - 640px);
+    width: 118px;
+  }
+
+  .activity-go-btns > div{
+    width: 118px;
+    height: 51px;
+    margin-top: 10px;
+  }
+
+  .activity-go-activity{
+    background: url("../images/activity/snqx/btn-activity.png") no-repeat center;
+  }
+
+  .activity-go-work{
+    background: url("../images/activity/snqx/btn-work.png") no-repeat center;
+  }
+
+  .activity-go-comment{
+    background: url("../images/activity/snqx/btn-comment.png") no-repeat center;
+  }
+
+  .activity-go-top{
+    background: url("../images/activity/snqx/btn-top.png") no-repeat center;
+  }
+
+  .container{
+    background-color: #f8f8f8;
+  }
+
+  .commentLogin, .comment-textArea{
+    background-color: #ffffff;
+  }
+}

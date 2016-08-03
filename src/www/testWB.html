@@ -1,0 +1,116 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta property="qc:admins" content="2336345717671415156375"/>
+    <title></title>
+    <script src="http://www.gilieye.com/js/vendor/av.js"></script>
+    <script src="js/lib/gili_api.js"></script>
+    <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+    <script type="text/javascript">
+        var url = getParam(location.href, "url");
+        document.addEventListener('DOMContentLoaded', function () {
+            //实例化AV
+            AV.initialize({appId: "oCjYs9w05WuNmCk6sDblt7hY-gzGzoHsz", appKey:"yaREoDyiyoy5iWV2iWAODk5X"});
+            var code = getParam(location.href, "code");
+            //调用云代码去获取用户对象信息，解决js客户端跨域问题
+            AV.Cloud.run('getWbOauthData', { code: code }, {
+                success: function (obj) {
+//                    console.log(obj);//用户对象
+                    loginuser(packageMicroBlogResults(obj));
+                },
+                error: function (err) {
+                    console.log(err.message);
+                }
+            });
+        });
+        /**
+         * 重新封装微博反会的数据
+         * @param originObj
+         * @returns {{unionid: *, nickname: (*|string), sexual: number, headimgurl: *}}
+         */
+        function packageMicroBlogResults (originObj) {
+            return {
+                unionid: originObj.idstr,
+                nickname: originObj.name || '',
+                sexual: originObj.gender === 'm' ? 1 : originObj.gender === 'f' ? 2 : 0,
+                headimgurl: originObj.avatar_large
+            };
+        }
+        /**
+         * 获取url参数值
+         *
+         * @params url {string} url
+         * @params param {string} 参数名
+         * @return {string}
+         */
+        function getParam(url, param) {
+            var iLen = param.length;
+            var iStart = url.indexOf(param);
+            if (iStart == -1) {
+                return "";
+            }
+            iStart += iLen + 1;
+            var iEnd = url.indexOf("&", iStart);
+            if (iEnd == -1) {
+                return url.substring(iStart);
+            }
+            return url.substring(iStart, iEnd);
+        }
+
+        function loginuser(data) {
+            var unionid = data.unionid;
+            var nickname = data.nickname;
+            var sexual = data.sexual;
+            var headimgurl = data.headimgurl;
+            //检索对象
+            var User = AV.Object.extend("_User");
+            var query = new AV.Query(User);
+            query.equalTo("username", unionid);
+            query.find({
+                success: function (user) {
+                    if (user.length > 0) {
+                        //用户存在则登陆绑定
+                        AV.User.logIn(unionid, "6a063e705a16e625", {
+                            success: function (_user) {
+                                window.location.href = url;
+                            },
+                            error: function (_user, error) {
+                                console.log(error.message);
+                            }
+                        })
+                    } else {
+                        //用户不存在则注册
+                        var user = new AV.User();
+                        user.set("username", unionid);
+                        user.set("password", "6a063e705a16e625"); //me第三方登录
+                        user.set('user_nick', nickname);
+                        user.set("avatar", headimgurl);
+                        user.set("sex", sexual);
+                        gili_data.signUp(user, function (user) {
+                            //注册成功则登陆
+                            AV.User.logIn(unionid, "6a063e705a16e625", {
+                                success: function (user) {
+                                    window.location.href = url;
+                                },
+                                error: function (user, error) {
+                                    console.log(error.message);
+                                }
+                            })
+                        },function (user, error) {
+                            console.log(error.message);
+                        });
+                    }
+                },
+                error: function (error) {
+                    console.log(error.message);
+                }
+            });
+        }
+    </script>
+
+</head>
+<body>
+
+
+</body>
+</html>

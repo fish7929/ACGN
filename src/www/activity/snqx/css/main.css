@@ -1,0 +1,30 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    width: 100%;
+    background-color: rgba(0, 0, 0, 1);
+}
+
+.button{
+    cursor: pointer;
+}
+
+.container{
+    margin: 0 auto;
+    background: url("../images/activeBg.jpg") no-repeat center;
+    width: 100%;
+    height: 4000px;
+}
+
+.btnJoin {
+    position: absolute;
+    top: 576px;
+    left: calc(50% - 130px);
+    width: 260px;
+    height: 78px;
+    background: url("../images/btnJoin.png") no-repeat center;
+}

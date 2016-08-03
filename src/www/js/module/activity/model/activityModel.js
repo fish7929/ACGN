@@ -44,5 +44,25 @@ define([
         }, cb_err);
     };
 
+    ActivityModel.prototype.voteWork = function(blogId, type, cb_ok, cb_err){
+        var opt = {};
+        opt.blog_id = blogId;
+        opt.vote_type = type;
+        gili_data.blogVote(opt, cb_ok, cb_err);
+    };
+
+    ActivityModel.prototype.getBlogById = function(blogId, cb_ok, cb_err){
+        gili_data.getBlogById(blogId, function(data){
+            if(data.length == 0){
+                if(cb_err) cb_err();
+                return;
+            }
+            data = utils.convert_2_json(data);
+            if(cb_ok){
+                cb_ok(data[0])
+            }
+        }, cb_err);
+    };
+
     return new ActivityModel();
 });

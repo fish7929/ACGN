@@ -17,12 +17,14 @@ define([
         // key : selector
         ui : {
             blogList : ".home-blog-list",
-            bnBlogMore : ".home-blog-bnMore"
+            bnBlogMore : ".home-blog-bnMore",
+            bnBlogMoreNew : ".home-blog-btnMore-new"
         },
 
         //事件添加
         events : {
-            "click @ui.bnBlogMore" : "onClickHandle"
+            "click @ui.bnBlogMore" : "onClickHandle",
+            "click @ui.bnBlogMoreNew" : "onClickHandle"
         },
 
         /**初始化**/

@@ -1,0 +1,34 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta property="qc:admins" content="2336345717671415156375"/>
+    <title></title>
+    <script src="http://www.gilieye.com/js/vendor/av.js"></script>
+    <script src="js/lib/gili_api.js"></script>
+    <script type="text/javascript">
+
+        var href = "http://www.gilieye.com/qq.html?platform=qq&url=http://www.gilieye.com/#activitySNQX/578a448b5bbb500064a92744&v=0.10010785555938884&#access_token=6CC31F356902985992827D9458AF57FB&expires_in=7776000"
+        var url = getParam(href, "url");
+        console.log(url);
+
+        function getParam(url, param) {
+            var iLen = param.length;
+            var iStart = url.indexOf(param);
+            if (iStart == -1) {
+                return "";
+            }
+            iStart += iLen + 1;
+            var iEnd = url.indexOf("&", iStart);
+            if (iEnd == -1) {
+                return url.substring(iStart);
+            }
+            return url.substring(iStart, iEnd);
+        }
+    </script>
+
+</head>
+<body>
+
+
+</body>
+</html>

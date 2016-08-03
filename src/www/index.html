@@ -30,10 +30,23 @@
         </script>
     </head>
     <body>
-        <div id="pageContent" class="container"></div>
+
+    <div id="pageContent" class="container"></div>
         <script type="text/javascript">
             var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");
             document.write(unescape("%3Cspan style='display:none;' id='cnzz_stat_icon_1259651596'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s4.cnzz.com/z_stat.php%3Fid%3D1259651596%26show%3Dpic2' type='text/javascript'%3E%3C/script%3E"));
+
+            window.onload = function() {
+                with(document.body) {
+                    oncontextmenu=function(){return false}
+                    ondragstart=function(){return false}
+                    onselectstart=function(){return false}
+                    onbeforecopy=function(){return false}
+                    onselect=function(){document.selection.empty()}
+                    oncopy=function(){document.selection.empty()}
+                }
+            }
+
         </script>
     </body>
 </html>

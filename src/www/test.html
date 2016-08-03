@@ -13,9 +13,21 @@
 <body>
 <script src="http://tjs.sjs.sinajs.cn/open/api/js/wb.js?appkey=2720439896" type="text/javascript" charset="utf-8"></script>
 <button id="testwb" >testwblogin</button>
+<button id="testQQ" >testQQLogin</button>
 </body>
 
 <script>
+
+    function getiUrlRelativePath(){
+        var url = window.location.toString();
+        if(url.indexOf("#") != -1){
+            url = url.split("#")[0];
+        }
+        return url;
+    };
+    console.log(window.location.host);
+    console.log(getiUrlRelativePath());
+
     //onclick="goto();"
    function packageWblogResults (originObj) {
        console.log(originObj);
@@ -45,7 +57,19 @@
 //                });
 //            });
         testObj.addEventListener("click", goto, false);
+
+        var testQQ = document.getElementById("testQQ");
+        testQQ.addEventListener("click", loginQQ, false);
     }
+
+    function loginQQ(e){
+        e.stopPropagation();
+        e.preventDefault();
+        var url = "http://www.gilieye.com/#activitySNQX/578a448b5bbb500064a92744";
+        window.open("https://graph.qq.com/oauth2.0/authorize?response_type=token&client_id=101326661&redirect_uri="+encodeURIComponent("http://www.gilieye.com/qq.html?platform=qq&url="+ url +"&v="+ Math.random()), "_self")
+    }
+
+
     function goto(e){
         console.log(e);
         e.stopPropagation();
@@ -53,10 +77,10 @@
 //        var _url = "https://api.weibo.com/2/oauth2/authorize?client_id=2720439896&response_type=token&display=js&transport=html5&referer=" + location.href;
 //        window.open(_url, "_blank");
 //        window.open (_url,'_blank','height=200,width=400,top=30%,left=30%,toolbar=no,menubar=no,scrollbars=no, resizable=no,location=no, status=no')
-        console.log(33333);
+        var url = "http://www.gilieye.com/#activitySNQX/578a448b5bbb500064a92744";
 //        location.href = "https://api.weibo.com/oauth2/authorize?client_id=2720439896&client_secrect=49df09be0f1fc7e4ef082a23ac385e97&response_type=code&redirect_uri=http://www.gilieye.com/weibo.html";
-        var _url = "https://api.weibo.com/oauth2/authorize?client_id=2720439896&client_secrect=49df09be0f1fc7e4ef082a23ac385e97&response_type=code&redirect_uri=http://www.gilieye.com/weibo.html";
-        window.open(_url, "_blank");
+        var _url = "https://api.weibo.com/oauth2/authorize?client_id=2720439896&client_secrect=49df09be0f1fc7e4ef082a23ac385e97&response_type=code&redirect_uri=http://www.gilieye.com/testWB.html?url="+encodeURIComponent(url)+"&v="+ Math.random();
+        location.href = _url;
     }
 
 </script>
