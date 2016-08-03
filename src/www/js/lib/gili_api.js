@@ -2352,7 +2352,7 @@ gili_data.blogVote = function (options, cb_ok, cb_err) {
 
     var activityDate = new Date("2016-8-8");
     if (new Date() < activityDate) {
-        cb_ok({ "status": "success", "data": "敬请期待8月8日" });
+        cb_err({ "status": "failed", "data": "敬请期待8月8日" });
         return;
     }
 
