@@ -7,7 +7,7 @@
     <script src="js/lib/gili_api.js"></script>
     <script type="text/javascript">
         var url = getUrlParam(location.href, 'url')
-
+        url = url.replace("-||-", "#");
         document.addEventListener('DOMContentLoaded', function () {
             //实例化AV
             AV.initialize("oCjYs9w05WuNmCk6sDblt7hY-gzGzoHsz", "yaREoDyiyoy5iWV2iWAODk5X");

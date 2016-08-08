@@ -220,8 +220,7 @@ define([
         e.preventDefault();
         var self = this;
 //        console.log(e, "microBlogLoginHandle");
-        var _url = "https://api.weibo.com/oauth2/authorize?client_id=2720439896&client_secrect=49df09be0f1fc7e4ef082a23ac385e97&response_type=code&redirect_uri=http://www.gilieye.com/weibo.html?url="+encodeURIComponent(window.location.href)+"&v="+ Math.random();
-        location.href = _url;
+        utils.wbLogin();
     };
     /**
      *第三方登录--QQ登录点击事件
@@ -232,7 +231,7 @@ define([
         e.preventDefault();
         var self = this;
         self._hide();
-        window.open("https://graph.qq.com/oauth2.0/authorize?response_type=token&client_id=101326661&redirect_uri="+encodeURIComponent("http://www.gilieye.com/qq.html?platform=qq&url="+ window.location.href +"&v="+ Math.random()), "_self")
+        utils.qqLogin();
     };
     /**
      * 回撤事件

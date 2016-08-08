@@ -8,6 +8,7 @@
     <script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
     <script type="text/javascript">
         var url = getParam(location.href, "url");
+        url = url.replace("-||-", "#");
         document.addEventListener('DOMContentLoaded', function () {
             //实例化AV
             AV.initialize({appId: "oCjYs9w05WuNmCk6sDblt7hY-gzGzoHsz", appKey:"yaREoDyiyoy5iWV2iWAODk5X"});
