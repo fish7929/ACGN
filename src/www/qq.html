@@ -127,6 +127,14 @@
                         //用户存在则登陆绑定
                         AV.User.logIn(unionid, "6a063e705a16e625", {
                             success: function (_user) {
+                                var temp = url.split("http://")[1];
+                                if(temp){
+                                    if(temp.indexOf("www") != 0){
+                                        url = "http://www."+temp;
+                                    }
+                                }else{
+                                    url = "http://www.gilieye.com/";
+                                }
                                 window.location.href = url;
                             },
                             error: function (_user, error) {
@@ -145,6 +153,15 @@
                             //注册成功则登陆
                             AV.User.logIn(unionid, "6a063e705a16e625", {
                                 success: function (user) {
+                                    var temp = url.split("http://")[1];
+                                    if(temp){
+                                        if(temp.indexOf("www") != 0){
+                                            url = "http://www."+temp;
+                                        }
+                                    }else{
+                                        url = "http://www.gilieye.com/";
+                                    }
+
                                     window.location.href = url;
                                 },
                                 error: function (user, error) {
