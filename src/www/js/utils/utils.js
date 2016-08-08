@@ -452,17 +452,20 @@
         return reStr;
     };
 
-    utils.shareVoteViewToQQ = function(blogId, userName){
+    utils.shareVoteViewToQQ = function(blogId, userName, activityName){
         var host = window.location.host.indexOf("localhost") >= 0 ? "www.gilieye.com" : window.location.host;
         var url = "http://" + host +"#activityVote/"+blogId;
         userName = userName || "";
+        var data = giliConfig.Activity[activityName];
+        if(!data) return;
+        var desc = data.desc.replace("@userName@", userName).replace("@url@", url)
 
         var opt = {
-            url:url, /*获取URL，可加上来自分享到QQ标识，方便统计*/
-            desc: userName + '指挥官正在Gili爱参加少女前线同人支援计划，快来为喜爱的指挥官投出宝贵的食粮，为指挥官支援。听说投食还有机会免费拿本子和精美周边！~投食地址：'+url, /*分享理由(风格应模拟用户对话),支持多分享语随机展现（使用|分隔）*/
-            title:'#格里芬全面行动#', /*分享标题(可选)*/
+            url : url, /*获取URL，可加上来自分享到QQ标识，方便统计*/
+            desc : desc, /*分享理由(风格应模拟用户对话),支持多分享语随机展现（使用|分隔）*/
+            title : data.title, /*分享标题(可选)*/
             // summary:'这是一个测试summary', /*分享摘要(可选)*/
-            pics:'http://www.gilieye.com/images/activity/snqx/snqx-share.jpg', /*分享图片(可选)*/
+            pics : data.pic, /*分享图片(可选)*/
             // flash: '', /*视频地址(可选)*/
             // site:'', /*分享来源(可选) 如：QQ分享*/
             // style:'203',
@@ -476,16 +479,20 @@
         window.open("http://sns.qzone.qq.com/cgi-bin/qzshare/cgi_qzshare_onekey?"+s.join('&'));
     };
 
-    utils.shareVoteViewToWB = function(blogId, userName){
+    utils.shareVoteViewToWB = function(blogId, userName, activityName){
         var host = window.location.host.indexOf("localhost") >= 0 ? "www.gilieye.com" : window.location.host;
         var url = "http://" + host +"#activityVote/"+blogId;
         userName = userName || "";
+        var data = giliConfig.Activity[activityName];
+        if(!data) return;
+        var desc = data.desc.replace("@userName@", userName).replace("@url@", url)
+
         var opt = {
             url: url, /*获取URL，可加上来自分享到QQ标识，方便统计*/
             //content:userName + '指挥官正在@Gili爱 参加少女前线同人支援计划，快来为喜爱的指挥官投出宝贵的食粮，为指挥官支援。听说投食还有机会免费拿本子和精美周边！~投食地址：'+url, /*分享理由(风格应模拟用户对话),支持多分享语随机展现（使用|分隔）*/
-            title:'#格里芬全面行动#'+ userName + '指挥官正在@Gili爱 参加少女前线同人支援计划，快来为喜爱的指挥官投出宝贵的食粮，为指挥官支援。听说投食还有机会免费拿本子和精美周边！~投食地址：'+url, /*分享标题(可选)*/
+            title: desc,
             // summary:'这是一个测试summary', /*分享摘要(可选)*/
-            pic : 'http://www.gilieye.com/images/activity/snqx/snqx-share.jpg', /*分享图片(可选)*/
+            pic : data.pic /*分享图片(可选)*/
             // flash: '', /*视频地址(可选)*/
             // site:'', /*分享来源(可选) 如：QQ分享*/
             // style:'203',

@@ -136,4 +136,17 @@ gili_config.Link = [
     {src : "./images/link/link10.jpg", link : "http://www.kicokico.com"}
 ]
 
+gili_config.Activity = {
+    "少女前线" : {
+                                    title : "#格里芬全面行动#",
+                                    desc : "@userName@指挥官正在Gili爱参加少女前线同人支援计划，快来为喜爱的指挥官投出宝贵的食粮，为指挥官支援。听说投食还有机会免费拿本子和精美周边！~投食地址：@url@",
+                                    pic : "http://www.gilieye.com/images/activity/snqx/snqx-share.jpg"
+                                },
+    "欧美同人" : {
+                                    title : "#欧美同人#",
+                                    desc : "@userName@指挥官正在Gili爱参加少女前线同人支援计划，快来为喜爱的指挥官投出宝贵的食粮，为指挥官支援。听说投食还有机会免费拿本子和精美周边！~投食地址：@url@",
+                                    pic : "http://www.gilieye.com/images/activity/snqx/snqx-share.jpg"
+                                }
+}
+
 window.giliConfig = gili_config;

@@ -23,7 +23,7 @@ define([
         '<div class="activity-blog-vote"><span class="voteSpan">{voteCnt}</span>人投票</div>' +
         '<div class="activity-blog-btns">' +
         '<div class="activity-blog-vote-btn button">投票</div>' +
-        '<div class="activity-blog-support-btn button">应援</div>' +
+        '<div class="activity-blog-support-btn button">拉票</div>' +
         '</div>' +
         '</div>';
     return BaseView.extend({
@@ -244,10 +244,10 @@ define([
                 btnDivs = parent.find(".activity-blog-share-btn");
                 btnDivs.show();
             }else if(target.className.indexOf("activity-blog-btn-weibo") >= 0){
-                utils.shareVoteViewToWB(dataId, dataName);
+                utils.shareVoteViewToWB(dataId, dataName, self.activityLabel);
                 activityModel.voteWork(dataId, 2);
             }else if(target.className.indexOf("activity-blog-btn-qq") >= 0){
-                utils.shareVoteViewToQQ(dataId, dataName);
+                utils.shareVoteViewToQQ(dataId, dataName, self.activityLabel);
                 activityModel.voteWork(dataId, 2);
             }else if(target.className.indexOf("activity-blog-btn-close") >= 0){
                 btnDivs = parent.find(".activity-blog-share-btn");

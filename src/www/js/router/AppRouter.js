@@ -31,7 +31,9 @@ define([
             "activitySNQX/:activityId" : "activitySNQX",
             "activitySNQX/:activityId/:pos" : "activitySNQX",
             "activityVote/:blogId" : "activityVote",
-            'aboutUs' : "aboutUs"
+            'aboutUs' : "aboutUs",
+            "activityOMTR/:activityId" : "activityOMTR",
+            "activityOMTR/:activityId/:pos" : "activityOMTR"
         },
         /**当前路由，如果调用返回，返回到指定路由**/
         backRoutes: {

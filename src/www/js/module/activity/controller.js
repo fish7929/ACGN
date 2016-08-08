@@ -3,8 +3,9 @@
 define([
     'module/activity/views/activityView',
     'module/activity/views/activitySNQXView',
-    'module/activity/views/activityVoteView'
-],function(activityView, activitySNQXView, activityVoteView){
+    'module/activity/views/activityVoteView',
+    'module/activity/views/activityOMTRView'
+],function(activityView, activitySNQXView, activityVoteView, activityOMTRView){
     return {
         activity : function(activityId, pos){
             var opt = {};
@@ -18,6 +19,13 @@ define([
             opt.activityId = activityId;
             opt.pos = pos;
             app.page.show(activitySNQXView, opt);
+        },
+
+        activityOMTR : function(activityId, pos){
+            var opt = {};
+            opt.activityId = activityId;
+            opt.pos = pos;
+            app.page.show(activityOMTRView, opt);
         },
 
         activityVote : function(blogId){

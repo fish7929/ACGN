@@ -71,6 +71,13 @@ define([
             if(!self.blogId) return;
             activityModel.getBlogById(self.blogId, function(data){
                 self.initData(data);
+                for(var i = 0; i < data.labels.length; i++){
+                    console.log(giliConfig.Activity[data.labels[i]])
+                    if(giliConfig.Activity[data.labels[i]]){
+                        self.activityLabel = data.labels[i];
+                        break;
+                    }
+                }
             });
             self.regionShow();
             self.addEvent();
@@ -79,7 +86,6 @@ define([
         initData : function(data){
             var self = this;
             self.author = data.user.user_nick;
-            console.log(data);
             var brief = "<span>" + data.user.user_nick + "：</span>" + (data.user.brief || "");
             var createdAt = data.createdAt || Date.now();
             var voteInt = '<span>'+(data.votes || 0)+'</span>人投票';
@@ -122,13 +128,13 @@ define([
 
         onShareQQHandler : function(e){
             var self = this;
-            utils.shareVoteViewToQQ(self.blogId, self.author);
+            utils.shareVoteViewToQQ(self.blogId, self.author, self.activityLabel);
             activityModel.voteWork(self.blogId, 2);
         },
 
         onShareWBHandler : function(e){
             var self = this;
-            utils.shareVoteViewToWB(self.blogId, self.author);
+            utils.shareVoteViewToWB(self.blogId, self.author, self.activityLabel);
             activityModel.voteWork(self.blogId, 2);
         },
 
