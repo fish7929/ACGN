@@ -121,11 +121,13 @@ define([
         },
 
         onShareQQHandler : function(e){
+            var self = this;
             utils.shareVoteViewToQQ(self.blogId, self.author);
             activityModel.voteWork(self.blogId, 2);
         },
 
         onShareWBHandler : function(e){
+            var self = this;
             utils.shareVoteViewToWB(self.blogId, self.author);
             activityModel.voteWork(self.blogId, 2);
         },
