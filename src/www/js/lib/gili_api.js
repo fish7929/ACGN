@@ -683,9 +683,15 @@ gili_data.getRandomDataByTable = function (options, cb_ok, cb_err) {
         orderBy = options.orderBy,
         isDesc = options.isDesc,
         table_name = options.table_name,
-        strWhere = options.strWhere || "";
+        strWhere = options.strWhere || "",
+        include_user = options.include_user || false;
 
     var strCQL = " select * from " + table_name;
+    if (include_user) {
+        strCQL = " select include user,* from " + table_name;
+    } else {
+        strCQL = " select * from " + table_name;
+    }
     if (strWhere.length > 0) {
         strCQL += strWhere;
     }
@@ -1582,24 +1588,30 @@ gili_data.getClubs = function (options, cb_ok, cb_err) {
         limit = options.limit || 100,
         isDesc = options.isDesc,
         orderBy = options.orderBy,
-        isRandom = options.isRandom;
-
+        isRandom = options.isRandom,
+        include_user = options.include_user,
+        strWhere = options.strWhere || "";
     var strCQL = " select * from club  ";
 
     if (isRandom) {
-        var strCountCQL = " select count(*) from club ";
+        var strCountCQL = " select count(*) from club where approved=1 ";
         AV.Query.doCloudQuery(strCountCQL, {
             success: function (objs) {
                 var count = objs.count;
                 if (count > limit) {
                     skip = gili_data.getRandom(0, count / limit);
                 }
-                gili_data.getRandomDataByTable({ "skip": skip, "limit": limit, "table_name": "club", "orderBy": orderBy, "isDesc": isDesc }, cb_ok, cb_err)
+                if (strWhere.length == 0) {
+                    strWhere = " where approved=1 "
+                } else {
+                    strWhere += " and approved=1 "
+                }
+                gili_data.getRandomDataByTable({ "skip": skip, "limit": limit, "table_name": "club", "orderBy": orderBy, "isDesc": isDesc, "strWhere": strWhere, "include_user": include_user }, cb_ok, cb_err)
             },
             error: cb_err
         });
     } else {
-        gili_data.getRandomDataByTable({ "skip": skip, "limit": limit, "table_name": "club", "orderBy": orderBy, "isDesc": isDesc }, cb_ok, cb_err)
+        gili_data.getRandomDataByTable({ "skip": skip, "limit": limit, "table_name": "club", "orderBy": orderBy, "isDesc": isDesc, "strWhere": strWhere, "include_user": include_user }, cb_ok, cb_err)
     }
 };
 
@@ -2344,10 +2356,12 @@ gili_data.updateBlogVote = function (blog_id, cb_ok, cb_err) {
  插画投票
  blog_id
  vote_type,投票类型：1-投票按钮，2-分享成功
+ activity_id,活动id
  cb_ok,{"status":success/failed,"data":obj/error massage}
  **/
 gili_data.blogVote = function (options, cb_ok, cb_err) {
     var blog_id = options.blog_id,
+        activity_id = options.activity_id,
         vote_type = options.vote_type;
 
     var activityDate = new Date("2016-8-8");
@@ -2361,6 +2375,10 @@ gili_data.blogVote = function (options, cb_ok, cb_err) {
         cb_err("插画id为空！");
         return;
     }
+    if (!activity_id) {
+        cb_err("活动id为空！");
+        return;
+    }
     if (!currentUser) {
         cb_err("请先登录!");
         return;
@@ -2369,7 +2387,7 @@ gili_data.blogVote = function (options, cb_ok, cb_err) {
 
     }
 
-    var strCQL = " select * from blog_activity where user_id='" + currentUser.id + "' limit 1000";
+    var strCQL = " select * from blog_activity where user_id='" + currentUser.id + "' and activity_id='" + activity_id + "' limit 1000";
     AV.Query.doCloudQuery(strCQL, {
         success: function (data) {
             if (data.results.length > 0) {
@@ -2436,6 +2454,7 @@ gili_data.blogVote = function (options, cb_ok, cb_err) {
         var obj = new blog_activity();
         obj.set("blog_id", blog_id);
         obj.set("user_id", currentUser.id);
+        obj.set("activity_id", activity_id);
         obj.set("vote_type", vote_type);
         obj.set("vote_date", new Date());
         obj.save(null, {
