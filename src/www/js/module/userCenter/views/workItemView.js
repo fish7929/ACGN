@@ -37,7 +37,7 @@ define([
             "click .face-item":"_clickFaceItemHandler",  //点击颜表情项
             "blur #commentTxt":"_blurCommentHandler",
             "click .commentHead":"_clickCommentHeadHandler", //点击评论头像
-            "click .commentName":"_clickCommentHeadHandler"//点击评论者昵称
+            "click .sp_name":"_clickCommentHeadHandler"//点击评论者昵称
 //            "mouseover .uc_info_item":"_overItemHandler", //鼠标移入 显示“删除”按钮
 //            "mouseout .uc_info_item":"_outItemHandler" //鼠标移出 隐藏“删除”按钮
         },
@@ -152,7 +152,7 @@ define([
             return commentHtml;
         },
         commentTpl: _.template('<div class="commentItem"><div class="commentHead" data-userid="<%=commentUserId %>" style="background:url(\'<%=headUrl%>\') no-repeat #f7f7f7 center; background-size:cover;"></div><div class="commentData">'+
-            '<div class="commentName"  data-userid="<%=commentUserId %>"><%=commentName %>&nbsp;<span class="sp_time"><%=commentTime %></span><span data-cId="<%=cId %>" data-userId="<%=commentUserId %>" data-userName="<%=commentUserName %>" class="sp_reply">回复</span></div>'+
+            '<div class="commentName"><span class="sp_name" data-userid="<%=commentUserId %>"><%=commentName %>&nbsp;</span><span class="sp_time"><%=commentTime %></span><span data-cId="<%=cId %>" data-userId="<%=commentUserId %>" data-userName="<%=commentUserName %>" class="sp_reply">回复</span></div>'+
             '<div class="commentContext"><%=commentTxt %></div></div></div>'),
         //填充颜表情窗口
         getFace:function(){
