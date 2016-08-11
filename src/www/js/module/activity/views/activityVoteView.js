@@ -116,7 +116,7 @@ define([
                 MsgBox.alert(giliConfig.Tip.NOLOGIN);
                 return;
             }
-            activityModel.voteWork(self.blogId, 1, function(){
+            activityModel.voteWork(self.activityLabel, self.blogId, 1, function(){
                 var voteSpan = self.ui.blogVote.find("span");
                 var val = voteSpan.html();
                 voteSpan.html(parseInt(val)+1);
@@ -129,13 +129,13 @@ define([
         onShareQQHandler : function(e){
             var self = this;
             utils.shareVoteViewToQQ(self.blogId, self.author, self.activityLabel);
-            activityModel.voteWork(self.blogId, 2);
+            activityModel.voteWork(self.activityLabel, self.blogId, 2);
         },
 
         onShareWBHandler : function(e){
             var self = this;
             utils.shareVoteViewToWB(self.blogId, self.author, self.activityLabel);
-            activityModel.voteWork(self.blogId, 2);
+            activityModel.voteWork(self.activityLabel, self.blogId, 2);
         },
 
         onLoginOkHandle : function(){

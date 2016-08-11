@@ -44,10 +44,14 @@ define([
         }, cb_err);
     };
 
-    ActivityModel.prototype.voteWork = function(blogId, type, cb_ok, cb_err){
+    ActivityModel.prototype.voteWork = function(activityLabel, blogId, type, cb_ok, cb_err){
+        var data = giliConfig.Activity[activityLabel];
+        if(!data) return;
+
         var opt = {};
         opt.blog_id = blogId;
         opt.vote_type = type;
+        opt.activity_id = data.id;
         gili_data.blogVote(opt, cb_ok, cb_err);
     };
 

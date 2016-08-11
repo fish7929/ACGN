@@ -245,10 +245,10 @@ define([
                 btnDivs.show();
             }else if(target.className.indexOf("activity-blog-btn-weibo") >= 0){
                 utils.shareVoteViewToWB(dataId, dataName, self.activityLabel);
-                activityModel.voteWork(dataId, 2);
+                activityModel.voteWork(self.activityLabel, dataId, 2);
             }else if(target.className.indexOf("activity-blog-btn-qq") >= 0){
                 utils.shareVoteViewToQQ(dataId, dataName, self.activityLabel);
-                activityModel.voteWork(dataId, 2);
+                activityModel.voteWork(self.activityLabel, dataId, 2);
             }else if(target.className.indexOf("activity-blog-btn-close") >= 0){
                 btnDivs = parent.find(".activity-blog-share-btn");
                 btnDivs.hide();
@@ -257,7 +257,7 @@ define([
 
         blogVote : function(blogId){
             var self = this;
-            activityModel.voteWork(blogId, 1, function(){
+            activityModel.voteWork(self.activityLabel, blogId, 1, function(){
                 MsgBox.alert("投票成功!");
                 var voteSpan = self.ui.blogList.find(".activity-blog-item[data-id='"+blogId+"']").find(".voteSpan");
                 var val = voteSpan.html();
