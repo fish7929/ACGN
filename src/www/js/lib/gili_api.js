@@ -2357,12 +2357,14 @@ gili_data.updateBlogVote = function (blog_id, cb_ok, cb_err) {
  blog_id
  vote_type,投票类型：1-投票按钮，2-分享成功
  activity_id,活动id
+ userObj,用户对象，如果不用当前登录用户就自定义传一个用户对象过来
  cb_ok,{"status":success/failed,"data":obj/error massage}
  **/
 gili_data.blogVote = function (options, cb_ok, cb_err) {
     var blog_id = options.blog_id,
         activity_id = options.activity_id,
-        vote_type = options.vote_type;
+        vote_type = options.vote_type,
+         userObj = options.userObj;
 
     var activityDate = new Date("2016-8-8");
     if (new Date() < activityDate) {
@@ -2371,6 +2373,10 @@ gili_data.blogVote = function (options, cb_ok, cb_err) {
     }
 
     var currentUser = this.getCurrentUser();
+    if (userObj) {
+        currentUser = userObj;
+    }
+
     if (!blog_id) {
         cb_err("插画id为空！");
         return;
