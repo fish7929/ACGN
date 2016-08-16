@@ -265,11 +265,13 @@ gili_data.getPlanByPlanId = function (plan_id, cb_ok, cb_err) {
         success: function (data) {
             //TODO 由于只有一条的
             var obj = (data.results)[0];
-            var _user = obj.get("user");
-            _user = _user.toJSON();
-            obj = obj.toJSON()
-            obj.user = _user;
-            cb_ok(obj);
+            var obj_ok = obj.toJSON()
+            if (obj.get("user")) {
+                var _user = obj.get("user");
+                _user = _user.toJSON(); 
+                obj_ok.user = _user;
+            }
+            cb_ok(obj_ok);
         }, error: cb_err
     }
     );
