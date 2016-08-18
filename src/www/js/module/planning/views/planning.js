@@ -299,8 +299,10 @@ define([
                     self.dataFinish = false;
                     self.updateMsg(self.SECOND);
                 }
-                if (data && data.length > 0) {
+                if(skip == 0){
                     self.ui.dynamicContent.text("");
+                }
+                if (data && data.length > 0) {
                     self.appendDynamicItemView(data);
                     self.skip += data.length;
                 }
