@@ -114,7 +114,7 @@ define([
                 }else{
                     self.noticeObj = data;
                     self._initNoticeInfoView(data);
-                    self.ui.planningNoticeContent.text("");
+                    // self.ui.planningNoticeContent.text("");
                 }
             }, function (err) {
                 console.log(err,"公告");
@@ -361,6 +361,7 @@ define([
                     .replace(/noticeDescription/g, obj.description);
                 noticeLi += noticeRepTemp;
             }
+            console.log(noticeLi);
             self.ui.planningNoticeContent.html(noticeLi);
         },
         /**
