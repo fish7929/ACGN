@@ -444,7 +444,7 @@ gili_data.getPlanUserBlog = function (options, cb_ok, cb_err) {
             followeeList += "'" + data[i].get("user_id") + "',";
         }
         if (followeeList.length > 0) {
-            CQL = " select include user, * from blog where status !=2 and user_id in (" + followeeList.substring(0, followeeList.length - 1) + ") and labels in ('" + plan_name + "') ";
+            CQL = " select include user, * from blog where status !=2 and is_delete!=1 and user_id in (" + followeeList.substring(0, followeeList.length - 1) + ") and labels in ('" + plan_name + "') ";
         }
         if (orderBy.length > 0) {
             if (isDesc) {
