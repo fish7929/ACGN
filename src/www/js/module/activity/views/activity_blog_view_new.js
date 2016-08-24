@@ -31,7 +31,7 @@ define([
         template : _.template(tpl),
         maxPage : 0,
         paginationWidth : 380,
-        tempSpanWidth : 70,
+        tempSpanWidth : 72,
         // key : selector
         ui : {
             blogList : ".activity-blog-list",
