@@ -33,7 +33,9 @@ define([
             "activityVote/:blogId" : "activityVote",
             'aboutUs' : "aboutUs",
             "activityOMTR/:activityId" : "activityOMTR",
-            "activityOMTR/:activityId/:pos" : "activityOMTR"
+            "activityOMTR/:activityId/:pos" : "activityOMTR",
+            "gActivity/:activityId" : "gActivity",
+            "gActivity/:activityId/:pos" : "gActivity"
         },
         /**当前路由，如果调用返回，返回到指定路由**/
         backRoutes: {

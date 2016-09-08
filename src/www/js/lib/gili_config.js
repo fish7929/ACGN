@@ -148,7 +148,16 @@ gili_config.Activity = {
                                     title : "快来参加欧美同人比赛啦",
                                     desc : "@userName@太太，正在@Gili爱 参加LET's GILI SLASH 欧美同人比赛，快来为喜爱的太太投出宝贵的一票，为太太支援。听说投票还有机会免费拿精美周边！~投票地址：@url@",
                                     pic : "http://www.gilieye.com/images/activity/omtr/omtr-share.jpg"
-                                }
+                                },
+    "七月与安生" : {
+        id : "57d17e0b0e3dd90069c1f914",
+        title : "快来参加欧美同人比赛啦",
+        desc : "@userName@太太，正在@Gili爱 参加LET's GILI SLASH 欧美同人比赛，快来为喜爱的太太投出宝贵的一票，为太太支援。听说投票还有机会免费拿精美周边！~投票地址：@url@",
+        pic : "http://www.gilieye.com/images/activity/omtr/omtr-share.jpg",
+        joinBtnCss : {top: "520px"},
+        buttonColor : "#a7dcc5",
+        fontColor : "#ffb400"
+    }
 }
 
 window.giliConfig = gili_config;
